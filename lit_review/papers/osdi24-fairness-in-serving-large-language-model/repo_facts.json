@@ -1,0 +1,52 @@
+{
+  "url": "https://github.com/Ying1123/VTC-artifact",
+  "head_commit": "192c2e2014c69c8c6c699d7113c3822e4db632e6",
+  "head_commit_date": "2024-06-06T23:49:48-07:00",
+  "file_count": 402,
+  "size_mb": 34.9,
+  "top_level": [
+    ".gitignore",
+    "LICENSE",
+    "README.md",
+    "benchmarks/",
+    "fair_bench/",
+    "figures/",
+    "setup.py",
+    "slora/",
+    "test/"
+  ],
+  "build_files": [
+    "setup.py"
+  ],
+  "lines_by_extension": {
+    ".py": 19322,
+    ".cuh": 1578,
+    ".sh": 439,
+    ".cc": 136,
+    ".h": 43,
+    ".cu": 5
+  },
+  "red_flags": {
+    "big_gpu": {
+      "count": 3,
+      "examples": [
+        "README.md:42: * Recommended: GPUs from the Ampere family, like the A100, which support bfloat16 operations.",
+        "fair_bench/README.md:4: - One A10G(24GB) and one A100(80GB).",
+        "fair_bench/README.md:167: Launch the server with Llama-2-13b on a GCP instance of A100(80GB) GPU using VTC scheduler."
+      ]
+    },
+    "multi_gpu": {
+      "count": 104,
+      "examples": [
+        "README.md:25: lengths. Additionally, S-LoRA employs a novel tensor parallelism strategy and",
+        "README.md:92: - S-LoRA TP: To ensure effective parallelization across multiple GPUs, S-LoRA introduces a novel tensor parallelism strategy. This approach incurs minimal commu",
+        "README.md:137: - We test the scalability of our tensor parallelism strategy.",
+        "fair_bench/profile_cost_function.py:209: # tppart_model_infer(rank_id=0, world_size=1, ans_queue=Queue(),",
+        "slora/common/basemodel/basemodel.py:29: def __init__(self, tp_rank, world_size, weight_dir,"
+      ]
+    }
+  },
+  "github": {
+    "error": "HTTP Error 403: rate limit exceeded"
+  }
+}

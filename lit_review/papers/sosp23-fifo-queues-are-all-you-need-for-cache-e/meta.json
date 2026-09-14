@@ -1,0 +1,11 @@
+{
+  "id": "sosp23-fifo-queues-are-all-you-need-for-cache-e",
+  "title": "FIFO queues are all you need for cache eviction (S3-FIFO)",
+  "venue": "sosp",
+  "year": 2023,
+  "paper_url": "https://dl.acm.org/doi/10.1145/3600006.3613147",
+  "pdf_url": "https://jasony.me/publication/sosp23-s3fifo.pdf",
+  "repo_url": "https://github.com/Thesys-lab/sosp23-s3fifo",
+  "topic": "caching",
+  "note": "Pure trace-driven cache-eviction study plus a C implementation in libCacheSim; CPU only, no root, no GPU. Ideal fit for the machine and for an improvement-style hypothesis on eviction policy. Concerns - the 6594-trace corpus across 14 datasets is far larger than 257 GB free so a documented trace subset must be chosen; the throughput/scalability claims were made at 16 threads which the 16-core Threadripper matches well"
+}

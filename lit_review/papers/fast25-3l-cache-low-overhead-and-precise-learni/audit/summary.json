@@ -1,0 +1,134 @@
+{
+  "title": "3L-Cache: Low Overhead and Precise Learning-based Eviction Policy for Caches",
+  "one_line": "An object-level learned (LightGBM) cache eviction policy that cuts the CPU cost of learning-based eviction to a few times LRU via filtered training-data collection, bidirectional candidate sampling, batched heap-based eviction and online parameter auto-tuning, evaluated by trace-driven simulation in libCacheSim.",
+  "topic": "ml-for-systems",
+  "repo": {
+    "official": "yes",
+    "evidence": "Paper section 1 footnote 1 (paper.txt p.3): 'The source code is available at https://github.com/optiq-lab/3L-Cache' - exactly the audited repo. Repo contains the full policy (3LCache/TLCache.cpp, 3LCache/TLCache.h), its libCacheSim glue (3LCache/TLCache_Interface.cpp, libCacheSim/bin/cachesim/cache_init.h:141-149), baselines and eval scripts. Independently corroborated by upstream adoption: libCacheSim issue 1a1a11a/libCacheSim#119 'Adding 3L-Cache', closed as completed by PR #126.",
+    "last_commit": "2025-08-09",
+    "artifact_badges": [],
+    "badge_evidence": "none found - the USENIX presentation page returned HTTP 403 to automated fetch and neither README.md nor the repo contains an artifact-evaluation badge or statement"
+  },
+  "hard_filters": {
+    "H1_open_repo": {
+      "result": "pass",
+      "evidence": "Official link from paper section 1 footnote 1. Real implementation, not a placeholder: 3LCache/TLCache.cpp (472 lines) implements train()/sample()/lookup()/admit()/rank()/quick_demotion()/evict_predobj()/prediction(), matching design sections 4.2-4.4; 3LCache/TLCache_Interface.cpp wires it into libCacheSim; eval drivers in 3LCache/scripts/*.py; ~50 sample traces in data/; a sample result (3LCache/scripts/result/io.traces.ns117.csv) and figure (3LCache/scripts/figures/bmr.pdf) ship with it."
+    },
+    "H2_no_root": {
+      "result": "pass",
+      "evidence": "Pure user-space C/C++ simulator. The paper's 'CPU overhead' is wall-clock throughput: libCacheSim/bin/cachesim/sim.c:75-96 computes req_cnt/gettime() and prints MQPS, and 3LCache/scripts/cpu_overhead_boxplot.py:112-119 forms throughput(LRU)/throughput(algo) - no perf/PMU, eBPF, KVM or kernel code anywhere. sudo appears only in scripts/install_dependency.sh:4-9,29,44,55 and .travis.yml, all replayable with conda-forge (glib, zstd, xgboost) plus CMAKE_INSTALL_PREFIX=$HOME; tcmalloc is optional (CMakeLists.txt:171-180 continues without it). USE_HUGEPAGE is only madvise(MADV_HUGEPAGE) (libCacheSim/dataStructure/hashtable/chainedHashTableV2.c:101-103) and is an off-switchable option (CMakeLists.txt:24). The inherited dockerfile is not the documented build path (README.md:30-34)."
+    },
+    "H3_hardware_fit": {
+      "result": "pass",
+      "evidence": "CPU-only, single-node, single-process simulation; no GPU used. Paper hardware (2x20-core Xeon, 192 GB, section 5.1) is the same class as this machine's 16-core/125 GB. Memory is bounded by one trace's metadata (sliding window <= 6x the cache queue, 3LCache/TLCache.cpp:56,131). Throughput is ~0.6 MQPS for 3L-Cache on the bundled 13.6M-request trace (README.md:73-75). Only constraint: the 4855-trace corpus is many TB vs ~257 GB free, so a 30-100 trace subset is needed - a scale-down that still tests the per-trace box-plot claims of Figures 6/8/10."
+    },
+    "H4_obtainable_deps_data": {
+      "result": "pass",
+      "evidence": "All deps installable in user space: glib/zstd/xgboost from conda-forge, LightGBM vendored in-repo (scripts/LightGBM/VERSION.txt = 2.2.2), gperftools optional, argp in glibc 2.36 (cmake/Modules/Findargp.cmake), cmake 3.12+ required (CMakeLists.txt:1). All 8 datasets are public and linked in README.md:45-55 (SNIA IOTTA Tencent Photo/CBS, github.com/alibaba/block-traces, github.com/twitter/cache-traces, cachelib.org Meta KV/CDN, CMU PDL Wikipedia); no proprietary trace is required and ~50 ready-to-run traces ship in data/ (format verified: data/w01.csv is 'time id size'), with per-trace unique-byte counts in 3LCache/scripts/trace_info/*.txt for setting the 0.1%/10% cache sizes."
+    }
+  },
+  "reproduce": {
+    "level": "M",
+    "target": "Figure 10(a)/(b) (p.12) and the section 5.3 claim it supports - 3L-Cache's mean CPU overhead is 6.4x LRU at small cache sizes and 3.4x at large, i.e. it sits with the heuristics rather than with LRB (94.9% lower than LRB). Secondary, from the same runs: Figure 6(b)/(f), byte-miss-ratio reduction from LRU on Tencent CBS (11.6% / 7.9% mean vs LRB's 8.6% / 6.7%).",
+    "scale_down": "Use the ~50 traces already bundled in data/ (Twitter clusterN, CloudPhysics wNN, Alibaba io.traces.nsNNN, Tencent tencentBlock.nsNNNN) plus 30-60 downloaded+converted Tencent CBS / CloudPhysics traces, capped at ~50 GB of the 257 GB free disk, instead of the paper's 4855 traces. Keep the paper's two cache sizes (0.1% and 10% of each trace's unique bytes, read from 3LCache/scripts/trace_info/*.txt). Policy set = the 9-11 that ship (LRU, LHD, GDSF, ARC, SIEVE, S3-FIFO, TinyLFU, LeCaR, CACHEUS, 3L-Cache, plus LRB and GL-Cache if their optional deps are built); HALP is not in the artifact at all, so the '60.9% vs HALP' number is out of reach while '94.9% vs LRB' is in reach. Serialise and pin the CPU-overhead runs (the shipped drivers launch 32 concurrent simulations while measuring wall-clock throughput).",
+    "effort": "~7 person-days + ~100 CPU-hours (0 GPU-hours), ~50 GB disk",
+    "rationale": "M, not H: scripts/install_dependency.sh is sudo-only end to end and must be re-derived with conda; the vendored LightGBM is 2.2.2 from 2018 and must build under gcc 12 / glibc 2.36; libCacheSim/cache/eviction/CMakeLists.txt:97-100 references ../../../../3LCache+/TLCacheN.cpp, one level above the repo root (vs the correct three levels at :93-94), so HEAD will likely fail at configure time; the headline figure aggregates 4855 traces that must be downloaded and format-converted (README Steps 1-4); the HALP baseline is absent and so is the 'modified-LRB' of section 5.5 (libCacheSim/cache/eviction/LRB/lrb.cpp is stock LRB); and the CPU-overhead harness measures throughput under self-inflicted 32-way contention (3LCache/scripts/executor_libcachesim.py:61, cpu_overhead_boxplot.py:175) on a shared machine. M, not L: the policy, nine baselines, the full plotting pipeline, per-trace cache-size metadata, ~50 ready-to-run traces and a known-good expected output (README.md:73-80 gives 0.3380 OMR / 0.1034 BMR for data/tencentBlock_ns3964) all ship in the repo, and the whole thing is CPU-only user space."
+  },
+  "addons": [
+    {
+      "name": "Skew-aware sampling guard",
+      "hypothesis": "We hypothesize that an online sampling-precision detector with a fallback to a wider candidate pool (or to plain tail eviction) improves worst-case byte miss ratio relative to LRU under low-skew / scan-heavy workloads (small Zipf exponent, high one-hit-wonder fraction) at no more than ~20% extra CPU, compared with stock 3L-Cache.",
+      "mechanism": "3L-Cache already counts, per sampling round, how many sampled objects were actually evicted (evcition_distribution[0..3] and the p1>p2 test that moves x, TLCache.cpp:236-258). Turn that into an explicit precision statistic and compare it with the precision a uniform sampler would achieve (estimable from the queue's evicted fraction). When precision is indistinguishable from random for k consecutive rounds, either raise the candidate budget / lower the eviction ratio, or bypass prediction and evict from the tail, re-arming the detector periodically. Evaluation adds a synthetic generator sweeping Zipf alpha 0.6-1.2 plus scan and uniform mixes, and selects genuinely low-skew production traces using the existing popularity analyser.",
+      "code_locations": [
+        "3LCache/TLCache.cpp:192",
+        "3LCache/TLCache.cpp:236",
+        "3LCache/TLCache.h:244",
+        "libCacheSim/traceAnalyzer/popularity.cpp",
+        "3LCache/scripts/miss_ratio_boxplot.py"
+      ],
+      "motivating_evidence": "Section 7 (conclusion) states the limitation verbatim: 'If an atypical web caching workload exhibits fewer Zipf access patterns, the objects sampled by 3L-Cache may not effectively represent low popularity ... causing the sampling effectiveness to degrade to that of random sampling. In future work, we plan to ... design an efficient eviction policy that can adapt to diverse workloads.' This is in direct tension with the unsupported claim in section 5.2.1 that 3L-Cache 'is less affected by this issue' than S3-FIFO as the power-law exponent falls - no figure settles it. Independent evidence the worst case is real: the S4-FIFO preprint reports 3L-Cache increasing FIFO's miss ratio by 8.8% in the worst case (vs 0.8% for S4-FIFO).",
+      "feasibility": "M",
+      "feasibility_rationale": "The policy change itself is localized to rank() and the auto-tuning block, but a credible evaluation needs a new low-skew workload generator, a trace-selection pass over the corpus, and a cheap online definition of 'random-sampling precision'. All CPU-only and well within the machine; the cost is the new harness, not the compute.",
+      "research_value": "H",
+      "research_value_rationale": "It is the limitation the authors themselves named as future work, and it attacks the regime where the design's core premise (Zipf skew => queue tail is unpopular) fails. Either outcome teaches something: the guard removes 3L-Cache's worst-case regression versus LRU/FIFO, or the regression is shown to be intrinsic to object-level sampling - both are results a FAST reviewer would care about, especially now that a follow-up has publicly quantified that worst case.",
+      "scoop_check": {
+        "result": "partial",
+        "details": "Queries: '3L-Cache non-Zipf low skew robustness', 'learned cache eviction worst-case robustness FIFO anchor 2026', '3L-Cache follow-up citing work'. Closest: Learning-Augmented Heuristics / S4-FIFO (https://arxiv.org/html/2608.27975v1) documents 3L-Cache's 8.8% worst-case regression and optimises for robustness, but by learning cache-level parameters of S3-FIFO rather than repairing 3L-Cache's sampler; SL-Cache (DASFAA 2026, https://link.springer.com/chapter/10.1007/978-981-92-0363-5_36) adds hotness-aware adaptive sampling to a new object-level learner aimed at throughput and hot-object retention. Neither adds a degradation detector or fallback inside 3L-Cache."
+      }
+    },
+    {
+      "name": "Adaptive eviction-ratio controller",
+      "hypothesis": "We hypothesize that replacing 3L-Cache's fixed eviction ratio of 1/2 with a controller that adapts the per-batch eviction count to observed prediction quality reduces byte miss ratio at equal CPU overhead (or cuts CPU overhead at equal miss ratio) on traces where the tail and head samplers do not contribute candidates in the assumed 1:1 proportion.",
+      "mechanism": "The eviction count is hard-coded as rank()/eviction_rate with eviction_rate = 2 (TLCache.cpp:353-355, TLCache.h:253). Measure, per batch, how many just-evicted objects are re-requested within the history window - their metadata is already retained in out_cache (TLCache.h:281), so this signal is free - and drive eviction_rate over [1,8] with a hill-climb / AIMD loop in the same style as the paper's existing rules for x, Q and f (Table 2). Optionally make the head/tail candidate split adaptive instead of assuming 1:1.",
+      "code_locations": [
+        "3LCache/TLCache.cpp:353",
+        "3LCache/TLCache.cpp:192",
+        "3LCache/TLCache.h:249",
+        "3LCache/scripts/cpu_overhead_boxplot.py"
+      ],
+      "motivating_evidence": "Section 4.3.2 justifies the 1/2 ratio from a population-level average ('the number of eviction candidates sampled by these two methods is approximately 1:1 overall') and then asserts, with no figure, that raising it causes 'a sharp increase in the miss ratio'. Every other parameter in the design is auto-tuned (Table 2); the eviction ratio is the one that is not - and it is the knob that directly sets prediction cost, which is 48.5% of 3L-Cache's CPU at small cache sizes (Table 4).",
+      "feasibility": "H",
+      "feasibility_rationale": "Roughly 100-300 LOC inside a single class, no new harness: miss_ratio_boxplot.py and cpu_overhead_boxplot.py already produce both axes of the miss-ratio/CPU trade-off, and the bundled traces suffice for the first sweeps. Comfortably a 10-week task for 2-4 students.",
+      "research_value": "M",
+      "research_value_rationale": "A natural extension that completes the auto-tuning story the paper started, and it probes an assumption the paper supports only by an aggregate average. But it is an expected result either way - adaptive beats a fixed constant, or the constant turns out to be near-optimal and the paper is validated - so it is a solid rather than surprising contribution.",
+      "scoop_check": {
+        "result": "partial",
+        "details": "Queries: 'adaptive eviction ratio learned cache 2026', '3L-Cache eviction count adaptive sampling improvement'. No work found that tunes 3L-Cache's eviction ratio. Nearest is SL-Cache (DASFAA 2026, https://link.springer.com/chapter/10.1007/978-981-92-0363-5_36), which makes sampling/demotion adaptive (not the eviction count) inside a different object-level learner."
+      }
+    },
+    {
+      "name": "Warm-start training and prediction reuse across model updates",
+      "hypothesis": "We hypothesize that updating the GBM incrementally (appending trees rather than retraining from scratch) together with retaining still-valid cached predictions across model updates and sampling-round boundaries reduces 3L-Cache's CPU overhead relative to LRU by at least 25% at equal byte miss ratio, with the largest gains at small cache sizes where prediction dominates.",
+      "mechanism": "train() frees the old booster and rebuilds it from scratch every 64K labels (TLCache.cpp:14,34-41), and the entire prediction cache is flushed on every model update (TLCache.cpp:44-46) and at every end-of-round (TLCache.cpp:230-232). Replace (i) the rebuild with a warm-started update using LGBM_BoosterMerge / LGBM_BoosterCreateFromModelfile, both exported by the vendored LightGBM (scripts/LightGBM/include/LightGBM/c_api.h:352,387); and (ii) the all-or-nothing invalidation with a staleness bound - keep predictions whose object features are unchanged and whose producing model is at most k updates old, re-scoring lazily on heap pop. Report the training/prediction/other split the way Table 4 does, using the existing training_time / inference_time fields.",
+      "code_locations": [
+        "3LCache/TLCache.cpp:12",
+        "3LCache/TLCache.cpp:230",
+        "3LCache/TLCache.cpp:343",
+        "3LCache/TLCache.h:240",
+        "scripts/LightGBM/include/LightGBM/c_api.h"
+      ],
+      "motivating_evidence": "Table 4: prediction is 48.5% and training 12.5% of 3L-Cache's CPU at small cache sizes (18.3% / 19.0% at large), i.e. ~61% of the remaining overhead sits in exactly the two paths that currently discard completed work. Section 4.3.2 already argues that 'the prediction results are accurate prior to model updates' - the paper never measures how much of that accuracy survives past an update, which is precisely what a staleness bound would exploit.",
+      "feasibility": "H",
+      "feasibility_rationale": "Localized to one class plus one C-API call, evaluable with the shipped harness on this machine. Main risk is that LightGBM 2.2.2's merge semantics force an upgrade to a modern LightGBM (upstream libCacheSim's merged 3L-Cache port is a ready fallback base), which is extra work but not a redesign.",
+      "research_value": "M",
+      "research_value_rationale": "Bounded headroom - at most ~61% of 3L-Cache's own overhead, and the policy is already only 3.4-6.4x LRU - and 'reuse work instead of throwing it away' is an expected engineering move. Still, it sharpens the paper's central overhead/accuracy trade-off, and a negative result (predictions rot immediately after a model update) would be a genuine finding about online GBM-based eviction.",
+      "scoop_check": {
+        "result": "partial",
+        "details": "Queries: 'LightGBM incremental training cache eviction reduce training overhead 2026', 'learned cache reuse predictions across model updates'. Incremental GBM training is standard practice, and SL-Cache (DASFAA 2026, https://link.springer.com/chapter/10.1007/978-981-92-0363-5_36) attacks the same overhead from the complementary direction ('not all objects necessitate precise prediction' - skipping predictions rather than reusing them). No work found that warm-starts or reuses 3L-Cache's accumulated predictions."
+      }
+    },
+    {
+      "name": "Metadata-charged evaluation and compact per-object metadata",
+      "hypothesis": "We hypothesize that when per-object learning metadata is charged against the cache budget, 3L-Cache's byte-miss-ratio advantage over LRU/S3-FIFO/SIEVE shrinks substantially at small cache sizes (0.1% of footprint), and that a compact-metadata variant (quantised inter-arrival times, no heap-allocated MetaExtra, byte-bounded history window) recovers most of the lost advantage at unchanged CPU overhead.",
+      "mechanism": "libCacheSim can charge metadata via --consider-obj-metadata (cli_parser.c:94,165), which adds each policy's declared obj_md_size to every cached object. 3L-Cache declares 180 bytes (TLCache_Interface.cpp:85-89, inherited from LRB_Interface.cpp:89) while LRU declares 16 (LRU.c:67) and the paper claims 67 bytes/object. Step 1: re-run the Figure 6 comparison with the flag on for all policies, and additionally account for the out-of-cache history window (up to 6x the cache queue, TLCache.cpp:56,131), which nothing charges today. Step 2: shrink Meta/MetaExtra (TLCache.h:35-98) - 16-bit log-quantised distances, inline array instead of vector<uint32_t> plus new, drop _sample_times for non-sampled objects - and set obj_md_size to the measured value.",
+      "code_locations": [
+        "3LCache/TLCache_Interface.cpp:85",
+        "3LCache/TLCache.h:35",
+        "3LCache/TLCache.cpp:130",
+        "libCacheSim/bin/cachesim/cli_parser.c:94",
+        "3LCache/scripts/miss_ratio_boxplot.py"
+      ],
+      "motivating_evidence": "Section 4.2.2 concedes the metadata costs 'approximately 2.5% of the cache space for small cache sizes' - exactly the regime where the paper's wins are largest (lowest BMR on 69.8% of traces at small sizes, section 5.2.1) - yet none of the released drivers pass --consider-obj-metadata (3LCache/scripts/executor_libcachesim.py:66, cpu_overhead_boxplot.py:179), so every reported miss ratio treats learning metadata as free. The code's own declaration (180 B) is 2.7x the paper's claimed 67 B, so even the 2.5% estimate may be optimistic.",
+      "feasibility": "H",
+      "feasibility_rationale": "Step 1 is a CLI flag plus a re-run of the existing harness; step 2 is a contained struct rewrite in one header plus the window-sizing line. Both fit the machine (CPU-only) and the 10-week budget, and both reuse the shipped plotting pipeline.",
+      "research_value": "M",
+      "research_value_rationale": "Primarily a fairness/measurement result plus a modest engineering fix, so a reviewer could call it incremental. But 'does the headline win survive honest memory accounting?' is a question FAST reviewers do ask of learned-cache papers, the 67-vs-180-byte discrepancy makes it concrete, and either outcome (the win survives / it evaporates at small caches) is informative for anyone deciding whether to deploy the policy.",
+      "scoop_check": {
+        "result": "clear",
+        "details": "Queries: '3L-Cache metadata overhead cache budget consider object metadata', 'learned cache eviction metadata charged miss ratio fair comparison 2026'. No follow-up found that re-evaluates 3L-Cache (or LRB) with per-object metadata charged against the cache size; the two known follow-ups (S4-FIFO, https://arxiv.org/html/2608.27975v1, and SL-Cache, https://link.springer.com/chapter/10.1007/978-981-92-0363-5_36) do not address metadata accounting."
+      }
+    }
+  ],
+  "risks": [
+    "Probable configure failure at HEAD: libCacheSim/cache/eviction/CMakeLists.txt:97-100 adds ../../../../3LCache+/TLCacheN.cpp, one directory level above the repo root, whereas the analogous 3LCache entry at :93-94 uses three levels. Desk-review inference (cmake was not run); one-'../' fix, or build the pre-3LCache+ state / upstream libCacheSim.",
+    "Vendored LightGBM is version 2.2.2 from 2018 (scripts/LightGBM/VERSION.txt) and must compile under gcc 12 / glibc 2.36; swapping in a modern LightGBM would change the model and hence the reported numbers.",
+    "No root means scripts/install_dependency.sh (sudo apt, sudo make install for xgboost/zstd/LightGBM) must be re-derived with conda-forge plus CMAKE_INSTALL_PREFIX=$HOME; README also claims Ubuntu 18.04 / cmake 3.28.6 while this machine is Debian 12 / cmake 3.25.1.",
+    "HALP is not implemented anywhere in the repo (only as a plot label in 3LCache/scripts/draw_figure.py:19,76), so the '60.9% CPU reduction vs HALP' headline cannot be reproduced; likewise the 'modified-LRB' of section 5.5 / Figure 12 is absent, since libCacheSim/cache/eviction/LRB/lrb.cpp is stock random-sampling LRB.",
+    "The CPU-overhead metric is wall-clock throughput (libCacheSim/bin/cachesim/sim.c:75-96) but the shipped drivers run 32 simulations concurrently (3LCache/scripts/executor_libcachesim.py:61, cpu_overhead_boxplot.py:175) on a machine that is shared with other users; runs must be serialised, pinned and repeated or variance will dominate.",
+    "The paper's claims are percentile/box-plot statements over 4855 traces (4030 of them Tencent CBS); with a 50-100 trace subset the 10th/90th percentiles are noisy, so choosing and defending a representative subset is itself a methodological burden on the project.",
+    "Two undocumented artifacts: 3LCache+ / TLCacheN (added 2025-08-09, registered as algorithm '3LCache+' in libCacheSim/bin/cachesim/cache_init.h:141) is not described in the paper, and several bundled traces are named *.sample.csv, i.e. sampled rather than full.",
+    "Metadata accounting is inconsistent: 3LCache/TLCache_Interface.cpp:86 charges 180 B/object while section 4.2.2 claims 67 B, and no released script enables --consider-obj-metadata, so all published miss ratios treat learning metadata as free.",
+    "Some trace sources may be stale (README points at lrb.cs.princeton.edu for the Wikipedia traces); unverified, and not fatal given 7 other public datasets plus ~50 bundled traces.",
+    "Open contradiction to resolve before building on the paper: section 5.2.1 claims 3L-Cache is less sensitive than S3-FIFO to a falling power-law exponent, while section 7 says its sampler degenerates to random sampling on weakly-Zipf workloads; no figure settles which is true."
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "id": "fast24-symbiosis-the-art-of-application-and-ker",
+  "title": "Symbiosis: The Art of Application and Kernel Cache Cooperation",
+  "venue": "fast",
+  "year": 2024,
+  "paper_url": "https://www.usenix.org/conference/fast24/presentation/dai",
+  "pdf_url": "https://www.usenix.org/system/files/fast24-dai.pdf",
+  "repo_url": "https://github.com/daiyifandanny/Symbiosis",
+  "topic": "caching",
+  "note": "Dynamically splits memory between an application cache and the kernel page cache for LevelDB, RocksDB and WiredTiger. Entirely user-space: modified KV stores plus a Python/simpy offline simulator, and memory budgets are enforced with cgroup v2, which env.md delegates to the user slice. No root, no kernel changes, single node. Strong improvement target - the sizing policy is a small, self-contained algorithm."
+}

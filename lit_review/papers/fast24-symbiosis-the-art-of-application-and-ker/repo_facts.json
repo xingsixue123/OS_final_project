@@ -1,0 +1,180 @@
+{
+  "url": "https://github.com/daiyifandanny/Symbiosis",
+  "head_commit": "36e3ea787f0a1f4c364f09444aa685be5aac416c",
+  "head_commit_date": "2023-12-16T22:37:57-06:00",
+  "file_count": 7662,
+  "size_mb": 3261.4,
+  "top_level": [
+    ".gitignore",
+    ".gitmodules",
+    "ae_readme.txt",
+    "bpf/",
+    "init_after_reboot.sh",
+    "leveldb/",
+    "mongo/",
+    "rocksdb/",
+    "scripts/",
+    "simulator/",
+    "sqlite/",
+    "traces/",
+    "wiredtiger/",
+    "ycsb-trace/"
+  ],
+  "build_files": [
+    "bpf/bcc/CMakeLists.txt",
+    "leveldb/CMakeLists.txt",
+    "mongo/client/Makefile",
+    "rocksdb/CMakeLists.txt",
+    "rocksdb/Makefile",
+    "rocksdb/Vagrantfile",
+    "rocksdb/db_stress_tool/CMakeLists.txt",
+    "rocksdb/examples/CMakeLists.txt",
+    "rocksdb/examples/Makefile",
+    "rocksdb/fuzz/Makefile",
+    "rocksdb/java/CMakeLists.txt",
+    "rocksdb/java/Makefile",
+    "rocksdb/microbench/CMakeLists.txt",
+    "rocksdb/tools/CMakeLists.txt",
+    "rocksdb/tools/Dockerfile",
+    "sqlite/autoconf/configure.ac",
+    "sqlite/configure",
+    "sqlite/configure.ac"
+  ],
+  "gitmodules": "[submodule \"third_party/rocksdb\"]\n\tpath = third_party/rocksdb\n\turl = https://github.com/facebook/rocksdb.git\n",
+  "lines_by_extension": {
+    ".c": 581477,
+    ".cc": 517364,
+    ".h": 278093,
+    ".py": 181231,
+    ".java": 63063,
+    ".sh": 19843,
+    ".hpp": 19152,
+    ".cpp": 4849,
+    ".cxx": 2886,
+    ".js": 125,
+    ".bash": 61,
+    ".proto": 28
+  },
+  "red_flags": {
+    "sudo": {
+      "count": 372,
+      "examples": [
+        "bpf/bcc/INSTALL.md:88: sudo apt-get install bpfcc-tools linux-headers-$(uname -r)",
+        "bpf/bcc/INSTALL.md:91: The tools are installed in `/sbin` (`/usr/sbin` in Ubuntu 18.04) with a `-bpfcc` extension. Try running `sudo opensnoop-bpfcc`.",
+        "bpf/bcc/INSTALL.md:107: sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 4052245BD4284CDD",
+        "bpf/bcc/INSTALL.md:108: echo \"deb https://repo.iovisor.org/apt/$(lsb_release -cs) $(lsb_release -cs) main\" | sudo tee /etc/apt/sources.list.d/iovisor.list",
+        "bpf/bcc/INSTALL.md:109: sudo apt-get update"
+      ]
+    },
+    "kernel_module": {
+      "count": 3,
+      "examples": [
+        "bpf/bcc/src/cc/frontends/clang/kbuild_helper.cc:158: ret = system(\"modprobe kheaders\");",
+        "bpf/bcc/src/cc/frontends/clang/kbuild_helper.cc:194: int ret1 = system(\"rmmod kheaders\");",
+        "bpf/bcc/tools/kvmexit.py:256: raise Exception(\"Please insmod kvm module to use kvmexit tool.\")"
+      ]
+    },
+    "custom_kernel": {
+      "count": 26,
+      "examples": [
+        "bpf/bcc/INSTALL.md:149: # reboot",
+        "bpf/bcc/INSTALL.md:225: sudo reboot",
+        "bpf/bcc/INSTALL.md:228: Use case 2. Install BCC for your AMI's default kernel (no reboot required):",
+        "bpf/bcc/INSTALL.md:237: Use case 1. Install BCC for your AMI's default kernel (no reboot required):",
+        "bpf/bcc/docs/tutorial_bcc_python_developer.md:103: Remember the days of sysadmins typing ```sync``` three times on a slow console before ```reboot```, to give the first asynchronous sync time to complete? Then s"
+      ]
+    },
+    "ebpf": {
+      "count": 468,
+      "examples": [
+        "bpf/bcc/CMakeLists.txt:16: # populate submodules (libbpf)",
+        "bpf/bcc/CMakeLists.txt:18: if(NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/src/cc/libbpf/src)",
+        "bpf/bcc/CMakeLists.txt:23: message(WARNING \"Failed to update submodule libbpf\")",
+        "bpf/bcc/CMakeLists.txt:26: execute_process(COMMAND git diff --shortstat ${CMAKE_CURRENT_SOURCE_DIR}/src/cc/libbpf/",
+        "bpf/bcc/CMakeLists.txt:33: message(WARNING \"Failed to update submodule libbpf\")"
+      ]
+    },
+    "perf_counters": {
+      "count": 337,
+      "examples": [
+        "bpf/bcc/debian/changelog:85: * support raw perf config for perf_event_open in python",
+        "bpf/bcc/docs/tutorial.md:371: perf_event_open(0x7ffd968212f0, -1, 0, -1, 0x8 /* PERF_FLAG_??? */) = -1 EIO (Input/output error)",
+        "bpf/bcc/docs/tutorial.md:375: The `perf_event_open` syscall returns `-EIO`. Digging into kernel uprobe related codes in `/kernel/trace` and `/kernel/events` directories to search `EIO`, the ",
+        "bpf/bcc/libbpf-tools/cpufreq.c:95: fd = syscall(__NR_perf_event_open, &attr, -1, i, -1, 0);",
+        "bpf/bcc/libbpf-tools/llcstat.c:99: fd = syscall(__NR_perf_event_open, &attr, -1, i, -1, 0);"
+      ]
+    },
+    "docker": {
+      "count": 47,
+      "examples": [
+        "bpf/bcc/.gitignore:16: # Output from docker builds",
+        "bpf/bcc/.gitignore:17: scripts/docker/output/",
+        "bpf/bcc/INSTALL.md:268: sudo docker run --rm -it --privileged \\",
+        "bpf/bcc/QUICKSTART.md:3: A Docker container is provided for user to try out [bcc](https://github.com/iovisor/bcc).",
+        "bpf/bcc/QUICKSTART.md:7: docker run -it --rm \\"
+      ]
+    },
+    "kvm_vm": {
+      "count": 5,
+      "examples": [
+        "bpf/bcc/scripts/build_bpf_demo.sh:76: virsh destroy $img_name",
+        "bpf/bcc/scripts/build_bpf_demo.sh:77: virsh undefine $img_name",
+        "bpf/bcc/scripts/build_bpf_demo.sh:78: virsh vol-delete $img_name.img --pool default",
+        "bpf/bcc/src/cc/libbpf/travis-ci/vmtest/run.sh:462: qemu-system-x86_64 -nodefaults -display none -serial mon:stdio -no-reboot \\",
+        "bpf/bcc/tools/kvmexit.py:253: if os.access(\"/dev/kvm\", os.R_OK | os.W_OK):"
+      ]
+    },
+    "rdma_dpdk_spdk": {
+      "count": 3,
+      "examples": [
+        "bpf/bcc/docs/kernel-versions.md:172: Mellanox `mlx5` driver | 4.9 | [`86994156c736`](https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/?id=86994156c736978d113e7927455d4eeeb2128",
+        "bpf/bcc/src/cc/libbpf/include/uapi/linux/if_link.h:712: IFLA_VF_IB_NODE_GUID,\t/* VF Infiniband node GUID */",
+        "bpf/bcc/src/cc/libbpf/include/uapi/linux/if_link.h:713: IFLA_VF_IB_PORT_GUID,\t/* VF Infiniband port GUID */"
+      ]
+    },
+    "cxl_pmem": {
+      "count": 633,
+      "examples": [
+        "sqlite/src/main.c:519: ** SQLITE_CONFIG_PAGECACHE: A pointer to 8-byte aligned memory (pMem),",
+        "sqlite/src/os_unix.c:4832: void *pMem;",
+        "sqlite/src/os_unix.c:4834: pMem = osMmap(0, nMap,",
+        "sqlite/src/os_unix.c:4838: if( pMem==MAP_FAILED ){",
+        "sqlite/src/os_unix.c:4843: pMem = sqlite3_malloc64(nMap);"
+      ]
+    },
+    "sysctl_hugepages": {
+      "count": 100,
+      "examples": [
+        "bpf/bcc/docs/tutorial.md:73: 1603   snmpd              11   0 /proc/sys/net/ipv4/neigh/eth0/retrans_time_ms",
+        "bpf/bcc/docs/tutorial.md:74: 1603   snmpd              11   0 /proc/sys/net/ipv6/neigh/eth0/retrans_time_ms",
+        "bpf/bcc/docs/tutorial.md:75: 1603   snmpd              11   0 /proc/sys/net/ipv6/conf/eth0/forwarding",
+        "bpf/bcc/libbpf-tools/cpudist.c:137: f = fopen(\"/proc/sys/kernel/pid_max\", \"r\");",
+        "bpf/bcc/src/cc/compat/linux/virtual_bpf.h:3554: *\t\tGet name of sysctl in /proc/sys/ and copy it into provided by"
+      ]
+    },
+    "big_gpu": {
+      "count": 3,
+      "examples": [
+        "wiredtiger/test/csuite/random_directio/main.c:124: * create table:A100-3       (3 for thread #3)",
+        "wiredtiger/test/csuite/random_directio/main.c:127: * insert into table:A100-3     (continuing the sequence)",
+        "wiredtiger/test/csuite/random_directio/main.c:131: * rename table:A100-3 -> table:B100-3  (third step in sequence)"
+      ]
+    },
+    "multi_node": {
+      "count": 2,
+      "examples": [
+        "rocksdb/USERS.md:77: [Netflix](http://techblog.netflix.com/2016/05/application-data-caching-using-ssds.html) Netflix uses RocksDB on AWS EC2 instances with local SSD drives to cache",
+        "wiredtiger/test/3rdparty/testtools-0.9.34/testtools/run.py:200: if progName.endswith('%srun.py' % os.path.sep):"
+      ]
+    }
+  },
+  "github": {
+    "stargazers_count": 8,
+    "forks_count": 0,
+    "archived": false,
+    "pushed_at": "2024-01-24T06:49:29Z",
+    "created_at": "2023-12-16T04:04:46Z",
+    "open_issues_count": 0,
+    "license": null
+  }
+}

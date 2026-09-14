@@ -1,0 +1,11 @@
+{
+  "id": "fast24-kosmo-efficient-online-miss-ratio-curve",
+  "title": "Kosmo: Efficient Online Miss Ratio Curve Generation for Eviction Policy Evaluation",
+  "venue": "fast",
+  "year": 2024,
+  "paper_url": "https://www.usenix.org/conference/fast24/presentation/shakiba",
+  "pdf_url": "https://www.usenix.org/system/files/fast24-shakiba.pdf",
+  "repo_url": "https://github.com/Stumm-Lab/kosmo-fast24",
+  "topic": "caching",
+  "note": "Pure trace-driven MRC generation for non-inclusive eviction policies (LFU, FIFO, 2Q, LRFU). Rust binaries, public cache traces (Twitter cache-trace, 52 traces), no privileged access and no special hardware. Artifact also archived at Zenodo DOI 10.5281/zenodo.10569925. Only concern is trace download size against the ~257 GB free on /home, which is manageable by subsetting traces."
+}

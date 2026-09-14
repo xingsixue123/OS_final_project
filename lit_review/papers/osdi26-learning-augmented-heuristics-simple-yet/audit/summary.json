@@ -1,0 +1,156 @@
+{
+  "title": "Learning-Augmented Heuristics: Simple Yet Smart, Robust and Interpretable Cache Eviction",
+  "one_line": "S4-FIFO keeps S3-FIFO's simple FIFO data path but exposes five cache-level knobs and uses an offline-pretrained GBDT on the asynchronous control plane to pick, once per workload, one of 18 parameter configurations that minimises expected miss-ratio regret anchored to FIFO.",
+  "topic": "ml-for-systems",
+  "repo": {
+    "official": "yes",
+    "evidence": "Repo lives in the cacheMon org (the libCacheSim org, Juncheng Yang is last author); .gitmodules points at forks owned by the first two authors (haochengxia/libCacheSim branch s4-fifo, williamnixon20/CacheLib branch fork-w-s4fifo); paper footnote 1 (p. 2242) points at libcachesim.com; README.md:244-251 carries the paper's BibTeX. The libCacheSim fork at b6d292e contains the real implementation (S4FIFO.c 22,554 B, S4FIFO.h, S4FIFO_base.c, S4FIFO_features.h, S4FIFO_verify.c) plus the grid_search/ harness.",
+    "last_commit": "2026-05-12",
+    "artifact_badges": [],
+    "badge_evidence": "none found - https://www.usenix.org/conference/osdi26/presentation/xia returned HTTP 403 to automated fetch, so badge status could not be confirmed either way; no badge image or claim in README.md / doc/REPRODUCTION.md."
+  },
+  "hard_filters": {
+    "H1_open_repo": {
+      "result": "pass",
+      "evidence": "Official (see repo.evidence) and contains the actual system, not a placeholder: the parameterised data path and feature collector are real C in the libCacheSim submodule (libCacheSim/cache/eviction/S4FIFO.c 22,554 B, S4FIFO.h with S4FIFO_base_params_t carrying exactly the paper's five knobs and Table 2 defaults 0.10/0.90/2/0/0; S4FIFO_features.h 14,009 B implementing the Table 3 histograms incl. the ghost deletion-count correction of §4.4.2), the grid-search harness is at libCacheSim/grid_search/, and the full training pipeline is in analysis/ (train_xgb_18class.py:15-34 the 18 classes, :402-486 the §4.3.1 cost matrix, :494-514 the expected-risk argmin). CAVEAT, not a fail: the pre-trained model itself is absent - analysis/.gitignore:2-5 excludes xgb_18class_results/, and a recursive tree listing of the fork at b6d292e contains no path matching model/ensemble/m2cgen, while S4FIFO.h and S4FIFO_features.h contain no inference code. README.md:204 and BLOG.md:169 nonetheless advertise a released pre-trained model."
+    },
+    "H2_no_root": {
+      "result": "pass",
+      "evidence": "Every miss-ratio result is user-space trace-driven simulation (paper §5.1: 'All miss ratio results are from libCacheSim'). Dockerfile:9-17 lists only build-time libs (build-essential, cmake, pkg-config, libglib2.0-dev, libgoogle-perftools-dev, libzstd-dev), all available from conda-forge; Dockerfile:31 already passes -DUSE_HUGEPAGE=OFF, so the one root-adjacent CMake option (default ON upstream) has a documented escape hatch. No kernel module, eBPF, perf counter, KVM or /proc/sys write anywhere. The two sudo hits are README.md:55 (the same apt libs) and README.md:84 (CacheLib getdeps.py install-system-deps), the latter needed only for the CacheBench throughput figure (Fig. 8 / doc/REPRODUCTION.md:172-180), which is not required for any miss-ratio claim and should be dropped."
+    },
+    "H3_hardware_fit": {
+      "result": "pass",
+      "evidence": "CPU-only, single-node, embarrassingly parallel across traces/configs/sizes (paper §4.4.3). doc/REPRODUCTION.md:227 gives a minimum of '4 cores, 16GB RAM'; the machine has 16 cores/32 threads and 125 GiB. Cache sizes are 0.1-10% of each trace's working set so per-run RSS is well under 1 GB. No GPU needed (analysis/gpu/train_deep_classifier.py is optional and gitignored). Only binding constraint is disk: doc/REPRODUCTION.md:229 recommends 500 GB for the full 5,175-trace x 168-config grid vs ~257 GB free, so the corpus must be subsetted - a scale-down that still tests the claim (300-400 public traces, 18 released configs, 3 cache sizes)."
+    },
+    "H4_obtainable_deps_data": {
+      "result": "pass",
+      "evidence": "Deps are user-space installable: C side = glib/pkg-config/zstd/gperftools from conda-forge with gcc 12.2 and cmake 3.25.1 (README.md:44-56 asks for gcc>=11, cmake>=3.12); Python side = requirements.txt (numpy, pandas, sklearn, xgboost, lightgbm, m2cgen, torch, jupyter), all pip/conda, though unpinned. Data: doc/REPRODUCTION.md:41 says many traces are proprietary and 'available upon request' (CDN1 163, CDN2 890, Meta 8, Tencent Photo 2 - about 20% of the corpus), but a public substitute in the identical oracleGeneral format is published by the same group at cacheMon/cache_dataset on s3.amazonaws.com/cache-datasets/ (Tencent CBS 4,030; Alibaba block 1,000; CloudPhysics 106; Twitter Twemcache 54; MSR 13; Wikimedia 3; Meta KV 5), and analysis/train_traces.txt names the exact 5,171 traces so the public subset can be matched name-for-name. libCacheSim/data/cloudPhysicsIO.vscsi ships for the smoke test. Model weights are not downloadable but are re-derivable from the released training code on those public traces - no gated or external asset is required."
+    }
+  },
+  "reproduce": {
+    "level": "M",
+    "target": "Figure 6(a) - mean and median miss-ratio reduction over FIFO at the large cache size (10% of working set) for the bars FIFO -> S3-FIFO -> S4-FIFO(v2) -> Offline S4-FIFO, i.e. the claim that S4-FIFO gives +26% higher mean miss-ratio reduction than S3-FIFO and lands within 0.2 pp of the grid-search optimum (§5.2). Secondary, nearly free: the Figure 7(a) worst-trace bars for S4-FIFO, S3-FIFO, 2Q, ARC and LeCaR.",
+    "scale_down": "~300-400 public oracleGeneral traces instead of 5,175 (all 106 CloudPhysics + all 54 Twitter + all 13 MSR + a stratified ~200 from Tencent CBS and Alibaba block, selected by name from analysis/train_traces.txt), keeping the block/KV/object mix of Table 4 minus the proprietary CDN sources and fitting the 257 GB disk budget. Grid reduced from 168 configurations to the 18 released classes (analysis/train_xgb_18class.py:15-34) plus the S3-FIFO default - exactly the space the model chooses from, so the claim is reproduced rather than approximated. Cache sizes 0.1%/1%/10% of WSS as in §5.1. Drop Figure 8 (CacheBench needs root). Drop 3L-Cache/LRB/LHD/GL-Cache from the first pass (ENABLE_3L_CACHE/ENABLE_LRB/ENABLE_GLCACHE default OFF and need LightGBM/XGBoost C libs); keep FIFO, LRU, 2Q, ARC, LeCaR, LIRS, SIEVE, S3-FIFO which need no extra deps.",
+    "effort": "~12 person-days + ~150 CPU-core-hours (about 5-6 wall-clock hours on 30 threads), 0 GPU-hours, plus 40-150 GB of trace download",
+    "rationale": "Not H: the pre-trained model, all feature CSVs (features_20pct.csv) and all grid CSVs (cleaned/*/grid_full.csv, grid_optimal.csv, baselines.csv) are gitignored (analysis/.gitignore:2-12), so every released analysis script fails on a fresh clone and every number must be regenerated before anything runs; the adapter from the C feature_vector_print() dump to the CSV schema the scripts expect is not released; ~20% of the corpus is proprietary so absolute numbers cannot be matched; doc/GUIDE.md:178,200 point at scripts that do not exist; no artifact badge. Not L: the simulator, the five knobs, the feature collector, the grid-search harness (libCacheSim/grid_search/), the 18 classes, the empirical regret matrix and the whole training pipeline are released and readable; the traces are public in the exact binary format; the build route is a straightforward conda replay of Dockerfile:9-31 with -DUSE_HUGEPAGE=OFF; and the entire workload is CPU-only and comfortably within this machine."
+  },
+  "addons": [
+    {
+      "name": "Leakage-free split plus calibrated abstention fallback",
+      "hypothesis": "We hypothesize that replacing the hand-curated train/test split and bare expected-risk-argmin inference with (a) a leakage-free grouped / leave-one-source-out split and (b) a calibrated abstention rule that falls back to the S3-FIFO default configuration when the regret margin is small, restores S4-FIFO's <=1% worst-case miss-ratio regression versus FIFO under an honest split, at <=1 percentage point of mean miss-ratio reduction.",
+      "mechanism": "(1) Drop force_train_traces/force_test_traces and evaluate under grouped 5-fold CV and leave-one-source-out, reporting worst-trace and 10th-percentile exactly as Figure 7 does. (2) Replace the argmin over expected risk with an abstention rule: emit the default configuration (rho_S=0.10, tau_S=2, tau_G=0, rho_G=0.90) whenever risk(default) - min_k risk(k) < tau; calibrate tau on a held-out fold to a target worst-case regression (e.g. <=0.5%) and report the resulting efficiency/robustness frontier. This turns the paper's asserted robustness mechanism ('selects parameters from a validated set of safe configurations', §3) into an explicit, tunable knob with a measurable price.",
+      "code_locations": [
+        "analysis/train_xgb_18class.py",
+        "analysis/train_xgb_18class_lite_logc.py",
+        "analysis/check_tail_performance.py",
+        "analysis/create_improvement_report.py"
+      ],
+      "motivating_evidence": "Paper §5.1 states 'We randomly split the traces into two sets: 4140 for training and 1035 for evaluation.' The released trainer does not: analysis/train_xgb_18class.py:296-312 force-feeds 27 named, previously-regressing traces into the TRAINING set with comments recording the exact regression each caused ('io_traces.ns738 # Was -1.52% at ratio=0.1'; 'cf_allcolo.ns180 # Was -0.22% at ratio=0.001'), and :316-325 pins 6 favourable 'showcase' traces into the TEST set ('tencentBlock.ns9193 # Best18: +28.8%, ARC: -9.7%'). analysis/train_xgb_18class_lite_logc.py:306-339 is identical. Figure 7a's 0.8% worst-case number and Figure 7c's 10th-percentile result - the paper's most distinctive claims - are computed on that split.",
+      "feasibility": "H",
+      "feasibility_rationale": "A change of well under 300 lines to Python that already exists (split_by_trace at :167-213 already supports force_*=None; the expected-risk computation at :494-514 is the single insertion point for the abstention branch), evaluated on the same grid CSVs the team regenerates for the §4 reproduction target. No simulator work, no C work, no additional compute beyond the reproduction itself. The one dependency is that step 3 of the reproduction plan (regenerating grid_full.csv) succeeded.",
+      "research_value": "H",
+      "research_value_rationale": "It tests the paper's flagship claim using the paper's own code, and both outcomes teach something: if robustness survives an honest split then the curation was cosmetic and the result is stronger than the artifact suggests; if it does not, the abstention rule is a principled repair that restores the FIFO-anchored guarantee and quantifies its cost in mean efficiency. An OSDI reviewer would care either way, because 'never worse than FIFO' is precisely the property the paper argues is the barrier to deploying smart caches.",
+      "scoop_check": {
+        "result": "clear",
+        "details": "Queries (2026-09-14): 'S4-FIFO learning-augmented heuristics cache eviction follow-up 2026'; 'cache policy selection model abstention fallback conformal prediction robustness worst-case miss ratio'. Only the paper itself (arXiv 2608.27975, https://arxiv.org/abs/2608.27975), the USENIX page and the authors' Harvard Systems blog (https://systems.seas.harvard.edu/blog/learning-augmented-heuristics/) came back. The conformal-abstention literature that surfaced is entirely LLM/vision; nothing applies selective prediction to cache configuration selection."
+      }
+    },
+    {
+      "name": "Honest-overhead model: distil to the paper's stated 20-tree budget",
+      "hypothesis": "We hypothesize that distilling the released 20-model LightGBM ensemble into the single 20-tree, depth-9 GBDT that §4.4.3 claims S4-FIFO uses costs less than 1 percentage point of mean miss-ratio reduction while shrinking the m2cgen-exported C model by more than 100x and cutting inference latency below 100 us, thereby making the paper's own overhead claim true.",
+      "mechanism": "Train the existing ensemble as a teacher; fit one LGBMClassifier(n_estimators=20, max_depth=9) on the teacher's soft probabilities, weighted by the empirical regret matrix that build_empirical_cost_matrix already produces, so the student is optimised for regret rather than log-loss. Export with export_models_multilang.py and measure (i) exported byte size per language, (ii) per-call latency via the existing compiled-C harness, (iii) end-to-end miss ratio versus the teacher on the honest split from AO1. Sweep the tree budget (5/10/20/50/200) to produce an accuracy-versus-footprint curve.",
+      "code_locations": [
+        "analysis/train_xgb_18class.py",
+        "analysis/train_xgb_18class_lite_logc.py",
+        "analysis/export_models_multilang.py",
+        "analysis/test_c_consistency.py"
+      ],
+      "motivating_evidence": "Paper §4.4.3 bounds inference as O(T*D) with 'T is the number of trees (20 in our model) and D is the maximum depth (9 in our model)' and claims total learning storage overhead 'on the order of only tens of kilobytes' (also BLOG.md:88,151). The released trainer at analysis/train_xgb_18class.py:347-358 fits 20 SEPARATE LightGBM models with n_estimators = 200 + 20*i (200..580), max_depth 6..9, num_leaves 31..126, over 18 classes - on the order of 1e5 trees. The 'lite' variant at train_xgb_18class_lite_logc.py:360-367 is still 5 x 50 estimators x 18 classes ~ 4,500 trees. analysis/export_models_multilang.py:456-457 and :466-472 print each exported model's size and the per-language total in MEGABYTES. No released script produces a 20-tree model.",
+      "feasibility": "H",
+      "feasibility_rationale": "All four scripts exist and already implement the m2cgen export and the Python-vs-C consistency/latency harness (test_c_consistency.py:55-107 compiles and runs the exported ensemble). The change is localized to the model-fitting block plus a distillation loss; training is minutes of CPU once the feature/label CSVs from the reproduction exist. No traces need re-simulating.",
+      "research_value": "M",
+      "research_value_rationale": "It repairs and quantifies a stated deployability claim for a system whose entire pitch is 'cheap enough to actually deploy', and it produces a reusable accuracy-versus-footprint curve for cache-level configuration models. But the direction of the result - small tree ensembles are nearly as good on 73 tabular features - is what most reviewers would expect, so the surprise value is limited.",
+      "scoop_check": {
+        "result": "clear",
+        "details": "Queries (2026-09-14): 'S4-FIFO learning-augmented heuristics cache eviction follow-up 2026'; 'learning to configure cache eviction parameters SIEVE 2Q TinyLFU generality learned configuration selector 2026'. No work distils or re-budgets this model. GBDT distillation is generic ML but has not been applied to cache configuration selection."
+      }
+    },
+    {
+      "name": "Actually periodic prediction: re-configuration under workload drift",
+      "hypothesis": "We hypothesize that periodic re-prediction over a windowed feature collector, gated by hysteresis on the expected-regret improvement, reduces mean miss ratio by more than 3% relative to one-shot S4-FIFO on drifting workloads (multi-day Tencent/Twitter traces and cross-source concatenations) without increasing the worst-trace regression versus FIFO.",
+      "mechanism": "(1) Make the feature collector windowed: bucketed_hit_pos_tracker_t currently accumulates from t=0, so a second prediction at t=0.6 is dominated by the first 20% - replace with an exponentially-decayed or tumbling-window histogram. (2) Drive re-prediction from the existing prediction-interval knob but commit a switch only when risk(current) - risk(candidate) > theta, so the cache does not oscillate. (3) Build a drift workload generator: concatenate traces from different sources and different phases of the same source, and exploit the natural multi-day structure of the Tencent CBS and Twitter traces. (4) Report mean, 10th-percentile and worst against one-shot S4-FIFO, S3-FIFO, ARC and LeCaR - the per-miss adaptive baselines that should win on drift if periodicity is the wrong granularity.",
+      "code_locations": [
+        "doc/REPRODUCTION.md",
+        "analysis/train_xgb_18class.py",
+        "analysis/create_improvement_report.py",
+        "Makefile"
+      ],
+      "motivating_evidence": "Paper §4.2: 'For simplicity, our evaluation makes a single prediction per trace. We found that substantial shifts requiring a new prediction are uncommon... We leave the choice of refresh policy and interval outside the scope of this work.' §5.1: 'we restrict ourselves to one prediction per trace'. Yet the paper's framing contribution (Table 1, Figure 1, §2.4.2) is that it occupies the PERIODIC cache-level quadrant - periodicity is asserted as the design's defining property and is never exercised. The knob exists but is defaulted off: doc/REPRODUCTION.md:210 documents 'prediction-interval | Re-predict every N requests (0 = one-shot) | 0', and S4FIFO.c's default parameter string ends '...,feature-collect-reqs=10000,feature-num-buckets=16,prediction-interval=0'. The 'drift is rare' claim is also tested only on filtered, single-window traces; on multi-day traces it is the assumption most likely to break. NOTE: the C-side edit lands in the submodule at libCacheSim/libCacheSim/cache/eviction/S4FIFO_features.h (14,009 B, the tracker/collector structs) and S4FIFO.c (22,554 B, the phase machine), both verified present upstream on branch s4-fifo @ b6d292e but not fetched in this shallow clone, which is why only in-clone anchors are listed above.",
+      "feasibility": "M",
+      "feasibility_rationale": "Cross-cutting: needs C work in the submodule (windowed collector plus an inference path that does not currently exist, since no model is embedded anywhere in the fork), a new drift workload generator, and a full re-run of the evaluation. All compute is CPU-only and within the reproduction budget, and 3-4 students can do it in 10 weeks once the reproduction lands, but it is not a localized change and it is blocked until the open question of how s4fifo obtains predicted parameters at run time is answered.",
+      "research_value": "H",
+      "research_value_rationale": "It closes the gap between the paper's taxonomy contribution and its evaluation - the paper claims the periodic quadrant as its novelty and then predicts exactly once. A null result ('one-shot is enough even on multi-day drifting traces') validates a load-bearing assumption the paper only asserts and would let deployers skip the control loop entirely; a positive result is a direct improvement in the regime the authors themselves named as future work.",
+      "scoop_check": {
+        "result": "partial",
+        "details": "Queries (2026-09-14): 'learned cache eviction policy configuration tuning periodic re-prediction workload drift 2026'; 'S4-FIFO learning-augmented heuristics cache eviction follow-up 2026'. Closest work is DynamicAdaptiveClimb: Adaptive Cache Replacement with Dynamic Resizing (https://arxiv.org/pdf/2511.21235), which resizes cache regions adaptively but per-access and without a pre-trained cache-level configuration selector - i.e. it sits in the per-miss quadrant the paper argues against. ARC/LeCaR/CACHEUS are the classical per-miss analogues. No work re-predicts LAH-style cache-level configurations periodically."
+      }
+    },
+    {
+      "name": "Shrinking the observation window to close the v1/v2 gap",
+      "hypothesis": "We hypothesize that triggering the prediction as soon as the histogram feature vector stabilises (L1 drift between consecutive windows below a threshold) - typically far earlier than 20% of the trace - recovers at least half of the online-versus-retrospective gap in Figure 6 at no loss in configuration-selection accuracy.",
+      "mechanism": "Collect features at 1%, 2%, 5%, 10% and 20% of each trace; train one model per window length and measure both top-k accuracy and the end-to-end v1 miss ratio (default parameters before the switch, predicted parameters after). Then replace the fixed window with a stability trigger on the L1 distance between successive feature snapshots, and report the distribution of trigger points and the resulting v1 miss ratio against the fixed-20% baseline.",
+      "code_locations": [
+        "analysis/train_xgb_18class.py",
+        "analysis/train_xgb_18class_lite_logc.py",
+        "analysis/plot_feature_distribution.py",
+        "analysis/train_per_ratio.py",
+        "analysis/README.md"
+      ],
+      "motivating_evidence": "Paper §5.2: 'Across both cache sizes, v2 consistently outperforms v1, indicating that the predicted parameters improve efficiency and that the observation window accounts for the gap between the two variants' - the paper identifies the cost and never tries to reduce it, and v1 is the variant that would actually be deployed. The authors evidently already collected a shorter-window variant and did not report it: analysis/README.md:81-82 lists both features_10pct.csv and features_20pct.csv, yet every training script loads only features_20pct.csv (e.g. train_xgb_18class.py:53). The window is defined three different ways across artifacts: 20% of the trace (paper §5.1), feature-collect-reqs=10000 (S4FIFO.c default parameter string), and feature-collect-reqs=50000 (doc/REPRODUCTION.md:154).",
+      "feasibility": "M",
+      "feasibility_rationale": "Needs feature collection re-run at ~5 window lengths over the trace subset (about 4x the reproduction's simulation budget, still only ~1 CPU-day on 30 threads) plus a two-phase v1 driver script that the repo does not provide (all released evaluation is table lookup from grid_full.csv, train_xgb_18class.py:518-551). Training itself is cheap and the existing scripts need only a path change.",
+      "research_value": "M",
+      "research_value_rationale": "A concrete, measurable improvement to the variant the paper actually deploys, and it probes how much history the 'foundation model' really needs - relevant to cold-start and short-lived caches. But the direction is unsurprising and the achievable gain is bounded above by the v1/v2 gap visible in Figure 6.",
+      "scoop_check": {
+        "result": "clear",
+        "details": "Queries (2026-09-14): 'S4-FIFO learning-augmented heuristics cache eviction follow-up 2026'; 'learned cache eviction policy configuration tuning periodic re-prediction workload drift 2026'. Nothing addresses warmup-window length for cache-level configuration prediction; the adjacent literature (LRB, 3L-Cache, GL-Cache) is all object-level and has no analogous window."
+      }
+    },
+    {
+      "name": "Generality of LAH: learning to configure a second heuristic",
+      "hypothesis": "We hypothesize that applying LAH to a structurally different heuristic - 2Q (hot/cold queue ratio plus ghost size) or SIEVE - recovers at least half of S4-FIFO's mean miss-ratio reduction over its own static default on the same traces, showing that the gain comes from learning-to-configure rather than from S3-FIFO's specific queue structure.",
+      "mechanism": "Expose the target heuristic's knobs in libCacheSim, define an analogous cache-level feature set (queue-position histograms plus the same composite ratios), grid-search a discretised configuration space, reduce it to ~10-18 classes, and reuse the existing empirical-regret training and risk-minimising inference verbatim. Compare (a) learned versus default for the new heuristic, (b) learned-2Q/SIEVE versus learned-S4-FIFO, and (c) whether a model trained on S4-FIFO features transfers to the new policy's feature space.",
+      "code_locations": [
+        "analysis/train_xgb_18class.py",
+        "analysis/train_xgb_18class_lite_logc.py",
+        "analysis/create_grid_optimal.py",
+        "analysis/analyze_class_distribution.py"
+      ],
+      "motivating_evidence": "Paper §5.5 'Generality across eviction algorithms' lists CacheLib's LRU knobs, 2Q's hot/cold ratio, ARC's recency/frequency balance and LeCaR's expert weights as candidates and then says 'Extending LAH to these policies requires policy-specific feature engineering... These extensions are beyond the scope of this work.' LAH is presented as a FRAMEWORK (§3; the first-listed contribution in §1) but is instantiated exactly once, so its central generality claim is currently unsupported by any evidence. The new policy would sit beside libCacheSim/libCacheSim/cache/eviction/TwoQ.c and Sieve.c, both verified present in the fork's eviction directory listing at b6d292e (not fetched in this clone).",
+      "feasibility": "M",
+      "feasibility_rationale": "A new parameterised policy plus a policy-specific feature collector in C, a fresh grid search, and a fresh training run - the largest of the five and cross-cutting, though it reuses the training/evaluation code unchanged and is entirely CPU-only. Realistic for 3-4 students over 10 weeks only if the reproduction in the plan lands in the first two weeks.",
+      "research_value": "H",
+      "research_value_rationale": "It is the direct test of the paper's framework-level claim, which is the contribution the title and §3 lead with. A negative result - gains do not transfer, i.e. S3-FIFO's three-queue structure with its ghost signal is what makes configuration learnable - would be at least as interesting as a positive one and would sharpen the boundary of where LAH applies.",
+      "scoop_check": {
+        "result": "clear",
+        "details": "Queries (2026-09-14): 'learning to configure cache eviction parameters SIEVE 2Q TinyLFU generality learned configuration selector 2026'; 'S4-FIFO learning-augmented heuristics cache eviction follow-up 2026'. Search returned only the paper, its arXiv preprint (2608.27975) and the authors' blog post, plus unrelated learned-eviction work (SL-Cache, Cold-RL, MUSTACHE, LearnedCache, Sketching the Path to Efficiency) that all replace the eviction policy rather than configure an existing one."
+      }
+    }
+  ],
+  "risks": [
+    "The pre-trained model - the paper's headline artifact - appears to be absent from both repos: analysis/.gitignore:2-5 excludes the pickles, and a recursive tree listing of haochengxia/libCacheSim @ b6d292e contains no path matching model/ensemble/m2cgen, while S4FIFO.h and S4FIFO_features.h contain no inference code. README.md:204 and BLOG.md:169 nonetheless advertise a released pre-trained model. Day-1 action: fetch both submodules and grep; if truly absent, every S4-FIFO number must be retrained from scratch.",
+    "Unclear how the s4fifo simulator obtains its parameters at run time: S4FIFO.c exposes feature-collect-reqs, feature-num-buckets and prediction-interval but no inference path was found on desk review. This blocks the periodic-reprediction add-on until answered.",
+    "No intermediate data is released at all - features_*.csv, cleaned/*, aggregated_results.csv, xgb_*_results/ and trace.txt are all gitignored (analysis/.gitignore:8-21), so every analysis and plotting script fails on a fresh clone. The dependency chain traces -> grid search -> grid_full.csv -> everything else must be rebuilt before a single released script runs.",
+    "The train/test split in the released trainer is hand-curated, not random as the paper states (analysis/train_xgb_18class.py:296-325): 27 previously-regressing traces are forced into training and 6 favourable traces are pinned into the test set. Any reproduction that runs the script unmodified inherits this; any reproduction that removes it is no longer comparing like with like against Figures 6 and 7. Report both.",
+    "The released model is orders of magnitude larger than the paper's overhead analysis states (20 LightGBM models of 200-580 estimators over 18 classes vs the claimed 20 trees of depth 9; export_models_multilang.py reports exported code sizes in MB vs the claimed 'tens of kilobytes'), which also casts doubt on the Figure 8 throughput-parity result - the one figure this machine cannot reproduce anyway, since CacheLib's build needs sudo getdeps.py install-system-deps.",
+    "Reported top-k accuracy uses an undisclosed miss-ratio tolerance (learning_curve_experiment.py:178-211, cross_dataset_simple.py:127-151 count a prediction correct when the predicted config's miss ratio rounds to the optimum's), so Figure 10's ~60% top-1 is not the quantity §5.5 defines. Recompute both ways.",
+    "About 20% of the corpus is proprietary (CDN1, CDN2, Meta, Tencent Photo; doc/REPRODUCTION.md:41 'available upon request'), so absolute numbers cannot be matched. The public substitute is block/KV-heavy, biasing results toward block workloads - state this rather than claiming a failed reproduction.",
+    "Disk: ~257 GB free versus the recommended 500 GB (doc/REPRODUCTION.md:229). Trace subsetting is mandatory; keep traces zstd-compressed (OPT_SUPPORT_ZSTD_TRACE is ON by default) and budget download/decompression time.",
+    "The learned baselines (3L-Cache, LRB, GL-Cache) sit behind CMake options that default to OFF and require LightGBM/XGBoost C libraries; without them the '+8% over 3L-Cache' claim cannot be checked at all. conda-forge provides both, but this build path is unvalidated.",
+    "No artifact badge could be confirmed - the USENIX presentation page returns HTTP 403 to automated fetch. The repo has 2 stars, 0 forks, 0 open issues, last push 2026-05-12, and the advertised 'Docker-based artifact evaluation package' (BLOG.md:170) builds only the simulator: no traces, no model, no results.",
+    "Python dependencies are unpinned and the scripts disagree with each other about the pandas API (learning_curve_experiment.py:125 needs pandas >= 2.2 for include_groups=, while train_xgb_18class.py:253 uses the form deprecated in 2.2). Expect to pin manually.",
+    "Documentation drift: doc/GUIDE.md:178 and :200 reference scripts/quick_eval.py and analysis/evaluate.py, neither of which exists; doc/REPRODUCTION.md:77 lists a ghost-ratio grid of {3x,6x} that yields 112 rather than 168 configurations; doc/REPRODUCTION.md:45 says traces under 1M objects were filtered while the paper §5.1 says 100K. Trust the code over the docs.",
+    "The greedy set-cover reduction from 168 to 18 configurations (§4.3.3) is not released - the 18 classes appear only as a hard-coded literal - so that step cannot be re-derived or varied without reimplementing it.",
+    "The skip ratio kappa is not actually learned in the released class set: the 18 class tuples in train_xgb_18class.py:15-34 have only four components (rho_S, tau_S, tau_G, rho_G), and export_models_multilang.py:22-41 fixes k=0.25 for all 18 classes, contradicting Table 2 (default 0.00, range {0.00, 0.25}) and the Figure 12 narrative."
+  ]
+}

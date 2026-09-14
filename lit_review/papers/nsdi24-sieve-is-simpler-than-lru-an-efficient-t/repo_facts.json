@@ -1,0 +1,59 @@
+{
+  "url": "https://github.com/cacheMon/NSDI24-SIEVE",
+  "head_commit": "0861f8261c37b8286a70449a1defb5a4749c72d2",
+  "head_commit_date": "2024-08-01T23:22:17-04:00",
+  "file_count": 535,
+  "size_mb": 124.1,
+  "top_level": [
+    ".gitignore",
+    "LICENSE",
+    "README.md",
+    "doc/",
+    "libCacheSim/",
+    "mydata/"
+  ],
+  "build_files": [
+    "libCacheSim/CMakeLists.txt",
+    "libCacheSim/doc0/Makefile",
+    "libCacheSim/test/CMakeLists.txt"
+  ],
+  "lines_by_extension": {
+    ".c": 44445,
+    ".h": 33339,
+    ".cpp": 6588,
+    ".py": 5887,
+    ".hpp": 1175,
+    ".sh": 145
+  },
+  "red_flags": {
+    "sudo": {
+      "count": 35,
+      "examples": [
+        "libCacheSim/.travis.yml:15: sudo: true",
+        "libCacheSim/.travis.yml:51: - sudo make install",
+        "libCacheSim/.travis.yml:89: ##  - sudo apt-get -qq update",
+        "libCacheSim/.travis.yml:90: ##  - sudo apt-get install -y libglib2.0-dev python3-pip python3-matplotlib python3-dev git gcc g++",
+        "libCacheSim/CMakeLists.txt:20: # echo madvise | sudo tee /sys/kernel/mm/transparent_hugepage/enabled"
+      ]
+    },
+    "docker": {
+      "count": 13,
+      "examples": [
+        "libCacheSim/dockerfile:31: # build the docker file",
+        "libCacheSim/dockerfile:32: # sudo docker build -t 1a1a11a/libcachesim -f dockerfile .",
+        "libCacheSim/dockerfile:34: # push to docker hub",
+        "libCacheSim/dockerfile:35: # sudo docker tag 1a1a11a/libcachesim:latest 1a1a11a/libcachesim:0.0.2",
+        "libCacheSim/dockerfile:36: # sudo docker push 1a1a11a/libcachesim:latest"
+      ]
+    }
+  },
+  "github": {
+    "stargazers_count": 87,
+    "forks_count": 10,
+    "archived": false,
+    "pushed_at": "2024-08-02T03:22:17Z",
+    "created_at": "2023-10-12T19:21:57Z",
+    "open_issues_count": 1,
+    "license": "Apache-2.0"
+  }
+}

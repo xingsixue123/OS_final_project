@@ -1,0 +1,14 @@
+{
+  "pdf": {
+    "status": "ok",
+    "source_url": "https://arxiv.org/pdf/2312.12456",
+    "version": "from list",
+    "notes": ""
+  },
+  "repo": {
+    "status": "ok",
+    "url": "https://github.com/SJTU-IPADS/PowerInfer",
+    "official": "unclear",
+    "evidence": "link taken from the research list; not independently verified"
+  }
+}

@@ -1,0 +1,160 @@
+{
+  "title": "Demystifying and Improving Lazy Promotion in Cache Eviction",
+  "one_line": "A 6357-trace libCacheSim study of five production lazy-promotion techniques (Probabilistic/Batch/Delay-LRU, FIFO-reinsertion, Random-LRU) under a new 'promotion efficiency' metric, plus two new algorithms (D-FR and AGE) that cut promotions 20-60% at equal or lower miss ratio.",
+  "topic": "caching",
+  "repo": {
+    "official": "yes",
+    "evidence": "Paper p.1, 'PVLDB Artifact Availability: The source code and data are available at https://github.com/cacheMon/Lazy-Promotions'; the repo is under the authors' cacheMon org (which also hosts libCacheSim, the simulator this work forks) and contains the real implementations of the paper's two new algorithms (simulator/libCacheSim/cache/eviction/AGE.c matches Listing 6, DelayFR.c matches Listing 5), not stubs.",
+    "last_commit": "2026-01-06",
+    "artifact_badges": [],
+    "badge_evidence": "none found - web searches for a VLDB/ACM availability or reproducibility badge for this artifact returned nothing; the repo has no badge in README.md and no top-level LICENSE (repo_facts.json github.license = null)."
+  },
+  "hard_filters": {
+    "H1_open_repo": {
+      "result": "pass",
+      "evidence": "Official per the paper's Artifact Availability statement (p.1) and the cacheMon org. Contains the full system: simulator/ (libCacheSim fork, 104k LOC C) with every paper algorithm mapped to a file - LRUProb.c/lpLRU_prob.c (Prob-LRU), lpFIFO_batch.c (Batch), LRUdelay.c (Delay), Clock.c/FIFO_Reinsertion.c (FR), RandomLRU.c, RandomBelady.c + BeladyRandomLRU.c (Belady early eviction, sec 4.1), Opt_Clock.cpp/offlineFR.c (offline FR, sec 4.2), DelayFR.c (D-FR, sec 5.1), AGE.c (AGE, sec 5.2), ARC_*/TwoQ_* (sec 3.7) - plus simulator-concurrent/ for throughput and scripts/ for task generation, parsing and every figure (scripts/generate_figures.py has one function per sub-figure)."
+    },
+    "H2_no_root": {
+      "result": "pass",
+      "evidence": "Core system is a user-space CLI binary (simulator/libCacheSim/bin/cachesim/main.c); the concurrent variant uses pthreads and pthread_spin_lock (simulator-concurrent/libCacheSim/cache/eviction/LRU.c:142) with no privileged syscalls. Red-flag hits are all skippable or substitutable: simulator/scripts/install_dependency.sh uses sudo apt but the deps (GLib, zstd, optional tcmalloc; xgboost/LightGBM are OFF by default per simulator/CMakeLists.txt:188-213) are conda/pip installable; scripts/disable_turbo.sh (modprobe msr + wrmsr) and scripts/disable_hyperthread.sh are measurement-stability helpers for the throughput runs only and can be omitted at the cost of noisier numbers; simulator-concurrent/dockerfile is an upstream libCacheSim leftover with no documented use; USE_HUGEPAGE resolves to madvise(MADV_HUGEPAGE) (simulator/libCacheSim/include/config.h:46-49) and can be disabled with -DUSE_HUGEPAGE=OFF. No kernel module, eBPF, perf counters or KVM anywhere in the build or run path."
+    },
+    "H3_hardware_fit": {
+      "result": "pass",
+      "evidence": "CPU-only deterministic trace simulation, no GPU used or needed. Paper scale does not fit (README.md:157-158: 'at least a day using 15 nodes (64 core, 376 GB RAM)'), but the headline claims are distributions over thousands of independent per-trace simulations, so a 200-400 trace public subset is a faithful scale-down that still tests the claim. Two constraints to respect on this machine: README.md:154 recommends >=256 GB RAM for 'some larger traces' vs our 125 GB, and the biggest collections (twitter ~4.6B req/trace, tencentBlock 33B req total per Table 2 p.4) would exceed both RAM and the 257 GB of free disk - so the largest traces must be excluded. The concurrent scalability harness targets 16 threads (scripts/generate_scalability_task.sh:25), which fits 16 cores / 32 threads."
+    },
+    "H4_obtainable_deps_data": {
+      "result": "pass",
+      "evidence": "Deps are user-space installable (GLib, argp from glibc, zstd, optional tcmalloc; see simulator/CMakeLists.txt:143-181). Traces come from the public index linked at README.md:70, https://ftp.pdl.cmu.edu/pub/datasets/twemcacheWorkload/cacheDatasets/, which I fetched: it serves alibabaBlock, cloudphysics, fiu, metaCDN, metaKV, metaStorage, msr, systor, tencentBlock, tencentPhoto, twitter, wiki - covering 4851 of the 6357 trace entries in scripts/datasets.txt. The remaining 1506 entries are akamai/ (CDN 1) and cf/ (CDN 2), the two anonymous private CDNs, which are not public and have no named substitute; the authors' own raw results for them ship in scripts/data/lazy_promotions_data.tar.gz for comparison. Python deps pinned in scripts/requirements.txt (pandas 2.3.1, numpy 2.3.2, seaborn 0.13.2, matplotlib 3.10.6) are current, though scipy and a stray textual_pandas import in scripts/process_data.py are missing from the pin file."
+    }
+  },
+  "reproduce": {
+    "level": "H",
+    "target": "Figure 11a + 11b (p.11) and the abstract claim that D-FR (delay-ratio=0.05, 1-bit) and AGE (scaler=0.5) reduce promotions by 20-60% relative to FIFO-reinsertion while achieving a similar or lower miss ratio than LRU. Secondary, essentially free from the same sweep: Figure 4a/4c (Delay-LRU at delay-time=0.1 -> 24% of LRU's promotions, no visible miss-ratio increase) and Figure 5c (2-bit FIFO-reinsertion beats LRU's miss ratio by ~2%).",
+    "scale_down": "Replace scripts/datasets.txt (6362 lines) with a ~200-400 trace public subset that preserves collection diversity: all cloudphysics (106), msr (14), fiu (~10), metaKV (5), metaCDN (3), wiki (3-4), plus a stratified sample of ~100 tencentBlock, ~50 alibabaBlock and ~10 twitter clusters, skipping any trace whose object count would exceed ~60 GB of RAM. Drop all akamai/ and cf/ lines (not publicly downloadable). Keep the paper's settings: cache size = 1% of working set, --ignore-obj-size 1. Report box plots over the stated subset and per-collection, not means over 6357 traces. Replace the distComp/redis/systemd orchestration with `xargs -P14` over the task file emitted by scripts/generate_task.sh.",
+    "effort": "4-6 person-days + ~100-300 CPU-core-hours (under a day of wall clock on 14-16 cores); 0 GPU-hours; ~150 GB of trace downloads.",
+    "rationale": "Per-figure task selectors exist (README.md:216-305), the plotting code is one function per sub-figure (scripts/generate_figures.py), the metric formulas in scripts/process_data.py:24-33 match the paper's definitions exactly, the authors ship their own raw results in scripts/data/*.tar.gz for a per-trace cross-check, dependencies are current and user-space, and the whole thing is deterministic CPU simulation with no GPU or privileged requirement. It is not clone-and-run: the cluster orchestration must be replaced, datasets.txt pruned to the public traces, and two Python imports (scipy, textual_pandas) fixed - ordinary porting friction that an H still allows. The residual risks (RAM ceiling on the largest traces, 24% of traces unobtainable) affect coverage, not the reproducibility of the target claim."
+  },
+  "addons": [
+    {
+      "name": "Trace-driven concurrency and the missing AGE throughput",
+      "hypothesis": "We hypothesize that driving the concurrent cache with real production traces instead of the hard-coded synthetic Zipfian generator changes the throughput ranking of the five lazy-promotion techniques at 16 threads (Figs. 2b/3b/4b/5b/6a), and that AGE - for which the paper reports no throughput at all - converts less of its promotion reduction into throughput than D-FR does, because its retention filter lengthens the eviction-time critical section.",
+      "mechanism": "(a) Port AGE into the concurrent tree with the same pthread_spin_lock discipline the other concurrent algorithms use, and register it in the concurrent cache_init.h (which currently maps only fifo/lru/lru-prob/lru-delay/batch/clock/delayfr/randomK). (b) Extend parallel_simulate() so the request stream can come from an oracleGeneral reader instead of generate_zipf(), sharding requests across threads the way the Zipf path already does. (c) Sweep Zipf alpha in {0.6, 0.8, 1.0, 1.2} and cache/working-set ratios other than the ~90% implied by the hard-coded constants, and compare against trace-driven numbers, reporting variance over many repetitions.",
+      "code_locations": [
+        "simulator-concurrent/libCacheSim/bin/cachesim/sim.c:93",
+        "simulator-concurrent/libCacheSim/bin/cachesim/cache_init.h",
+        "simulator-concurrent/libCacheSim/cache/eviction/DelayFR.c",
+        "simulator-concurrent/libCacheSim/cache/eviction/CMakeLists.txt",
+        "simulator/libCacheSim/cache/eviction/AGE.c",
+        "scripts/generate_scalability_task.sh",
+        "scripts/parse_scalability.py"
+      ],
+      "motivating_evidence": "Every throughput claim in the paper (Figs. 1a, 2b, 3b, 4b, 5b, 6a and the '12x speedup') rests on one synthetic configuration. Section 3 says the trace has '10 million requests for 1 million unique objects, with a skewness parameter of 1.0', but simulator-concurrent/libCacheSim/bin/cachesim/sim.c:92-95 sets req_cnt=10000000, obj_num=100000 and alpha=1 - a 10x smaller working set than the paper states - and the cache sizes in scripts/generate_scalability_task.sh (88000-94000) are then ~90% of that working set. The paper itself observes that LP effectiveness depends on workload skew (sec 3.2, 'the effectiveness of Batch-LRU depends on the skewness of the workload') yet never varies alpha. Separately, grep finds no AGE_init or 'age' algorithm anywhere under simulator-concurrent/, so the paper's second new algorithm has no scalability evidence.",
+      "feasibility": "M",
+      "feasibility_rationale": "The port itself is small (AGE is ~380 lines; the trace reader already exists in libCacheSim, and cli_parser.c:273 shows the concurrent binary already carries a reader it ignores). What keeps this off H is the measurement environment: this is a throughput experiment on a shared machine with no root, so scripts/disable_turbo.sh (needs modprobe msr + wrmsr) and scripts/disable_hyperthread.sh (refuses to run as non-root) cannot be used, and 16 threads on 16 cores/32 hyperthreads will contend with other users. Doable with taskset pinning, many repetitions and visible variance, but it is new eval plumbing plus a methodology problem.",
+      "research_value": "H",
+      "research_value_rationale": "The paper's central selling point is that lazy promotion buys scalability without efficiency loss. Showing that the scalability half of that claim rests on a single synthetic point whose parameters do not match the paper's own text is a genuine finding, and the absent AGE throughput is a hole a VLDB reviewer would have flagged. Both outcomes teach something: either the ranking is robust across real workloads (strengthening the paper) or it is not (a real correction).",
+      "scoop_check": {
+        "result": "partial",
+        "details": "Searched 'concurrent scalable SIEVE S3-FIFO lock contention throughput multi-thread evaluation 2026 cache', 'Mobius lock-free cache throughput-optimized SIGMETRICS 2025', and the paper's Semantic Scholar citation list. Closest work: Mobius, 'Using Lock-Free Design for Throughput-Optimized Cache Eviction', SIGMETRICS/POMACS 2025, https://dl.acm.org/doi/10.1145/3727136 - it does measure concurrent cache throughput on both synthetic and real high-concurrency workloads, but it proposes a lock-free FIFO design rather than measuring the five LP techniques' throughput ranking, and it predates this paper. The three works citing this paper (Clock2Q+ arXiv:2511.21958, ORBIT, BufBench) do not touch LP concurrency."
+      }
+    },
+    {
+      "name": "Learned Belady-early-eviction (binary reuse classifier replacing AGE's age heuristic)",
+      "hypothesis": "We hypothesize that a lightweight online binary classifier predicting 'will this object be requested again before it reaches the average eviction age?', trained on features the cache already tracks (age since last access, frequency counter, queue position, inter-arrival gap), closes a substantial fraction of the miss-ratio gap between AGE/FIFO-reinsertion and the Belady-early-eviction oracle at no more promotions than AGE, on the block and CDN traces where AGE currently increases miss ratio.",
+      "mechanism": "Replace AGE's single-feature threshold rule is_retained1() - which predicts next-reuse-time = current age and compares it to scaler * cache_size/miss_ratio - with a small online logistic-regression / counting classifier. Labels are free and online: at eviction we know whether the object was hit since its last reinsertion decision, so that becomes the training signal. Keep the decision at eviction time only (sec 4.2 argues eviction-time promotion dominates hit-time promotion), so the classifier runs once per eviction rather than once per request. Use RandomBelady / BeladyRandomLRU with a tolerance-factor sweep as the achievable upper bound and AGE/Clock as the lower bound on the same traces.",
+      "code_locations": [
+        "simulator/libCacheSim/cache/eviction/AGE.c:310",
+        "simulator/libCacheSim/cache/eviction/BeladyRandomLRU.c",
+        "simulator/libCacheSim/cache/eviction/RandomBelady.c",
+        "simulator/libCacheSim/include/libCacheSim/cacheObj.h",
+        "simulator/libCacheSim/bin/cachesim/cache_init.h",
+        "scripts/generate_task.sh"
+      ],
+      "motivating_evidence": "Section 4.1 states the idea and explicitly leaves it undone: 'If we employ a binary classifier to predict whether an object will be reused before being evicted[,] the model can be used to trigger early eviction. This differs from existing learned eviction algorithms, e.g., LRB, which predict each object's reuse distance using regression', with a footnote arguing binary classification is the easier objective. The headroom is quantified by the paper's own figures: BEE cuts LRU's miss ratio by 14% at tolerance factor 5 (Figs. 9a/9b, p.10) and offline FIFO-reinsertion removes >90% of promotions while lowering miss ratio (Fig. 10, p.10), whereas the practical AGE only matches FIFO-reinsertion's miss ratio and 'increases the miss ratio for some traces' (sec 5.2, p.11). Both oracle baselines are already implemented in the artifact, so the gap is directly measurable trace-by-trace.",
+      "feasibility": "M",
+      "feasibility_rationale": "The change is localized - a new eviction algorithm file plus a few fields in the cache_obj_t union in cacheObj.h, well under 1-2k LOC - and the existing harness, oracle baselines and metric pipeline all apply unchanged with zero new infrastructure. What keeps it off H: the feature set and online-learning schedule need genuine experimentation to beat a one-line heuristic that is already tuned, and showing the classifier is cheap enough to matter (sec 4.2 calls per-request binary prediction 'computationally expensive') means also getting it into the concurrent tree, which is its own measurement problem.",
+      "research_value": "H",
+      "research_value_rationale": "This is the paper's own stated open problem, the oracle upper bound is already computed inside the artifact so the result is quantitative either way, and both outcomes are informative: a tiny online classifier capturing most of the BEE gap is a strong practical result, while failure quantifies how much of BEE's advantage is irreducibly oracular - which directly sharpens the paper's 'ranking objects for eviction is unnecessary' claim.",
+      "scoop_check": {
+        "result": "partial",
+        "details": "Searched 'learned binary classifier early eviction cache reused before eviction libCacheSim 2025' and 'cache eviction predict will be reused before eviction binary classification learned policy 2025 2026'. Learned eviction exists - LRB (regression on reuse distance), GL-Cache (segment-level), LearnedCache (perceptron for the Linux page cache, https://arxiv.org/html/2605.26168v1), and https://arxiv.org/pdf/2301.11886 - but none formulates the BEE binary 'reused before the average eviction age' label or plugs it into FIFO-reinsertion's eviction-time decision. Most 2026 hits for this phrasing are LLM KV-cache token eviction, a different problem."
+      }
+    },
+    {
+      "name": "Object-size-aware lazy promotion",
+      "hypothesis": "We hypothesize that when object sizes are honoured instead of ignored, the promotion-efficiency ranking of the lazy-promotion techniques changes on CDN and object-cache traces, and that a size-weighted delay/age threshold (promote cheaply-stored objects more readily than large ones) lowers byte miss ratio at an equal promotion count compared with size-blind D-FR and AGE.",
+      "mechanism": "Drop --ignore-obj-size 1 and re-run the sweep with byte-denominated cache sizes. Then make the two new algorithms size-aware: in D-FR scale delay_time by obj_size / mean_obj_size so large objects must wait longer before earning a frequency increment; in AGE scale the retention threshold (expected_reuse_distance * scaler) inversely with object size so a large stale object is evicted sooner than a small one of the same age. Report both object and byte miss ratio, which cachesim already emits.",
+      "code_locations": [
+        "simulator/libCacheSim/cache/eviction/DelayFR.c:146",
+        "simulator/libCacheSim/cache/eviction/AGE.c",
+        "simulator/libCacheSim/cache/eviction/LRUdelay.c",
+        "simulator/libCacheSim/bin/cachesim/main.c",
+        "scripts/generate_task.sh",
+        "scripts/process_data.py"
+      ],
+      "motivating_evidence": "Every simulation in the paper is run with --ignore-obj-size 1 (README.md:77-148 and every line of scripts/generate_task.sh), and scripts/process_data.py:12 hard-filters results to `Ignore Obj Size == 1` - so all 6357 traces are evaluated as if every object were one unit. Yet Table 2 (p.4) shows the corpus is dominated by object and CDN caches with wildly varying object sizes (Meta CDN: 231M requests but 8594 TB of traffic; CDN 2: 2079 TB). The size fields are present in the traces and the code already tracks n_byte_rewritten (DelayFR.c:221, AGE.c:244) and byte miss ratio in main.c, but none of it is reported. This is a clean, explicitly visible simplifying assumption.",
+      "feasibility": "H",
+      "feasibility_rationale": "No new harness: the simulator supports sized objects natively, the change is a command-line flag plus a handful of lines in three eviction files, and the metrics pipeline needs only a widened filter in process_data.py:12. Compute cost is the same as one more normal sweep over the trace subset, which fits this machine easily.",
+      "research_value": "M",
+      "research_value_rationale": "A reviewer would agree it is a real gap and the byte-miss-ratio numbers are worth having, but 'object size matters for CDN caches' is well established (GDSF, LHD, LRB all model size), so the surprise is bounded. The genuinely interesting part is narrower: whether the lazy-promotion ranking, as opposed to the eviction ranking, is size-sensitive.",
+      "scoop_check": {
+        "result": "clear",
+        "details": "Searched for size-aware promotion/reinsertion and promotion efficiency under sized objects, and checked the paper's citation list (Clock2Q+, ORBIT, BufBench). Size-aware eviction is old and well covered, but no work applies size-awareness to the promotion/reinsertion decision itself or reports promotion efficiency with object sizes respected."
+      }
+    },
+    {
+      "name": "Lazy promotion on quick-demotion algorithms (S3-FIFO, SIEVE, W-TinyLFU)",
+      "hypothesis": "We hypothesize that S3-FIFO and SIEVE already operate near the offline-FIFO-reinsertion promotion-efficiency bound, so adding delay/batch/probabilistic relaxations to them yields under 10% further promotion reduction with no miss-ratio benefit - whereas W-TinyLFU, which still maintains an LRU window, behaves like ARC and 2Q and benefits as much as they do.",
+      "mechanism": "Instrument cache->n_promotion in Sieve.c, S3FIFO.c and WTinyLFU.c (none of them currently counts promotions, so they are invisible to the metrics pipeline), then add _Delay / _Batch / _Prob / _FR variants of their in-queue promotion points, following exactly the pattern the authors used for ARC and 2Q. Register the new names in cache_init.h and extend scripts/generate_task.sh plus the algorithm name map in scripts/parse_data.py.",
+      "code_locations": [
+        "simulator/libCacheSim/cache/eviction/Sieve.c",
+        "simulator/libCacheSim/cache/eviction/S3FIFO.c",
+        "simulator/libCacheSim/cache/eviction/ARC_Delay.c",
+        "simulator/libCacheSim/cache/eviction/TwoQ_FR.c",
+        "simulator/libCacheSim/bin/cachesim/cache_init.h",
+        "scripts/parse_data.py"
+      ],
+      "motivating_evidence": "Section 3.7 deliberately limits the advanced-algorithm study to ARC and 2Q ('We illustrate this with 2Q and ARC'), while section 4.1 makes an unmeasured claim about exactly the algorithms left out: 'This observation also explains why the new eviction algorithm[s], such as S3-FIFO and SIEVE, achieve state-of-the-art efficiency. They evict new objects quickly (called quick demotion) without ranking.' Both are already implemented in the repo (Sieve.c, S3FIFO.c, S3FIFOd.c, and WTinyLFU.c in the concurrent tree), so the claim is directly testable with the paper's own promotion-efficiency metric.",
+      "feasibility": "H",
+      "feasibility_rationale": "The template already exists in the tree - five ARC variants (ARC_LRU/Prob/Delay/Batch/FR) and three 2Q variants were built the same way - the metric pipeline is unchanged, and the compute cost is one additional sweep over the same trace subset. Clearly doable by 2-4 students in 10 weeks.",
+      "research_value": "M",
+      "research_value_rationale": "It closes a stated-but-unmeasured claim and would strengthen or qualify the paper's conclusion that future LP techniques should be built on a FIFO queue with FIFO-reinsertion (sec 4.2). But the expected answer - SIEVE and S3-FIFO are already lazy - is the one most readers would guess, so the surprise potential is moderate.",
+      "scoop_check": {
+        "result": "partial",
+        "details": "Searched 'applying lazy promotion delay FIFO-reinsertion to S3-FIFO SIEVE promotion efficiency evaluation' and the paper's citation list. Clock2Q+ (https://arxiv.org/pdf/2511.21958), which cites this paper, combines CLOCK with 2Q for VMware vSAN metadata caching; LAH / S4-FIFO (https://arxiv.org/html/2608.27975v1) learns S3-FIFO's parameters from 4140 production traces. Neither measures the promotion efficiency of SIEVE/S3-FIFO nor adds lazy-promotion relaxations to them."
+      }
+    },
+    {
+      "name": "Self-tuning lazy promotion under a promotion budget",
+      "hypothesis": "We hypothesize that an online controller that adapts the delay threshold (Delay-LRU / D-FR) or the age scaler (AGE) to hold a target promotion rate achieves a lower miss ratio than the best static parameter at the same promotion count, with the gain concentrated on the low-skew traces where Batch-LRU and Probabilistic-LRU currently fail.",
+      "mechanism": "Add a feedback loop that, every cache_size insertions, compares realized promotions-per-request against an operator-specified budget and adjusts the threshold multiplicatively, with a secondary guard that backs off if the windowed miss ratio drifts above the FIFO-reinsertion baseline. AGE already computes a dynamic expected_reuse_distance = cache_size / miss_ratio from the running miss ratio but multiplies it by a static scaler; the controller replaces that static scaler. Compare against the per-trace best static parameter, which the existing sweep produces for free (6 D-FR ratios, 10 AGE factors, 9 delay ratios per trace).",
+      "code_locations": [
+        "simulator/libCacheSim/cache/eviction/AGE.c:234",
+        "simulator/libCacheSim/cache/eviction/DelayFR.c",
+        "simulator/libCacheSim/cache/eviction/LRUdelay.c",
+        "simulator/libCacheSim/cache/eviction/lpFIFO_batch.c",
+        "simulator/libCacheSim/bin/cachesim/cache_init.h"
+      ],
+      "motivating_evidence": "The paper's parameter-sensitivity figures (Fig. 12 for D-FR, Fig. 13 for AGE, p.12) are framed as reassurance - 'D-FR is not sensitive to delay ratio', 'Age is not sensitive to the factor parameter' - but they are aggregate box plots, and sec 3.2 explicitly reports that per-trace behaviour is highly variable ('the long box indicates that some traces enjoy a huge promotion reduction, while others do not observe much benefit... the effectiveness of Batch-LRU depends on the skewness of the workload'). A promotion budget is also the natural operator-facing knob, since the whole point of lazy promotion is to hit a lock-contention target, which is a rate rather than a ratio.",
+      "feasibility": "H",
+      "feasibility_rationale": "Fully localized: a controller struct plus roughly 50 lines in each of three or four eviction files, no new harness or workload generator, and the static-parameter sweep that forms the comparison baseline is already emitted by scripts/generate_task.sh. Evaluation runs on the same trace subset at the same cost as one extra sweep.",
+      "research_value": "M",
+      "research_value_rationale": "Adaptive parameter tuning is a solid but expected improvement rather than a surprising one, and the paper pre-empts part of the motivation by arguing its parameters are insensitive in aggregate. The genuinely publishable angle is narrower: per-trace regret against the best static setting, and behaviour under a fixed promotion budget rather than a fixed parameter.",
+      "scoop_check": {
+        "result": "partial",
+        "details": "Searched 'adaptive delay ratio self-tuning lazy promotion cache delay-LRU adaptive parameter tuning miss ratio promotion'. Closest: LAH / S4-FIFO (https://arxiv.org/html/2608.27975v1), which pre-trains a model on 4140 production traces to pick S3-FIFO's parameters - the same idea (adaptive configuration of a cache heuristic) applied to a different algorithm family and a different objective (miss ratio, not a promotion budget). Classic adaptive caches (ARC, CACHEUS, LeCaR) adapt eviction policy, not promotion frequency. Nothing found that adapts a lazy-promotion threshold online."
+      }
+    }
+  ],
+  "risks": [
+    "RAM ceiling: README.md:154 recommends at least 256 GB 'required to run some larger traces'; this machine has 125 GB (111 GB free, shared). The tencentBlock, twitter and CDN 2 traces are the ones at risk, and trace sizes cannot be predicted from reading alone - the team must probe empirically and prune. This is the most likely practical blocker for a naive 'run everything in datasets.txt' attempt.",
+    "1506 of the 6357 traces (akamai/ = CDN 1, cf/ = CDN 2) are not on the public CMU index and have no named substitute, so locally reproduced aggregate means and percentiles will differ from the paper's by a collection-composition effect rather than a bug. Any reproduction must state the subset and compare per-collection.",
+    "Throughput results are not honestly reproducible here: the paper's methodology (turbo off, hyperthreading off, single NUMA domain, dedicated node) needs root, since scripts/disable_turbo.sh:6,23 requires modprobe msr + wrmsr and scripts/disable_hyperthread.sh:13 refuses to run as non-root. On a shared 32-thread machine a 16-thread scalability curve will be noisy; throughput claims should carry many repetitions and visible variance, or be reframed as promotion-count claims, which are deterministic.",
+    "Paper/code disagreement on the scalability workload: section 3 says the synthetic trace has '1 million unique objects' but simulator-concurrent/libCacheSim/bin/cachesim/sim.c:93 sets obj_num = 100000, and the cache sizes in generate_scalability_task.sh are then ~90% of that working set. Either the released concurrent code is not the version used for the figures or the paper's description is wrong; worth resolving with the authors before building on it.",
+    "AGE has no concurrent implementation (no AGE_init or 'age' algorithm anywhere under simulator-concurrent/), so one of the paper's two new algorithms has no scalability evidence at all; whether it was measured and omitted is unknown.",
+    "The contents of the released result tarballs (scripts/data/lazy_promotions_data.tar.gz, lazy_throughput.tar.gz) could not be inspected without a shell, so whether they hold raw .cachesim output consumable by parse_data.py or an already-parsed frame is unclear - which affects how easy the per-trace cross-check against the authors' numbers will be.",
+    "Build cleanliness is a prediction, not a test: README.md:48-53 pre-emptively supplies -Wno-implicit-int, -fpermissive and -include cstdint for 'stricter compilers', signalling the C/C++ is not warning-clean. gcc 12.2 is older than the Ubuntu 24.04 toolchain the authors targeted so it will probably build, but this was not verified.",
+    "Script wrinkles that break a literal 'pip install -r requirements.txt && run': scripts/process_data.py:2 imports textual_pandas (absent from requirements.txt, apparently unused), :6 imports scipy (also absent), and :101 reads data/scalability.feather unconditionally so the miss-ratio pipeline fails if scalability data was never generated; scripts/parse_data.py:113 resolves ./datasets.txt against the CWD.",
+    "No license at the repository root (GitHub metadata license: null); the only LICENSE is the vendored libCacheSim one under simulator-concurrent/. Irrelevant for coursework, but it should be clarified before releasing any derivative."
+  ]
+}

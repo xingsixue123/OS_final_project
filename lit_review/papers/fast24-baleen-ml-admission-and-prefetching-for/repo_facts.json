@@ -1,0 +1,33 @@
+{
+  "url": "https://github.com/wonglkd/Baleen-FAST24",
+  "head_commit": "4e3a9205b1f1bd72bffd66dd52bd5b06509089e9",
+  "head_commit_date": "2024-02-28T19:57:03-08:00",
+  "file_count": 30,
+  "size_mb": 7.5,
+  "top_level": [
+    ".gitignore",
+    ".gitmodules",
+    "BCacheSim/",
+    "README.md",
+    "chameleon/",
+    "data/",
+    "getting-started.sh",
+    "notebooks/",
+    "runs/"
+  ],
+  "build_files": [],
+  "gitmodules": "[submodule \"BCacheSim\"]\n\tpath = BCacheSim\n\turl = https://github.com/wonglkd/BCacheSim.git\n",
+  "lines_by_extension": {
+    ".sh": 1119
+  },
+  "red_flags": {},
+  "github": {
+    "stargazers_count": 27,
+    "forks_count": 3,
+    "archived": false,
+    "pushed_at": "2024-02-29T03:57:03Z",
+    "created_at": "2023-12-20T19:41:46Z",
+    "open_issues_count": 0,
+    "license": null
+  }
+}

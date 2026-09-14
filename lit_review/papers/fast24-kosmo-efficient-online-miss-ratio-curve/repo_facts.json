@@ -1,0 +1,31 @@
+{
+  "url": "https://github.com/Stumm-Lab/kosmo-fast24",
+  "head_commit": "48a843d6c969befaa0d2d778cf7643b003989c60",
+  "head_commit_date": "2025-05-11T03:50:17-04:00",
+  "file_count": 46,
+  "size_mb": 31.7,
+  "top_level": [
+    ".gitignore",
+    "Cargo.toml",
+    "LICENSE",
+    "README.md",
+    "src/",
+    "traces/"
+  ],
+  "build_files": [
+    "Cargo.toml"
+  ],
+  "lines_by_extension": {
+    ".rs": 5103
+  },
+  "red_flags": {},
+  "github": {
+    "stargazers_count": 11,
+    "forks_count": 3,
+    "archived": false,
+    "pushed_at": "2025-05-11T07:50:19Z",
+    "created_at": "2023-12-20T06:13:42Z",
+    "open_issues_count": 1,
+    "license": "MIT"
+  }
+}

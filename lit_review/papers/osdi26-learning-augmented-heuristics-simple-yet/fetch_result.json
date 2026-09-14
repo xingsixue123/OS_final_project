@@ -1,0 +1,14 @@
+{
+  "pdf": {
+    "status": "ok",
+    "source_url": "https://www.usenix.org/system/files/osdi26-xia.pdf",
+    "version": "from list",
+    "notes": ""
+  },
+  "repo": {
+    "status": "ok",
+    "url": "https://github.com/cacheMon/osdi26-s4-fifo",
+    "official": "unclear",
+    "evidence": "link taken from the research list; not independently verified"
+  }
+}

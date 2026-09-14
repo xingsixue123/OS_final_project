@@ -1,0 +1,62 @@
+[
+  {
+    "venue": "vldb",
+    "year": 2024,
+    "title": "VOCALExplore: Pay-as-You-Go Video Data Exploration and Model Building",
+    "paper_url": "https://doi.org/10.14778/3625054.3625057",
+    "pdf_url": "https://www.vldb.org/pvldb/vol16/p4188-daum.pdf",
+    "repo_url": "https://github.com/uwdb/VOCALExplore",
+    "topic": "ml-systems",
+    "note": "End-to-end system for interactive video exploration - asynchronous GPU feature extraction, feature caching/persistence, background task scheduling and active-learning sample selection. The systems contributions (latency-hiding scheduler, feature reuse, automatic model/feature selection) are exactly the kind of thing that can be improved and re-measured. Evaluated on a single node with one NVIDIA A40 and 61 GB RAM; our A5000 has 24 GB instead of 48 GB, so very large batch feature extraction may need smaller batches, but video backbones (R3D/CLIP-class) fit comfortably in FP16. All user space Python, no root needed. Concern: the video datasets (Deer, Bees, K20 subsets) may need to be re-obtained or substituted. [PVLDB 16(13), added from the vldbgap-2024 shard]"
+  },
+  {
+    "venue": "vldb",
+    "year": 2024,
+    "title": "ShadowAQP: Efficient Approximate Group-by and Join Query via Attribute-oriented Sample Size Allocation and Data Generation",
+    "paper_url": "https://doi.org/10.14778/3625054.3625059",
+    "pdf_url": "https://www.vldb.org/pvldb/vol16/p4216-gu.pdf",
+    "repo_url": "https://github.com/nju-lands/ShadowAQP",
+    "topic": "ml-for-systems",
+    "note": "A learned component inside a query engine - a conditional VAE trained per table that generates samples for approximate group-by/join queries, plus sample-size allocation, outlier-aware sampling and dimension reduction. Core mechanism is single-GPU model training plus sample generation, which fits the A5000 easily. Concern: the paper's baselines run on a 10-node Spark/Hive cluster; on one machine those comparisons must be scaled down to local Spark plus single-node Postgres, which changes absolute speedups but preserves the accuracy-vs-cost hypothesis. Artifact statement in the paper points at the repo. [PVLDB 16(13), added from the vldbgap-2024 shard]"
+  },
+  {
+    "venue": "vldb",
+    "year": 2024,
+    "title": "RTIndeX: Exploiting Hardware-Accelerated GPU Raytracing for Database Indexing",
+    "paper_url": "https://doi.org/10.14778/3625054.3625063",
+    "pdf_url": "https://www.vldb.org/pvldb/vol16/p4268-schuhknecht.pdf",
+    "repo_url": "https://gitlab.rlp.net/juhenneb/rtindex",
+    "topic": "other-userspace",
+    "note": "Maps database point/range indexing onto NVIDIA OptiX raytracing cores; a pure user-space CUDA/OptiX artifact, no root, no kernel, no cluster. The machine fit is unusually good: the paper's Section 4.10 explicitly re-runs the study on Ampere and Turing RTX GPUs besides the RTX 4090, and our RTX A5000 is Ampere with RT cores and exactly 24 GB VRAM (same capacity as their main 4090 system), so datasets sized in the paper fit. Carries the PVLDB \"Results Reproduced\" badge. Concerns: (a) the artifact is on GitLab (gitlab.rlp.net), reachable and live, not GitHub; (b) the authors use Nsight Systems/Nsight Compute for some breakdowns - GPU profiling may be blocked by the driver's admin-only profiling setting, so a project should plan on wall-clock timing only; (c) OptiX SDK must be installed per-user, and CUDA 11.8/driver 535 support OptiX 7.x. [PVLDB 16(13), added from the vldbgap-2024 shard]"
+  },
+  {
+    "venue": "vldb",
+    "year": 2024,
+    "title": "ContTune: Continuous Tuning by Conservative Bayesian Optimization for Distributed Stream Data Processing Systems",
+    "paper_url": "https://doi.org/10.14778/3625054.3625064",
+    "pdf_url": "https://www.vldb.org/pvldb/vol16/p4282-shao.pdf",
+    "repo_url": "https://github.com/ljqcodelove/ContTune",
+    "topic": "ml-for-systems",
+    "note": "ML-based configuration tuning - conservative Bayesian Optimization plus a Big-small decomposition that picks per-operator parallelism for Flink jobs, compared against DS2. The tuner itself is user-space Java and the search-quality hypothesis (fewer reconfigurations, no SLA violation) can be tested against the same baselines. Concern: the paper's setup is Flink 1.13 with 45 TaskManagers across three 48-core machines (max parallelism 90); our 16-core/32-thread node cannot reproduce that scale. Flink runs fine as a local multi-process cluster, so the experiment must be scaled down (fewer slots, smaller source rates) or driven by the paper's workload replay - this is the main risk and is flagged for the audit stage rather than being a hard blocker. [PVLDB 16(13), added from the vldbgap-2024 shard]"
+  },
+  {
+    "venue": "vldb",
+    "year": 2024,
+    "title": "Single Update Sketch with Variable Counter Structure",
+    "paper_url": "https://doi.org/10.14778/3625054.3625065",
+    "pdf_url": "https://www.vldb.org/pvldb/vol16/p4296-wang.pdf",
+    "repo_url": "https://github.com/DimitrisMel/SSVS",
+    "topic": "other-userspace",
+    "note": "Borderline, kept per the \"when in doubt, include\" rule. SSVS is a compact counting data structure (variable-width active counters, noise-interval estimator) whose released artifact is a plain user-space Java implementation evaluated by replaying packet traces and measuring per-item processing time and estimation error - no root, no kernel, no special hardware, and it runs in minutes on one core. Improving the accuracy/throughput tradeoff or re-testing on non-network streams is a well-scoped hypothesis. Concerns: (a) it is closer to an algorithms/data-structure paper than a systems paper, so topic fit is the weakest of the six; (b) the design's stated target is switch data planes, and the CAIDA traces used for evaluation require a separate data-access agreement, so a substitute trace may be needed. [PVLDB 16(13), added from the vldbgap-2024 shard]"
+  },
+  {
+    "venue": "vldb",
+    "year": 2024,
+    "title": "Can Large Language Models Predict Data Correlations from Column Names?",
+    "paper_url": "https://doi.org/10.14778/3625054.3625066",
+    "pdf_url": "https://www.vldb.org/pvldb/vol16/p4310-trummer.pdf",
+    "repo_url": "https://github.com/itrummer/DataCorrelationPredictionWithNLP",
+    "topic": "ml-for-systems",
+    "note": "A learned component for database tuning - predicting column correlations from schema text to prioritize data profiling and correct cardinality estimates, benchmarked against classical correlation-detection algorithms. Artifact plus benchmark are released. Machine fit is easy: the paper fine-tunes DistilBERT/ALBERT/RoBERTa on a single V100 (p3.2xlarge), all of which fit in 24 GB, and a modern 7-8B instruct model in FP16 also fits on the A5000 for an \"improvement\" angle. Concerns: this is a study rather than a system, so the improvement must be framed as a better predictor plus a demonstrated downstream benefit (e.g. feeding an optimizer), otherwise it degenerates into a pure reproduction - acceptable as the fallback track but worth flagging. [PVLDB 16(13), added from the vldbgap-2024 shard]"
+  }
+]

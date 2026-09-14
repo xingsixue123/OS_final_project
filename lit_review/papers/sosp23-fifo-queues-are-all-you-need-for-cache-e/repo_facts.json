@@ -1,0 +1,71 @@
+{
+  "url": "https://github.com/Thesys-lab/sosp23-s3fifo",
+  "head_commit": "6bc49d9630572721b41cd08adfa982775f3cb1de",
+  "head_commit_date": "2024-06-12T22:26:37-04:00",
+  "file_count": 23706,
+  "size_mb": 812.9,
+  "top_level": [
+    ".gitignore",
+    "README.md",
+    "distributedComputation/",
+    "doc/",
+    "libCacheSim/",
+    "requirements.txt",
+    "result/",
+    "scripts/"
+  ],
+  "build_files": [
+    "libCacheSim/CMakeLists.txt",
+    "libCacheSim/doc0/Makefile",
+    "libCacheSim/test/CMakeLists.txt"
+  ],
+  "lines_by_extension": {
+    ".c": 37993,
+    ".h": 32362,
+    ".py": 7445,
+    ".cpp": 5833,
+    ".hpp": 612,
+    ".sh": 161
+  },
+  "red_flags": {
+    "sudo": {
+      "count": 27,
+      "examples": [
+        "doc/AE.md:8: sudo apt install -yqq libglib2.0-dev libboost-all-dev zstd libzstd-dev wget",
+        "libCacheSim/CMakeLists.txt:17: # echo madvise | sudo tee /sys/kernel/mm/transparent_hugepage/enabled",
+        "libCacheSim/README.md:70: [sudo] make install;",
+        "libCacheSim/doc/advanced_lib.md:232: * if you get `error while loading shared libraries`, run `sudo ldconfig`",
+        "libCacheSim/doc/install.md:12: sudo apt install libglib2.0-dev libgoogle-perftools-dev cmake"
+      ]
+    },
+    "docker": {
+      "count": 12,
+      "examples": [
+        "libCacheSim/dockerfile:37: # build the docker file",
+        "libCacheSim/dockerfile:38: # sudo docker build -t 1a1a11a/libcachesim -f dockerfile .",
+        "libCacheSim/dockerfile:40: # push to docker hub",
+        "libCacheSim/dockerfile:41: # sudo docker tag 1a1a11a/libcachesim:latest 1a1a11a/libcachesim:0.0.1",
+        "libCacheSim/dockerfile:42: # sudo docker push 1a1a11a/libcachesim:latest"
+      ]
+    },
+    "multi_node": {
+      "count": 10,
+      "examples": [
+        "README.md:86: We greatly appreciate the resources and support provided by [Cloudlab](https://cloudlab.us) and [PDL](https://pdl.cmu.edu) for performing large-scale evaluation",
+        "distributedComputation/README.md:4: I have been using it on Cloudlab to use up to 100 nodes to speed up my experiments.",
+        "distributedComputation/adhoc.py:8: password=\"cloudlab\",",
+        "distributedComputation/conf.json:11: \"redis_pass\": \"cloudlab\",",
+        "distributedComputation/redis.sh:15: # echo 'user jason on +@all ~* >cloudlab' >> redis.conf"
+      ]
+    }
+  },
+  "github": {
+    "stargazers_count": 143,
+    "forks_count": 17,
+    "archived": false,
+    "pushed_at": "2024-06-13T02:26:37Z",
+    "created_at": "2023-07-18T15:58:52Z",
+    "open_issues_count": 0,
+    "license": null
+  }
+}

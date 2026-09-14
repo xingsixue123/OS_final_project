@@ -1,0 +1,11 @@
+{
+  "id": "nsdi24-sieve-is-simpler-than-lru-an-efficient-t",
+  "title": "SIEVE is Simpler than LRU: an Efficient Turn-Key Eviction Algorithm for Web Caches",
+  "venue": "nsdi",
+  "year": 2024,
+  "paper_url": "https://www.usenix.org/conference/nsdi24/presentation/zhang-yazhuo",
+  "pdf_url": "https://www.usenix.org/system/files/nsdi24-zhang-yazhuo.pdf",
+  "repo_url": "https://github.com/cacheMon/NSDI24-SIEVE",
+  "topic": "caching",
+  "note": "Cache eviction algorithm evaluated on 1559 open traces with a CPU-only user-space simulator (libCacheSim) plus patches to five production cache libraries; no root, no GPU, no network. Strongest fit of this venue-year. Concerns: the full trace corpus is large relative to 257 GB free disk so a subset is needed; throughput/scalability claims were made with 16 threads which matches this machine."
+}

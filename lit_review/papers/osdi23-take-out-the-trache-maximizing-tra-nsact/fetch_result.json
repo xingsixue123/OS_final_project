@@ -1,0 +1,14 @@
+{
+  "pdf": {
+    "status": "ok",
+    "source_url": "https://www.usenix.org/system/files/osdi23-cheng.pdf",
+    "version": "from list",
+    "notes": ""
+  },
+  "repo": {
+    "status": "ok",
+    "url": "https://github.com/audreyccheng/detox",
+    "official": "unclear",
+    "evidence": "link taken from the research list; not independently verified"
+  }
+}

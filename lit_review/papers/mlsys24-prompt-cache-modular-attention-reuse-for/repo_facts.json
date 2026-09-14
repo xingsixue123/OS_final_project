@@ -1,0 +1,55 @@
+{
+  "url": "https://github.com/yale-sys/prompt-cache",
+  "head_commit": "9027040d4b4e3fce911b060590dd4a71783b12b9",
+  "head_commit_date": "2024-11-09T06:39:50-08:00",
+  "file_count": 77,
+  "size_mb": 0.5,
+  "top_level": [
+    ".gitignore",
+    ".gitmodules",
+    "LICENSE",
+    "Makefile",
+    "README.md",
+    "benchmark/",
+    "benchmark_memcpy.py",
+    "config/",
+    "demo.py",
+    "dependency/",
+    "eval.py",
+    "eval_acc.py",
+    "eval_acc.slurm",
+    "eval_sys.py",
+    "eval_sys_a100-7b-cpu.slurm",
+    "eval_sys_a100-7b-gpu.slurm",
+    "eval_sys_a40-7b-cpu.slurm",
+    "eval_sys_a40-7b-gpu.slurm",
+    "examples/",
+    "g.sh",
+    "get_scores.py",
+    "metrics.py",
+    "promptcache/",
+    "requirements.txt",
+    "score.py",
+    "scripts/",
+    "tests/"
+  ],
+  "build_files": [
+    "Makefile"
+  ],
+  "gitmodules": "[submodule \"dependency/LongBench\"]\n\tpath = dependency/LongBench\n\turl = https://github.com/THUDM/LongBench.git\n\tignore = dirty\n[submodule \"dependency/bleurt\"]\n\tpath = dependency/bleurt\n\turl = https://github.com/google-research/bleurt\n\tignore = dirty\n",
+  "lines_by_extension": {
+    ".py": 8902,
+    ".sh": 3
+  },
+  "red_flags": {
+    "multi_node": {
+      "count": 1,
+      "examples": [
+        "g.sh:1: srun --exclusive --mem=0 --nodes=1 --ntasks=1 --ntasks-per-node=1 --cpus-per-task=16 \\"
+      ]
+    }
+  },
+  "github": {
+    "error": "HTTP Error 403: rate limit exceeded"
+  }
+}

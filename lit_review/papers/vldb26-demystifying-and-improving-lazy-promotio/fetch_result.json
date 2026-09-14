@@ -1,0 +1,14 @@
+{
+  "pdf": {
+    "status": "ok",
+    "source_url": "https://www.vldb.org/pvldb/vol19/p549-yang.pdf",
+    "version": "from list",
+    "notes": ""
+  },
+  "repo": {
+    "status": "ok",
+    "url": "https://github.com/cacheMon/Lazy-Promotions",
+    "official": "unclear",
+    "evidence": "link taken from the research list; not independently verified"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "id": "osdi26-learning-augmented-heuristics-simple-yet",
+  "title": "Learning-Augmented Heuristics: Simple Yet Smart, Robust and Interpretable Cache Eviction",
+  "venue": "osdi",
+  "year": 2026,
+  "paper_url": "https://www.usenix.org/conference/osdi26/presentation/xia",
+  "pdf_url": "https://www.usenix.org/system/files/osdi26-xia.pdf",
+  "repo_url": "https://github.com/cacheMon/osdi26-s4-fifo",
+  "topic": "ml-for-systems",
+  "note": "Learned *parameters* for static eviction heuristics (S4-FIFO), with released code, pre-trained model, and libCacheSim + CacheLib implementations; evaluation is pure trace-driven simulation over thousands of public traces - perfect for a machine with no root. See also https://libcachesim.com and arXiv 2608.27975"
+}

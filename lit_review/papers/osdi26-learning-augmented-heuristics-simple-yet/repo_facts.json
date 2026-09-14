@@ -1,0 +1,58 @@
+{
+  "url": "https://github.com/cacheMon/osdi26-s4-fifo",
+  "head_commit": "000095fc3c96a95ff1b9a19d101fb1411c7f4d54",
+  "head_commit_date": "2026-05-12T11:25:24-05:00",
+  "file_count": 42,
+  "size_mb": 0.5,
+  "top_level": [
+    ".dockerignore",
+    ".gitignore",
+    ".gitmodules",
+    "BLOG.md",
+    "CacheLib/",
+    "Dockerfile",
+    "LICENSE",
+    "Makefile",
+    "README.md",
+    "analysis/",
+    "doc/",
+    "libCacheSim/",
+    "requirements.txt"
+  ],
+  "build_files": [
+    "Dockerfile",
+    "Makefile"
+  ],
+  "gitmodules": "[submodule \"libCacheSim\"]\n\tpath = libCacheSim\n\turl = https://github.com/haochengxia/libCacheSim\n\tbranch = s4-fifo\n[submodule \"CacheLib\"]\n\tpath = CacheLib\n\turl = https://github.com/williamnixon20/CacheLib\n\tbranch = fork-w-s4fifo\n",
+  "lines_by_extension": {
+    ".py": 7871
+  },
+  "red_flags": {
+    "sudo": {
+      "count": 2,
+      "examples": [
+        "README.md:55: sudo apt install build-essential cmake libglib2.0-dev libgoogle-perftools-dev libzstd-dev",
+        "README.md:84: sudo python3 ./CacheLib/build/fbcode_builder/getdeps.py install-system-deps --recursive cachelib"
+      ]
+    },
+    "docker": {
+      "count": 17,
+      "examples": [
+        ".dockerignore:1: # Git (not needed in Docker, and git submodule won't work without it)",
+        ".dockerignore:6: # Build artifacts (rebuilt inside Docker)",
+        ".dockerignore:39: # Docker files themselves",
+        "BLOG.md:170: - **Docker-based artifact evaluation package** for reproducing all results",
+        "Makefile:1: .PHONY: all build debug test run clean docker-build docker-run submodules help"
+      ]
+    }
+  },
+  "github": {
+    "stargazers_count": 2,
+    "forks_count": 0,
+    "archived": false,
+    "pushed_at": "2026-05-12T16:25:49Z",
+    "created_at": "2026-04-10T17:03:12Z",
+    "open_issues_count": 0,
+    "license": "NOASSERTION"
+  }
+}

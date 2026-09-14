@@ -1,0 +1,11 @@
+{
+  "id": "osdi24-fairness-in-serving-large-language-model",
+  "title": "Fairness in Serving Large Language Models",
+  "venue": "osdi",
+  "year": 2024,
+  "paper_url": "https://www.usenix.org/conference/osdi24/presentation/sheng",
+  "pdf_url": "https://www.usenix.org/system/files/osdi24-sheng.pdf",
+  "repo_url": "https://github.com/Ying1123/VTC-artifact",
+  "topic": "llm-inference",
+  "note": "Virtual Token Counter fair-queueing scheduler for LLM serving - a scheduling policy layered on a serving engine which is cheap to reproduce and extend on one GPU with small models"
+}

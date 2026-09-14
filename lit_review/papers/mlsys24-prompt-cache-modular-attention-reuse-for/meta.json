@@ -1,0 +1,11 @@
+{
+  "id": "mlsys24-prompt-cache-modular-attention-reuse-for",
+  "title": "Prompt Cache: Modular Attention Reuse for Low-Latency Inference",
+  "venue": "mlsys",
+  "year": 2024,
+  "paper_url": "https://proceedings.mlsys.org/paper_files/paper/2024/hash/a66caa1703fe34705a4368c3014c1966-Abstract-Conference.html",
+  "pdf_url": "https://proceedings.mlsys.org/paper_files/paper/2024/file/a66caa1703fe34705a4368c3014c1966-Paper-Conference.pdf",
+  "repo_url": "https://github.com/yale-sys/prompt-cache",
+  "topic": "llm-inference",
+  "note": "Precomputed, reusable attention states for repeated prompt segments - a caching/TTFT problem evaluated on single GPU and even CPU. Small, readable prototype; obvious improvement axes (cache admission/eviction, positional handling). Concern - the schema-based reuse can perturb output quality, so an improvement claim needs an accuracy control."
+}

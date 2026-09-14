@@ -1,0 +1,125 @@
+{
+  "title": "Kosmo: Efficient Online Miss Ratio Curve Generation for Eviction Policy Evaluation",
+  "one_line": "A single-pass, low-memory algorithm that generates approximate miss ratio curves for non-inclusive cache eviction policies (LFU, FIFO, 2Q, LRFU, LRU) by keeping one copy of each object plus a per-policy 'eviction map' from which cache stacks of any size are reconstructed on demand.",
+  "topic": "caching",
+  "repo": {
+    "official": "yes",
+    "evidence": "The paper's Artifact Appendix (p.15, 'Hosting') gives DOI 10.5281/zenodo.10569925; that Zenodo record is titled 'Stumm-Lab/kosmo-fast24: FAST'24' by Kia Shakiba and links github.com/Stumm-Lab/kosmo-fast24/tree/v1.0.0-fast24. Stumm-Lab is the senior author's lab org. The repo contains the real implementation (src/kosmo/eviction_map/*.rs matches Algorithms 1-3 verbatim, src/minisimulations.rs is the MiniSim baseline, src/accurate.rs the ground-truth simulator), MIT licensed, 5103 LOC Rust.",
+    "last_commit": "2025-05-11",
+    "artifact_badges": [],
+    "badge_evidence": "none found - paper carries a full Artifact Appendix (p.15) but https://www.usenix.org/conference/fast24/presentation/shakiba returned HTTP 403 to the fetcher and the Zenodo record (https://zenodo.org/records/10569925) shows no badge metadata, so no badge could be confirmed."
+  },
+  "hard_filters": {
+    "H1_open_repo": {
+      "result": "pass",
+      "evidence": "Official per Artifact Appendix p.15 + Zenodo 10.5281/zenodo.10569925 -> github.com/Stumm-Lab/kosmo-fast24. Contains the actual system, not a placeholder: src/kosmo.rs (algorithm + granularity + parallel reconstruction, S3.2-3.3), src/kosmo/eviction_map/{lfu,fifo,two_q,lrfu,lru}_eviction_map.rs (S3.4-3.5, Algs 1-3), src/minisimulations.rs (NUM_CACHES=100 baseline, S4.1), src/accurate.rs (100 full simulations, S4.3), plus the three tools wss/accurate/mrc named in the appendix. 46 files, 5103 lines of Rust."
+    },
+    "H2_no_root": {
+      "result": "pass",
+      "evidence": "Pure user-space Rust CLI; repo_facts.json red-flag scan is empty (no sudo, kernel module, eBPF, perf, Docker, KVM, RDMA hits) and there is no Dockerfile. The only privileged-looking call is mem::clear(None) at src/mrc.rs:105, which (per kwik v1.16.5 src/sys/mem.rs) writes /proc/self/clear_refs and reads VmHWM from /proc/self/status - both permitted to the process owner; it is also only reached with '-r memory' and can be replaced by sampling VmHWM externally. No kernel build, no hugepages, no /proc/sys writes."
+    },
+    "H3_hardware_fit": {
+      "result": "pass",
+      "evidence": "CPU-only, single node, no GPU. Kosmo's footprint is 1-100 MiB and MiniSim peaks at ~3.1 GiB (S1, Fig.6) vs 125 GB RAM. Parallelism is rayon over at most G=10 reconstructed stacks (src/kosmo.rs:35,186) and the paper notes Kosmo saturates once the pool exceeds G (S4.2), so 16 cores suffice for Kosmo; MiniSim was tuned to 64 cores, so the throughput comparison (Fig.7) must be re-run locally rather than copied. Binding constraint is disk: the README states the full corpus is 'roughly 4 TiB' against ~257 GB free, so the 52-trace sweep must be scaled down to MSR (13 traces, 434M accesses ~ 11 GB in the 25-byte binary format), which still tests the memory/MAE claims of Figs. 6 and 8."
+    },
+    "H4_obtainable_deps_data": {
+      "result": "pass",
+      "evidence": "All deps are user-space installable: rustup nightly into $HOME (needed for edition=2024 in Cargo.toml:4 and #![feature(btree_cursors)] in src/mrc.rs:8), conda gnuplot 5.4, and conda clang/libclang for the bindgen step of fasthash 0.4.0 (Cargo.toml:9, used only at src/shards.rs:11,55). kwik is fetched from git at tag v1.16.5 (network at build time). Data is public and free: MSR Cambridge via SNIA IOTTA (ref [23]), Twitter cache-trace on GitHub (ref [39]), SEC EDGAR logs on sec.gov (refs [37,38]); traces/wdev.bin ships pre-converted. Caveat, porting work not a blocker: no CSV -> 25-byte-binary converter is shipped (format documented in README and src/access.rs:40-73), and the precomputed accurate/ curves lived only on the now-retired AE VM."
+    }
+  },
+  "reproduce": {
+    "level": "M",
+    "target": "Figure 6 (memory usage) and Figure 8 (MAE) for LFU and FIFO under fixed-size SHARDS S_max=2048, restricted to the MSR dataset - i.e. the headline claim that Kosmo uses ~3.6x less memory than MiniSim at comparable MAE (Abstract, S4.4). Smoke test: the four README commands on the bundled traces/wdev.bin (wss must print 313344512).",
+    "scale_down": "MSR only (13 traces / 434M accesses ~ 11 GB binary) instead of the full 52-trace / ~4 TiB corpus; drop Twitter and SEC or add at most one small Twitter cluster. For MAE ground truth, src/accurate.rs re-reads the whole trace once per simulated size (100 sizes, serial, src/accurate.rs:71-96), so restrict it to the ~6 smallest MSR traces (wdev, web, ts, rsrch, hm, prn) and/or cut to 25 accurate points, reporting the changed metric. Report memory and throughput as Kosmo:MiniSim ratios on our 16-core box, never as absolute numbers against the paper's 64-core box.",
+    "effort": "~5 person-days + ~150 CPU-hours (no GPU); almost all compute is the 'accurate' ground-truth runs",
+    "rationale": "For H: the algorithm, the MiniSim baseline, the ground-truth simulator and exact single-run commands all ship, and traces/wdev.bin makes a first end-to-end result reachable on day 1. Held to M by unavoidable porting work: no trace converter (must be written and validated against wdev.bin's known WSS), no sweep driver, no aggregate plotting for the Fig.6-9 box plots, no reference accurate/ curves, an unmaintained fasthash 0.4.0 needing libclang and a Rust nightly, and a 16-vs-64-core mismatch that makes Fig.7's throughput claim reproducible only in spirit."
+  },
+  "addons": [
+    {
+      "name": "Quantify and share work across simultaneous multi-policy MRC generation",
+      "hypothesis": "We hypothesize that generating MRCs for k eviction policies in one Kosmo pass costs sub-linearly in k (memory and CPU per access grow much less than k-fold), so that at k=4 Kosmo's memory advantage over k independent MiniSim instances exceeds the paper's single-policy 3.6x, under the MSR and Twitter traces.",
+      "mechanism": "Expose the already-present Vec<KosmoPolicy> through the CLI (today src/mrc.rs:90 panics on more than one policy and init_kosmo hard-wires &[policy] at src/mrc.rs:201); add a multi-policy MiniSim driver instantiating k*100 caches as the honest baseline; then push shared work further - reconstruct_policy_stacks (src/kosmo.rs:219) already walks the global table once for all policies, but reuse-distance computation, the step-size schedule and the eviction loop remain per-policy (src/kosmo.rs:186-205). Unify them so the table is touched once per simulated size and all k stacks are filled in one pass, and report the marginal per-policy cost.",
+      "code_locations": ["src/mrc.rs:90", "src/kosmo.rs:186", "src/kosmo/global_object.rs:43", "src/minisimulations.rs:103"],
+      "motivating_evidence": "S3.8 is titled 'Simultaneous MRC generation' and the abstract sells 'simultaneous generation of MRCs for a variety of eviction policies', yet S4 evaluates one policy at a time and the shipped tool forbids the multi-policy mode (src/mrc.rs:90). S1 asserts without measurement that MiniSim's memory 'requirements are compounded' for multiple policies. The paper's central selling point is unquantified.",
+      "feasibility": "H",
+      "feasibility_rationale": "Bounded change of a few hundred LOC across two files, reuses the existing measurement harness (-r memory / -r throughput) and the MSR traces, and runs comfortably on 16 cores since Kosmo saturates at G=10 threads.",
+      "research_value": "M",
+      "research_value_rationale": "It validates rather than extends: a reviewer expects Kosmo to win here, so the surprise budget is limited - unless the shared-work refactor also turns the 2Q throughput regression (0.54x MiniSim, S4.4) into a win, which would be a genuine result.",
+      "scoop_check": {
+        "result": "clear",
+        "details": "Queries: 'papers citing Kosmo Shakiba FAST 2024 miss ratio curve 2025 2026'; 'miss ratio curve 2025 non-stack eviction policy SIEVE S3-FIFO MRC generation algorithm online'. Nothing measures multi-policy MRC generation cost. Closest is the authors' own PaperCache (HotStorage'25, https://dl.acm.org/doi/10.1145/3736548.3737836), which consumes runtime MRCs to switch policies but reports cache miss ratios, not generator cost."
+      }
+    },
+    {
+      "name": "Incremental stack reconstruction to cut Kosmo's CPU time per access",
+      "hypothesis": "We hypothesize that replacing Kosmo's full global-table rescan with incrementally maintained per-size ordered structures reduces CPU time per access by at least 2x at unchanged MAE and unchanged memory, across LFU, FIFO, 2Q and LRFU - closing the 1.85-2x CPU gap the paper concedes to MiniSim.",
+      "mechanism": "Every sampled access currently rebuilds G stacks from scratch: the loop at src/kosmo.rs:227-231 iterates all S_max global-table entries and re-derives each object's sorting key, i.e. O(G * S_max * log S_max) per access. Between consecutive accesses only O(G) objects change state (the accessed object plus the evicted ones), so keep the G reconstructed stacks resident as order-statistic structures inside Kosmo and apply deltas, invalidating an object's cached sorting key only when its eviction map mutates (GlobalObject::evict_by_policy_index at src/kosmo/global_object.rs:58 and update at :50). LFU/FIFO/LRU keys are stable between mutations; LRFU's CRF decays with time and needs a lazy re-keying rule - a deliberate stress case.",
+      "code_locations": ["src/kosmo.rs:219", "src/kosmo.rs:175", "src/kosmo/reconstructed_stack.rs:22", "src/kosmo/global_object.rs:58", "src/kosmo/local_object.rs"],
+      "motivating_evidence": "S6 future work: 'We also plan to improve on Kosmo's throughput by reducing its computational overhead through the use of more specialized data structures.' Figure 9 shows Kosmo's CPU time per access is ~1.85x (LFU) and ~2x (FIFO/2Q/LRFU) MiniSim's, and S4.4 admits the throughput win comes from MiniSim's threads idling rather than from Kosmo doing less work - a fragile advantage on a 16-core machine and precisely the property that matters for the paper's 'online, next to the cache' pitch.",
+      "feasibility": "M",
+      "feasibility_rationale": "Cross-cutting: touches the ReconstructedStack trait and all five implementations plus the eviction loop, roughly 1-2k LOC, and correctness must be pinned by diffing MRCs against unmodified Kosmo before any speedup is claimed. Evaluable with the existing harness on the MSR subset, but there is real risk of subtle divergence on 2Q and LRFU.",
+      "research_value": "H",
+      "research_value_rationale": "Attacks the system's one admitted weakness against its own baseline and is the authors' named future work. Either outcome teaches: a negative result ('the rescan is already cheap relative to eviction-map lookups; the bottleneck is elsewhere') is itself insight into where Kosmo's time goes, which the paper never profiles.",
+      "scoop_check": {
+        "result": "partial",
+        "details": "Queries: 'LAShards Low-Overhead Self-Adaptive MRC Construction Non-Stack Algorithms IEEE Transactions on Computers 2025'; 'Shakiba Stumm 2025 miss ratio curve cache sizing eviction map'. Closest: LAShards, IEEE TC 74(10):3490-3503, Oct 2025, https://www.computer.org/csdl/journal/tc/2025/10/11087706/28xfc5EUReE - reduces memory/compute overhead of non-stack MRC construction, but in the MiniSim/DFShards mini-cache lineage, not by changing Kosmo's stack reconstruction. Different mechanism; must be cited and ideally compared against. Full text was paywalled in this desk review."
+      }
+    },
+    {
+      "name": "Violation-aware pruning: bounded eviction-record retention for FIFO and 2Q",
+      "hypothesis": "We hypothesize that retaining the k most recent sub-threshold eviction records instead of discarding all of them reduces Kosmo's MAE for FIFO and 2Q by a measurable margin (target: eliminating the +0.44% and +1.56% average MAE deficit vs MiniSim) for a memory increase below 2x, on the MSR traces where inclusion-property violations are most frequent.",
+      "mechanism": "EvictionMap::insert prunes unconditionally: the FIFO map pops every record with size <= cache_size (src/kosmo/eviction_map/fifo_eviction_map.rs:37-45) and the LFU/2Q maps do the equivalent, hard-coding 'evicted at S implies absent at every S' < S'. S4.5 shows that is wrong for 20.61% of FIFO accesses and 10.49% of 2Q accesses. Replace the boolean exists_at/reuse_distance with a k-record window able to represent 'present at S1, absent at S2 > S1', and let Curve::from_histogram (src/curve.rs:62), which today emits a monotone inverse CDF, produce a non-monotone curve when the windowed records say so. Sweep k in {0,1,2,4,8}; k=0 is the paper's design, making the ablation self-calibrating.",
+      "code_locations": ["src/kosmo/eviction_map/fifo_eviction_map.rs:30", "src/kosmo/eviction_map/two_q_eviction_map.rs", "src/kosmo/eviction_map/lfu_eviction_map.rs", "src/kosmo/eviction_map.rs:32", "src/curve.rs:62"],
+      "motivating_evidence": "Two of the paper's three stated limitations (S1): 'the MRCs Kosmo generates are monotonically decreasing which could increase the error for eviction policies which display significant non-monotonic behaviour', and S3.3's admission that pruning 'may introduce inaccuracies for eviction policies which do not adhere to the inclusion property'. S4.4 reports Kosmo losing to MiniSim on FIFO and 2Q MAE and blames exactly these violations, calling out MSR src1 as pathological for 2Q; S4.5/Fig.10 quantify the violation rates this add-on exploits.",
+      "feasibility": "M",
+      "feasibility_rationale": "The change is localized to the eviction maps and the curve builder, but it directly trades against the pruning that made Kosmo memory-efficient (Fig.4: ~387x smaller maps), so memory must be re-measured rather than assumed, and every MAE number needs ground truth from the expensive accurate tool. Fits the 10-week budget on the MSR subset.",
+      "research_value": "H",
+      "research_value_rationale": "Converts a self-declared limitation into a measured accuracy/memory knob, and either outcome is informative: if k=1 recovers most of the MAE gap cheaply, Kosmo strictly dominates MiniSim; if it does not, the paper's claim that violations are benign is confirmed with evidence the paper itself does not provide.",
+      "scoop_check": {
+        "result": "clear",
+        "details": "Queries: 'inclusion property violation miss ratio curve error non-monotonic FIFO 2Q approximation 2025'; 'miss ratio curve generation ARC adaptive replacement cache non-stack algorithm 2025 simulation SHARDS'. Nothing found that revisits eviction-record pruning or non-monotone MRC emission. Related but different: probabilistic/age-based MRC modelling for non-inclusive policies (Beckmann & Sanchez, paper ref [61]) models such policies analytically rather than repairing a pruning heuristic."
+      }
+    },
+    {
+      "name": "An ARC eviction map: does the eviction-map abstraction cover self-tuning policies?",
+      "hypothesis": "We hypothesize that ARC's self-tuning partition can be encoded in a Kosmo eviction map, yielding ARC MRCs with MAE within ~2% of MiniSim's at lower memory on the MSR traces, and that the per-cache-size adaptation parameter p - not the multi-stack structure - is the binding difficulty.",
+      "mechanism": "Follow the 2Q template (src/kosmo/eviction_map/two_q_eviction_map.rs, which already juggles two record sets and the Kin/Kout ratios): ARC needs T1/T2 record sets plus B1/B2 ghost lists and, crucially, a per-cache-size target p that moves on every ghost hit. Since Kosmo never materializes a cache, p(S) must be reconstructed from the eviction records at size S - either carried inside the records or recomputed during stack reconstruction. Add KosmoPolicy::Arc (src/kosmo/policy.rs:20), the matching local object and reconstructed stack, and - for ground truth and the MiniSim baseline - a real ARC cache under src/cache/ wired into CachePolicy (src/cache/policy.rs).",
+      "code_locations": ["src/kosmo/policy.rs:20", "src/kosmo/eviction_map.rs:43", "src/kosmo/eviction_map/two_q_eviction_map.rs", "src/kosmo/reconstructed_stack.rs:42", "src/kosmo/local_object.rs", "src/cache/policy.rs", "src/cache.rs:114"],
+      "motivating_evidence": "S6 names ARC, LIRS and LHD as future work; S3.5 says 'We believe a similar technique would work for other multi-stack eviction policies (e.g., ARC) and leave this for future work'; the Limitations paragraph states 'it remains an open problem which classes of eviction policies Kosmo is able to support'. ARC is the sharpest test because its behaviour at size S depends on a state variable that itself depends on S - something no existing eviction map carries. The repo confirms the gap: grep for Mru/S3/Sieve/Arc in src/ returns nothing, so even the MRU and S3-FIFO maps the paper describes are absent.",
+      "feasibility": "M",
+      "feasibility_rationale": "Roughly 800-1200 LOC across five files following an existing template, plus an ARC cache for ground truth and MiniSim, plus accurate runs. Doable by 2-4 students in 10 weeks, but the per-size p may force a design change rather than merely a new map - that is the interesting risk, with a safe fallback (fixed-p ARC, a strict generalization of 2Q, which still answers the multi-stack question).",
+      "research_value": "H",
+      "research_value_rationale": "Directly probes the paper's stated open problem about the expressive power of eviction maps. A negative result - adaptive policies need per-size state that breaks the single-global-copy premise - delimits Kosmo's applicability and is exactly the question the FAST reviewers left open.",
+      "scoop_check": {
+        "result": "clear",
+        "details": "Queries: 'Kosmo miss ratio curve eviction policy follow-up 2025 eviction maps ARC LIRS MRC generation'; 'miss ratio curve generation ARC adaptive replacement cache non-stack algorithm 2025 simulation SHARDS'. Nothing extends Kosmo to ARC or LIRS; MiniSim can already simulate ARC by brute force, which is the baseline rather than a scoop. Note S3-FIFO is self-scooped by footnote 6 of the paper ('We have also designed eviction maps to support the S3-FIFO eviction policy'), so choose ARC/LIRS over S3-FIFO; SIEVE (NSDI'24) is unclaimed and is a cheap second policy."
+      }
+    },
+    {
+      "name": "Workload-adaptive granularity: where to spend the G reconstructions",
+      "hypothesis": "We hypothesize that placing Kosmo's G reconstruction points non-uniformly - log-spaced, or concentrated where the running reuse-distance histogram has mass - reduces worst-case MAE (the upper whisker of Fig.3) by at least 30% at equal G, or reaches the paper's MAE at G=5 instead of G=10, on the MSR traces.",
+      "mechanism": "perform_evictions derives a single uniform step_size from the accessed object's reuse distance (src/kosmo.rs:176-180) and reconstructs at step_size, 2*step_size, ... (src/kosmo.rs:186-189), with GRANULARITY a compile-time constant (src/kosmo.rs:35). Replace the arithmetic schedule with a pluggable size-schedule trait offering (a) geometric spacing, (b) histogram-guided spacing that samples the live Histogram (src/histogram.rs:51) so points cluster near cliffs, and (c) a per-access budget spending fewer reconstructions on small reuse distances and more on large ones. Measure MAE, CPU time per access and memory at matched G.",
+      "code_locations": ["src/kosmo.rs:35", "src/kosmo.rs:175", "src/histogram.rs:51", "src/curve.rs:62"],
+      "motivating_evidence": "S3.3 picks G=10 from Figure 3 on the basis of the mean MAE plateau, but Fig.3's maximum whisker stays an order of magnitude above the mean at every G - some traces are badly served by a uniform schedule and the paper does not identify which. The paper's own critique of MiniSim (S2.3 and footnote 3) is precisely that uniformly spaced simulated sizes hide points of interest when C_max is mis-chosen; Kosmo inherits that uniformity, merely rescaled per access.",
+      "feasibility": "H",
+      "feasibility_rationale": "Self-contained in perform_evictions plus a small schedule module; no new harness, no new data, cheap to sweep on the MSR subset with the existing -r memory / -r throughput modes.",
+      "research_value": "M",
+      "research_value_rationale": "Real but incremental - a smarter setting of an existing knob, which a reviewer could read as tuning unless the histogram-guided variant demonstrably finds cliffs the uniform schedule misses. Pairs naturally with the incremental-reconstruction add-on as the 'make Kosmo cheaper' half of a project.",
+      "scoop_check": {
+        "result": "partial",
+        "details": "Closest work: LAShards, IEEE TC 74(10):3490-3503, Oct 2025, https://www.computer.org/csdl/journal/tc/2025/10/11087706/28xfc5EUReE - 'low-overhead and self-adaptive MRC construction for non-stack algorithms', explicitly addressing 'the inability to adapt to dynamic I/O workloads'. That is self-adaptive size selection for non-stack MRCs, but for mini-cache simulation rather than Kosmo's eviction maps. Read it before committing; if its adaptation rule is equivalent, reframe this as a comparison study or fold it into the incremental-reconstruction add-on. Full text was paywalled in this desk review."
+      }
+    }
+  ],
+  "risks": [
+    "fasthash 0.4.0 (Cargo.toml:9, used only for murmur3::hash128 at src/shards.rs:11,55) is unmaintained since 2019 and builds C++ through bindgen, requiring libclang which is absent on this machine (conda-installable). Whether it compiles on the Rust nightly demanded by edition=2024 is unclear from reading alone; the mitigation (pure-Rust murmur3, two lines) changes SHARDS sampling decisions so results become statistically rather than bit-wise comparable to the paper.",
+    "Nightly-only toolchain: #![feature(btree_cursors)] at src/mrc.rs:8 and src/accurate.rs:8 blocks stable Rust even though the feature has since stabilized; the team may need to pin a specific nightly or delete the attribute and retest.",
+    "No CSV-to-binary trace converter and no reference accurate/ curves ship with the repo - both lived on the now-retired artifact-evaluation VM described in the README. The converter is the first real deliverable, and the unspecified key-hashing choice (MSR LBAs to u64 keys) will shift absolute numbers.",
+    "src/accurate.rs:71-96 runs 100 serial full-trace simulations per trace per policy; the paper quotes roughly 6 months of compute for the full study. Every MAE-bearing experiment must budget around this, e.g. by freezing a small ground-truth set early.",
+    "Hardware mismatch: the paper tuned MiniSim's thread pool to 64 cores (S4.2) while Kosmo saturates at G=10 threads, so on 16 cores the Fig.7 throughput comparison tilts toward Kosmo for reasons unrelated to the algorithm. Memory (Fig.6) is the safer headline to target.",
+    "The artifact is narrower than the paper: MRU (S3.5), S3-FIFO (footnote 6), TTL support (S3.7 - Access.ttl is parsed at src/access.rs:58 and never read) and the online resize/clean path (src/algorithm.rs:33-35, implemented at src/kosmo.rs:74-81 but called from nowhere) are described but absent or unreachable. Any add-on assuming these exist starts from zero; TTL-aware MRCs are separately claimed by the same group (ref [36], EuroSys'24 'TTLs Matter') and are therefore scooped.",
+    "Author follow-up is active: PaperCache (HotStorage'25, code at papercache.io) already does runtime MRC-driven policy switching from the same lab, so anything framed as 'use Kosmo online to pick a policy' is taken.",
+    "Artifact badges could not be verified (USENIX page returned HTTP 403, Zenodo record has no badge metadata), so there is no 'Results Reproduced' evidence to lean on.",
+    "The repo README's Claims section is stale relative to the camera-ready (5x/9x memory and 1.2x throughput vs the paper's 3.6x/36x and 1.3x); use the paper's numbers as the reproduction target and report the discrepancy."
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "model": "claude-opus-5[1m]",
+  "effort": "xhigh",
+  "years": [2023, 2024, 2025, 2026],
+  "venues": [
+    {"key": "osdi",       "name": "USENIX OSDI",        "tier": "A"},
+    {"key": "sosp",       "name": "ACM SOSP",           "tier": "A"},
+    {"key": "eurosys",    "name": "ACM EuroSys",        "tier": "A"},
+    {"key": "atc",        "name": "USENIX ATC",         "tier": "A"},
+    {"key": "nsdi",       "name": "USENIX NSDI",        "tier": "A"},
+    {"key": "fast",       "name": "USENIX FAST",        "tier": "A"},
+    {"key": "asplos",     "name": "ACM ASPLOS",         "tier": "A", "note": "ASPLOS has several submission cycles / proceedings volumes per year; cover all of them."},
+    {"key": "mlsys",      "name": "MLSys",              "tier": "B"},
+    {"key": "vldb",       "name": "VLDB",               "tier": "B", "note": "Research-track PVLDB papers presented at the VLDB conference held in this year (they span PVLDB volumes)."},
+    {"key": "vldbgap",    "name": "PVLDB Volume 16, Number 13 (VLDB)", "tier": "B", "years": [2024], "note": "Gap filler: enumerate ONLY the research papers of PVLDB Volume 16, Number 13 (https://www.vldb.org/pvldb/volumes/16/). The VLDB 2023 screen excluded that issue as presented at VLDB 2024, and the VLDB 2024 screen covered only Volume 17, so these papers were covered by neither."},
+    {"key": "sigmod",     "name": "ACM SIGMOD",         "tier": "B", "note": "Research-track papers presented at SIGMOD this year (published in PACMMOD for 2023+)."},
+    {"key": "sigmetrics", "name": "ACM SIGMETRICS",     "tier": "B", "note": "POMACS papers presented at SIGMETRICS this year."},
+    {"key": "socc",       "name": "ACM SoCC",           "tier": "B"},
+    {"key": "middleware", "name": "ACM/IFIP Middleware", "tier": "B"}
+  ],
+  "stages": {
+    "research": {"concurrency": 4, "timeout_seconds": 5400},
+    "collect":  {"timeout_seconds": 3600},
+    "prerank":  {"concurrency": 4, "batch_size": 80, "timeout_seconds": 2400, "effort": "medium"},
+    "fetch":    {"timeout_seconds": 1800},
+    "audit":    {"concurrency": 1, "timeout_seconds": 3600}
+  },
+  "max_fix_rounds": 2,
+  "max_crash_retries": 1
+}

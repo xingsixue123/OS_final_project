@@ -1,0 +1,21 @@
+# --- third-party material downloaded by the pipeline (large, not ours) ---
+lit_review/top8/repos/
+lit_review/papers/*/repo/
+lit_review/papers/*/repo.part/
+lit_review/papers/*/paper.pdf
+lit_review/papers/*/paper.part
+lit_review/papers/*/paper.txt
+lit_review/papers/*/pages/
+lit_review/papers/*/pages.part/
+# research shards: keep only each scout's report, not its scratch downloads
+lit_review/research/*/*
+!lit_review/research/*/report.md
+
+# --- agent sandboxes: full transcripts + config dirs linking to credentials ---
+lit_review/.agents/
+
+# --- runtime state / logs ---
+lit_review/.lr.lock
+lit_review/*.out
+__pycache__/
+*.pyc

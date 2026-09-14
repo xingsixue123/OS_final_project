@@ -1,0 +1,11 @@
+{
+  "id": "vldb26-demystifying-and-improving-lazy-promotio",
+  "title": "Demystifying and Improving Lazy Promotion in Cache Eviction",
+  "venue": "vldb",
+  "year": 2026,
+  "paper_url": "https://doi.org/10.14778/3785297.3785299",
+  "pdf_url": "https://www.vldb.org/pvldb/vol19/p549-yang.pdf",
+  "repo_url": "https://github.com/cacheMon/Lazy-Promotions",
+  "topic": "caching",
+  "note": "Trace-driven benchmark and improvement of five lazy-promotion cache eviction strategies plus two new algorithms; the archetypal cache-policy paper for this course and runs on libCacheSim traces"
+}

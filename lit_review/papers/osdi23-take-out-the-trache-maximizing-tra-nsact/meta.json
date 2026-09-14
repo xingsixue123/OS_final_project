@@ -1,0 +1,11 @@
+{
+  "id": "osdi23-take-out-the-trache-maximizing-tra-nsact",
+  "title": "Take Out the TraChe: Maximizing (Tra)nsactional Ca(che) Hit Rate",
+  "venue": "osdi",
+  "year": 2023,
+  "paper_url": "https://www.usenix.org/conference/osdi23/presentation/cheng",
+  "pdf_url": "https://www.usenix.org/system/files/osdi23-cheng.pdf",
+  "repo_url": "https://github.com/audreyccheng/detox",
+  "topic": "caching",
+  "note": "Squarely on-topic: a new cache eviction and prefetching policy (DeToX) driven by transactional dependencies, evaluated with OLTP traces and benchmarks on a single node in user space. Strong fit for a policy-improvement hypothesis with trace-driven replay."
+}

@@ -1,0 +1,11 @@
+{
+  "id": "sosp24-powerinfer-fast-large-language-model-ser",
+  "title": "PowerInfer: Fast Large Language Model Serving with a Consumer-grade GPU",
+  "venue": "sosp",
+  "year": 2024,
+  "paper_url": "https://dl.acm.org/doi/10.1145/3694715.3695964",
+  "pdf_url": "https://arxiv.org/pdf/2312.12456",
+  "repo_url": "https://github.com/SJTU-IPADS/PowerInfer",
+  "topic": "llm-inference",
+  "note": "Designed for exactly this machine class: one consumer/workstation GPU plus CPU, hot/cold neuron-aware GPU-CPU hybrid inference with offloading. llama.cpp-based, user-space build, CUDA 11.8/12.x friendly, no root. 7B-13B models in the sparsity-aware formats fit 24 GB or spill to the 125 GiB host RAM by design. Strongest single candidate."
+}

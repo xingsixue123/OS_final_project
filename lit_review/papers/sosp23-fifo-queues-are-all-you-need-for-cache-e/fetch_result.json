@@ -1,0 +1,14 @@
+{
+  "pdf": {
+    "status": "ok",
+    "source_url": "https://jasony.me/publication/sosp23-s3fifo.pdf",
+    "version": "from list",
+    "notes": ""
+  },
+  "repo": {
+    "status": "ok",
+    "url": "https://github.com/Thesys-lab/sosp23-s3fifo",
+    "official": "unclear",
+    "evidence": "link taken from the research list; not independently verified"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "pdf": {
+    "status": "ok",
+    "source_url": "https://www.usenix.org/system/files/nsdi24-zhang-yazhuo.pdf",
+    "version": "from list",
+    "notes": ""
+  },
+  "repo": {
+    "status": "ok",
+    "url": "https://github.com/cacheMon/NSDI24-SIEVE",
+    "official": "unclear",
+    "evidence": "link taken from the research list; not independently verified"
+  }
+}

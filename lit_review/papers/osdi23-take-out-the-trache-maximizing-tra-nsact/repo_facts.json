@@ -1,0 +1,97 @@
+{
+  "url": "https://github.com/audreyccheng/detox",
+  "head_commit": "b36054be3a7748dbc9c5a67fb7ff3bf95ff74999",
+  "head_commit_date": "2023-08-24T19:11:37-07:00",
+  "file_count": 15117,
+  "size_mb": 292.8,
+  "top_level": [
+    ".DS_Store",
+    ".gitignore",
+    "LICENSE",
+    "README.md",
+    "chronocache/",
+    "oltpbench-chronocache/",
+    "redis/",
+    "simulator/",
+    "sys/"
+  ],
+  "build_files": [
+    "chronocache/pom.xml",
+    "oltpbench-chronocache/pom.xml",
+    "redis/Makefile",
+    "redis/deps/Makefile",
+    "redis/src/Makefile",
+    "sys/pom.xml"
+  ],
+  "lines_by_extension": {
+    ".js": 716338,
+    ".c": 215036,
+    ".java": 171608,
+    ".h": 36188,
+    ".py": 7059,
+    ".pl": 2436,
+    ".sh": 1240,
+    ".rb": 937,
+    ".ts": 512,
+    ".cpp": 286,
+    ".m": 134,
+    ".proto": 112
+  },
+  "red_flags": {
+    "sudo": {
+      "count": 54,
+      "examples": [
+        "README.md:62: 1. `sudo apt install postgresql`",
+        "README.md:64: 2. `sudo systemctl start postgresql.service`",
+        "README.md:66: 3. `sudo -u postgres psql`",
+        "README.md:74: 7. `sudo systemctl restart postgresql.service`",
+        "oltpbench-chronocache/.travis.yml:2: sudo: required"
+      ]
+    },
+    "kernel_module": {
+      "count": 1,
+      "examples": [
+        "oltpbench-chronocache/tools/rs-sysmon/plugins/dstat_vm_memctl.py:24: raise Exception, 'Needs VMware Tools (modprobe vmmemctl)'"
+      ]
+    },
+    "custom_kernel": {
+      "count": 15,
+      "examples": [
+        "redis/src/cluster.c:4348: * master, after a reboot, without giving the cluster a chance to",
+        "redis/src/config.c:1183: * configuration file to be set to NULL again at the next reboot. */",
+        "redis/src/latency.c:484: report = sdscat(report,\"- I detected a non zero amount of anonymous huge pages used by your process. This creates very serious latency events in different condi",
+        "redis/src/sentinel.c:198: mstime_t master_reboot_since_time; /* master reboot time since time. */",
+        "redis/src/sentinel.c:1989: } else if (!strcasecmp(argv[0],\"master-reboot-down-after-period\") && argc == 3) {"
+      ]
+    },
+    "sysctl_hugepages": {
+      "count": 20,
+      "examples": [
+        "redis/deps/jemalloc/src/pages.c:475: fd = (int)syscall(SYS_open, \"/proc/sys/vm/overcommit_memory\", O_RDONLY |",
+        "redis/deps/jemalloc/src/pages.c:478: fd = (int)syscall(SYS_open, \"/proc/sys/vm/overcommit_memory\", O_RDONLY);",
+        "redis/deps/jemalloc/src/pages.c:486: AT_FDCWD, \"/proc/sys/vm/overcommit_memory\", O_RDONLY | O_CLOEXEC);",
+        "redis/deps/jemalloc/src/pages.c:489: AT_FDCWD, \"/proc/sys/vm/overcommit_memory\", O_RDONLY);",
+        "redis/deps/jemalloc/src/pages.c:496: fd = open(\"/proc/sys/vm/overcommit_memory\", O_RDONLY | O_CLOEXEC);"
+      ]
+    },
+    "multi_node": {
+      "count": 6,
+      "examples": [
+        "README.md:24: Note: if running on EC2 or other cloud providers, make sure security groups / firewalls allow all traffic.",
+        "chronocache/src/main/java/chronocache/core/Parameters.java:29: public static String FIDO_TRAIN_FILE = \"/home/ec2-user/fido-training.sql\";",
+        "oltpbench-chronocache/tools/rs-sysmon/setenv:21: mysql_host=\"ec2-50-16-99-183.compute-1.amazonaws.com\"",
+        "redis/utils/releasetools/02_upload_tarball.sh:14: ssh ubuntu@host.redis.io \"cd /var/www/download;",
+        "sys/src/main/java/shield/tests/config/interactiveConfig.json:8: \"ec2\": {"
+      ]
+    }
+  },
+  "github": {
+    "stargazers_count": 14,
+    "forks_count": 5,
+    "archived": false,
+    "pushed_at": "2023-12-13T13:49:00Z",
+    "created_at": "2023-04-24T21:07:16Z",
+    "open_issues_count": 0,
+    "license": "Apache-2.0"
+  }
+}

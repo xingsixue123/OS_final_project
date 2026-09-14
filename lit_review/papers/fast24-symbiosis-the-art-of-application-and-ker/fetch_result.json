@@ -1,0 +1,14 @@
+{
+  "pdf": {
+    "status": "ok",
+    "source_url": "https://www.usenix.org/system/files/fast24-dai.pdf",
+    "version": "from list",
+    "notes": ""
+  },
+  "repo": {
+    "status": "ok",
+    "url": "https://github.com/daiyifandanny/Symbiosis",
+    "official": "unclear",
+    "evidence": "link taken from the research list; not independently verified"
+  }
+}

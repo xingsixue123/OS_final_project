@@ -1,0 +1,153 @@
+{
+  "title": "Baleen: ML Admission & Prefetching for Flash Caches",
+  "one_line": "Baleen trains LightGBM admission and prefetching policies for a bulk-storage flash cache by imitating an episode-based offline optimum, optimizing backend disk-head time (not hit rate) under a flash write-rate budget.",
+  "topic": "ml-for-systems",
+  "repo": {
+    "official": "yes",
+    "evidence": "The paper's Artifact Appendix (paper.txt p. 18) names https://github.com/wonglkd/Baleen-FAST24 and the Chameleon Trovi share aa6fb454-6452-4fc8-994a-b028bfc3c82d; the account wonglkd is first author Daniel Lin-Kit Wong. repo/README.md:5 links the paper, the live code repo (github.com/wonglkd/BCacheSim, the submodule in repo/.gitmodules), and the CMU PDL data mirror. Note the simulator itself is in the BCacheSim submodule, which this shallow clone did not fetch.",
+    "last_commit": "2024-02-28",
+    "artifact_badges": ["available", "functional", "reproduced"],
+    "badge_evidence": "repo/README.md:10-12 embeds the three USENIX badge images (usenix_available.svg, usenix_functional.svg, usenix_reproduced.svg); artifact page https://www.usenix.org/conference/fast24/presentation/wong"
+  },
+  "hard_filters": {
+    "H1_open_repo": {
+      "result": "pass",
+      "evidence": "Official artifact named in the paper's Artifact Appendix (p. 18). It is real code, not a placeholder: repo/notebooks/reproduce/reproduce_commands_all.sh holds ~330 concrete train+simulate commands with converged hyper-parameters, repo/runs/example/*/config.json are runnable simulator configs, and 8 per-figure notebooks sit in repo/notebooks/paper-figs/. Caveat: the simulator package lives in the git submodule declared in repo/.gitmodules (github.com/wonglkd/BCacheSim, public, Apache-2.0, pushed 2024-01-16) which the audited clone did not fetch; 'git submodule update --init' retrieves it."
+    },
+    "H2_no_root": {
+      "result": "pass",
+      "evidence": "Simulator results are pure user-space CPU Python: repo/getting-started.sh:27-33 runs 'python -m BCacheSim.cachesim.simulate_ap' and 'python -m BCacheSim.episodic_analysis.train' via BCacheSim/run_py.sh (a stdbuf wrapper). Deps come from conda/pip (BCacheSim/install/requirements.txt). repo_facts.json reports red_flags: {} for the wrapper repo; the submodule contains no kernel/eBPF/perf/KVM code, only an optional BCacheSim/cachesim/testbed/ CacheBench harness that is not needed (repo/README.md:14 states the testbed CacheLib fork is unreleased). The Chameleon notebooks (repo/chameleon/) are cloud convenience and are skipped."
+    },
+    "H3_hardware_fit": {
+      "result": "pass",
+      "evidence": "Paper §5.1: 'Our key results use simulation runs'; repo/README.md:14 scopes the artifact to the Python simulator. Single-threaded CPU Python over a 76 MB 0.1% trace with a simulated 366.475 GB cache (repo/runs/example/rejectx/config.json:28). No GPU, flash, or HDD required; LightGBM trains in ~25 s on CPU (repo/getting-started.sh:29). 16 cores / 125 GB RAM run the ~330-command grid embarrassingly in parallel; the ~257 GB free disk dwarfs the 76 MB - 8 GB trace sets. Only the testbed validation (Fig 11) needs real HDDs plus the unreleased CacheLib fork, and it backs no headline claim."
+    },
+    "H4_obtainable_deps_data": {
+      "result": "pass",
+      "evidence": "repo/data/get-tectonic.sh:2,9,11 wget public, un-gated files from https://ftp.pdl.cmu.edu/pub/datasets/Baleen24/ (storage_0.1.tar.gz 15 MB -> 76 MB, results_release.csv.gz, breakdowns.tar.gz); the same index publishes 1%/10%/full trace variants. Deps are pinned pure-Python CPU wheels (BCacheSim/install/requirements.txt: lightgbm==3.3.5, numpy==1.24.2, pandas==1.5.3, scikit-learn==1.2.2, scipy==1.10.1, matplotlib==3.7.1, seaborn==0.12.1) plus BCacheSim/install/env_cachelib-py-3.11.yaml. The only proprietary element - Meta's exact seek/bandwidth constants - is substituted by the authors' measured university-testbed constants (repo/README.md:14, Artifact Appendix 'Caveats')."
+    }
+  },
+  "reproduce": {
+    "level": "H",
+    "target": "Figure 9 (paper p. 11): Peak backend load per trace for CoinFlip / RejectX / CacheLib-ML / Baleen (No Prefetch) / Baleen, supporting §5.2's headline claim that Baleen cuts Peak Disk-head Time by 12% on average over RejectX at a fixed flash write rate (5-29% across traces). Cheaper secondary target: Figures 13-14 (ML-Range / ML-When prefetching ablation) via repo/notebooks/paper-figs/fig-13,14-prefetching-20230424.ipynb.",
+    "scale_down": "Use the 0.1% traces (storage_0.1.tar.gz - the same sample rate used for the paper's simulator curve in Fig 11a) at the default 366.475 GB-equivalent cache and 35.599 MB/s target write rate. Run 7 regions x 4 policies (CoinFlip, RejectX, Baleen-NoPrefetch, Baleen) x 3 samples instead of the paper's 10 samples: ~84 runs instead of ~330. Reproduce 4 of Fig 9's 5 bars from scratch and overlay CacheLib-ML from the authors' released data/results_release.csv.gz, since its config is absent from the reproduce scripts.",
+    "effort": "~4 person-days + ~80 CPU-core-hours (about 6-8 wall-clock hours on 16 cores), 0 GPU-hours",
+    "rationale": "Everything needed exists: pinned deps (BCacheSim/install/requirements.txt), public data (repo/data/get-tectonic.sh), a 3-command smoke test with published timings (repo/getting-started.sh:27-33: RejectX 4 min, train 25 s, Baleen sim ~30 min), literal per-result commands with converged eviction ages and thresholds (repo/notebooks/reproduce/reproduce_commands_all.sh), and a USENIX 'Results Reproduced' badge (repo/README.md:12). The machine is over-provisioned for CPU-only Python simulation. It falls short of effortless because (a) the paper-fig notebooks are wired to the authors' directory layout ('../runs/exp_reproduce_spring23/...', job-ids containing '/users/dlwong/...') and default to the released results CSV, so re-pointing them at local runs is real work, and (b) the CacheLib-ML and Flashield baselines have code but no scripted configs."
+  },
+  "addons": [
+    {
+      "name": "PeakBaleen: peak-aware episode scoring and load-adaptive gating",
+      "hypothesis": "We hypothesize that scoring episodes by their contribution to the peak 10-minute disk-head-time windows, and modulating the admission threshold and the ML-When prefetch gate by the current load level, reduces Peak DT by at least 5% over stock Baleen at the same flash write rate on the 7 Meta traces.",
+      "mechanism": "Add a scoring function next to PolicyUtilityServiceTimeSize2 in BCacheSim/episodic_analysis/policies.py (~L259; the unused PolicyUtilityPeakServiceTimeSize at ~L289 is a stub to build on) that weights each episode's DT_saved by the load percentile of the 10-minute windows its hits land in, so the write budget is spent on peak-relevant episodes; the 600 s window bucketing already exists (log_interval in the run configs). Add a load-aware gate in the pf_when dispatch of BCacheSim/cachesim/prefetchers.py (~L103-115) that raises the ML-When confidence threshold off-peak and lowers it near peak using a trailing-load estimate rather than an oracle. Re-run the existing eviction-age / admission-threshold convergence loop (BCacheSim/episodic_analysis/train.py) so the write-rate constraint still binds, then evaluate with the unchanged harness, which already reports Peak DT. Driven from the run configs and reproduce scripts listed below.",
+      "code_locations": [
+        "runs/example/baleen/prefetch_ml-on-partial-hit/config.json",
+        "getting-started.sh",
+        "notebooks/reproduce/reproduce_commands.sh",
+        "notebooks/paper-figs/fig-18-peak-hrs-20230424.ipynb",
+        "notebooks/paper-figs/fig-09-202309.ipynb"
+      ],
+      "motivating_evidence": "Paper §3.1: 'As explicitly optimizing admission for the peak introduces significant complexity, we leave that for future work.' §5.6 'Explicitly optimizing Peak DT': the authors admitted only during high-load periods, 'found that while this saved flash writes, it did not reduce Peak DT', and concluded 'more fundamental changes (e.g., scoring episodes by their usefulness in reducing Peak DT) will be required' - naming this exact mechanism as the missing piece. App A.3 / Fig 18 shows the peak window shifts between policies and that Baleen's worst windows are those where prefetching does not pay, giving the load-aware prefetch gate a concrete target.",
+      "feasibility": "H",
+      "feasibility_rationale": "Two localized additions - one episode scoring function and one gate predicate, order 300-600 LOC - plus re-running the existing convergence loop. No new evaluation harness is needed because Peak DT is already the metric the simulator emits and the figure notebooks plot. Compute is CPU-only and parallel: ~30 min per ML simulation, so 7 traces x 3 samples x {Baleen, PeakBaleen} is ~21 core-hours per design iteration, easily affordable on 16 cores in 10 weeks.",
+      "research_value": "H",
+      "research_value_rationale": "Peak DT is the paper's own headline metric and the quantity that sets the number of backend HDDs (and hence TCO, §3.2). The authors flag peak-explicit optimization as unsolved and report a failed attempt, so a FAST reviewer would care about either outcome: a win directly improves the paper's main claim, while a principled negative result plus episode-level peak attribution explains why peaks are a whack-a-mole target (App A.3) - which is itself a contribution.",
+      "scoop_check": {
+        "result": "clear",
+        "details": "Queries: 'peak-aware cache admission policy disk-head time flash cache load-adaptive 2025'; \"'Baleen' flash cache Tectonic traces 2026 admission policy improve peak disk-head time paper\"; 'Baleen flash cache ML admission prefetching follow-up work citing FAST 2024 episodes'. No follow-up to Baleen found. Closest prior work: CacheSack (https://www.usenix.org/conference/atc22/presentation/yang-tzu-wei and https://dl.acm.org/doi/10.1145/3582014), which solves a knapsack over admission policies for average cost, not peak; HALP (https://www.usenix.org/conference/nsdi23/presentation/song) targets eviction. Neither scores cache residencies by peak-window contribution."
+      }
+    },
+    {
+      "name": "Segment-level admission and prefetching",
+      "hypothesis": "We hypothesize that extending episodes, labels and the admission/prefetch models from block granularity to per-segment granularity reduces Peak DT by up to the 11% that the authors' own offline episode analysis predicts, under the default 3-DWPD / 400 GB-equivalent regime on all 7 traces.",
+      "mechanism": "Construct per-segment (or per-contiguous-run) episodes in BCacheSim/episodic_analysis/episodes.py; score and label them at that granularity in BCacheSim/episodic_analysis/policies.py so the OPT ranking and the write-budget accounting become segment-aware; have the GBM emit per-segment admission decisions instead of one decision for the whole access range, and let BCacheSim/cachesim/sim_cache.py admit a strict subset of the fetched range. Partial plumbing already exists and is exposed in the run config: learned_ap_granularity ('both'), block_level and one_chunk switches, and NewMLAP in BCacheSim/cachesim/admission_policies.py (~L250) already consumes the 'meta+block+chunk' feature subset. Evaluated with the existing Fig 9 / Fig 13 pipeline.",
+      "code_locations": [
+        "runs/example/baleen/prefetch_ml-on-partial-hit/config.json",
+        "notebooks/reproduce/reproduce_commands_all.sh",
+        "notebooks/paper-figs/fig-09-202309.ipynb",
+        "notebooks/example/example.ipynb"
+      ],
+      "motivating_evidence": "Paper §5.6, 'Segment-aware admission & prefetching': 'Baleen operates at the block level and can only choose to admit or reject the entire access range, rather than individual segments (unlike RejectX). Episode-based analysis showed a potential reduction of DT by 11%. However, we were unable to realize this.' App A.8 Fig 19c-d: blocks average 5.1-6.8 MB but the median access is under 2 MB, so block-granular admission systematically over-spends the flash write budget. §5.6 also reports a remaining 16% gap to OPT overall.",
+      "feasibility": "M",
+      "feasibility_rationale": "Cross-cutting rather than localized: the episode abstraction - the paper's core contribution - is defined on blocks, so segment episodes need new construction, new size/benefit accounting, and a redone OPT ranking, touching episodes.py, policies.py, sim_cache.py and both trainers (roughly 1-2k LOC). All Python, all inside the existing harness and well within this machine's compute, but the authors tried and failed, so a 10-week team should plan for the measurement-and-explain outcome as well as the win.",
+      "research_value": "H",
+      "research_value_rationale": "This is the single largest quantified opportunity the paper leaves unrealized (11% of DT), explicitly called out as attempted-and-failed. A win is a substantial improvement over a FAST'24 system on its own metric; a documented failure that shows why finer granularity defeats the episode abstraction (e.g. 142 kB region-based LRU write amplification, App B.1) is a genuine negative result a reviewer at the venue would find useful.",
+      "scoop_check": {
+        "result": "clear",
+        "details": "Queries: \"'segment-level' OR 'chunk-level' flash cache admission policy learned granularity 2025 storage cache episodes\". Closest work is container-oriented flash caching - Kangaroo (https://dl.acm.org/doi/full/10.1145/3542928) and Pannier (https://dl.acm.org/doi/10.1145/3094785) - which changes the flash write granularity for tiny objects rather than making learned admission sub-block under a DT objective. Nothing found doing segment-granular episode-based admission."
+      }
+    },
+    {
+      "name": "Learned early eviction (episode-end TTL)",
+      "hypothesis": "We hypothesize that a GBM predicting the end of an episode, used to drive TTL-based eviction instead of LRU, reduces mean and Peak DT at a fixed flash write rate by reclaiming the dead time between an item's last hit and its LRU eviction, on the 7 Meta traces.",
+      "mechanism": "Train a regression head on the same 9 features with labels drawn from each episode's last access time (a copy of the existing prefetch-range regressor in BCacheSim/episodic_analysis/train_prefetcher.py). At admission, stamp the predicted expiry and evict through the existing TTLPolicy in BCacheSim/cachesim/eviction_policies.py (~L119-145) instead of LRUPolicy (~L127-139); QueueCache in sim_cache.py already supports a TTL backend and an evict_by='episode' mode. The switches are already exposed in the run config (evict_by_episode at line 26, eviction_policy at line 42 of the Baleen example config). Sweep a conservatism margin so that under-prediction (evicting a still-live item) is penalized asymmetrically, and report the write-rate / DT frontier against stock Baleen.",
+      "code_locations": [
+        "runs/example/baleen/prefetch_ml-on-partial-hit/config.json",
+        "runs/example/rejectx/config.json",
+        "getting-started.sh",
+        "notebooks/example/example.ipynb"
+      ],
+      "motivating_evidence": "Paper §5.6, 'Early eviction': 'If items could be evicted immediately after their last access in an episode, instead of waiting to leave the cache, this would eliminate dead time and result in a greater effective cache size. Episode-based analysis showed mean DT could potentially be reduced by 11%. However, our current ML models are not accurate enough to realize this.' §3.3 also states eviction is the sub-problem Baleen deliberately leaves to plain LRU, 'leaving ML-based flash-aware eviction policies for future work'.",
+      "feasibility": "H",
+      "feasibility_rationale": "One new model plus a config switch: the TTL eviction path, the evict_by_episode flag and the ML-driven-TTL hook already exist in eviction_policies.py / sim_cache.py, and the trainer is a near-copy of the existing prefetch-range regressor. No new harness, same traces, same metrics; a few hundred LOC and tens of CPU-hours.",
+      "research_value": "M",
+      "research_value_rationale": "The 11% offline ceiling is attractive and the flash-specific framing (reclaiming dead space under a write-rate budget, rather than ranking eviction victims for hit rate) is less explored than generic learned eviction. But ML eviction is crowded - LRB, HALP, MAT, Raven, RL-Belady are all discussed in §7 - so a moderate win would read as expected rather than surprising to a FAST reviewer.",
+      "scoop_check": {
+        "result": "partial",
+        "details": "Queries: 'learned early eviction flash cache predict end of residency episode eviction 2025'. MAT (https://arxiv.org/abs/2301.11886) and LRB (https://www.usenix.org/conference/nsdi20/presentation/song) learn which object to evict next rather than predicting an episode-end TTL under a flash write-rate constraint; the paper itself (§7, App A.7) argues the episode formulation makes stronger assumptions than Relaxed Belady for flash admission. Related in spirit, not the same experiment."
+      }
+    },
+    {
+      "name": "Workload drift and cross-region transfer with online retraining",
+      "hypothesis": "We hypothesize that Baleen's day-1-trained per-workload models degrade over the 7-day test window and transfer poorly across clusters and years, and that periodic retraining via the already-implemented online-trained admission policy recovers most of the loss at negligible flash-write cost - measured as Peak DT per test day and per (train-region, test-region) pair.",
+      "mechanism": "No new policy is required. (i) A driver script that trains on Region i / trace-group y and simulates on Region j / trace-group y', using the --region and --trace-group flags that appear in every command of the reproduce scripts and in getting-started.sh, producing a 7x7 transfer matrix spanning the 2019 / 2021 / 2023 traces. (ii) Per-day Peak DT instead of a single whole-window P100, by post-processing the 10-minute cache_perf logs the simulator already writes and which notebooks/example/example.ipynb loads. (iii) Enable the existing online-retrained admission policy (LocalMLAP / 'ap': 'mlonline' in BCacheSim/cachesim/admission_policies.py ~L372, with GBTrainer ~L342) and sweep the retraining interval against the static day-1 model.",
+      "code_locations": [
+        "notebooks/reproduce/reproduce_commands.sh",
+        "notebooks/reproduce/reproduce_commands_all.sh",
+        "getting-started.sh",
+        "runs/example/baleen/prefetch_ml-on-partial-hit/config.json",
+        "notebooks/example/example.ipynb"
+      ],
+      "motivating_evidence": "Paper §5.1 states 'the first day of each workload is used as training data, with the remaining days used for testing', yet no result decomposes accuracy or Peak DT by test day. §6: 'Models often performed the best when they were first deployed and slowly regressed over time even with retraining using the same set of features' - the paper answers this only with the weak claim that Baleen 'was designed primarily using traces from 2019 but also demonstrates improvements on traces from 2021 and 2023', which uses per-trace models rather than transferred ones. Table 2 / App A.8 supplies traces from three years and seven clusters, so the transfer experiment is sitting unused in the artifact.",
+      "feasibility": "H",
+      "feasibility_rationale": "Scripting and config sweeps over already-implemented policies; no algorithmic change and no new simulator code. Compute is the only cost: 49 transfer pairs at ~30 min each is ~25 core-hours, trivially parallel across 16 cores, plus a comparable budget for the online-retraining sweep.",
+      "research_value": "M",
+      "research_value_rationale": "A real deployment question the paper raises and does not answer, and a natural robustness section for an improvement paper. It scores M rather than H because the qualitative outcome (offline models decay; retraining helps) is largely expected, CacheSack already argues for online training, and the contribution is measurement rather than new mechanism.",
+      "scoop_check": {
+        "result": "partial",
+        "details": "Queries: 'flash cache admission policy transfer learning cross-workload generalization retraining drift storage cache 2025 2026'. CacheSack (https://www.usenix.org/system/files/atc22-yang-tzu-wei.pdf) argues online-trained models are needed because workloads change faster than software updates, but does not measure drift or cross-cluster transfer for an episode-trained GBM on the Baleen traces. No direct scoop found."
+      }
+    },
+    {
+      "name": "Is the ML necessary? DT-objective vs model-class ablation",
+      "hypothesis": "We hypothesize that most of Baleen's Peak-DT advantage over RejectX comes from optimizing disk-head time under a write budget with episode-derived labels rather than from the GBM itself, and that a non-ML size-and-frequency-aware scorer thresholding estimated DT_saved per byte written recovers at least 70% of Baleen's gain across the 7 traces.",
+      "mechanism": "Add a closed-form episode scorer next to PolicyHeuristic in BCacheSim/episodic_analysis/policies.py (~L330) and a matching online admission policy next to RejectXAP in BCacheSim/cachesim/admission_policies.py (~L42) that thresholds estimated_DT_saved / bytes_written computed from the count-min-sketch history counters already maintained in BCacheSim/cachesim/dynamic_features.py, with the threshold tuned by the same write-rate convergence loop Baleen uses. Run it through the unchanged Fig 9 pipeline; the comparison points (CoinFlip, RejectX, Baleen with and without prefetching) are already scripted. Second axis of the ablation: swap the episode scoring policy between PolicyUtilityHits and PolicyUtilityServiceTimeSize2 with the model class held fixed, which the paper never reports separately.",
+      "code_locations": [
+        "notebooks/reproduce/reproduce_commands_all.sh",
+        "getting-started.sh",
+        "runs/example/rejectx/config.json",
+        "runs/example/baleen/prefetch_ml-on-partial-hit/config.json",
+        "notebooks/paper-figs/fig-09-202309.ipynb"
+      ],
+      "motivating_evidence": "Paper §5.6 and App C Table 3 report that GBM beats a purpose-built Cache Transformer by only 0.2%, and that 'Baleen learns [size-awareness] implicitly if size-related features are supplied' - both hints that the model is capturing something simple. §5.6 also observes Baleen 'learning to reject almost all items on the first access (a behavior similar to RejectX)' and that many training examples share identical features with different labels, i.e. the classifier is close to a Bayes-optimal lookup. The code keeps PolicyUtilityHits and PolicyUtilityServiceTimeSize2 side by side, but the paper only reports the combined Baleen-vs-RejectX delta, never separating objective from model class.",
+      "feasibility": "H",
+      "feasibility_rationale": "A few hundred LOC, no new data, no new harness: it reuses the existing threshold-convergence loop, the scripted baselines in reproduce_commands_all.sh, and the Fig 9 notebook. Compute is a fraction of the reproduction budget because the heuristic policy runs at RejectX speed (~4 min per simulation) rather than ML speed.",
+      "research_value": "M",
+      "research_value_rationale": "This is the standard ablation a FAST reviewer asks of any ML-for-systems paper (the paper itself cites the 'FIFO queues are all you need' line of work), and it is a strong fallback for the course's careful-reproduction track since it produces a publishable result whether or not the headline improvement holds. It is M rather than H because the likely outcome - ML gives a real but modest edge over a well-designed heuristic with the same objective - refines rather than overturns the paper.",
+      "scoop_check": {
+        "result": "clear",
+        "details": "Queries: 'flash cache admission ML vs heuristic ablation is ML necessary caching 2025'; 'Baleen flash cache ML admission prefetching follow-up work citing FAST 2024 episodes'. Nothing found that ablates Baleen's DT objective against its model class. Related in spirit: S3-FIFO / 'FIFO queues are all you need' (https://dl.acm.org/doi/10.1145/3600006.3613147), whose Flashield implementation the Baleen authors reused (App A.5), but it targets eviction in DRAM caches rather than flash admission under a write-rate budget."
+      }
+    }
+  ],
+  "risks": [
+    "The audited clone does not contain the system: repo/ is only notebooks, configs and shell scripts (~7.5 MB). The simulator lives in the git submodule declared in repo/.gitmodules (github.com/wonglkd/BCacheSim, public, Apache-2.0, last pushed 2024-01-16) and was read on GitHub, not on disk. Confirm with 'git submodule update --init' before committing to this paper; the line numbers quoted for submodule files come from a summarizing web fetch, not a direct read.",
+    "Simulator-only artifact: the modified CacheLib testbed and Meta's real seek/bandwidth constants are not released (repo/README.md:14; Artifact Appendix 'Caveats'), so absolute disk-head time will differ from the paper and no add-on can be validated on real flash or HDDs. Every claim would be simulator-relative and must be stated as such.",
+    "Peak DT is a P100 statistic measured on a 0.1%-downsampled trace. With 1-3 samples instead of the paper's 10, run-to-run variance may be comparable to a 5% improvement; the per-trace spread in Fig 9 is already 5-29%. Any add-on result needs multiple samples and a reported spread.",
+    "Plotting is wired to the authors' environment: the paper-fig notebooks embed '../runs/exp_reproduce_spring23/...' paths and job-ids containing '/users/dlwong/...', and default to the released data/results_release.csv.gz. Budget real time for re-pointing them, or build a loader on top of notebooks/example/example.ipynb.",
+    "Two Fig 9 baselines are unscripted: CacheLib-ML and Flashield exist in BCacheSim/cachesim/admission_policies.py but have no commands in reproduce_commands*.sh, and Flashield is reported as failing to train on half the trace samples (App A.5). Fair add-on comparisons should use RejectX and Baleen, taking CacheLib-ML from the released results.",
+    "Dependency pins are Q1-2023 (lightgbm 3.3.5, numpy 1.24.2, pandas 1.5.3 on Python 3.11). Fine in a dedicated conda env, but the 300-package env_cachelib-py-3.11.yaml may not solve today - prefer requirements.txt - and it is unverified whether the code is pandas-2.x clean.",
+    "Compute honesty: the authors used 624 machine-days for the full grid and at least 30 minutes per ML simulation. Any add-on that re-runs the eviction-age / threshold convergence loop across 7 traces x N samples x M configurations must be budgeted in core-hours up front; this machine can afford a few hundred core-hours, not thousands.",
+    "The two highest-value add-ons (peak-aware scoring, segment-level admission) target problems the authors explicitly tried and failed to solve. That is why they are valuable, but the project should be framed so that a negative-but-explained result counts as the deliverable.",
+    "Unverified by desk review: per-run peak RAM; whether the --fast flag seen in notebooks/reproduce/reproduce_commands.sh:25 trades fidelity for speed; whether the PyPy environment (env_cachelib-pypy-3.8.yaml) can cut wall-clock for the non-ML baselines."
+  ]
+}

@@ -1,0 +1,213 @@
+{
+  "url": "https://github.com/SJTU-IPADS/PowerInfer",
+  "head_commit": "8bd56d69906c9d2dba4d3bf6899763401e01a9a4",
+  "head_commit_date": "2026-05-11T14:48:06+08:00",
+  "file_count": 2376,
+  "size_mb": 69.3,
+  "top_level": [
+    ".clang-tidy",
+    ".devops/",
+    ".dockerignore",
+    ".ecrc",
+    ".editorconfig",
+    ".flake8",
+    ".github/",
+    ".gitignore",
+    ".gitmodules",
+    ".pre-commit-config.yaml",
+    "CMakeLists.txt",
+    "LICENSE",
+    "Package.swift",
+    "README.md",
+    "SHA256SUMS",
+    "atomic_windows.h",
+    "build.zig",
+    "ci/",
+    "cmake/",
+    "codecov.yml",
+    "common/",
+    "convert-dense.py",
+    "convert-hf-to-powerinfer-gguf.py",
+    "convert.py",
+    "docs/",
+    "examples/",
+    "flake.lock",
+    "flake.nix",
+    "ggml-alloc.c",
+    "ggml-alloc.h",
+    "ggml-backend-impl.h",
+    "ggml-backend.c",
+    "ggml-backend.h",
+    "ggml-cuda.cu",
+    "ggml-cuda.h",
+    "ggml-impl.h",
+    "ggml-metal.h",
+    "ggml-metal.m",
+    "ggml-metal.metal",
+    "ggml-mpi.c",
+    "ggml-mpi.h",
+    "ggml-opencl.cpp",
+    "ggml-opencl.h",
+    "ggml-quants.c",
+    "ggml-quants.h",
+    "ggml.c",
+    "ggml.h",
+    "gguf-py/",
+    "grammars/",
+    "llama.cpp",
+    "llama.h",
+    "media/",
+    "models/",
+    "mypy.ini",
+    "pocs/",
+    "powerinfer-py/",
+    "prompts/",
+    "requirements.txt",
+    "run_with_preset.py",
+    "scripts/",
+    "smallthinker/",
+    "spm-headers/",
+    "tests/",
+    "unicode.h"
+  ],
+  "build_files": [
+    "CMakeLists.txt",
+    "common/CMakeLists.txt",
+    "examples/CMakeLists.txt",
+    "examples/baby-llama/CMakeLists.txt",
+    "examples/batched-bench/CMakeLists.txt",
+    "examples/batched.swift/Makefile",
+    "examples/batched/CMakeLists.txt",
+    "examples/beam-search/CMakeLists.txt",
+    "examples/benchmark/CMakeLists.txt",
+    "examples/convert-llama2c-to-ggml/CMakeLists.txt",
+    "examples/embedding/CMakeLists.txt",
+    "examples/export-lora/CMakeLists.txt",
+    "examples/finetune/CMakeLists.txt",
+    "examples/gguf/CMakeLists.txt",
+    "examples/infill/CMakeLists.txt",
+    "examples/llama-bench/CMakeLists.txt",
+    "examples/llava/CMakeLists.txt",
+    "examples/main-cmake-pkg/CMakeLists.txt",
+    "examples/main/CMakeLists.txt",
+    "examples/metal/CMakeLists.txt",
+    "examples/parallel/CMakeLists.txt",
+    "examples/perplexity/CMakeLists.txt",
+    "examples/quantize-stats/CMakeLists.txt",
+    "examples/quantize/CMakeLists.txt",
+    "examples/save-load-state/CMakeLists.txt",
+    "examples/server/CMakeLists.txt",
+    "examples/simple/CMakeLists.txt",
+    "examples/speculative/CMakeLists.txt",
+    "examples/train-text-from-scratch/CMakeLists.txt",
+    "gguf-py/pyproject.toml",
+    "pocs/CMakeLists.txt",
+    "pocs/vdot/CMakeLists.txt",
+    "powerinfer-py/pyproject.toml",
+    "smallthinker/CMakeLists.txt",
+    "smallthinker/Makefile",
+    "smallthinker/common/CMakeLists.txt",
+    "smallthinker/examples/CMakeLists.txt",
+    "smallthinker/ggml/CMakeLists.txt",
+    "smallthinker/gguf-py/pyproject.toml",
+    "smallthinker/pocs/CMakeLists.txt",
+    "smallthinker/powerinfer/CMakeLists.txt",
+    "smallthinker/pyproject.toml",
+    "smallthinker/src/CMakeLists.txt",
+    "smallthinker/tests/CMakeLists.txt",
+    "smallthinker/tools/CMakeLists.txt",
+    "tests/CMakeLists.txt"
+  ],
+  "gitmodules": "[submodule \"smallthinker/ggml/src/ggml-kompute/kompute\"]\n\tpath = smallthinker/ggml/src/ggml-kompute/kompute\n\turl = https://github.com/nomic-ai/kompute.git\n[submodule \"smallthinker/powerinfer/third_part/perfetto\"]\n\tpath = smallthinker/powerinfer/third_part/perfetto\n\turl = https://github.com/google/perfetto.git\n[submodule \"smallthinker/powerinfer/third_part/benchmark\"]\n\tpath = smallthinker/powerinfer/third_part/benchmark\n\turl = https://github.com/google/benchmark.git\n[submodule \"smallthinker/powerinfer/third_part/googletest\"]\n\tpath = smallthinker/powerinfer/third_part/googletest\n\turl = https://github.com/google/googletest.git\n[submodule \"smallthinker/powerinfer/third_part/libaio\"]\n\tpath = smallthinker/powerinfer/third_part/libaio\n\turl = https://github.com/crossbuild/libaio.git\n[submodule \"smallthinker/powerinfer/third_part/liburing\"]\n\tpath = smallthinker/powerinfer/third_part/liburing\n\turl = https://github.com/axboe/liburing.git\n[submodule \"smallthinker/powerinfer/third_part/fmt\"]\n\tpath = smallthinker/powerinfer/third_part/fmt\n\turl = https://github.com/fmtlib/fmt.git\n",
+  "lines_by_extension": {
+    ".cpp": 245430,
+    ".h": 145748,
+    ".cc": 85027,
+    ".hpp": 84934,
+    ".c": 61198,
+    ".py": 47807,
+    ".cu": 22833,
+    ".cuh": 9379,
+    ".js": 9215,
+    ".sh": 9105,
+    ".m": 7753,
+    ".swift": 1625
+  },
+  "red_flags": {
+    "sudo": {
+      "count": 58,
+      "examples": [
+        ".github/workflows/build.yml:35: sudo apt-get update",
+        ".github/workflows/build.yml:36: sudo apt-get install build-essential gcc-8",
+        ".github/workflows/build.yml:60: sudo apt-get update",
+        ".github/workflows/build.yml:61: sudo apt-get install build-essential",
+        ".github/workflows/build.yml:95: sudo apt-get update"
+      ]
+    },
+    "perf_counters": {
+      "count": 1,
+      "examples": [
+        ".github/ISSUE_TEMPLATE/bug.md:94: llama.cpp$ perf stat ./main -m ./models/65B/ggml-model-q4_0.bin -t 16 -n 1024 -p \"Please close your issue when it has been answered.\""
+      ]
+    },
+    "docker": {
+      "count": 81,
+      "examples": [
+        ".github/workflows/docker.yml:10: name: Publish Docker image",
+        ".github/workflows/docker.yml:20: name: Push Docker image to Docker Hub",
+        ".github/workflows/docker.yml:43: uses: docker/setup-qemu-action@v2",
+        ".github/workflows/docker.yml:45: - name: Set up Docker Buildx",
+        ".github/workflows/docker.yml:46: uses: docker/setup-buildx-action@v2"
+      ]
+    },
+    "sysctl_hugepages": {
+      "count": 7,
+      "examples": [
+        "examples/main/README.md:286: -   `--numa`: Attempt optimizations that help on some systems with non-uniform memory access. This currently consists of pinning an equal proportion of the thre",
+        "ggml.c:1906: FILE *fptr = fopen(\"/proc/sys/kernel/numa_balancing\", \"r\");",
+        "ggml.c:1910: GGML_PRINT(\"WARNING: /proc/sys/kernel/numa_balancing is enabled, this has been observed to impair performance\\n\");",
+        "smallthinker/docs/backend/CANN.md:191: | NPU   Name           | Health        | Power(W)    Temp(C)           Hugepages-Usage(page)|",
+        "smallthinker/ggml/src/ggml-cpu/ggml-cpu.c:650: FILE *fptr = fopen(\"/proc/sys/kernel/numa_balancing\", \"r\");"
+      ]
+    },
+    "big_gpu": {
+      "count": 6,
+      "examples": [
+        "README.md:55: only 18\\% lower than that achieved by a top-tier server-grade A100 GPU.",
+        "smallthinker/docs/backend/SYCL.md:128: | Ampere Series            | Supported | A100, A4000    |",
+        "smallthinker/docs/backend/SYCL.md:271: [cuda:gpu][cuda:0] NVIDIA CUDA BACKEND, NVIDIA A100-PCIE-40GB 8.0 [CUDA 12.5]",
+        "smallthinker/docs/build.md:199: | GGML_CUDA_FORCE_MMQ           | Boolean                | false   | Force the use of custom matrix multiplication kernels for quantized models instead of FP16 ",
+        "smallthinker/docs/development/token_generation_performance_tips.md:24: GPU: A6000 (48GB VRAM)"
+      ]
+    },
+    "multi_gpu": {
+      "count": 13,
+      "examples": [
+        "smallthinker/ggml/CMakeLists.txt:145: set(GGML_SCHED_MAX_COPIES  \"4\" CACHE STRING \"ggml: max input copies for pipeline parallelism\")",
+        "smallthinker/ggml/include/ggml-backend.h:187: // Split buffer type for tensor parallelism",
+        "smallthinker/ggml/src/ggml-backend.cpp:662: // pipeline parallelism support",
+        "smallthinker/include/llama.h:222: LLAMA_SPLIT_MODE_ROW   = 2, // split layers and KV across GPUs, use tensor parallelism if supported",
+        "smallthinker/src/llama-context.cpp:234: // enabling pipeline parallelism in the scheduler increases memory usage, so it is only done when necessary"
+      ]
+    },
+    "multi_node": {
+      "count": 34,
+      "examples": [
+        "smallthinker/src/llama-context.cpp:749: llama_sbatch sbatch = llama_sbatch(batch, n_embd, /* simple_split */ true, /* logits_all */ true);",
+        "smallthinker/src/llama-context.cpp:751: const llama_ubatch ubatch = sbatch.split_simple(n_tokens);",
+        "smallthinker/src/llama-kv-cache-recurrent.cpp:361: auto sbatch = llama_sbatch(batch, hparams.n_embd, false, logits_all);",
+        "smallthinker/src/llama-kv-cache-recurrent.cpp:365: while (sbatch.n_tokens > 0) {",
+        "smallthinker/src/llama-kv-cache-recurrent.cpp:370: ubatch = sbatch.split_seq(n_ubatch);"
+      ]
+    }
+  },
+  "github": {
+    "stargazers_count": 9791,
+    "forks_count": 597,
+    "archived": false,
+    "pushed_at": "2026-05-11T06:48:06Z",
+    "created_at": "2023-12-15T02:24:10Z",
+    "open_issues_count": 129,
+    "license": "MIT"
+  }
+}

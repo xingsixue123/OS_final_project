@@ -1,0 +1,11 @@
+{
+  "id": "fast25-3l-cache-low-overhead-and-precise-learni",
+  "title": "3L-Cache: Low Overhead and Precise Learning-based Eviction Policy for Caches",
+  "venue": "fast",
+  "year": 2025,
+  "paper_url": "https://www.usenix.org/conference/fast25/presentation/zhou-wenbin",
+  "pdf_url": "https://www.usenix.org/system/files/fast25-zhou-wenbin.pdf",
+  "repo_url": "https://github.com/optiq-lab/3L-Cache",
+  "topic": "caching",
+  "note": "Learning-based cache eviction policy evaluated entirely by trace-driven simulation on top of libCacheSim - user-space C++, CPU only, no root, and the headline metric (CPU overhead vs miss ratio) is exactly the kind of trade-off a 10-week improvement project can attack. Concerns - the paper's 4855-trace corpus is many TB; must subset to a few trace families and argue representativeness."
+}

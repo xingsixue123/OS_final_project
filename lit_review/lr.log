@@ -1,0 +1,238 @@
+[2026-09-13 21:39:04] research: 52 venue-years to screen
+[2026-09-13 21:39:04] research-osdi-2026: agent start (fresh session)
+[2026-09-13 21:39:04] research-osdi-2024: agent start (fresh session)
+[2026-09-13 21:39:04] research-osdi-2023: agent start (fresh session)
+[2026-09-13 21:39:04] research-osdi-2025: agent start (fresh session)
+[2026-09-13 21:49:07] research-osdi-2024: agent done (cost $3.09039475), 0 validation errors
+[2026-09-13 21:49:07] research-osdi-2024: OK {'STATUS': 'complete', 'TOTAL_PAPERS': '53', 'INCLUDED': '23'}
+[2026-09-13 21:49:07] research-sosp-2023: agent start (fresh session)
+[2026-09-13 21:49:30] research-osdi-2025: agent done (cost $3.5339524500000006), 0 validation errors
+[2026-09-13 21:49:30] research-osdi-2025: OK {'STATUS': 'complete', 'TOTAL_PAPERS': '53', 'INCLUDED': '23'}
+[2026-09-13 21:49:30] research-sosp-2024: agent start (fresh session)
+[2026-09-13 21:50:40] research-osdi-2023: agent done (cost $4.4977775), 0 validation errors
+[2026-09-13 21:50:40] research-osdi-2023: OK {'STATUS': 'complete', 'TOTAL_PAPERS': '55', 'INCLUDED': '17'}
+[2026-09-13 21:50:40] research-sosp-2025: agent start (fresh session)
+[2026-09-13 21:56:54] research-sosp-2023: agent done (cost $2.6019805), 0 validation errors
+[2026-09-13 21:56:54] research-sosp-2023: OK {'STATUS': 'complete', 'TOTAL_PAPERS': '43', 'INCLUDED': '10'}
+[2026-09-13 21:56:54] research-sosp-2026: agent start (fresh session)
+[2026-09-13 22:00:16] research-osdi-2026: agent done (cost $9.15276), 0 validation errors
+[2026-09-13 22:00:16] research-osdi-2026: OK {'STATUS': 'complete', 'TOTAL_PAPERS': '136', 'INCLUDED': '30'}
+[2026-09-13 22:00:16] research-eurosys-2023: agent start (fresh session)
+[2026-09-13 22:00:26] research-sosp-2024: agent done (cost $3.2883708), 0 validation errors
+[2026-09-13 22:00:26] research-sosp-2024: OK {'STATUS': 'complete', 'TOTAL_PAPERS': '43', 'INCLUDED': '17'}
+[2026-09-13 22:00:26] research-eurosys-2024: agent start (fresh session)
+[2026-09-13 22:13:26] research-eurosys-2024: agent done (cost $4.2486809999999995), 0 validation errors
+[2026-09-13 22:13:26] research-eurosys-2024: OK {'STATUS': 'complete', 'TOTAL_PAPERS': '71', 'INCLUDED': '18'}
+[2026-09-13 22:13:26] research-eurosys-2025: agent start (fresh session)
+[2026-09-13 22:13:33] research-sosp-2025: agent done (cost $10.848919350000001), 0 validation errors
+[2026-09-13 22:13:33] research-sosp-2025: OK {'STATUS': 'complete', 'TOTAL_PAPERS': '66', 'INCLUDED': '18'}
+[2026-09-13 22:13:33] research-eurosys-2026: agent start (fresh session)
+[2026-09-13 22:19:29] research-sosp-2026: agent done (cost $4.67489375), 0 validation errors
+[2026-09-13 22:19:29] research-sosp-2026: OK {'STATUS': 'complete', 'TOTAL_PAPERS': '62', 'INCLUDED': '27'}
+[2026-09-13 22:19:29] research-atc-2023: agent start (fresh session)
+[2026-09-13 22:23:53] research-eurosys-2023: agent done (cost $5.5023056), 0 validation errors
+[2026-09-13 22:23:53] research-eurosys-2023: OK {'STATUS': 'complete', 'TOTAL_PAPERS': '54', 'INCLUDED': '14'}
+[2026-09-13 22:23:53] research-atc-2024: agent start (fresh session)
+[2026-09-13 22:28:46] research-atc-2023: agent done (cost $2.8634940000000006), 0 validation errors
+[2026-09-13 22:28:46] research-atc-2023: OK {'STATUS': 'complete', 'TOTAL_PAPERS': '65', 'INCLUDED': '19'}
+[2026-09-13 22:28:46] research-atc-2025: agent start (fresh session)
+[2026-09-13 22:29:50] research-eurosys-2025: agent done (cost $5.2141375), 0 validation errors
+[2026-09-13 22:29:50] research-eurosys-2025: OK {'STATUS': 'complete', 'TOTAL_PAPERS': '85', 'INCLUDED': '23'}
+[2026-09-13 22:29:50] research-atc-2026: agent start (fresh session)
+[2026-09-13 22:31:57] research-atc-2026: agent done (cost $0.6815582499999999), 0 validation errors
+[2026-09-13 22:31:57] research-atc-2026: OK {'STATUS': 'not_held', 'TOTAL_PAPERS': '0', 'INCLUDED': '0'}
+[2026-09-13 22:31:57] research-nsdi-2023: agent start (fresh session)
+[2026-09-13 22:37:46] research-eurosys-2026: executed tools outside its role: ['Monitor {"description": "arXiv abstract fetch progress", "timeout_ms": 600000, "persistent": false, "command": "cd /home/xing/project/os_hw/lit_review/research/eurosys-2026/scratch; while true; do if grep -q ']
+[2026-09-13 22:37:46] research-eurosys-2026: FAILED: agent executed tools outside its role (1); see /home/xing/project/os_hw/lit_review/.agents/research-eurosys-2026/tool_violations.json
+[2026-09-13 22:37:46] research-nsdi-2024: agent start (fresh session)
+[2026-09-13 22:38:45] research-atc-2024: agent done (cost $5.12522415), 0 validation errors
+[2026-09-13 22:38:45] research-atc-2024: OK {'STATUS': 'complete', 'TOTAL_PAPERS': '77', 'INCLUDED': '19'}
+[2026-09-13 22:38:45] research-nsdi-2025: agent start (fresh session)
+[2026-09-13 22:41:29] research-atc-2025: agent done (cost $5.684298249999999), 0 validation errors
+[2026-09-13 22:41:29] research-atc-2025: OK {'STATUS': 'complete', 'TOTAL_PAPERS': '100', 'INCLUDED': '20'}
+[2026-09-13 22:41:29] research-nsdi-2026: agent start (fresh session)
+[2026-09-13 22:44:52] research-nsdi-2023: agent done (cost $5.031641050000001), 0 validation errors
+[2026-09-13 22:44:52] research-nsdi-2023: OK {'STATUS': 'complete', 'TOTAL_PAPERS': '96', 'INCLUDED': '16'}
+[2026-09-13 22:44:52] research-fast-2023: agent start (fresh session)
+[2026-09-13 22:49:54] research-nsdi-2025: agent done (cost $3.713965000000001), 0 validation errors
+[2026-09-13 22:49:54] research-nsdi-2025: OK {'STATUS': 'complete', 'TOTAL_PAPERS': '83', 'INCLUDED': '12'}
+[2026-09-13 22:49:54] research-fast-2024: agent start (fresh session)
+[2026-09-13 22:52:07] research-nsdi-2024: agent done (cost $4.789939499999999), 0 validation errors
+[2026-09-13 22:52:07] research-nsdi-2024: OK {'STATUS': 'complete', 'TOTAL_PAPERS': '112', 'INCLUDED': '14'}
+[2026-09-13 22:52:07] research-fast-2025: agent start (fresh session)
+[2026-09-13 22:52:46] research-fast-2023: agent done (cost $2.4959106), 0 validation errors
+[2026-09-13 22:52:46] research-fast-2023: OK {'STATUS': 'complete', 'TOTAL_PAPERS': '28', 'INCLUDED': '5'}
+[2026-09-13 22:52:46] research-fast-2026: agent start (fresh session)
+[2026-09-13 22:53:58] research-nsdi-2026: agent done (cost $4.333427750000001), 0 validation errors
+[2026-09-13 22:53:58] research-nsdi-2026: OK {'STATUS': 'complete', 'TOTAL_PAPERS': '150', 'INCLUDED': '20'}
+[2026-09-13 22:53:58] research-asplos-2023: agent start (fresh session)
+[2026-09-13 22:56:33] research-fast-2024: agent done (cost $2.1431484999999997), 0 validation errors
+[2026-09-13 22:56:33] research-fast-2024: OK {'STATUS': 'complete', 'TOTAL_PAPERS': '22', 'INCLUDED': '9'}
+[2026-09-13 22:56:33] research-asplos-2024: agent start (fresh session)
+[2026-09-13 23:03:16] research-fast-2025: agent done (cost $3.5977992500000004), 0 validation errors
+[2026-09-13 23:03:16] research-fast-2025: OK {'STATUS': 'complete', 'TOTAL_PAPERS': '36', 'INCLUDED': '7'}
+[2026-09-13 23:03:16] research-asplos-2025: agent start (fresh session)
+[2026-09-13 23:03:29] research-fast-2026: agent done (cost $4.030397999999999), 0 validation errors
+[2026-09-13 23:03:29] research-fast-2026: OK {'STATUS': 'complete', 'TOTAL_PAPERS': '44', 'INCLUDED': '13'}
+[2026-09-13 23:03:29] research-asplos-2026: agent start (fresh session)
+[2026-09-13 23:28:04] research-asplos-2023: agent done (cost $6.271959700000001), 0 validation errors
+[2026-09-13 23:28:04] research-asplos-2023: OK {'STATUS': 'complete', 'TOTAL_PAPERS': '151', 'INCLUDED': '28'}
+[2026-09-13 23:28:04] research-mlsys-2023: agent start (fresh session)
+[2026-09-13 23:31:18] research-asplos-2024: agent done (cost $13.203311650000003), 0 validation errors
+[2026-09-13 23:31:18] research-asplos-2024: OK {'STATUS': 'complete', 'TOTAL_PAPERS': '194', 'INCLUDED': '31'}
+[2026-09-13 23:31:18] research-mlsys-2024: agent start (fresh session)
+[2026-09-13 23:36:04] research-mlsys-2023: agent crashed/timed out (rc=1), log /home/xing/project/os_hw/lit_review/.agents/research-mlsys-2023/log-1.json
+[2026-09-13 23:36:04] research-mlsys-2023: agent start (fresh session)
+[2026-09-13 23:36:06] research-asplos-2025: agent crashed/timed out (rc=1), log /home/xing/project/os_hw/lit_review/.agents/research-asplos-2025/log-1.json
+[2026-09-13 23:36:06] research-asplos-2025: agent start (fresh session)
+[2026-09-13 23:37:03] research-mlsys-2024: agent crashed/timed out (rc=1), log /home/xing/project/os_hw/lit_review/.agents/research-mlsys-2024/log-1.json
+[2026-09-13 23:37:03] research-mlsys-2024: agent start (fresh session)
+[2026-09-13 23:37:19] research-asplos-2026: executed tools outside its role: ['Monitor {"description": "wait for gh2.json to appear", "timeout_ms": 420000, "persistent": false, "command": "cd /home/xing/project/os_hw/lit_review/research/asplos-2026/scratch; while [ ! -f gh2.json ]; do s']
+[2026-09-13 23:37:19] research-asplos-2026: FAILED: agent executed tools outside its role (1); see /home/xing/project/os_hw/lit_review/.agents/research-asplos-2026/tool_violations.json
+[2026-09-13 23:37:19] research-mlsys-2025: agent start (fresh session)
+[2026-09-13 23:46:38] research-mlsys-2024: agent done (cost $2.8661702499999997), 0 validation errors
+[2026-09-13 23:46:38] research-mlsys-2024: OK {'STATUS': 'complete', 'TOTAL_PAPERS': '37', 'INCLUDED': '15'}
+[2026-09-13 23:46:38] research-mlsys-2026: agent start (fresh session)
+[2026-09-13 23:47:20] research-mlsys-2023: agent done (cost $3.10521175), 0 validation errors
+[2026-09-13 23:47:20] research-mlsys-2023: OK {'STATUS': 'complete', 'TOTAL_PAPERS': '46', 'INCLUDED': '23'}
+[2026-09-13 23:47:20] research-vldb-2023: agent start (fresh session)
+[2026-09-13 23:49:21] research-mlsys-2025: agent done (cost $4.444987350000001), 0 validation errors
+[2026-09-13 23:49:21] research-mlsys-2025: OK {'STATUS': 'complete', 'TOTAL_PAPERS': '61', 'INCLUDED': '24'}
+[2026-09-13 23:49:21] research-vldb-2024: agent start (fresh session)
+[2026-09-13 23:59:40] research-mlsys-2026: agent done (cost $4.8613455), 0 validation errors
+[2026-09-13 23:59:40] research-mlsys-2026: OK {'STATUS': 'complete', 'TOTAL_PAPERS': '135', 'INCLUDED': '41'}
+[2026-09-13 23:59:40] research-vldb-2025: agent start (fresh session)
+[2026-09-14 00:03:50] research-vldb-2024: agent done (cost $4.553523499999999), 0 validation errors
+[2026-09-14 00:03:50] research-vldb-2024: OK {'STATUS': 'complete', 'TOTAL_PAPERS': '304', 'INCLUDED': '69'}
+[2026-09-14 00:03:50] research-vldb-2026: agent start (fresh session)
+[2026-09-14 00:03:58] research-vldb-2023: agent done (cost $4.1337695), 0 validation errors
+[2026-09-14 00:03:58] research-vldb-2023: OK {'STATUS': 'complete', 'TOTAL_PAPERS': '287', 'INCLUDED': '53'}
+[2026-09-14 00:03:58] research-sigmod-2023: agent start (fresh session)
+[2026-09-14 00:14:38] research-vldb-2025: agent done (cost $6.068891500000003), 0 validation errors
+[2026-09-14 00:14:38] research-vldb-2025: OK {'STATUS': 'complete', 'TOTAL_PAPERS': '354', 'INCLUDED': '47'}
+[2026-09-14 00:14:38] research-sigmod-2024: agent start (fresh session)
+[2026-09-14 00:18:05] research-vldb-2026: agent done (cost $5.15339425), 0 validation errors
+[2026-09-14 00:18:05] research-vldb-2026: OK {'STATUS': 'complete', 'TOTAL_PAPERS': '297', 'INCLUDED': '68'}
+[2026-09-14 00:18:05] research-sigmod-2025: agent start (fresh session)
+[2026-09-14 00:23:24] research-sigmod-2023: agent done (cost $5.920747750000001), 0 validation errors
+[2026-09-14 00:23:24] research-sigmod-2023: OK {'STATUS': 'complete', 'TOTAL_PAPERS': '186', 'INCLUDED': '37'}
+[2026-09-14 00:23:24] research-sigmod-2026: agent start (fresh session)
+[2026-09-14 00:50:21] research-sigmod-2024: agent done (cost $7.1631), 0 validation errors
+[2026-09-14 00:50:21] research-sigmod-2024: OK {'STATUS': 'complete', 'TOTAL_PAPERS': '213', 'INCLUDED': '61'}
+[2026-09-14 00:50:21] research-sigmetrics-2023: agent start (fresh session)
+[2026-09-14 00:51:14] research-asplos-2025: agent done (cost $11.010363250000001), 0 validation errors
+[2026-09-14 00:51:14] research-asplos-2025: OK {'STATUS': 'complete', 'TOTAL_PAPERS': '176', 'INCLUDED': '50'}
+[2026-09-14 00:51:14] research-sigmetrics-2024: agent start (fresh session)
+[2026-09-14 01:04:34] research-sigmetrics-2023: agent done (cost $4.114571), 0 validation errors
+[2026-09-14 01:04:34] research-sigmetrics-2023: OK {'STATUS': 'complete', 'TOTAL_PAPERS': '54', 'INCLUDED': '3'}
+[2026-09-14 01:04:34] research-sigmetrics-2025: agent start (fresh session)
+[2026-09-14 01:06:28] research-sigmetrics-2024: agent done (cost $3.8641954999999997), 0 validation errors
+[2026-09-14 01:06:28] research-sigmetrics-2024: OK {'STATUS': 'complete', 'TOTAL_PAPERS': '52', 'INCLUDED': '7'}
+[2026-09-14 01:06:28] research-sigmetrics-2026: agent start (fresh session)
+[2026-09-14 01:08:54] research-sigmod-2026: agent done (cost $11.253158749999999), 0 validation errors
+[2026-09-14 01:08:54] research-sigmod-2026: OK {'STATUS': 'complete', 'TOTAL_PAPERS': '349', 'INCLUDED': '82'}
+[2026-09-14 01:08:54] research-socc-2023: agent start (fresh session)
+[2026-09-14 01:19:04] research-sigmetrics-2025: agent done (cost $4.169162000000001), 0 validation errors
+[2026-09-14 01:19:04] research-sigmetrics-2025: OK {'STATUS': 'complete', 'TOTAL_PAPERS': '66', 'INCLUDED': '7'}
+[2026-09-14 01:19:04] research-socc-2024: agent start (fresh session)
+[2026-09-14 01:23:03] research-socc-2023: agent done (cost $4.678947499999999), 0 validation errors
+[2026-09-14 01:23:03] research-socc-2023: OK {'STATUS': 'complete', 'TOTAL_PAPERS': '40', 'INCLUDED': '12'}
+[2026-09-14 01:23:03] research-socc-2025: agent start (fresh session)
+[2026-09-14 01:29:18] research-sigmetrics-2026: agent done (cost $7.959481300000003), 0 validation errors
+[2026-09-14 01:29:18] research-sigmetrics-2026: OK {'STATUS': 'complete', 'TOTAL_PAPERS': '80', 'INCLUDED': '10'}
+[2026-09-14 01:29:18] research-socc-2026: agent start (fresh session)
+[2026-09-14 01:29:53] research-sigmod-2025: executed tools outside its role: ['Monitor {"description": "GitHub repo search progress for SIGMOD 2025 candidates", "timeout_ms": 3000000, "persistent": false, "command": "cd /home/xing/project/os_hw/lit_review/research/sigmod-2025/scratch &&']
+[2026-09-14 01:29:53] research-sigmod-2025: FAILED: agent executed tools outside its role (1); see /home/xing/project/os_hw/lit_review/.agents/research-sigmod-2025/tool_violations.json
+[2026-09-14 01:29:53] research-middleware-2023: agent start (fresh session)
+[2026-09-14 01:31:49] research-socc-2026: agent done (cost $0.8996877499999999), 0 validation errors
+[2026-09-14 01:31:49] research-socc-2026: OK {'STATUS': 'not_yet_published', 'TOTAL_PAPERS': '0', 'INCLUDED': '0'}
+[2026-09-14 01:31:49] research-middleware-2024: agent start (fresh session)
+[2026-09-14 01:39:54] research-middleware-2023: agent done (cost $3.8850835000000012), 0 validation errors
+[2026-09-14 01:39:54] research-middleware-2023: OK {'STATUS': 'complete', 'TOTAL_PAPERS': '24', 'INCLUDED': '4'}
+[2026-09-14 01:39:54] research-middleware-2025: agent start (fresh session)
+[2026-09-14 01:45:51] research-middleware-2024: agent done (cost $4.496822499999998), 0 validation errors
+[2026-09-14 01:45:51] research-middleware-2024: OK {'STATUS': 'complete', 'TOTAL_PAPERS': '39', 'INCLUDED': '9'}
+[2026-09-14 01:45:51] research-middleware-2026: agent start (fresh session)
+[2026-09-14 01:47:04] research-socc-2024: agent done (cost $7.01557605), 0 validation errors
+[2026-09-14 01:47:04] research-socc-2024: OK {'STATUS': 'complete', 'TOTAL_PAPERS': '63', 'INCLUDED': '7'}
+[2026-09-14 01:48:56] research-middleware-2026: agent done (cost $1.2025345), 0 validation errors
+[2026-09-14 01:48:56] research-middleware-2026: OK {'STATUS': 'not_yet_published', 'TOTAL_PAPERS': '0', 'INCLUDED': '0'}
+[2026-09-14 01:56:23] research-socc-2025: agent done (cost $12.122917549999999), 0 validation errors
+[2026-09-14 01:56:23] research-socc-2025: OK {'STATUS': 'complete', 'TOTAL_PAPERS': '67', 'INCLUDED': '11'}
+[2026-09-14 02:08:13] research-middleware-2025: agent done (cost $5.4819453), 0 validation errors
+[2026-09-14 02:08:13] research-middleware-2025: OK {'STATUS': 'complete', 'TOTAL_PAPERS': '36', 'INCLUDED': '8'}
+[2026-09-14 02:08:13] research: 1 venue-years to screen
+[2026-09-14 02:08:13] research-asplos-2026: agent start (fresh session)
+[2026-09-14 03:19:43] research-asplos-2026: agent done (cost $10.788371250000003), 0 validation errors
+[2026-09-14 03:19:43] research-asplos-2026: OK {'STATUS': 'complete', 'TOTAL_PAPERS': '168', 'INCLUDED': '30'}
+[2026-09-14 03:19:43] collect: agent start (fresh session)
+[2026-09-14 04:16:49] collect: agent done (cost $30.601148500000008), 0 validation errors
+[2026-09-14 04:16:49] collect: 1248 papers -> /home/xing/project/os_hw/lit_review/paper_list.md
+[2026-09-14 04:16:49] papers: 1248 to process (0 already done or not selected)
+[2026-09-14 10:01:06] research: 1 venue-years to screen
+[2026-09-14 10:01:06] research-vldbgap-2024: agent start (fresh session)
+[2026-09-14 10:07:42] research-vldbgap-2024: agent done (cost $2.4915174999999996), 0 validation errors
+[2026-09-14 10:07:42] research-vldbgap-2024: OK {'STATUS': 'complete', 'TOTAL_PAPERS': '14', 'INCLUDED': '6'}
+[2026-09-14 10:07:46] prerank: 1254 papers in 16 batches
+[2026-09-14 10:07:46] prerank-02: agent start (fresh session)
+[2026-09-14 10:07:46] prerank-04: agent start (fresh session)
+[2026-09-14 10:07:46] prerank-01: agent start (fresh session)
+[2026-09-14 10:07:46] prerank-03: agent start (fresh session)
+[2026-09-14 10:10:57] prerank-02: agent done (cost $0.85020625), 0 validation errors
+[2026-09-14 10:10:57] prerank-05: agent start (fresh session)
+[2026-09-14 10:10:58] prerank-01: agent done (cost $0.910985), 0 validation errors
+[2026-09-14 10:10:58] prerank-06: agent start (fresh session)
+[2026-09-14 10:11:01] prerank-03: agent done (cost $0.930333), 0 validation errors
+[2026-09-14 10:11:01] prerank-07: agent start (fresh session)
+[2026-09-14 10:11:14] prerank-04: agent done (cost $0.8744449999999999), 0 validation errors
+[2026-09-14 10:11:14] prerank-08: agent start (fresh session)
+[2026-09-14 10:13:47] prerank-05: agent done (cost $0.7529885000000001), 0 validation errors
+[2026-09-14 10:13:47] prerank-09: agent start (fresh session)
+[2026-09-14 10:14:16] prerank-08: agent done (cost $0.8533395), 0 validation errors
+[2026-09-14 10:14:16] prerank-10: agent start (fresh session)
+[2026-09-14 10:14:23] prerank-07: agent done (cost $0.830818), 0 validation errors
+[2026-09-14 10:14:23] prerank-11: agent start (fresh session)
+[2026-09-14 10:14:24] prerank-06: agent done (cost $0.847774), 0 validation errors
+[2026-09-14 10:14:24] prerank-12: agent start (fresh session)
+[2026-09-14 10:17:13] prerank-09: agent done (cost $0.9330685000000001), 0 validation errors
+[2026-09-14 10:17:13] prerank-13: agent start (fresh session)
+[2026-09-14 10:17:22] prerank-12: agent done (cost $0.8482115000000001), 0 validation errors
+[2026-09-14 10:17:22] prerank-14: agent start (fresh session)
+[2026-09-14 10:17:30] prerank-11: agent done (cost $0.7713142500000001), 0 validation errors
+[2026-09-14 10:17:30] prerank-15: agent start (fresh session)
+[2026-09-14 10:17:50] prerank-10: agent done (cost $0.8563455000000001), 0 validation errors
+[2026-09-14 10:17:50] prerank-16: agent start (fresh session)
+[2026-09-14 10:19:57] prerank-16: agent done (cost $0.5597767499999999), 0 validation errors
+[2026-09-14 10:20:09] prerank-13: agent done (cost $0.8389387500000001), 0 validation errors
+[2026-09-14 10:20:14] prerank-14: agent done (cost $0.83814625), 0 validation errors
+[2026-09-14 10:20:42] prerank-15: agent done (cost $0.913049), 0 validation errors
+[2026-09-14 10:20:42] prerank: 1254 papers scored -> /home/xing/project/os_hw/lit_review/prerank.md
+[2026-09-14 10:20:43] papers: 30 to process (0 already done or not selected)
+[2026-09-14 10:20:48] audit-fast24-baleen-ml-admission-and-prefetching-for: agent start (fresh session)
+[2026-09-14 10:20:48] audit-fast24-kosmo-efficient-online-miss-ratio-curve: agent start (fresh session)
+[2026-09-14 10:20:52] audit-nsdi24-sieve-is-simpler-than-lru-an-efficient-t: agent start (fresh session)
+[2026-09-14 10:20:59] audit-vldb26-demystifying-and-improving-lazy-promotio: agent start (fresh session)
+[2026-09-14 10:31:17] audit-fast24-kosmo-efficient-online-miss-ratio-curve: agent done (cost $3.6922795000000006), 0 validation errors
+[2026-09-14 10:31:17] paper fast24-kosmo-efficient-online-miss-ratio-curve: audited -> shortlist 
+[2026-09-14 10:31:49] audit-fast25-3l-cache-low-overhead-and-precise-learni: agent start (fresh session)
+[2026-09-14 10:31:57] audit-fast24-baleen-ml-admission-and-prefetching-for: agent done (cost $4.59597025), 0 validation errors
+[2026-09-14 10:31:57] paper fast24-baleen-ml-admission-and-prefetching-for: audited -> shortlist 
+[2026-09-14 10:32:17] audit-sosp23-fifo-queues-are-all-you-need-for-cache-e: agent start (fresh session)
+[2026-09-14 10:33:06] audit-nsdi24-sieve-is-simpler-than-lru-an-efficient-t: agent done (cost $5.322585649999999), 0 validation errors
+[2026-09-14 10:33:06] paper nsdi24-sieve-is-simpler-than-lru-an-efficient-t: audited -> shortlist 
+[2026-09-14 10:33:18] audit-vldb26-demystifying-and-improving-lazy-promotio: agent done (cost $5.34458325), 0 validation errors
+[2026-09-14 10:33:18] paper vldb26-demystifying-and-improving-lazy-promotio: audited -> shortlist 
+[2026-09-14 10:33:22] audit-osdi26-learning-augmented-heuristics-simple-yet: agent start (fresh session)
+[2026-09-14 10:33:22] audit-sosp24-powerinfer-fast-large-language-model-ser: agent start (fresh session)
+[2026-09-14 10:44:20] audit-fast25-3l-cache-low-overhead-and-precise-learni: agent done (cost $6.11895725), 0 validation errors
+[2026-09-14 10:44:20] paper fast25-3l-cache-low-overhead-and-precise-learni: audited -> shortlist 
+[2026-09-14 10:44:25] audit-osdi24-fairness-in-serving-large-language-model: agent start (fresh session)
+[2026-09-14 10:44:33] audit-sosp23-fifo-queues-are-all-you-need-for-cache-e: agent done (cost $6.8419995), 0 validation errors
+[2026-09-14 10:44:33] paper sosp23-fifo-queues-are-all-you-need-for-cache-e: audited -> shortlist 
+[2026-09-14 10:44:35] audit-mlsys24-prompt-cache-modular-attention-reuse-for: agent start (fresh session)
+[2026-09-14 10:44:54] audit-sosp24-powerinfer-fast-large-language-model-ser: agent done (cost $4.3722773), 0 validation errors
+[2026-09-14 10:44:54] paper sosp24-powerinfer-fast-large-language-model-ser: audited -> shortlist 
+[2026-09-14 10:47:14] audit-osdi26-learning-augmented-heuristics-simple-yet: agent done (cost $6.7236030000000016), 0 validation errors
+[2026-09-14 10:47:14] paper osdi26-learning-augmented-heuristics-simple-yet: audited -> shortlist 
+[2026-09-14 10:47:51] audit-osdi23-take-out-the-trache-maximizing-tra-nsact: agent start (fresh session)
+[2026-09-14 10:48:31] audit-fast24-symbiosis-the-art-of-application-and-ker: agent start (fresh session)

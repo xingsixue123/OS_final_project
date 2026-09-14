@@ -1,0 +1,434 @@
+[
+  {
+    "id": "asplos25-concurrency-informed-orchestration-for-s",
+    "os_fit": 5,
+    "feasibility": 5,
+    "buildability": 1,
+    "headroom": 4,
+    "reason": "Keep-alive/eviction policy over production FaaS traces is an ideal trace-driven simulation target, but no official repo was found so everything would have to be reimplemented."
+  },
+  {
+    "id": "eurosys26-adaserve-accelerating-multi-slo-llm-serv",
+    "os_fit": 5,
+    "feasibility": 3,
+    "buildability": 4,
+    "headroom": 4,
+    "reason": "Multi-SLO speculative-decoding scheduler is core LLM-serving with a published AE artifact, but the artifact assumes 8x A100 + Docker + CUDA 12.4 (driver here caps at 12.2), so a real port plus scale-down is needed."
+  },
+  {
+    "id": "vldb24-database-native-model-selection-harnessi",
+    "os_fit": 2,
+    "feasibility": 4,
+    "buildability": 3,
+    "headroom": 3,
+    "reason": "In-database neural model selection is ML/DB modeling rather than OS resource management, though it runs on one GPU and the repo is linked."
+  },
+  {
+    "id": "sosp26-computation-is-fast-use-threadlet",
+    "os_fit": 3,
+    "feasibility": 2,
+    "buildability": 1,
+    "headroom": 2,
+    "reason": "No abstract, PDF or artifact is public; the title hints at a thread abstraction that could well be kernel-side, so nothing can be judged and it must be scored conservatively."
+  },
+  {
+    "id": "osdi23-welder-scheduling-deep-learning-memory-a",
+    "os_fit": 3,
+    "feasibility": 4,
+    "buildability": 3,
+    "headroom": 4,
+    "reason": "Memory-access-centric DL compiler evaluated on a single GPU with an artifact branch, but the pinned CUDA/TVM/nnfusion stack is a heavy build for a 10-week project."
+  },
+  {
+    "id": "asplos26-tilus-a-tile-level-gpgpu-programming-lan",
+    "os_fit": 2,
+    "feasibility": 4,
+    "buildability": 4,
+    "headroom": 3,
+    "reason": "A GPU kernel DSL/compiler is only systems-adjacent for an OS course; Ampere is supported and the NVIDIA repo is real, but some features target Blackwell."
+  },
+  {
+    "id": "vldb26-thundergnn-unlocking-tensor-cores-for-gr",
+    "os_fit": 2,
+    "feasibility": 4,
+    "buildability": 3,
+    "headroom": 3,
+    "reason": "Tensor-core GNN kernel work is GPU-kernel engineering rather than OS resource management; single-A5000 reproducible but repo completeness unknown."
+  },
+  {
+    "id": "osdi26-echo-efficient-kv-cache-offloading-with",
+    "os_fit": 5,
+    "feasibility": 3,
+    "buildability": 4,
+    "headroom": 4,
+    "reason": "KV-cache eviction/recall plus host-memory prefetching is exactly the OS-flavored LLM-serving problem, but the artifact ships as Docker for an 8-GPU server and Docker is unavailable here."
+  },
+  {
+    "id": "socc24-queue-management-for-slo-oriented-large",
+    "os_fit": 5,
+    "feasibility": 4,
+    "buildability": 4,
+    "headroom": 5,
+    "reason": "Request-group queue ordering on top of vLLM is a clean scheduling artifact in active Python; a 7B single-GPU scale-down is straightforward and the LP/ordering heuristic is an obvious swap-in surface."
+  },
+  {
+    "id": "sigmod24-gts-gpu-based-tree-index-for-fast-simila",
+    "os_fit": 3,
+    "feasibility": 4,
+    "buildability": 1,
+    "headroom": 3,
+    "reason": "Single-GPU metric-space index fits the machine, but no official repo was located so the GPU tree would have to be written from scratch."
+  },
+  {
+    "id": "sosp26-diflow-a-system-for-micro-serving-text-t",
+    "os_fit": 4,
+    "feasibility": 3,
+    "buildability": 1,
+    "headroom": 4,
+    "reason": "Per-model scheduling of diffusion workflows is a good serving-systems topic, but no artifact exists and the per-model scaling / adaptive parallelism claims are cluster-scale."
+  },
+  {
+    "id": "eurosys23-groundhog-efficient-request-isolation-in",
+    "os_fit": 4,
+    "feasibility": 3,
+    "buildability": 3,
+    "headroom": 3,
+    "reason": "Fork plus soft-dirty snapshot/restore is genuinely user-space and benchmarkable standalone, but the end-to-end OpenWhisk+Docker harness cannot run here and the artifact is only a Zenodo record."
+  },
+  {
+    "id": "eurosys23-refl-resource-efficient-federated-learni",
+    "os_fit": 2,
+    "feasibility": 4,
+    "buildability": 3,
+    "headroom": 3,
+    "reason": "Federated client-selection and staleness policies are ML-training policy work rather than OS resource management, though the FedScale-style simulator runs fine on one node."
+  },
+  {
+    "id": "vldb24-partition-don-t-sort-compression-booster",
+    "os_fit": 4,
+    "feasibility": 5,
+    "buildability": 3,
+    "headroom": 3,
+    "reason": "CPU-only storage compression for ingestion pipelines fits the machine perfectly; the clustering heuristic is swappable, but artifact completeness is unverified."
+  },
+  {
+    "id": "sosp24-powerinfer-fast-large-language-model-ser",
+    "os_fit": 5,
+    "feasibility": 5,
+    "buildability": 5,
+    "headroom": 5,
+    "reason": "Hot/cold neuron-aware GPU-CPU hybrid offloading designed for exactly this one-consumer-GPU-plus-large-RAM machine, llama.cpp-based user-space build with a mature repo and obvious policy-tuning hypotheses."
+  },
+  {
+    "id": "sosp25-tempo-compiled-dynamic-deep-learning-wit",
+    "os_fit": 3,
+    "feasibility": 4,
+    "buildability": 3,
+    "headroom": 4,
+    "reason": "Single-GPU DL compiler whose headline numbers use a 3B model that fits 24 GB, with a rich pass-level improvement surface; risk is the polyhedral/LLVM toolchain build under $HOME."
+  },
+  {
+    "id": "eurosys26-carbon-aware-continuous-learning-for-sus",
+    "os_fit": 3,
+    "feasibility": 3,
+    "buildability": 1,
+    "headroom": 3,
+    "reason": "Carbon-aware retraining scheduling is only loosely an OS problem, depends on external carbon traces and edge-server assumptions, and no code was found."
+  },
+  {
+    "id": "sigmod25-how-to-grow-an-lsm-tree-towards-bridging",
+    "os_fit": 5,
+    "feasibility": 5,
+    "buildability": 1,
+    "headroom": 4,
+    "reason": "LSM growth policy is a textbook storage-engine topic that runs on one NVMe, but no repo was located so the prototype key-value store would need reimplementation."
+  },
+  {
+    "id": "asplos26-lobster-a-gpu-accelerated-framework-for",
+    "os_fit": 2,
+    "feasibility": 4,
+    "buildability": 3,
+    "headroom": 3,
+    "reason": "GPU Datalog for neurosymbolic programming is a language/runtime contribution far from OS resource management, though it is user-space and single-GPU."
+  },
+  {
+    "id": "osdi26-learning-augmented-heuristics-simple-yet",
+    "os_fit": 5,
+    "feasibility": 5,
+    "buildability": 5,
+    "headroom": 5,
+    "reason": "Cache eviction with released code, pre-trained model, libCacheSim/CacheLib integrations and thousands of public traces; pure trace-driven simulation with an open space of policy and parameter-learning variants."
+  },
+  {
+    "id": "eurosys26-automated-end-to-end-model-serving-with",
+    "os_fit": 4,
+    "feasibility": 3,
+    "buildability": 1,
+    "headroom": 3,
+    "reason": "Cooperative compilation plus scheduling for model serving is a reasonable single-GPU topic, but no code has been released so there is nothing to build on."
+  },
+  {
+    "id": "mlsys24-proteus-preserving-model-confidentiality",
+    "os_fit": 2,
+    "feasibility": 3,
+    "buildability": 3,
+    "headroom": 2,
+    "reason": "The headline metric is model confidentiality rather than a resource-management win, and validating preserved optimization quality means GPU-hour-heavy autotuning."
+  },
+  {
+    "id": "sigmod25-subspace-collision-an-efficient-and-accu",
+    "os_fit": 2,
+    "feasibility": 5,
+    "buildability": 3,
+    "headroom": 3,
+    "reason": "ANN index framework runs comfortably on one machine but is an algorithms/data-structures contribution rather than an OS systems-resource problem."
+  },
+  {
+    "id": "vldb26-stratum-a-system-infrastructure-for-mass",
+    "os_fit": 3,
+    "feasibility": 3,
+    "buildability": 2,
+    "headroom": 2,
+    "reason": "A vision-track paper whose prototype runtime is likely early-stage, so there is no solid baseline to improve on within ten weeks."
+  },
+  {
+    "id": "nsdi26-droidspeak-kv-cache-sharing-across-fine",
+    "os_fit": 5,
+    "feasibility": 4,
+    "buildability": 1,
+    "headroom": 4,
+    "reason": "KV-cache reuse across fine-tuned variants is a great single-GPU 8B-scale topic with clear layer-selection knobs, but no artifact URL exists so the release is unconfirmed."
+  },
+  {
+    "id": "sigmod23-pea-hash-a-performant-extendible-adaptiv",
+    "os_fit": 4,
+    "feasibility": 3,
+    "buildability": 4,
+    "headroom": 3,
+    "reason": "A DRAM-only variant ships in the repo and hash-index memory/latency tradeoffs suit the course, but the paper's best results need Optane PMEM and AVX-512 that this Zen3 machine lacks."
+  },
+  {
+    "id": "vldb23-minigraph-querying-big-graphs-with-a-sin",
+    "os_fit": 3,
+    "feasibility": 4,
+    "buildability": 3,
+    "headroom": 3,
+    "reason": "Out-of-core single-machine graph engine has real I/O and buffering behavior to study, but the contribution is a graph-processing programming model more than OS resource management."
+  },
+  {
+    "id": "mlsys25-xgrammar-flexible-and-efficient-structur",
+    "os_fit": 4,
+    "feasibility": 5,
+    "buildability": 4,
+    "headroom": 4,
+    "reason": "CPU-side grammar compilation overlapped with GPU decode is a genuine CPU/GPU pipelining problem, the engine is widely deployed with easy baselines, and it runs on any single GPU."
+  },
+  {
+    "id": "atc25-mitigating-resource-usage-dependency-in",
+    "os_fit": 5,
+    "feasibility": 3,
+    "buildability": 3,
+    "headroom": 4,
+    "reason": "Decoupling LSM flush/compaction to kill write stalls is core storage-engine work with a RocksDB+YCSB artifact, but the Optane fast tier is unavailable so the hybrid setup must be emulated."
+  },
+  {
+    "id": "sosp24-apparate-rethinking-early-exits-to-tame",
+    "os_fit": 4,
+    "feasibility": 4,
+    "buildability": 3,
+    "headroom": 4,
+    "reason": "Early-exit ramps bolted onto a serving runtime are pure user-space PyTorch with models that fit 24 GB; the multi-GPU cluster evaluation needs a single-GPU trace replay and goodput numbers will shift."
+  },
+  {
+    "id": "asplos25-fleetio-managing-multi-tenant-cloud-stor",
+    "os_fit": 4,
+    "feasibility": 2,
+    "buildability": 1,
+    "headroom": 3,
+    "reason": "Multi-tenant SSD virtualization is a good storage topic, but there is no official repo and the evaluation likely needs an SSD emulator that would have to be stood up first."
+  },
+  {
+    "id": "socc23-cameo-a-causal-transfer-learning-approac",
+    "os_fit": 2,
+    "feasibility": 3,
+    "buildability": 3,
+    "headroom": 3,
+    "reason": "Causal configuration tuning is an ML-for-systems method; offline datasets keep it runnable, but the original Jetson target hardware is absent so live experiments must be redesigned."
+  },
+  {
+    "id": "sosp25-diffkv-differentiated-memory-management",
+    "os_fit": 5,
+    "feasibility": 4,
+    "buildability": 4,
+    "headroom": 5,
+    "reason": "An on-GPU KV allocator that compacts fragmented free lists is memory management in the purest OS sense, single-GPU vLLM-style, and an ideal target for a better-allocator or better-compression hypothesis; only CUDA-toolkit versioning is a risk."
+  },
+  {
+    "id": "osdi24-chameleonapi-automatic-and-efficient-cus",
+    "os_fit": 2,
+    "feasibility": 4,
+    "buildability": 3,
+    "headroom": 3,
+    "reason": "Application-aware retraining of neural networks is model customization rather than systems resource management, though it is single-GPU and needs no root."
+  },
+  {
+    "id": "sigmod24-one-seed-two-birds-a-unified-learned-str",
+    "os_fit": 2,
+    "feasibility": 4,
+    "buildability": 1,
+    "headroom": 2,
+    "reason": "A learned counting/cardinality structure sits in DB-ML territory with little OS content, and no artifact was found."
+  },
+  {
+    "id": "vldb23-federatedscope-a-flexible-federated-lear",
+    "os_fit": 2,
+    "feasibility": 4,
+    "buildability": 4,
+    "headroom": 3,
+    "reason": "A mature FL platform that simulates clients on one node, but it is framework/ML infrastructure rather than an OS resource-management result to improve."
+  },
+  {
+    "id": "atc25-voltrix-sparse-matrix-matrix-multiplicat",
+    "os_fit": 2,
+    "feasibility": 4,
+    "buildability": 3,
+    "headroom": 3,
+    "reason": "Tensor-core SpMM kernel optimization is low-level GPU kernel engineering; Ampere supports cp.async but the larger graphs must be trimmed from 80 GB to 24 GB."
+  },
+  {
+    "id": "eurosys24-gmorph-accelerating-multi-dnn-inference",
+    "os_fit": 2,
+    "feasibility": 3,
+    "buildability": 3,
+    "headroom": 3,
+    "reason": "Model-fusion graph search is an ML-model transformation, and the repeated fine-tuning search phase is GPU-hour heavy for a ten-week budget on one card."
+  },
+  {
+    "id": "nsdi23-push-button-reliability-testing-for-clou",
+    "os_fit": 2,
+    "feasibility": 3,
+    "buildability": 3,
+    "headroom": 2,
+    "reason": "A fault-injection testing tool is bug-finding rather than resource management, and reproducing results needs a .NET toolchain under $HOME plus cloud emulators."
+  },
+  {
+    "id": "sigmod24-high-ratio-compression-for-machine-gener",
+    "os_fit": 4,
+    "feasibility": 5,
+    "buildability": 3,
+    "headroom": 3,
+    "reason": "CPU-only storage-engine compression is a clean fit for the machine; the repo is linked but its completeness and data availability are unverified."
+  },
+  {
+    "id": "middleware23-pravega-a-tiered-storage-system-for-data",
+    "os_fit": 4,
+    "feasibility": 2,
+    "buildability": 3,
+    "headroom": 4,
+    "reason": "Tiering and auto-scaling policies are attractive to redesign, but the evaluated stack is a distributed AWS deployment pulling in Zookeeper, BookKeeper and S3, so the single-node scale-down is a large risky lift."
+  },
+  {
+    "id": "sigmod25-bt-tree-a-reinforcement-learning-based-i",
+    "os_fit": 2,
+    "feasibility": 4,
+    "buildability": 1,
+    "headroom": 2,
+    "reason": "An RL-built trajectory index is a specialized spatial-DB result with no located artifact and little OS-resource content."
+  },
+  {
+    "id": "asplos26-m2xfp-a-metadata-augmented-microscaling",
+    "os_fit": 3,
+    "feasibility": 4,
+    "buildability": 3,
+    "headroom": 2,
+    "reason": "The released artifact is only a pseudo-quantization/perplexity workflow; the actual speedup rests on a hardware unit that cannot be built here, leaving no performance hypothesis to test."
+  },
+  {
+    "id": "osdi26-controlling-opaque-component-effects-wit",
+    "os_fit": 4,
+    "feasibility": 5,
+    "buildability": 4,
+    "headroom": 4,
+    "reason": "Explicitly unprivileged sandboxing on user namespaces and overlay mounts, which this machine supports, with a public repo and a clean effect-capture/commit overhead target to optimize."
+  },
+  {
+    "id": "vldb24-powering-in-database-dynamic-model-slici",
+    "os_fit": 2,
+    "feasibility": 4,
+    "buildability": 3,
+    "headroom": 2,
+    "reason": "A Postgres extension for dynamic model slicing is in-database ML serving; runnable on one GPU but far from an OS resource-management hypothesis."
+  },
+  {
+    "id": "mlsys25-diffserve-efficiently-serving-text-to-im",
+    "os_fit": 4,
+    "feasibility": 4,
+    "buildability": 3,
+    "headroom": 4,
+    "reason": "Query-aware cascade and scheduling logic is user-space Python and SD-class models fit 24 GB; the multi-GPU resource-allocation experiments are the part that must be scaled down or simulated."
+  },
+  {
+    "id": "vldb24-eliminating-data-processing-bottlenecks",
+    "os_fit": 3,
+    "feasibility": 4,
+    "buildability": 3,
+    "headroom": 3,
+    "reason": "Feature compression co-designed with a GPU cache touches caching and data-loading pipelines and has a single-GPU config, but the framing is GNN training throughput."
+  },
+  {
+    "id": "osdi26-incr-faster-re-execution-via-bolt-on-inc",
+    "os_fit": 4,
+    "feasibility": 5,
+    "buildability": 4,
+    "headroom": 4,
+    "reason": "Dependency tracking plus intermediate-result caching is entirely user-space on one machine, with natural improvement axes in caching policy and dependency granularity."
+  },
+  {
+    "id": "sigmod24-prevision-an-out-of-core-matrix-computat",
+    "os_fit": 5,
+    "feasibility": 5,
+    "buildability": 3,
+    "headroom": 4,
+    "reason": "An optimal buffer-replacement policy for out-of-core computation is a textbook caching/eviction problem that runs on one node; repo completeness is the only unknown."
+  },
+  {
+    "id": "asplos23-characterizing-and-optimizing-end-to-end",
+    "os_fit": 2,
+    "feasibility": 3,
+    "buildability": 3,
+    "headroom": 2,
+    "reason": "Much of the contribution is at the cryptographic-protocol level, which is outside an OS course's core, and the artifact is only a Zenodo record."
+  },
+  {
+    "id": "vldb25-logcloud-fast-search-of-compressed-logs",
+    "os_fit": 4,
+    "feasibility": 4,
+    "buildability": 3,
+    "headroom": 3,
+    "reason": "Compressed log storage with an FM-index is a solid storage topic and a local MinIO or filesystem backend substitutes for S3, though that substitution changes the I/O regime the design targets."
+  },
+  {
+    "id": "sigmod24-making-in-memory-learned-indexes-efficie",
+    "os_fit": 4,
+    "feasibility": 5,
+    "buildability": 4,
+    "headroom": 4,
+    "reason": "Disk-resident learned indexes on a single NVMe in user space fit the machine exactly, and the I/O-aware design choices give plenty of well-defined variants to test."
+  },
+  {
+    "id": "sosp24-reducing-cross-cloud-region-costs-with-t",
+    "os_fit": 5,
+    "feasibility": 4,
+    "buildability": 3,
+    "headroom": 5,
+    "reason": "Cache sizing and admission with a separately released trace-driven simulator is exactly the single-machine evaluation path this project needs; cost parameters must come from the paper and the repos lack READMEs so build effort is unverified."
+  },
+  {
+    "id": "sigmod26-dynamic-flat-filter-a-unified-framework",
+    "os_fit": 4,
+    "feasibility": 5,
+    "buildability": 1,
+    "headroom": 3,
+    "reason": "Resizable fingerprint filters are a small CPU-only data structure that would run anywhere, but no repo was located so it would be a from-scratch implementation."
+  }
+]

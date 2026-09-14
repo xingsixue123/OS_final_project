@@ -1,0 +1,642 @@
+[
+  {
+    "id": "sigmod24-ge2-a-general-and-efficient-knowledge-gr",
+    "os_fit": 2,
+    "feasibility": 3,
+    "buildability": 1,
+    "headroom": 2,
+    "reason": "KG-embedding training system is only systems-adjacent and the scout found no released implementation, which violates the hard requirement."
+  },
+  {
+    "id": "atc25-qfactory-accelerating-quantized-large-la",
+    "os_fit": 4,
+    "feasibility": 4,
+    "buildability": 4,
+    "headroom": 4,
+    "reason": "Quantized LLM serving kernels with a named AE repo fit one 24 GB GPU once 4-bit weights shrink the model; H100-tuned numbers mean Ampere retuning is itself a plausible improvement hypothesis."
+  },
+  {
+    "id": "mlsys23-sirius-harvesting-whole-program-optimiza",
+    "os_fit": 3,
+    "feasibility": 3,
+    "buildability": 2,
+    "headroom": 3,
+    "reason": "Single-GPU DNN compiler is systems-adjacent, but the artifact ships as a Docker image on an unresponsive Zenodo record and would need an LLVM-16 + PipLib user-space rebuild."
+  },
+  {
+    "id": "sosp26-efficient-gpu-multitasking-with-morphabl",
+    "os_fit": 4,
+    "feasibility": 4,
+    "buildability": 1,
+    "headroom": 3,
+    "reason": "GPU multitasking is a great single-A5000 topic, but nothing is public yet — no abstract, no preprint, no artifact — so it cannot be built upon."
+  },
+  {
+    "id": "sigmod24-alp-adaptive-lossless-floating-point-com",
+    "os_fit": 3,
+    "feasibility": 5,
+    "buildability": 5,
+    "headroom": 4,
+    "reason": "CPU/SIMD lossless float compression with a clean public repo and DuckDB integration runs trivially here; compression-scheme variants and new datasets are easy testable hypotheses, though it is storage-adjacent rather than OS resource management."
+  },
+  {
+    "id": "osdi24-usher-holistic-interference-avoidance-fo",
+    "os_fit": 5,
+    "feasibility": 3,
+    "buildability": 3,
+    "headroom": 4,
+    "reason": "GPU spatial multiplexing and interference estimation is squarely OS resource management, but MIG is unavailable on an A5000 so sharing must fall back to MPS/streams and the cluster placement arm needs simulation."
+  },
+  {
+    "id": "osdi25-quake-adaptive-indexing-for-vector-searc",
+    "os_fit": 3,
+    "feasibility": 4,
+    "buildability": 4,
+    "headroom": 4,
+    "reason": "Single-node C++/Python vector index with a latency cost model builds here and the cost model is a clear knob to improve; NUMA-aware parallelism cannot be studied on one NUMA node."
+  },
+  {
+    "id": "fast24-metis-file-system-model-checking-via-ver",
+    "os_fit": 3,
+    "feasibility": 2,
+    "buildability": 4,
+    "headroom": 3,
+    "reason": "Headline experiments need root for modprobe/mount of in-kernel file systems; only a much weaker FUSE-only study survives, and the contribution is bug-finding rather than resource management."
+  },
+  {
+    "id": "sigmod23-dbet-execution-time-distribution-based-p",
+    "os_fit": 1,
+    "feasibility": 3,
+    "buildability": 1,
+    "headroom": 2,
+    "reason": "ML inside a query optimizer is the weakest topic fit and there is no public artifact from the industrial authors."
+  },
+  {
+    "id": "osdi24-llumnix-dynamic-scheduling-for-large-lan",
+    "os_fit": 5,
+    "feasibility": 3,
+    "buildability": 4,
+    "headroom": 5,
+    "reason": "Request migration and scheduling for LLM serving is a textbook OS scheduling problem with a linked artifact and many policy knobs; the catch is that it needs multiple instances, so a scale-down to small models or the bundled simulator is required."
+  },
+  {
+    "id": "vldb26-raydb-building-databases-with-ray-tracin",
+    "os_fit": 2,
+    "feasibility": 4,
+    "buildability": 3,
+    "headroom": 3,
+    "reason": "The A5000 has the RT cores needed to reproduce it, but mapping query operators onto OptiX is a database-acceleration result with little OS resource-management content."
+  },
+  {
+    "id": "vldb25-keigo-co-designing-log-structured-merge",
+    "os_fit": 5,
+    "feasibility": 3,
+    "buildability": 4,
+    "headroom": 4,
+    "reason": "LSM file placement across a storage hierarchy under RocksDB is core storage systems with a public repo, but the single NVMe tier means device classes must be emulated with cgroups or loopback, weakening the headline claim."
+  },
+  {
+    "id": "eurosys23-with-great-freedom-comes-great-opportuni",
+    "os_fit": 4,
+    "feasibility": 4,
+    "buildability": 4,
+    "headroom": 4,
+    "reason": "Serverless resource-allocation policy whose Zenodo artifact bundles the full measured performance dataset, so the policy search can be re-run and improved offline; only fresh cloud measurements are out of reach."
+  },
+  {
+    "id": "sigmod23-transaction-scheduling-from-conflicts-to",
+    "os_fit": 3,
+    "feasibility": 4,
+    "buildability": 1,
+    "headroom": 3,
+    "reason": "Multicore transaction scheduling fits the hardware well but no public artifact was found, so it would have to be reimplemented from scratch."
+  },
+  {
+    "id": "sigmod25-tgraph-a-tensor-centric-graph-processing",
+    "os_fit": 2,
+    "feasibility": 4,
+    "buildability": 1,
+    "headroom": 2,
+    "reason": "Graph processing on tensor runtimes is only loosely a systems-resource problem and no repo was located."
+  },
+  {
+    "id": "vldb26-one-pass-to-parse-them-all-fused-paralle",
+    "os_fit": 3,
+    "feasibility": 5,
+    "buildability": 4,
+    "headroom": 3,
+    "reason": "Multicore user-space CSV parsing runs perfectly on 16 cores with an evaluation repo linked, but it is a data-processing kernel rather than OS resource management and the improvable surface is mostly vectorization micro-tuning."
+  },
+  {
+    "id": "sigmod24-thalamusdb-approximate-query-processing",
+    "os_fit": 2,
+    "feasibility": 4,
+    "buildability": 3,
+    "headroom": 3,
+    "reason": "CLIP/Whisper-class models fit one GPU and the repo is linked, but scheduling ML inference inside relational operators is a query-processing contribution with modest OS relevance."
+  },
+  {
+    "id": "asplos24-proteus-a-high-throughput-inference-serv",
+    "os_fit": 4,
+    "feasibility": 3,
+    "buildability": 3,
+    "headroom": 4,
+    "reason": "Accuracy-scaling inference serving is a genuine scheduling/resource-allocation problem with trace-driven evaluation, but it targets a heterogeneous cluster so a single-GPU or simulated scale-down is mandatory."
+  },
+  {
+    "id": "asplos26-fasttts-accelerating-test-time-scaling-f",
+    "os_fit": 5,
+    "feasibility": 5,
+    "buildability": 4,
+    "headroom": 4,
+    "reason": "A vLLM plug-in explicitly designed for memory-constrained devices, so a 24 GB GPU is the intended target and no scale-down is needed; batching/scheduling knobs for test-time scaling give clear hypotheses."
+  },
+  {
+    "id": "asplos25-tapas-thermal-and-power-aware-scheduling",
+    "os_fit": 4,
+    "feasibility": 2,
+    "buildability": 1,
+    "headroom": 3,
+    "reason": "The placement policy is simulator-friendly, but there is no public artifact and the evaluation depends on datacenter power/thermal telemetry we cannot obtain."
+  },
+  {
+    "id": "eurosys24-traceupscaler-upscaling-traces-to-evalua",
+    "os_fit": 3,
+    "feasibility": 4,
+    "buildability": 3,
+    "headroom": 4,
+    "reason": "Pure user-space trace transformation is easy to run and directly reusable methodology, but validation originally replays against real servers so on one host it degrades to a loopback experiment at reduced load."
+  },
+  {
+    "id": "sigmod26-restore-a-reinforcement-learning-approac",
+    "os_fit": 4,
+    "feasibility": 3,
+    "buildability": 3,
+    "headroom": 4,
+    "reason": "Page-level migration for tiered storage is a real resource-management policy with a linked repo and obvious policy-swap experiments, but our single NVMe tier forces emulated tiers or trace-only evaluation."
+  },
+  {
+    "id": "mlsys26-wave-a-symbolic-python-dsl-and-compiler",
+    "os_fit": 3,
+    "feasibility": 2,
+    "buildability": 3,
+    "headroom": 3,
+    "reason": "Open source and user-space buildable, but the primary backend is AMD CDNA matrix cores so NVIDIA Ampere support is unproven, and a user-space LLVM/MLIR build is a heavy 10-week tax."
+  },
+  {
+    "id": "fast25-liquid-state-drive-a-case-for-dna-block",
+    "os_fit": 4,
+    "feasibility": 4,
+    "buildability": 2,
+    "headroom": 4,
+    "reason": "The design is evaluated entirely on a user-space simulator with improvable mapping and GC policies, but the repo link is an unresponsive institutional host and the release could not be confirmed."
+  },
+  {
+    "id": "atc24-metis-fast-automatic-distributed-trainin",
+    "os_fit": 3,
+    "feasibility": 3,
+    "buildability": 3,
+    "headroom": 3,
+    "reason": "Only the CPU-only planner and cost model are runnable here; without a heterogeneous multi-GPU cluster any improvement must be argued from planner search quality alone."
+  },
+  {
+    "id": "sigmetrics26-capsule-a-storage-prefetcher-harnessing",
+    "os_fit": 5,
+    "feasibility": 5,
+    "buildability": 4,
+    "headroom": 5,
+    "reason": "A storage prefetch policy evaluated purely by replaying public block traces with an explicit artifact repo — no root, no special hardware, and prefetch/clustering heuristics are an obvious space of testable policy swaps."
+  },
+  {
+    "id": "vldb23-cost-based-or-learning-based-a-hybrid-qu",
+    "os_fit": 2,
+    "feasibility": 4,
+    "buildability": 3,
+    "headroom": 3,
+    "reason": "Single-node PostgreSQL with small models is easy to run, but a learned query-plan selector is the anchor case for weak OS-course topic fit."
+  },
+  {
+    "id": "mlsys26-mixllm-llm-quantization-with-global-mixe",
+    "os_fit": 4,
+    "feasibility": 4,
+    "buildability": 4,
+    "headroom": 4,
+    "reason": "Ordinary Tensor Core kernels run on Ampere and the Microsoft repo is public; the 70B accuracy runs must move to 7-8B models, which is exactly the kind of scale-down the note calls plausible."
+  },
+  {
+    "id": "sigmod23-automating-and-optimizing-data-centric-w",
+    "os_fit": 2,
+    "feasibility": 5,
+    "buildability": 4,
+    "headroom": 3,
+    "reason": "Clean CPU-only Python artifact that runs effortlessly, but multi-query reuse across ML pipeline re-executions is a data-systems optimization with little OS content."
+  },
+  {
+    "id": "vldb23-bp-tree-overcoming-the-point-range-opera",
+    "os_fit": 4,
+    "feasibility": 5,
+    "buildability": 4,
+    "headroom": 4,
+    "reason": "Concurrent in-memory B-tree in C++ scales naturally to 32 threads with a public repo; the point-versus-range tradeoff knob is a ready-made testable hypothesis."
+  },
+  {
+    "id": "sosp24-verus-a-practical-foundation-for-systems",
+    "os_fit": 2,
+    "feasibility": 4,
+    "buildability": 5,
+    "headroom": 3,
+    "reason": "Distinguished-artifact quality release with clean single-machine metrics (verification time, SMT queries), but it is verification tooling rather than a resource-management system and the proof corpus is CPU-hours-heavy."
+  },
+  {
+    "id": "middleware24-on-the-semantic-overlap-of-operators-in",
+    "os_fit": 3,
+    "feasibility": 4,
+    "buildability": 3,
+    "headroom": 3,
+    "reason": "Single-host JVM stream-engine throughput study with an artifact statement; needs a conda JDK and the improvable claim is operator-level throughput rather than a systems policy."
+  },
+  {
+    "id": "atc24-fwdllm-efficient-federated-finetuning-of",
+    "os_fit": 2,
+    "feasibility": 3,
+    "buildability": 3,
+    "headroom": 3,
+    "reason": "The federation can be simulated on one GPU with small models, but the headline results depend on mobile NPUs we lack and the core contribution is a training-algorithm idea more than systems resource management."
+  },
+  {
+    "id": "eurosys25-garbage-collection-does-not-only-collect",
+    "os_fit": 5,
+    "feasibility": 3,
+    "buildability": 2,
+    "headroom": 4,
+    "reason": "GC-plus-defragmentation in a user-space dedup store is exactly the kind of storage policy this course wants, but the AE repo currently 404s and the backup datasets are large against 257 GB free."
+  },
+  {
+    "id": "vldb26-caps-cost-aware-ml-pipeline-selection",
+    "os_fit": 2,
+    "feasibility": 5,
+    "buildability": 3,
+    "headroom": 3,
+    "reason": "Pure user-space Python that runs anywhere, but AutoML pipeline selection is an ML-workflow contribution rather than a systems-resource one."
+  },
+  {
+    "id": "sosp26-validating-rust-compilers-with-trait-typ",
+    "os_fit": 1,
+    "feasibility": 4,
+    "buildability": 1,
+    "headroom": 2,
+    "reason": "Compiler testing is CPU-only and rootless, but it is a PL bug-finding tool with no public artifact — the two weakest axes combined."
+  },
+  {
+    "id": "asplos25-rassm-residue-based-acceleration-of-sing",
+    "os_fit": 2,
+    "feasibility": 5,
+    "buildability": 1,
+    "headroom": 3,
+    "reason": "CPU sparse-kernel tiling fits the 16-core box perfectly, but no official repo was found and sparse linear algebra is only marginally an OS topic."
+  },
+  {
+    "id": "osdi26-rlinf-flexible-and-efficient-large-scale",
+    "os_fit": 3,
+    "feasibility": 2,
+    "buildability": 4,
+    "headroom": 3,
+    "reason": "Actively maintained open framework, but the collocate-versus-disaggregate placement contribution largely evaporates with a single 24 GB GPU, leaving only tiny LoRA policies."
+  },
+  {
+    "id": "osdi23-karma-resource-allocation-for-dynamic-de",
+    "os_fit": 5,
+    "feasibility": 5,
+    "buildability": 4,
+    "headroom": 4,
+    "reason": "Credit-based fair allocation evaluated by trace-driven simulation over production workloads with a public repo — no hardware dependency at all; part of the contribution is game-theoretic proofs, so the improvable surface is the allocation algorithm."
+  },
+  {
+    "id": "sigmod25-camal-optimizing-lsm-trees-via-active-le",
+    "os_fit": 4,
+    "feasibility": 4,
+    "buildability": 1,
+    "headroom": 4,
+    "reason": "LSM knob tuning on RocksDB is a fine single-node storage project with plenty of tunable-heuristic headroom, but no artifact was located."
+  },
+  {
+    "id": "asplos25-cascade-a-dependency-aware-efficient-tra",
+    "os_fit": 2,
+    "feasibility": 4,
+    "buildability": 1,
+    "headroom": 3,
+    "reason": "Single-GPU temporal-GNN training batching is runnable in principle, but no official repo was found and the topic is ML training rather than OS resource management."
+  },
+  {
+    "id": "vldb23-toward-quantity-of-interest-preserving-l",
+    "os_fit": 3,
+    "feasibility": 4,
+    "buildability": 4,
+    "headroom": 3,
+    "reason": "CPU-only C++ compression on top of the well-maintained SZ3 repo (qoi branch); the main friction is tens of GB of scientific reference datasets and a fairly closed error-control result."
+  },
+  {
+    "id": "asplos25-comet-towards-practical-w4a4kv4-llms-ser",
+    "os_fit": 4,
+    "feasibility": 4,
+    "buildability": 1,
+    "headroom": 3,
+    "reason": "INT4 tensor cores exist on sm_86 so the mechanism would run, but no official repo was found and reimplementing mixed-precision W4Ax kernels in 10 weeks is unrealistic."
+  },
+  {
+    "id": "vldb26-arcekv-towards-workload-driven-lsm-compa",
+    "os_fit": 5,
+    "feasibility": 5,
+    "buildability": 4,
+    "headroom": 5,
+    "reason": "Workload-driven LSM compaction on RocksDB with a public repo: single-node, no root, and the compaction decision engine is an obvious space of policy swaps and new workloads."
+  },
+  {
+    "id": "mlsys23-renee-end-to-end-training-of-extreme-cla",
+    "os_fit": 3,
+    "feasibility": 3,
+    "buildability": 4,
+    "headroom": 3,
+    "reason": "Microsoft repo is public and medium XC benchmarks fit 24 GB, but the headline label sets do not fit and GPU-memory tricks for extreme classification are a narrow training-systems topic."
+  },
+  {
+    "id": "vldb24-elasticnotebook-enabling-live-migration",
+    "os_fit": 4,
+    "feasibility": 5,
+    "buildability": 4,
+    "headroom": 4,
+    "reason": "User-space checkpoint/restore of a process's live state is a classic OS mechanism, it is pure Python on one machine with no root, and the migration cost model invites policy improvements."
+  },
+  {
+    "id": "sigmod26-improving-range-scan-performance-in-lsm",
+    "os_fit": 5,
+    "feasibility": 5,
+    "buildability": 1,
+    "headroom": 4,
+    "reason": "A cache admission/eviction policy inside RocksDB is an ideal topic and trivially runnable, but no repo was located so the hard requirement fails."
+  },
+  {
+    "id": "vldb23-lru-c-parallelizing-database-i-os-for-fl",
+    "os_fit": 5,
+    "feasibility": 5,
+    "buildability": 4,
+    "headroom": 5,
+    "reason": "Buffer-pool replacement plus I/O parallelisation on NVMe is core caching and I/O management, needs no kernel changes, has a public repo, and eviction-policy variants are directly testable."
+  },
+  {
+    "id": "nsdi26-feedback-guided-adaptive-testing-of-dist",
+    "os_fit": 2,
+    "feasibility": 5,
+    "buildability": 3,
+    "headroom": 3,
+    "reason": "CPU-only model fuzzing runs easily and the code was upstreamed into P, but the paper's own artifact URL 404s and testing distributed-system models is far from OS resource management."
+  },
+  {
+    "id": "sigmod26-dimweaver-dimensional-weaved-trajectory",
+    "os_fit": 2,
+    "feasibility": 4,
+    "buildability": 1,
+    "headroom": 2,
+    "reason": "Domain-specific trajectory compression with no located repo — narrow topic and unbuildable as listed."
+  },
+  {
+    "id": "sosp25-phoenixos-concurrent-os-level-gpu-checkp",
+    "os_fit": 5,
+    "feasibility": 4,
+    "buildability": 4,
+    "headroom": 4,
+    "reason": "User-space CUDA-interception checkpoint/restore is a genuine OS mechanism demonstrable on one A5000 with a well-maintained repo; the risk is tight coupling to CUDA/driver versions against driver 535."
+  },
+  {
+    "id": "eurosys24-zkml-an-optimizing-system-for-ml-inferen",
+    "os_fit": 2,
+    "feasibility": 3,
+    "buildability": 4,
+    "headroom": 3,
+    "reason": "Solid user-space Rust/Python compiler with a clear performance objective, but ZK proving is memory- and time-hungry and the subject matter is cryptographic compilation rather than OS resources."
+  },
+  {
+    "id": "mlsys23-transcending-runtime-memory-tradeoffs-in",
+    "os_fit": 4,
+    "feasibility": 4,
+    "buildability": 2,
+    "headroom": 3,
+    "reason": "A pure single-GPU memory-versus-runtime tradeoff, but the work was upstreamed into PyTorch's default min-cut partitioner, so the baseline is now production code and any improvement must beat current PyTorch."
+  },
+  {
+    "id": "sigmod23-speeding-up-end-to-end-query-execution-v",
+    "os_fit": 1,
+    "feasibility": 4,
+    "buildability": 1,
+    "headroom": 2,
+    "reason": "Learned cardinality estimation is the weakest topic fit for an OS course and no public repo was found."
+  },
+  {
+    "id": "mlsys24-sida-sparsity-inspired-data-aware-servin",
+    "os_fit": 5,
+    "feasibility": 4,
+    "buildability": 3,
+    "headroom": 4,
+    "reason": "Offloading dormant MoE experts to host DRAM is a GPU/host memory tiering problem that suits 24 GB GPU plus 125 GiB RAM, though the activation predictor adds offline training cost and the largest MoEs need scale-down."
+  },
+  {
+    "id": "asplos26-it-takes-two-to-entangle",
+    "os_fit": 2,
+    "feasibility": 3,
+    "buildability": 3,
+    "headroom": 2,
+    "reason": "The analysis tool itself is user-space, but it checks equivalence of distributed training graphs whose motivating bugs need multi-GPU runs, leaving a closed correctness result with little to extend here."
+  },
+  {
+    "id": "sigmod25-leafi-data-series-indexes-on-steroids-wi",
+    "os_fit": 2,
+    "feasibility": 4,
+    "buildability": 3,
+    "headroom": 3,
+    "reason": "Learned filters inside a data-series index run on one machine with a public repo, but this is an indexing/ML-for-DB result rather than an OS resource-management one."
+  },
+  {
+    "id": "atc24-exploit-both-smart-attributes-and-nand-f",
+    "os_fit": 3,
+    "feasibility": 4,
+    "buildability": 4,
+    "headroom": 3,
+    "reason": "The artifact ships both datasets and model so the whole study is trace-driven on CPU or one GPU; a container image must be ported to conda, and failure prediction is a learned-component study rather than a resource policy."
+  },
+  {
+    "id": "mlsys24-atom-low-bit-quantization-for-efficient",
+    "os_fit": 4,
+    "feasibility": 4,
+    "buildability": 4,
+    "headroom": 4,
+    "reason": "Single-GPU W4A4 serving with an official lab repo and sm_86 INT4 support; kernels were tuned for A100/4090, so A5000 retuning is both a risk and a ready-made improvement hypothesis."
+  },
+  {
+    "id": "asplos23-betty-enabling-large-scale-gnn-training",
+    "os_fit": 4,
+    "feasibility": 5,
+    "buildability": 4,
+    "headroom": 4,
+    "reason": "Batch-level partitioning under single-GPU memory pressure is precisely a one-GPU memory-management problem, with both Zenodo and GitHub artifacts and clear partitioning-policy variants."
+  },
+  {
+    "id": "sigmod25-t3-accurate-and-fast-performance-predict",
+    "os_fit": 2,
+    "feasibility": 5,
+    "buildability": 3,
+    "headroom": 3,
+    "reason": "Compiled decision trees run trivially on CPU with a public repo, but query performance prediction is an ML-for-DB contribution with limited OS relevance."
+  },
+  {
+    "id": "eurosys25-capsys-contention-aware-task-placement-f",
+    "os_fit": 4,
+    "feasibility": 3,
+    "buildability": 4,
+    "headroom": 3,
+    "reason": "Contention-aware placement is a real scheduling topic with an Available+Functional+Reproduced artifact, but the multi-node Kubernetes Flink setup collapses to several TaskManagers under cgroup limits, weakening the story."
+  },
+  {
+    "id": "sosp26-rpcshield-defending-microservices-agains",
+    "os_fit": 2,
+    "feasibility": 3,
+    "buildability": 2,
+    "headroom": 2,
+    "reason": "Only a static-analysis tool is public with no abstract; the end-to-end evaluation is on Uber production microservices and open microservice benchmarks assume Docker, which is unavailable."
+  },
+  {
+    "id": "sigmod25-pdx-a-data-layout-for-vector-similarity",
+    "os_fit": 3,
+    "feasibility": 5,
+    "buildability": 4,
+    "headroom": 4,
+    "reason": "CPU-only data-layout work on memory access patterns and auto-vectorization runs perfectly on 16 cores with a clean repo; layout/pruning variants give real headroom, but it is a data-structure contribution."
+  },
+  {
+    "id": "asplos25-medusa-accelerating-serverless-llm-infer",
+    "os_fit": 5,
+    "feasibility": 4,
+    "buildability": 3,
+    "headroom": 4,
+    "reason": "Removing KV-cache init and CUDA-graph capture cold-start stages is a single-GPU OS-style mechanism with a public repo; artifact completeness is unknown and CUDA-graph paths depend on the driver version."
+  },
+  {
+    "id": "vldb26-lio-a-lightweight-and-interpretable-quer",
+    "os_fit": 2,
+    "feasibility": 4,
+    "buildability": 3,
+    "headroom": 3,
+    "reason": "Trains and runs entirely on one machine with a linked repo, but a learned query optimizer sits at the bottom of the os_fit scale for this course."
+  },
+  {
+    "id": "mlsys25-optimizing-llm-queries-in-relational-dat",
+    "os_fit": 5,
+    "feasibility": 5,
+    "buildability": 3,
+    "headroom": 5,
+    "reason": "KV-cache-reuse-maximizing request reordering against a single-GPU vLLM with Llama-3-8B is exactly our hardware; the reordering algorithm is CPU-side and swapping in better orderings is a clean testable hypothesis."
+  },
+  {
+    "id": "eurosys26-mfs-an-efficient-model-family-serving-sy",
+    "os_fit": 5,
+    "feasibility": 2,
+    "buildability": 1,
+    "headroom": 3,
+    "reason": "Shared/nested parameter serving is a great memory-management topic, but the paper uses 70B-class models that do not fit and no code was found."
+  },
+  {
+    "id": "vldb25-diva-dynamic-range-filter-for-var-length",
+    "os_fit": 4,
+    "feasibility": 5,
+    "buildability": 4,
+    "headroom": 4,
+    "reason": "In-memory range filter for key-value stores in the SuRF/Rosetta line: user-space, single machine, public repo, and false-positive-versus-space tradeoffs are easy hypotheses."
+  },
+  {
+    "id": "vldb24-a-comparative-study-and-component-analys",
+    "os_fit": 1,
+    "feasibility": 5,
+    "buildability": 4,
+    "headroom": 2,
+    "reason": "A released evaluation testbed runs easily, but this is a measurement/comparison study of ML-for-DB representations with essentially no systems mechanism to improve."
+  },
+  {
+    "id": "nsdi23-arya-arbitrary-graph-pattern-mining-with",
+    "os_fit": 2,
+    "feasibility": 3,
+    "buildability": 3,
+    "headroom": 3,
+    "reason": "The single-machine claim helps, but the 5-billion-edge experiments exceed our RAM and disk and the distributed arm is out of reach; graph mining is also only weakly an OS topic."
+  },
+  {
+    "id": "sigmod23-compressgraph-efficient-parallel-graph-a",
+    "os_fit": 2,
+    "feasibility": 4,
+    "buildability": 3,
+    "headroom": 3,
+    "reason": "User-space C++ multicore engine that builds here, but as the note says the flavour is graph analytics rather than OS-level systems."
+  },
+  {
+    "id": "sigmod24-hyper-a-high-performance-and-memory-effi",
+    "os_fit": 3,
+    "feasibility": 4,
+    "buildability": 1,
+    "headroom": 3,
+    "reason": "Learned-index construction with 32-thread concurrency experiments would fit the machine, but no artifact was found in search."
+  },
+  {
+    "id": "socc24-scheduling-for-reduced-tail-task-latenci",
+    "os_fit": 5,
+    "feasibility": 4,
+    "buildability": 3,
+    "headroom": 4,
+    "reason": "Decentralized task scheduling studied by simulation over public Google/Alibaba traces is explicitly allowed by scope; only the simulator path is usable since the k8s prototype needs a real cluster."
+  },
+  {
+    "id": "sigmod25-pasta-a-cost-based-optimizer-for-generat",
+    "os_fit": 3,
+    "feasibility": 4,
+    "buildability": 1,
+    "headroom": 3,
+    "reason": "Pipelining schedules for dataflow DAGs is a legitimate user-space scheduling problem, but no repo was located."
+  },
+  {
+    "id": "sigmod25-diskgnn-bridging-i-o-efficiency-and-mode",
+    "os_fit": 4,
+    "feasibility": 4,
+    "buildability": 4,
+    "headroom": 4,
+    "reason": "Out-of-core training with I/O-efficient feature packing on one GPU plus NVMe matches this machine exactly, with a public repo and clear packing/prefetch knobs to vary."
+  },
+  {
+    "id": "vldb23-substrat-a-subset-based-optimization-str",
+    "os_fit": 1,
+    "feasibility": 5,
+    "buildability": 3,
+    "headroom": 3,
+    "reason": "Tiny pure-Python CPU workload that runs anywhere, but accelerating AutoML search by data subsetting has almost no OS-systems content."
+  },
+  {
+    "id": "atc23-tc-gnn-bridging-sparse-gnn-computation-a",
+    "os_fit": 3,
+    "feasibility": 4,
+    "buildability": 4,
+    "headroom": 3,
+    "reason": "Single-GPU Tensor Core kernels with an Available+Functional+Reproduced artifact and Ampere TCUs present; it is GPU kernel engineering rather than resource management, and newer-CUDA kernels may need a conda toolkit on driver 535."
+  },
+  {
+    "id": "vldb24-single-update-sketch-with-variable-count",
+    "os_fit": 2,
+    "feasibility": 5,
+    "buildability": 3,
+    "headroom": 3,
+    "reason": "Plain Java user-space sketch that runs in minutes on one core, but it is closer to an algorithms paper than a systems one and the CAIDA traces need a data-access agreement."
+  },
+  {
+    "id": "asplos24-trackfm-far-out-compiler-support-for-a-f",
+    "os_fit": 5,
+    "feasibility": 3,
+    "buildability": 4,
+    "headroom": 4,
+    "reason": "Far-memory management with a user-space runtime and no kernel changes is a strong memory-management topic with a public repo; the CloudLab far-memory backend must be replaced by a local loopback or second-process memory server."
+  }
+]

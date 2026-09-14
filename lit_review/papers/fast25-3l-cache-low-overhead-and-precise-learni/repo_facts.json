@@ -1,0 +1,98 @@
+{
+  "url": "https://github.com/optiq-lab/3L-Cache",
+  "head_commit": "134cd159b635cdab75419a4281bed1a330fef31f",
+  "head_commit_date": "2025-08-09T22:40:36+08:00",
+  "file_count": 921,
+  "size_mb": 747.0,
+  "top_level": [
+    ".clang-format",
+    ".github/",
+    ".gitignore",
+    ".readthedocs.yaml",
+    ".sshyncignore",
+    ".travis.yml",
+    "3LCache+/",
+    "3LCache/",
+    "CMakeLists.txt",
+    "FAQ.md",
+    "LICENSE",
+    "README.md",
+    "cmake/",
+    "data/",
+    "doc/",
+    "dockerfile",
+    "example/",
+    "libCacheSim.cmake.in",
+    "libCacheSim.pc.in",
+    "libCacheSim/",
+    "random/",
+    "references.md",
+    "requirements.txt",
+    "scripts/",
+    "test.c",
+    "test/"
+  ],
+  "build_files": [
+    "CMakeLists.txt",
+    "example/cacheCluster/CMakeLists.txt",
+    "example/cacheHierarchy/CMakeLists.txt",
+    "example/cacheSimulator/CMakeLists.txt",
+    "example/cacheSimulatorConcurrent/CMakeLists.txt",
+    "libCacheSim/bin/CMakeLists.txt",
+    "libCacheSim/cache/CMakeLists.txt",
+    "libCacheSim/dataStructure/CMakeLists.txt",
+    "libCacheSim/profiler/CMakeLists.txt",
+    "libCacheSim/traceAnalyzer/CMakeLists.txt",
+    "libCacheSim/traceReader/CMakeLists.txt",
+    "libCacheSim/utils/CMakeLists.txt",
+    "scripts/LightGBM/CMakeLists.txt",
+    "test/CMakeLists.txt"
+  ],
+  "lines_by_extension": {
+    ".h": 41678,
+    ".c": 39024,
+    ".cpp": 22747,
+    ".py": 16209,
+    ".hpp": 8912,
+    ".sh": 373,
+    ".js": 29
+  },
+  "red_flags": {
+    "sudo": {
+      "count": 64,
+      "examples": [
+        ".travis.yml:15: sudo: true",
+        ".travis.yml:51: - sudo make install",
+        ".travis.yml:89: ##  - sudo apt-get -qq update",
+        ".travis.yml:90: ##  - sudo apt-get install -y libglib2.0-dev python3-pip python3-matplotlib python3-dev git gcc g++",
+        "CMakeLists.txt:23: # echo madvise | sudo tee /sys/kernel/mm/transparent_hugepage/enabled"
+      ]
+    },
+    "docker": {
+      "count": 50,
+      "examples": [
+        "dockerfile:31: # build the docker file",
+        "dockerfile:32: # sudo docker build -t 1a1a11a/libcachesim -f dockerfile .",
+        "dockerfile:34: # push to docker hub",
+        "dockerfile:35: # sudo docker tag 1a1a11a/libcachesim:latest 1a1a11a/libcachesim:0.0.2",
+        "dockerfile:36: # sudo docker push 1a1a11a/libcachesim:latest"
+      ]
+    },
+    "rdma_dpdk_spdk": {
+      "count": 2,
+      "examples": [
+        "scripts/LightGBM/docs/Experiments.rst:197: | Windows Server 2012 | 2 \\* E5-2670 v2 | DDR3 1600Mhz, 256GB | Mellanox ConnectX-3, 54Gbps, RDMA support |",
+        "scripts/LightGBM/docs/Installation-Guide.rst:184: `MPI`_ is a high performance communication approach with `RDMA`_ support."
+      ]
+    }
+  },
+  "github": {
+    "stargazers_count": 16,
+    "forks_count": 6,
+    "archived": false,
+    "pushed_at": "2025-08-09T14:40:49Z",
+    "created_at": "2024-12-24T13:28:57Z",
+    "open_issues_count": 0,
+    "license": "GPL-3.0"
+  }
+}

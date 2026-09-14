@@ -1,0 +1,10 @@
+`/home/xing/project/os_hw/documents/CourseProject-Fall2026.pdf` is my os course project
+
+i am focusing on finding "find recent top conference/journal paper" 
+1.PICK those that has github repo open.
+2.and should be easy to rebuild+make incremental improvements on this linux machine
+3.need to read through paper and evaluate potential incremental addons confidence (high to low)
+
+then we obtain a paper list. we choose from the list. and discuss
+
+is my idea good?

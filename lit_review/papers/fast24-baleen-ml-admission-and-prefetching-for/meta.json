@@ -1,0 +1,11 @@
+{
+  "id": "fast24-baleen-ml-admission-and-prefetching-for",
+  "title": "Baleen: ML Admission and Prefetching for Flash Caches",
+  "venue": "fast",
+  "year": 2024,
+  "paper_url": "https://www.usenix.org/conference/fast24/presentation/wong",
+  "pdf_url": "https://www.usenix.org/system/files/fast24-wong.pdf",
+  "repo_url": "https://github.com/wonglkd/Baleen-FAST24",
+  "topic": "ml-for-systems",
+  "note": "ML admission plus prefetching policy for flash caches, trained and evaluated entirely offline on released Meta traces from seven clusters (traces and code at https://www.pdl.cmu.edu/CILES/). Simulation-only, CPU-bound, no root and no flash hardware needed; the A5000 is optional for model training. Ideal single-machine improvement target - policy, the \"episodes\" residency model, and the Disk-head Time objective are all swappable."
+}
