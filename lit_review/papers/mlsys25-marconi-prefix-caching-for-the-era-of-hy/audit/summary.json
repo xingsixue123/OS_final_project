@@ -1,0 +1,156 @@
+{
+  "title": "Marconi: Prefix Caching for the Era of Hybrid LLMs",
+  "one_line": "A prefix-cache admission and eviction policy for Attention+SSM hybrid LLMs that admits at most two SSM state checkpoints per sequence (last decoded token plus a speculatively-detected branch point) and evicts by a recency + FLOPs-saved-per-byte utility score, evaluated in a trace-driven radix-tree simulator.",
+  "topic": "caching",
+  "repo": {
+    "official": "yes",
+    "evidence": "Paper §1 (p. 2) states 'Marconi is open sourced at https://github.com/ruipeterpan/marconi'; the Artifact Appendix §B.3.1 (p. 16) repeats the same URL plus Zenodo DOI 10.5281/zenodo.14970139; the GitHub owner 'ruipeterpan' is first author Rui Pan (correspondence ruipan@princeton.edu, which also appears in repo/artifact_evaluation.md:32); the MLSys 2025 poster page (https://mlsys.org/virtual/2025/poster/3360) lists the repo as the project page.",
+    "last_commit": "2025-03-05",
+    "artifact_badges": [],
+    "badge_evidence": "none found - the paper carries a full Artifact Appendix (§B, p. 15-16) with an archived Zenodo DOI (10.5281/zenodo.14970139) and cTuning AE methodology links (repo/artifact_evaluation.md:129-133), which indicates it went through MLSys artifact evaluation, but neither the MLSys 2025 poster page nor the proceedings page shows an explicit badge award."
+  },
+  "hard_filters": {
+    "H1_open_repo": {
+      "result": "pass",
+      "evidence": "Official (see repo.evidence) and contains the real system, not a placeholder: repo/radix_cache_hybrid.py (561 lines) implements the radix tree, the judicious admission (:158 speculative match_prefix, :163 num_extra_mamba_states = 2 if branchoff_required else 1, :322 _split_node with state_at_branchoff) and the FLOP-aware eviction (:503 evict_v2, :534-546 Eq. 2 utility score); repo/config_tuner.py:58 implements the retrospective alpha grid search of §4.2; repo/radix_cache_vllm.py is the vLLM+ baseline; repo/policy_exploration.py is the full sweep driver; repo/plotting/ holds the figure scripts. The artifact is a trace-driven simulator rather than a serving-engine patch, but that is also what the paper's own evaluation harness is (§5.1 primary metric is token hit rate; TTFT is derived from the profiled table repo/data/ttft_AI21-Jamba-1.5-Mini.pickle)."
+    },
+    "H2_no_root": {
+      "result": "pass",
+      "evidence": "Pure Python (4253 LOC) plus a 14-line bash loop (repo/run_all_experiments.sh). No Dockerfile, no kernel module, no eBPF, no perf, no sudo anywhere in the tree. The repo_facts.json red flags are all false positives: 'big_gpu' hits are matplotlib annotation lines in repo/plotting/plotting.py:81,85,347; 'multi_gpu' is the transitive nvidia-nccl-cu12 pin in repo/environment.yml:147 (never imported by the simulator); 'multi_node' hits are Cloudlab prose in repo/artifact_evaluation.md:29,32."
+    },
+    "H3_hardware_fit": {
+      "result": "pass",
+      "evidence": "Fig. 7 and Fig. 8 need no GPU at all: repo/policy_exploration.py:107-127 replays JSONL traces through the radix tree and repo/radix_cache_hybrid.py models state sizes and FLOPs analytically via repo/utils.py. The paper's p4d.24xlarge (§5.1 Setup, p. 8) was used for its 96 CPUs; the 4xA100 Jamba-1.5-Mini profiling run produced repo/data/ttft_AI21-Jamba-1.5-Mini.pickle, which is already checked in. The 60-140 GB cache sizes of Fig. 11 are simulated byte budgets (repo/policy_exploration.py:162-175), not real GPU memory. 16 cores / 32 threads and 111 GB RAM cover the 32-way parallel grid search (repo/config_tuner.py:11,84); ~13-20 GB of trace data fits in 257 GB free disk."
+    },
+    "H4_obtainable_deps_data": {
+      "result": "pass",
+      "evidence": "All dependencies are conda/pip and user-space (repo/environment.yml); the simulator only imports scipy, transformers, datasets, numpy, pandas, pytz, tqdm, matplotlib, scikit-learn and gdown. The pre-tokenized request traces (~700 MB compressed / 6.3 GB expanded) are publicly downloadable with no credentials from the Google Drive link in repo/artifact_evaluation.md:69, and repo/utils/generate_trace.py documents a regeneration path from ShareGPT (ungated HF: anon8231489123/ShareGPT_Vicuna_unfiltered) and the public SWE-bench-experiments GitHub repo. Caveats recorded as risks rather than failures: the regeneration path needs the gated meta-llama/Llama-2-7b-hf tokenizer (repo/utils/generate_trace.py:12, ungated mirrors exist) and the gated lmsys/lmsys-chat-1m dataset, and repo/utils/generate_trace.py:232 hard-codes /home/ubuntu/SWE-bench-experiments/..."
+    }
+  },
+  "reproduce": {
+    "level": "H",
+    "target": "Fig. 7 (p. 8) and its claim that judicious admission raises the mean token hit rate by 4.5x / 7.3x / 34.4x over vLLM+ on LMSys / ShareGPT / SWEBench; secondarily Fig. 8 (p. 9), Marconi vs SGLang+ P95 wins of 45.6% / 19.0% / 219.7%, which isolates the FLOP-aware eviction. These are the two figures the authors designate as the artifact-evaluation targets (repo/artifact_evaluation.md:110-113).",
+    "scale_down": "(1) Delete the V3 offline-oracle sweep (repo/policy_exploration.py:268-316) - 21 extra full-trace replays per config that appear in no paper figure; this removes roughly 85% of the compute and touches neither Fig. 7 nor Fig. 8 (keep the V2-internal ConfigTuner grid search, which is Marconi itself). (2) Run the LMSys (30 configs) and ShareGPT (36 configs) sweeps in full - the README quotes ~30 s and ~5 s per trace. (3) Run a quarter-sweep for SWEBench (72 configs at 5-10 min each): 4 cache sizes x sessions_per_second in {0.25, 1, 10} x avg_response_time = 5, i.e. 12 configs, still covering the contention and arrival-rate axes that drive the claim; the boxplot then has 12 rather than 72 points. (4) If peak RSS is a problem, cap NUM_CPUS (repo/config_tuner.py:11) at 16, since each tuner worker holds a pickled deep copy of the tree (repo/config_tuner.py:78).",
+    "effort": "~3 person-days + ~30-60 CPU-core-hours + 0 GPU-hours",
+    "rationale": "The exact scripts for the target figures exist and consume exactly the logs the driver writes (repo/plotting/token_hit_rate.py:118-123 reads logs/{lmsys,sharegpt,swebench}.txt, which repo/run_all_experiments.sh:13 produces), and token_hit_rate.py:68-71 prints the very improvement ratios Fig. 7's caption reports. Determinism is engineered in - use_logical_ts=True (repo/radix_cache_hybrid.py:80) makes results independent of wall-clock timing. There is no build step, no CUDA kernel, no model weights, and no root. The two real frictions are routine porting: repo/environment.yml pins exact conda build strings (lines 7-70) that may no longer solve, and the traces sit behind a single gdown link. Neither touches the scientific content, which is why this is H rather than M. The runtime claim of ~12 h in repo/artifact_evaluation.md:16 looks optimistic for 16 cores, which is why the scale-down above is not optional."
+  },
+  "addons": [
+    {
+      "name": "Block-aligned checkpointing fidelity + alignment-aware admission",
+      "hypothesis": "We hypothesize that constraining SSM state checkpoints to fixed block boundaries - as every shipping hybrid serving engine actually does - lowers Marconi's token hit rate by a large, workload-dependent margin (we predict >30% relative on SWEBench, with occasional collapse to near-zero reuse), and that an alignment-aware admission policy (checkpoint at the largest block boundary <= the branch point, plus the boundary after it when the branch point falls mid-block) recovers most of that loss at <= 1 extra SSM state per sequence.",
+      "mechanism": "radix_cache_hybrid.py has no notion of block or chunk size at all (grepping 'chunk|block_size' in that file returns nothing): _split_node materializes a state at the exact branch offset and match_prefix credits the full matched prefix as reusable. Add a chunk_size parameter to RadixCache; in match_prefix, floor the creditable reusable prefix to a chunk boundary relative to the node's checkpoint position; in insert/_split_node, place the branch-off checkpoint at the floored boundary and charge the missing suffix as recompute; adjust the byte accounting at radix_cache_hybrid.py:163. Then implement the alignment-aware variant as a new admission flag / evict_policy_version and sweep chunk_size in {32, 64, 128, 256} - the paper itself cites 'every 256 tokens' as a realistic checkpoint interval (§1, p. 1). Evaluated with the unchanged run_all_experiments.sh -> plotting/token_hit_rate.py harness.",
+      "code_locations": [
+        "radix_cache_hybrid.py:220",
+        "radix_cache_hybrid.py:120",
+        "radix_cache_hybrid.py:322",
+        "radix_cache_hybrid.py:163",
+        "utils.py",
+        "policy_exploration.py:196"
+      ],
+      "motivating_evidence": "§4.1 'Obtaining states during prefill' (p. 5-6) concedes that the chunked-state-passing approach 'may miss some prefix caching opportunities within a chunk' and that the alternative is a two-pass prefill - neither cost is quantified anywhere in the paper, and the simulator silently assumes the exact-position checkpoint is free. Real systems have since found this to be the dominant failure mode: vLLM's hybrid prefix cache supports only mamba_cache_mode='align', and because HybridKVCacheCoordinator requires every group to match, a misaligned Mamba checkpoint vetoes the attention groups' hits - a 100-token prompt shift flips a workload between 52/64 hits (433 ms TTFT) and 0/64 hits (905 ms TTFT) (vllm-project/vllm#45238).",
+      "feasibility": "H",
+      "feasibility_rationale": "Self-contained change to one 561-line Python file plus a config knob; the existing sweep driver and the Fig. 7 plotting script measure the outcome with no modification; CPU-only, no new data. Comfortably inside 2-4 students x 10 weeks, well under 1k LOC.",
+      "research_value": "H",
+      "research_value_rationale": "It re-examines the paper's headline claim under precisely the assumption that broke it in deployment, and both outcomes teach something: if alignment barely matters, Marconi's result is stronger than stated; if it matters a lot, the 34.4x is an upper bound and the alignment-aware policy is a genuine contribution to a live engineering problem that vLLM has an open issue about.",
+      "scoop_check": {
+        "result": "partial",
+        "details": "Queries: 'prefix caching Mamba hybrid model SSM state checkpointing chunk granularity 2026'; 'arXiv 2026 prefix cache eviction policy hybrid Mamba attention SSM states admission improve Marconi'. Closest work: Sparse Prefix Caching for Hybrid and Recurrent LLM Serving, arXiv:2605.05219 (Shirokikh & Nikolenko, Apr 2026, https://arxiv.org/abs/2605.05219) stores sparse exact checkpoints and recomputes the suffix from the deepest one with a DP for checkpoint placement - a different remedy (recompute) for the same asymmetry, and it does not evaluate Marconi's admission/eviction policies. vllm-project/vllm#45238 and tracking issue vllm-project/vllm#26201 document the pathology operationally but propose no policy. No paper found that re-evaluates Marconi under aligned checkpointing."
+      }
+    },
+    {
+      "name": "Branching workloads and a fan-out-adaptive checkpoint budget",
+      "hypothesis": "We hypothesize that on high-fan-out workloads - self-consistency sampling, tree-of-thought, best-of-n, and agent search trees, where many requests branch from one shared prefix - Marconi's hard cap of <= 2 SSM states per sequence and its 'reuse only from the third occurrence' rule cost substantial token hit rate compared with a fan-out-adaptive checkpoint budget that admits k states at nodes whose observed branching factor exceeds a threshold.",
+      "mechanism": "Marconi hard-codes num_extra_mamba_states = 2 if branchoff_required else 1 (radix_cache_hybrid.py:163). Replace it with a per-node budget derived from historical child count - the tree already carries this information and _collect_keystone_nodes (radix_cache_hybrid.py:396) already enumerates multi-child nodes. Add a small count-min sketch over prefix hashes so that a purely-input prefix can be admitted on its second occurrence when its hash was already seen, removing the third-occurrence penalty. Requires a new branching trace generator emitting m sibling requests that share a prefix per session with a configurable fan-out distribution, in the same JSONL schema as utils/generate_trace.py (session_id, turn_id, ts, input_tokens, output_tokens), and a new sweep axis in policy_exploration.py:159.",
+      "code_locations": [
+        "radix_cache_hybrid.py:163",
+        "radix_cache_hybrid.py:120",
+        "radix_cache_hybrid.py:396",
+        "utils/generate_trace.py",
+        "policy_exploration.py:159"
+      ],
+      "motivating_evidence": "§4.1 states the assumption explicitly: Marconi values only 'SSM states that represent the last decoded token between conversation rounds, which conversations typically append to, as opposed to branch off from' (p. 5). §4.1 'Tradeoffs' (p. 6) concedes that judicious admission 'reduces coverage and slightly limits the potential reusability of arbitrary prefixes, as only up to two SSM states are admitted per sequence.' All three evaluated workloads (Fig. 6, p. 6) are strictly append-structured multi-turn traces; no branching or parallel-sampling workload appears anywhere in §5.",
+      "feasibility": "M",
+      "feasibility_rationale": "The policy change itself is small and local, but the project needs a new workload generator plus a new sweep axis, and the fan-out parameterization has to be defended - ideally derived from a real reasoning/agent trace rather than invented, which is the main work item. Still CPU-only with no new heavy dependencies.",
+      "research_value": "H",
+      "research_value_rationale": "Branching inference is the dominant 2025-26 workload shift and it attacks the load-bearing assumption of the paper's admission taxonomy - a regime the paper simply does not consider. A negative result ('the append bias is fine even under fan-out') would be equally informative to a MLSys reviewer.",
+      "scoop_check": {
+        "result": "partial",
+        "details": "Query: 'prefix caching parallel sampling branching tree-of-thought reasoning workload KV cache reuse hybrid SSM 2026'. Closest work: ArborKV: Structure-Aware KV Cache Management for Scaling Tree-based LLM Reasoning, arXiv:2605.22106 (https://arxiv.org/pdf/2605.22106) - tree-structured reasoning KV cache management, but Transformer KV only, with no recurrent state and no admission policy for exact-match SSM entries. Nothing found on branching workloads for hybrid/SSM prefix caches."
+      }
+    },
+    {
+      "name": "Real arrival timestamps and bursty arrivals (recency is currently request-count)",
+      "hypothesis": "We hypothesize that replacing Marconi's logical (request-count) recency with the real arrival timestamps already present in every trace record changes eviction decisions enough to improve token hit rate under bursty and heterogeneous arrival - the regime Fig. 13 shows the system is sensitive to - and that a session-lifetime-aware admission rule (do not admit the last-token state of a session predicted to be finished) yields a further gain.",
+      "mechanism": "utils/generate_trace.py writes a wall-clock 'ts' field for every request (lines 104, 196, 278, 383) and sorts the trace by it, but the simulator never reads it: policy_exploration.py:107-127 consumes only input_tokens, output_tokens and session_id, and RadixCache increments an integer logical_ts by 1 per operation (radix_cache_hybrid.py:102-105, 134-135); the use_logical_ts=False fallback uses time.time(), i.e. the simulator's own wall clock, not the trace's. Plumb request['ts'] in as the node timestamp and recompute recency = 1/(current_ts - ts) in trace-time (radix_cache_hybrid.py:535), then re-run the alpha grid search. Add a bursty (Poisson/Gamma) inter-session arrival model to replace the generator's uniform curr_ts = session_id / sessions_per_second (utils/generate_trace.py:70), and layer on the session-lifetime predictor.",
+      "code_locations": [
+        "radix_cache_hybrid.py:41",
+        "radix_cache_hybrid.py:102",
+        "radix_cache_hybrid.py:535",
+        "policy_exploration.py:107",
+        "utils/generate_trace.py:70"
+      ],
+      "motivating_evidence": "An unnamed simplifying assumption: under logical time a session idle for ten minutes is exactly as 'recent' as one idle for one second, provided the same number of requests passed in between. Fig. 13 (p. 10) shows the hit rate is genuinely sensitive to arrival pattern (48.7% -> 43.0% as sessions/s goes 0.5 -> 2; 25.9% -> 24.1% as inter-request time goes 5 s -> 10 s), so the ordering recency imposes is load-bearing. The generator's uniform session spacing means burstiness was never tested at all.",
+      "feasibility": "H",
+      "feasibility_rationale": "The use_logical_ts switch and timestamp plumbing already exist, the 'ts' field is already in the traces on disk, and the existing sweep + plotting harness measures the outcome. Mostly a correctness fix plus one new arrival model; CPU-only.",
+      "research_value": "M",
+      "research_value_rationale": "It is a real, unexamined modelling assumption and the burstiness regime is unexplored, but the likely magnitude is moderate and the direction is unsurprising - a solid ablation that strengthens or qualifies the paper rather than a new idea a reviewer would call novel.",
+      "scoop_check": {
+        "result": "partial",
+        "details": "Queries: 'UniCache unifying prefix cache eviction SIGMETRICS 2026'; 'prefix cache offload SSM recurrent state CPU memory tiering hybrid LLM serving 2026'. Closest work: UniCache: Unifying Prefix Cache Eviction for Heterogeneous LLM Serving Workloads, SIGMETRICS '26 (https://jxing.me/pdf/unicache-sigmetrics26.pdf) builds a trace-driven prefix cache simulator and argues LRU is wrong for heterogeneous mixed workloads - same spirit, but Transformer KV only, no recurrent state and no FLOP-efficiency term. No work found that revisits Marconi's timestamp model or evaluates it under bursty arrival."
+      }
+    },
+    {
+      "name": "Does the frozen alpha survive workload drift?",
+      "hypothesis": "We hypothesize that on non-stationary traces (interleaved LMSys + SWEBench sessions, or a mid-trace shift in arrival rate / cache pressure) Marconi's one-shot retrospective alpha loses a measurable fraction of the gap to the offline-optimal static-alpha oracle (V3, already implemented but unreported), and that periodic re-tuning on a sliding window - or a cheap 3-arm shadow-cache bandit over {0, alpha_hat, 2*alpha_hat} - recovers most of that gap at bounded CPU cost.",
+      "mechanism": "Alpha is tuned exactly once: evict() records num_reqs_before_eviction on the first eviction and sets bootstrap_window_size = bootstrap_multiplier * num_reqs_before_eviction (radix_cache_hybrid.py:469-472); when len(request_history) reaches it, ConfigTuner.tune_config runs a 21-point parallel replay and the result is frozen (radix_cache_hybrid.py:147-155). The author's own comment at radix_cache_hybrid.py:113 marks the continuous-tuning path as 'legacy code'. Re-enable a windowed re-tune reusing config_tuner.py:13 replay_trace, measure its per-re-tune CPU cost on 16 cores against the paper's 'few seconds' claim, and use V3 (policy_exploration.py:268-316) as the ceiling. Drift traces come from interleaving existing JSONL traces by ts - a ~30-line script.",
+      "code_locations": [
+        "config_tuner.py:58",
+        "config_tuner.py:13",
+        "radix_cache_hybrid.py:147",
+        "radix_cache_hybrid.py:469",
+        "policy_exploration.py:159"
+      ],
+      "motivating_evidence": "§4.2 'Managing the balance' (p. 7) describes a single bootstrap-then-freeze cycle justified by the bootstrap window 'capturing a representative workload sample' - an assumption only valid for the stationary, single-dataset traces of §5. The bootstrap multiplier is already dataset-specific (15 for LMSys, 5 otherwise, policy_exploration.py:193-194), suggesting the tuner is sensitive to workload shape. The V3 oracle exists in the code but its results 'weren't included in the paper' (repo/artifact_evaluation.md:103), so the headroom above Marconi is unreported.",
+      "feasibility": "H",
+      "feasibility_rationale": "The oracle, the replay machinery and the parallel grid search are all already written; the work is re-wiring plus a trace-mixing script, and it is measured by the existing harness. CPU-only.",
+      "research_value": "M",
+      "research_value_rationale": "Adaptive-parameter-under-drift is a well-trodden pattern and the expected direction is obvious. Its value here is quantifying an unreported gap (V2 vs V3) and the real CPU cost of closing it on a 16-core box, not a conceptual advance; UniCache already makes the heterogeneity argument for KV-only caches.",
+      "scoop_check": {
+        "result": "partial",
+        "details": "Queries: 'Marconi prefix caching hybrid LLMs MLSys 2025 follow-up work citing SSM state cache eviction'; 'UniCache unifying prefix cache eviction SIGMETRICS 2026'. UniCache (SIGMETRICS '26, https://jxing.me/pdf/unicache-sigmetrics26.pdf) covers heterogeneous-workload eviction for Transformer prefix caches; Not All Tokens Are Worth Caching, arXiv:2605.18825 (https://arxiv.org/html/2605.18825) does learned/semantic prefix-cache eviction. Neither touches hybrid models, recurrent state, or Marconi's alpha tuner."
+      }
+    },
+    {
+      "name": "Measure the TTFT model and the unquantified checkpointing overhead on one A5000",
+      "hypothesis": "We hypothesize that when Marconi's TTFT savings are recomputed from measured prefill latencies of a real hybrid model on one 24 GB Ampere GPU - and charged for the state-acquisition cost the paper never measures (two-pass prefill, or chunk-boundary rounding) - the reported P95 TTFT wins over SGLang+ (17.2% / 12.8% / 24.7%, §5.2 p. 9) shrink by a measurable margin and the P5 regression (6.3%, §5.3) grows.",
+      "mechanism": "The paper's TTFT numbers come from plotting/ttft.py, which loads data/ttft_AI21-Jamba-1.5-Mini.pickle, fits a single global LinearRegression over sequence length (linear_smooth, plotting/ttft.py:33-56), and applies a multiplier = 10 to work around a self-documented unit bug ('accidentally used 1e2 for s to ms conversion instead of 1e3', plotting/ttft.py:16-17), with lookups as a step function over profiled seqlens (get_approximate_ttft, line 16). Replace the table with one profiled on this machine using a hybrid Mamba2-Attention model that fits in 24 GB FP16 and exposes state save/restore through HF transformers' Mamba2Cache; separately profile a two-pass prefill against a single pass to obtain the per-checkpoint overhead; feed both into a corrected ttft.py and re-derive Figs. 9 and 10b. Also fix the hard-coded SOSP-era log filenames at plotting/ttft.py:218-221 so the figure becomes turn-key.",
+      "code_locations": [
+        "plotting/ttft.py",
+        "data/ttft_AI21-Jamba-1.5-Mini.pickle",
+        "radix_cache_hybrid.py:163",
+        "utils.py"
+      ],
+      "motivating_evidence": "§4.1 'Obtaining states during prefill' (p. 5-6) introduces the two-pass prefill and the chunk rounding as the only ways to obtain a mid-sequence SSM state, then never costs either. The entire latency story rests on a regression-smoothed lookup profiled from a different, much larger model than the one used for the hit-rate results - Jamba-1.5-Mini, 12B active / 52B total on four A100-40GB (§5.1 Models, p. 8) versus the 7B hybrid of the policy experiments - a mismatch the paper does not discuss, and the conversion carries a known unit bug worked around by a magic constant.",
+      "feasibility": "M",
+      "feasibility_rationale": "Requires real GPU work: selecting a hybrid model with usable HF state save/restore, writing a profiling harness, and living with driver 535 / CUDA <= 12.2 (FP16 hybrid inference is fine on Ampere; FP8 is not available). A 7B hybrid in FP16 (~14 GB) fits in 24 GB, but Jamba-1.5-Mini does not, so absolute milliseconds will differ from the paper and only the relative erosion is comparable. Tens of GPU-hours plus real integration risk.",
+      "research_value": "H",
+      "research_value_rationale": "It converts the paper's only latency claim from a modelled number into a measured one and puts a number on the paper's single largest unquantified cost. Either outcome - overhead is negligible, or it consumes a quarter of the win - is a result a MLSys reviewer would want, and it fits the course's 'careful reproduction showing the results are more nuanced' fallback as well as the improvement track.",
+      "scoop_check": {
+        "result": "partial",
+        "details": "Queries: 'arXiv 2026 prefix cache eviction policy hybrid Mamba attention SSM states admission improve Marconi'; 'prefix cache offload SSM recurrent state CPU memory tiering hybrid LLM serving 2026'. vllm-project/vllm#37898 '[Hybrid] Marconi-style admission policy for hybrid cache' (merged 2026-06-10, https://github.com/vllm-project/vllm/pull/37898) ports Marconi's admission idea into vLLM without the radix tree and without the FLOP-aware eviction, reporting up to 40%/66% latency improvement on synthetic tests, but it does not measure checkpoint-acquisition overhead or validate Marconi's TTFT model. The LMSYS Unified Radix Cache blog (2026-08-11, https://www.lmsys.org/blog/2026-08-11-unified-radix-cache/) describes SGLang's hybrid radix cache with no Marconi comparison. That PR lowers the risk of this add-on by providing a reference implementation to read."
+      }
+    }
+  ],
+  "risks": [
+    "environment.yml pins exact conda build strings (repo/environment.yml:7-70, e.g. libgcc-ng=13.2.0=h77fa898_11, python=3.11.9=hb806964_0_cpython); such builds are routinely dropped from conda-forge and the solve may simply fail. Mitigation: install by name the ~10 packages the simulator actually imports (numpy, pandas, scipy, matplotlib, scikit-learn, transformers, datasets, tqdm, pytz, gdown) - torch is only needed by utils/generate_trace.py and toy_example.py.",
+    "The traces live behind a single Google Drive link fetched with gdown (repo/artifact_evaluation.md:69), and the authors already warn about gdown permission/quota errors (lines 63-66). If the link dies, regeneration needs the gated meta-llama/Llama-2-7b-hf tokenizer (repo/utils/generate_trace.py:12), the gated lmsys/lmsys-chat-1m dataset, and a hard-coded path /home/ubuntu/SWE-bench-experiments/... (repo/utils/generate_trace.py:232). Verify the link works before committing to this paper.",
+    "Runtime is likely larger than the artifact's ~12 h claim (repo/artifact_evaluation.md:16): the SWEBench sweep alone is 72 configs x (3 serial runs at 5-10 min each plus a 21-way parallel V3 batch), which on 16 cores plausibly runs into machine-days. The V3-removal and config-subset scale-down is not optional.",
+    "Several figures are not turn-key. repo/plotting/ttft.py:218-221 reads SOSP-era log filenames the sweep never produces, and repo/artifact_evaluation.md:113 states that the scripts for Figs. 10-13 'either do not exactly reproduce the figures in the paper ... or contain hardcoded numbers (handpicked from log files)'. Only Figs. 7 and 8 should be treated as reproduction targets.",
+    "A FLOP-formula change happened between submission and camera-ready: repo/utils.py:104-107 documents that the Mamba FLOP formula 'missed a term' in the original submission and that all camera-ready numbers use the corrected version. Any comparison against pre-print numbers must use the current formula.",
+    "Apparent bugs that will confound add-ons touching the eviction accounting: evict_v2 charges bytes using len(node.value) of the leftover loop variable rather than node_to_evict (repo/radix_cache_hybrid.py:555); the MLP savings term subtracts get_attn_flops(seqlen_parent, ...) from get_mlp_flops(seqlen_total, ...), mixing layer types (repo/radix_cache_hybrid.py:526); self.num_nodes is annotated 'NOTE(ruipan): buggy?' (repo/radix_cache_hybrid.py:89). None invalidates the headline result by inspection, but quantifying their effect is itself a defensible contribution.",
+    "evict_v2 is O(tree) per evicted node - it re-walks the whole tree and recomputes every candidate's FLOP efficiency inside the eviction loop (repo/radix_cache_hybrid.py:506-531), which is why SWEBench traces take 5-10 minutes. Any add-on that increases the number of admitted states makes this worse; budget for an incremental or heap-based rewrite.",
+    "Concurrency is not modelled: repo/policy_exploration.py:107 replays requests strictly one at a time in trace order, with no batching, no in-flight request set, and no reference counting on cache entries - unlike real vLLM/SGLang, which cannot evict a block that is in use. Claims about behaviour under load must be made carefully.",
+    "Artifact badges are unconfirmed: a full Artifact Appendix (§B, p. 15-16), a Zenodo DOI (10.5281/zenodo.14970139) and cTuning AE methodology links are present, but no explicit badge award was found on the MLSys 2025 poster or proceedings pages.",
+    "The field has moved since publication: Marconi's admission idea is merged into vLLM (vllm-project/vllm#37898, 2026-06-10), SGLang ships a unified hybrid radix cache (LMSYS blog 2026-08-11), and arXiv:2605.05219 proposes a recompute-based alternative. None reproduces or falsifies Marconi's policy comparison, but every add-on must position against them."
+  ]
+}

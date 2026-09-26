@@ -1,0 +1,11 @@
+{
+  "id": "sigmetrics26-capsule-a-storage-prefetcher-harnessing",
+  "title": "CAPSULE: A Storage Prefetcher Harnessing Spatio-Temporal Locality for Cloud-Scale Workloads",
+  "venue": "sigmetrics",
+  "year": 2026,
+  "paper_url": "https://doi.org/10.1145/3788088",
+  "pdf_url": "https://dl.acm.org/doi/pdf/10.1145/3788088",
+  "repo_url": "https://github.com/imagesid/capsule",
+  "topic": "storage",
+  "note": "Clustering-based storage prefetcher evaluated purely by replaying 729 public block traces - MSR, CloudPhysics, Tencent, Alibaba, Meta. No root, no special hardware; artifact repo is explicitly labelled as the paper artifact. Concern: downloading the full trace corpus may exceed the 257 GB free, so pick a subset"
+}

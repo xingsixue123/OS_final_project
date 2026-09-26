@@ -1,0 +1,11 @@
+{
+  "id": "vldb26-how-much-can-rocksdb-chew-achieving-near",
+  "title": "How Much Can RocksDB Chew? Achieving Near-Zero Write Stalls with Sustainable RocksDB",
+  "venue": "vldb",
+  "year": 2026,
+  "paper_url": "https://doi.org/10.14778/3836663.3836683",
+  "pdf_url": "https://www.vldb.org/pvldb/vol19/p3202-shin.pdf",
+  "repo_url": "https://github.com/shinhojin/Sustainable-RocksDB",
+  "topic": "storage",
+  "note": "Reframes RocksDB write stalls as a control problem and adds an online RL admission controller; single-node and directly reproducible on NVMe"
+}

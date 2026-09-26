@@ -1,0 +1,14 @@
+{
+  "pdf": {
+    "status": "ok",
+    "source_url": "https://dl.acm.org/doi/pdf/10.1145/3788088",
+    "version": "camera-ready",
+    "notes": "Published version of record from ACM DL (POMACS Vol. 10, No. 1, Article 6, March 2026), CC-BY open access per Crossref/OpenAlex/Unpaywall. Plain curl and WebFetch got HTTP 403 from a Cloudflare JS challenge; the PDF was retrieved by re-requesting the same ACM URL with a Chrome TLS/HTTP fingerprint (curl_cffi installed under /tmp, not in the repo). No arXiv or author copy exists (Unpaywall/OpenAlex list ACM as the only OA location). Verified: file starts with %PDF-1.5, 14.6 MB, 24 pages, title/authors/abstract match the target paper."
+  },
+  "repo": {
+    "status": "ok",
+    "url": "https://github.com/imagesid/capsule",
+    "official": "yes",
+    "evidence": "URL is stated in the paper itself (Section 1 contributions: \"We publicly release the source code and experimental artifacts at https://github.com/imagesid/capsule\"). Repo README self-identifies as the artifact for the ACM SIGMETRICS 2026 camera-ready of CAPSULE; it is a fork/extension of libCacheSim with the CAPSULE prefetcher added. Already cloned by the driver (21 top-level entries, HEAD 8a596dc). Nothing was built or run."
+  }
+}

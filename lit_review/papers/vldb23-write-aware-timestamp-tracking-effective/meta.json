@@ -1,0 +1,11 @@
+{
+  "id": "vldb23-write-aware-timestamp-tracking-effective",
+  "title": "Write-Aware Timestamp Tracking: Effective and Efficient Page Replacement for Modern Hardware",
+  "venue": "vldb",
+  "year": 2023,
+  "paper_url": "https://doi.org/10.14778/3611479.3611529",
+  "pdf_url": "https://www.vldb.org/pvldb/vol16/p3323-vohringer.pdf",
+  "repo_url": "https://github.com/leanstore/leanstore",
+  "topic": "caching",
+  "note": "Write-aware timestamp tracking page-replacement policy in a buffer manager; single-node NVMe, pure user-space C++. Merge note: scout linked branch https://github.com/leanstore/leanstore/tree/WATT ."
+}

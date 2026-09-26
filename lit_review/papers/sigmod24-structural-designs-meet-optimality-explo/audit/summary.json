@@ -1,0 +1,149 @@
+{
+  "title": "Structural Designs Meet Optimality: Exploring Optimized LSM-tree Structures in a Colossal Configuration Space",
+  "one_line": "Moose/Smoose generalize the LSM-tree configuration space to per-level size ratios, run counts and Bloom bits, and use dynamic programming plus a workload-aware search to pick a structure that trades off point lookups, range lookups and updates, implemented as a RocksDB fork.",
+  "topic": "storage",
+  "repo": {
+    "official": "yes",
+    "evidence": "github.com/NTU-Siqiang-Group/MooseLSM is the corresponding author's (Siqiang Luo, NTU) lab organization; README.md:9 links the paper PDF on siqiangluo.com and README.md:12-21 gives this article's exact BibTeX. The tree is a RocksDB 8.9.0 fork (include/rocksdb/version.h:14-16) containing the Moose compaction style end-to-end: db/compaction/compaction_picker_moose.cc, db/version_set.cc:3400-3462, db/monkey_filter.cc, table/block_based/filter_policy.cc:1831-1850, tools/rw_test.cc.",
+    "last_commit": "2024-06-11",
+    "artifact_badges": [],
+    "badge_evidence": "none found - the paper text contains no artifact/availability statement (grep for 'artifact|availab|reproducib' in paper.txt returns nothing), the README carries no badge, and no ACM artifact-evaluation page was located."
+  },
+  "hard_filters": {
+    "H1_open_repo": {
+      "result": "pass",
+      "evidence": "Official lab repo with the real system, not a placeholder: db/compaction/compaction_picker_moose.cc (360 lines implementing the per-level run/capacity compaction policy), db/version_set.cc:3400 EnableDynamicRun and :3412 ComputeCompactionScoreForMoose, db/monkey_filter.cc:5 MonkeyBpks (Eq. 10), table/block_based/filter_policy.cc:1847 NewMonkeyFilterPolicy, options plumbing in options/cf_options.h and options/options_helper.cc:336,808, plus a driver tools/rw_test.cc built via tools/CMakeLists.txt:19. Caveat (noted, not a fail): the Smoose search of paper section 3.6 is absent and the section 3.4 DP exists only as TypeScript in front-end/moose/src/components/Tree/algm.ts with a fixed, non-workload-aware objective (algm.ts:98-100)."
+    },
+    "H2_no_root": {
+      "result": "pass",
+      "evidence": "Pure user-space RocksDB fork; build is cmake + make (README.md:30-36) with gflags as the only extra dependency (README.md:25-28). No kernel module, eBPF, perf counter, KVM or /proc/sys use on the Moose path. tools/rw_test.cc:234-235 sets use_direct_reads / use_direct_io_for_flush_and_compaction, which is plain O_DIRECT and needs no privilege. The sudo/sysctl/hugepage grep hits in repo_facts.json are inherited RocksDB CI config (.circleci/config.yml) and doc comments (include/rocksdb/advanced_options.h:489 documents an optional hugepage memtable that is off by default). The Dockerfiles are inherited RocksDB CI files and are not on the build path; conda supplies gflags and optionally snappy/zlib/bzip2. Only adjustment needed: do not run README.md:35's 'make install' (default prefix /usr/local needs root) - build the targets directly or set -DCMAKE_INSTALL_PREFIX=$HOME/local."
+    },
+    "H3_hardware_fit": {
+      "result": "pass",
+      "evidence": "Single node, CPU-only, no GPU. The paper's machine (Xeon W-2235, 32 GB RAM, 512 GB SATA SSD, section 4 p.17) is smaller than ours in cores, RAM and disk. Dataset is ~11 GB (24 B key + 1000 B value, section 4 p.17); the largest config shipped in tools/rw_test.sh:10 totals ~22.6 GB and the script keeps a _backup copy (rw_test.sh:16), still well under the ~257 GB free. The one divergence is that our 125 GB RAM could cache the whole DB, which is controllable: tools/rw_test.cc:234-235 already uses direct I/O for the measurement phase, and cgroup-v2 memory is delegated to the user slice if a 32 GB cap is wanted."
+    },
+    "H4_obtainable_deps_data": {
+      "result": "pass",
+      "evidence": "No external datasets, traces or model weights: all keys/values are synthesized in-process by KeyGenerator (tools/rw_test.cc:30-68) and PrepareDB (tools/rw_test.cc:70), and db_bench self-generates. Dependencies are gflags + cmake + gcc/g++ (README.md:25-28) against RocksDB 8.9.0 with vendored third-party/; system cmake 3.25.1 satisfies CMakeLists.txt:35 (>=3.10) and gcc 12.2.0 satisfies C++17 (CMakeLists.txt:84-85). gflags, snappy, zlib and bzip2 are all conda packages installable in user space."
+    }
+  },
+  "reproduce": {
+    "level": "M",
+    "target": "Table 5 (p.19) rows for workloads J and F plus the Fig. 8 / Table 4 ranking (p.18), restricted to Leveling, Tiering, LazyLeveling, QLSM-Bush and Moose - supporting the claim that Moose's per-level {r_i},{n_i} beats all non-workload-aware baselines on three-way mixed workloads (Moose average rank 3.2 vs 5.2/6.3/5.8/7.3) while moving fewer compacted bytes (workload J: Moose 3.06 IO/9 GB/221 compactions vs Leveling 2.94/22/203). Week-1 smoke target: the row-store points of Fig. 9(A), Moose vs stock RocksDB, which tools/rw_test.sh runs as shipped.",
+    "scale_down": "Keep 24 B keys / 1000 B values, 2 MB buffer and 5 bits/key so the level count (4-5) and the structural story are preserved, but shrink the dataset from 11 GB to ~4 GB (~4 M entries) and the operations per workload from 2 M to 500 k. Run the measurement phase with direct I/O (already the default at tools/rw_test.cc:234-235) and additionally under a cgroup-v2 memory.max of ~8 GB so the machine's 125 GB of RAM does not turn the benchmark into a page-cache test. Put the DB under /home via --path rather than the /tmp paths hard-coded at tools/rw_test.sh:4-5.",
+    "effort": "~6 person-days + ~30 CPU-hours (no GPU) for the primary target; ~1 person-day + ~4 CPU-hours for the Fig. 9(A) smoke target",
+    "rationale": "The engine and its option plumbing are complete and the build is trivial on this machine (cmake 3.25 + gcc 12 + conda gflags; no root, no Docker). But the evaluation harness for the paper's figures does not exist. BalancedWorkload (tools/rw_test.cc:90-152) is a fixed 25/25/25/25 mix with a hard-coded 16-entry scan (tools/rw_test.cc:140), so the A-J proportions need a new driver; the baseline configurations are given only as prose in section 4 p.18 and must be hand-encoded as level_capacities/run_numbers vectors; and Smoose's section 3.6 search must be re-implemented because only the inner DP was released, in TypeScript, with a workload-agnostic objective (front-end/moose/src/components/Tree/algm.ts:98-100). That is textbook 'reproducible with real porting work'. Not H for those reasons; not L because every missing piece is small and fully specified in the paper, and tools/rw_test.sh already gives a runnable Moose-vs-RocksDB comparison on day one."
+  },
+  "addons": [
+    {
+      "name": "Skew- and hit-aware Smoose",
+      "hypothesis": "We hypothesize that replacing Smoose's all-empty, uniform point-lookup cost term with a hit-probability- and skew-aware term improves end-to-end throughput by >=10% under Zipfian/YCSB-style workloads containing a non-trivial fraction of successful point lookups, compared with the structure Smoose selects today.",
+      "mechanism": "(i) Re-implement the section 3.6 search (N_L in [0.5N, N] x k) in C++/Python since it is missing from the artifact. (ii) Replace Z = k*sum(p_i*sqrt(r_i)) in the Eq. 17 objective with sum_i [ P(key resides at level >= i) * (n_i*p_i + hit_i) ], estimating the per-level residency distribution from a sampled query log and the recency distribution of the data - under skew hot keys live in the small levels, which directly opposes the 'make N_L large' insight of section 3.3. (iii) Re-derive the Bloom allocation in MonkeyBpks from that same distribution instead of from level capacity alone. (iv) Evaluate at Zipfian theta = 0.8 and 0.99 against uniform.",
+      "code_locations": [
+        "front-end/moose/src/components/Tree/algm.ts",
+        "db/monkey_filter.cc",
+        "include/rocksdb/monkey_filter.h",
+        "tools/rw_test.cc"
+      ],
+      "motivating_evidence": "The paper names the gap itself in section 3.6 (p.16): 'the cost of non-zero result point lookup is not specialized in the model since its probabilistic is uncertain for Smoose'. Every experiment uses uniform random keys - KeyGenerator (tools/rw_test.cc:30-68) shuffles the whole key range uniformly and BalancedWorkload (tools/rw_test.cc:90-152) issues exactly 25% hits and 25% misses. MonkeyBpks (db/monkey_filter.cc:19-30) allocates bits purely from level capacities, so with the default N_L = 0.8N the level holding 80% of the data receives the fewest bits per key - correct for all-empty lookups, likely wrong when hot keys concentrate.",
+      "feasibility": "M",
+      "feasibility_rationale": "The search and the modified cost model are a few hundred lines of user-space code and the Zipfian key chooser is ~50 LOC, but it is two new components plus a new harness, and the evaluation must sweep skew x operation-mix, so it is more than a localized patch. Compute is CPU-only and modest at the scale-down.",
+      "research_value": "H",
+      "research_value_rationale": "It attacks an explicitly stated blind spot of the paper's own cost model, in the regime (skewed, read-mostly) that dominates real KV workloads, and it tests the paper's central structural claim (large last level). A negative result - 'N_L = 0.8N survives skew' - is equally informative about the robustness of the optimality argument.",
+      "scoop_check": {
+        "result": "partial",
+        "details": "Queries: 'MooseLSM Structural Designs Meet Optimality citing follow-up 2025 2026', 'LSM-tree level-wise size ratio run number workload-aware tuning skewed Zipfian cost model'. CAMAL (SIGMOD'25, same NTU group, https://arxiv.org/abs/2409.15130) tunes the LSM design space with active learning but over the conventional (T, policy, BPK) space and does not use Moose. Zhu et al., 'Dynamic Workload-Aware BF Tuning via Accurate Statistics' (PACMMOD'25, https://cs-people.bu.edu/mathan/publications/pacmmod25-zhu.pdf) does skew-aware Bloom filter tuning, overlapping part (iii) but not the structural search over {N_i}/{n_i}. No work found that combines skew-aware point-lookup costs with Moose's generalized structure."
+      }
+    },
+    {
+      "name": "Tail latency of whole-level compaction; key-range-partitioned Moose",
+      "hypothesis": "We hypothesize that Moose's whole-logical-level compaction inflates p99/p999 latency and write-stall time relative to stock RocksDB leveling even where it wins on mean throughput, and that key-range-partitioned partial compaction inside the Moose picker recovers most of the tail while retaining >=90% of Moose's mean-throughput advantage on three-way mixed workloads.",
+      "mechanism": "MooseCompactionBuilder::PickFilesForLevel pushes every non-being-compacted file of all runs of a logical level into a single compaction, and the resulting Compaction is built with max_subcompactions = 0, so one background thread rewrites an entire level on a 16-core machine. The change: (i) split each level compaction at key-range boundaries into p jobs whose inputs are the overlapping files of that range across the level's runs, bounded by max_compaction_bytes; (ii) let max_subcompactions follow the mutable option instead of the hard-coded 0; (iii) keep ComputeCompactionScoreForMoose as the trigger but score per partition. Measure p50/p99/p999 and cumulative stall time, not only throughput.",
+      "code_locations": [
+        "db/compaction/compaction_picker_moose.cc:306",
+        "db/compaction/compaction_picker_moose.cc:227",
+        "db/version_set.cc:3412",
+        "db/compaction/compaction.cc:477",
+        "tools/rw_test.cc"
+      ],
+      "motivating_evidence": "The paper reports only throughput and I/O counts (Fig. 7 p.17, Fig. 8 p.18, Table 5 p.19); no latency distribution appears anywhere. Table 5 shows Moose performing more compactions than Leveling in every workload (J: 221 vs 203; B: 656 vs 561) while moving fewer bytes, i.e. many large level-wide merges. tools/rw_test.cc:237-238 lowers level0_slowdown_writes_trigger to 4 and level0_stop_writes_trigger to 8, making stalls more likely, yet stalls are never reported. Prolonged write stalls are the classic failure mode of tiering-like policies, which Moose's n_i > 1 levels are.",
+      "feasibility": "M",
+      "feasibility_rationale": "Partitioning a compaction is confined to the picker (~500-1000 LOC with tests) and RocksDB already provides GetRange/ExpandInputsToCleanCut machinery, but correctness is non-trivial because runs within one logical level overlap arbitrarily, and the evaluation needs a new latency-histogram harness. Cross-cutting enough to be M rather than H.",
+      "research_value": "H",
+      "research_value_rationale": "The paper's optimality argument is entirely about expected I/O count. Showing that the I/O-optimal structure is tail-pathological - or that it is not - directly qualifies the headline claim in a way a SIGMOD reviewer would care about, and the proposed fix keeps the structure while changing only the compaction granularity, so either outcome teaches something.",
+      "scoop_check": {
+        "result": "partial",
+        "details": "Query: 'LSM-tree compaction write stall tail latency p99 partial compaction key-range partitioned tiering 2025 2026'. Tail latency of full vs partial compaction is mapped generically in Sarkar et al., 'Constructing and Analyzing the LSM Compaction Design Space' (VLDB'21, https://vldb.org/pvldb/vol14/p2216-sarkar.pdf) and attacked by vLSM (https://arxiv.org/pdf/2407.15581) and Vertiorizon (SIGMOD'25, https://arxiv.org/abs/2504.17178), which uses partial compaction in its vertical part. None of these operate in, or measure, Moose's per-level {r_i},{n_i} space, and the Moose artifact has no partial compaction at all."
+      }
+    },
+    {
+      "name": "Scan-length-aware choice of k",
+      "hypothesis": "We hypothesize that the optimal run-count regulator k decreases monotonically with range-query selectivity, so that Moose's fixed n_i = k*sqrt(r_i) with k = 1 loses >=15% throughput to a scan-length-aware k on workloads whose scans return far more than B entries, while matching it for short scans.",
+      "mechanism": "Eq. 3 (section 3.2) drops the retrieval term t/B by assuming t = O(sum(n_i)*B); section 3.5 (p.14-15) argues the Pareto curve survives for an average t_bar but never re-derives k. Add the t_bar/B term explicitly to the Eq. 17 objective so that S = k*sum(sqrt(r_i)) + t_bar/B, make t_bar a measured quantity, and re-run the k enumeration. Validate by sweeping scan length over {1, 16, 256, 4096} entries in the workload driver and comparing the predicted-optimal k against the measured-optimal k.",
+      "code_locations": [
+        "front-end/moose/src/components/Tree/algm.ts:98",
+        "tools/rw_test.cc:131",
+        "tools/rw_test.sh"
+      ],
+      "motivating_evidence": "The released DP objective hard-codes the scan length: calCost(ri, ni) = ni + 16/internalDiv + (ri-1)/internalDiv/ni (front-end/moose/src/components/Tree/algm.ts:99), where internalDiv = blockSize/kvSize (algm.ts:15) and the literal 16 is exactly the scan length used by the benchmark (tools/rw_test.cc:140: 'for (int i = 0; i < 16 && it->Valid(); i++)'). Every published Moose configuration is therefore tuned for one selectivity. Fig. 10(A) (p.21) already shows lookup and update latency moving in opposite directions as k varies; this add-on predicts the crossover point shifts with scan length.",
+      "feasibility": "H",
+      "feasibility_rationale": "No engine change at all: only the configuration generator (a ~140-line TypeScript file to port) and the workload driver's scan loop move, and the existing rw_test harness already measures what is needed. Comfortably inside 10 weeks for 2-4 students at a few CPU-hours per data point.",
+      "research_value": "M",
+      "research_value_rationale": "It turns an unexamined hard-coded constant in the released artifact into a tunable and tests a simplifying assumption the paper itself flags in section 3.5. Solid, but the direction of the result (longer scans favour fewer runs) is what the cost model already implies, so a reviewer would find it expected rather than surprising.",
+      "scoop_check": {
+        "result": "clear",
+        "details": "Queries: 'Moose LSM-tree level capacities generalization follow-up scan length range query cost model', 'LSM-tree range query selectivity size ratio tuning'. Range-query-aware LSM tuning exists (Dostoevsky, Endure, and the Vertiorizon line of work), but nothing was found that re-derives Moose's n_i = k*sqrt(r_i) rule as a function of scan selectivity, and the hard-coded 16 in algm.ts is untouched in the repository."
+      }
+    },
+    {
+      "name": "Does the I/O-count cost model still rank correctly on NVMe?",
+      "hypothesis": "We hypothesize that on a modern NVMe SSD with 16 cores, Moose's I/O-count-minimizing objective (Eq. 17) mispredicts the throughput ranking of structures because compaction CPU and merge-iterator work rather than I/O count become the bottleneck, and that adding a per-entry CPU term to the objective restores agreement with measured latency (as in Fig. 10(D)) and changes the selected N_L and k.",
+      "mechanism": "Extend the Smoose objective to L = s*S + u*U + z*Z + gamma*(merged entries per update), where gamma is a device/CPU calibration constant fitted once from a micro-benchmark on the target machine; re-run the N_L x k search; then repeat the Fig. 10(D) predicted-vs-measured comparison in both a cold (direct-I/O, cgroup-capped) and a warm configuration. Instrument the statistics dump in rw_test.cc to separate compaction CPU time from I/O time.",
+      "code_locations": [
+        "front-end/moose/src/components/Tree/algm.ts:98",
+        "tools/rw_test.cc:154",
+        "db/version_set.cc:3412",
+        "moose_bench.sh"
+      ],
+      "motivating_evidence": "Section 4 (p.17) evaluates on a SATA SSD with 6 cores, and the entire cost analysis (Eq. 2-4, section 3.2) counts I/Os only; Fig. 10(D) claims the model tracks measured latency on that device. Our NVMe RAID has roughly an order of magnitude more IOPS and 16 cores, shifting the bottleneck. The artifact aggravates CPU pressure by construction: Moose compactions are single-threaded (max_subcompactions = 0 at db/compaction/compaction_picker_moose.cc:227) and always level-wide (compaction_picker_moose.cc:306-327). Section 3.5 explicitly notes the worst-case analysis 'necessitates the evaluation in real KV-stores'.",
+      "feasibility": "H",
+      "feasibility_rationale": "Reuses the reproduction harness end to end; the only new code is the extra cost term plus a timing breakdown that RocksDB's statistics already largely expose. CPU-only and cheap (~20 machine-hours), and it doubles as the safe fallback deliverable if the improvement track stalls.",
+      "research_value": "M",
+      "research_value_rationale": "Device sensitivity of analytical LSM cost models is a known concern, so the question is not novel in the abstract; the value here is quantifying how far Moose's specific optimality claim travels to current hardware and whether a single CPU term is enough to repair it. Useful, moderately surprising at best.",
+      "scoop_check": {
+        "result": "clear",
+        "details": "Queries: 'LSM-tree cost model NVMe CPU bound compaction throughput', 'MooseLSM reproduction NVMe'. No re-evaluation of Moose on NVMe was found. The closest work, Keigo (https://arxiv.org/pdf/2506.14630), co-designs LSM stores with a concurrency-aware storage hierarchy but does not evaluate Moose or its cost model."
+      }
+    },
+    {
+      "name": "Online restructuring when the workload drifts (scooped)",
+      "hypothesis": "We hypothesize that migrating a live Moose tree to a newly searched Smoose configuration using lazy and preemptive compaction improves throughput under workload drift compared with keeping the stale configuration.",
+      "mechanism": "Make level_capacities and run_numbers mutable at runtime and add a migration controller that re-runs the Smoose search on a workload-shift detector and re-shapes levels incrementally instead of via a stop-the-world rebuild.",
+      "code_locations": [
+        "options/cf_options.h",
+        "db/version_set.cc:3400",
+        "db/compaction/compaction_picker_moose.cc:256"
+      ],
+      "motivating_evidence": "Section 3.6 (p.17) states Smoose is 'initially designed for static workload tuning' and that substantial workload change 'require[s] structural transformation', offering a lazy strategy and preemptive compaction only as future work. In the artifact, options.level_capacities is fixed at DB::Open (tools/rw_test.cc:165-192) and EnableDynamicRun (db/version_set.cc:3400) reads an immutable configuration.",
+      "feasibility": "M",
+      "feasibility_rationale": "Making the structure mutable touches MutableCFOptions, the version-set level mapping and the picker simultaneously, and needs a drift-detection harness - cross-cutting but not out of reach.",
+      "research_value": "H",
+      "research_value_rationale": "It is the paper's own named future work and the single most-cited weakness of Moose by later authors - but it does not count, being already published.",
+      "scoop_check": {
+        "result": "scooped",
+        "details": "ArceKV, 'Towards Workload-driven LSM-compactions for Key-Value Store Under Dynamic Workloads' (https://arxiv.org/html/2508.03565v1, PVLDB submission) explicitly targets this gap, stating that Moose 'does not offer a robust solution for adapting structural configurations across varying workloads' and that Moose's per-workload configurations differ so much that transitions are impractical; its ElasticLSM allows compactions among any runs at any time and adapts within 20 M operations. The growing-N half of the problem is covered by Vertiorizon / 'How to Grow an LSM-tree?' (SIGMOD'25, Mo, Luo, Idreos, https://arxiv.org/abs/2504.17178)."
+      }
+    }
+  ],
+  "risks": [
+    "Smoose must be rebuilt from the paper: the section 3.6 search (Eq. 17 objective, N_L and k enumeration) is nowhere in the repo; only the inner DP exists, in TypeScript, with a fixed workload-agnostic objective (front-end/moose/src/components/Tree/algm.ts:98-140). Any claim about the SMSE columns of Fig. 8 / Table 5 or about Table 3 rests on a reimplementation.",
+    "Baseline configurations are prose, not code: Leveling/Tiering/LazyLeveling/QLSM-Bush/Dostoevsky/tuned-RocksDB must all be encoded as level_capacities/run_numbers vectors from section 4 p.18. A wrong vector silently yields a different structure, and db/monkey_filter.cc:26-28 calls exit(0) rather than returning an error on an inconsistent one. Budget time to validate each baseline against the rocksdb.stats level output printed at tools/rw_test.cc:250-253.",
+    "Memory divergence: 125 GB RAM versus the paper's 32 GB against an 11 GB dataset can turn the benchmark into a page-cache test. tools/rw_test.cc:234-235 uses direct I/O in the test phase only; the prepare phase and any db_bench-based run do not. Plan a cgroup-v2 memory.max cap.",
+    "Device divergence: SATA SSD to NVMe RAID changes the I/O-to-CPU balance and the paper's ranking may not survive. The NVMe is a software RAID on a shared machine, so other users' I/O adds noise - repeat runs and report variance.",
+    "db_bench and rw_test disagree: tools/db_bench_tool.cc:4156-4170 assigns the -level_capacities vector unchanged, never sets num_levels, and never installs the Monkey filter policy, whereas tools/rw_test.cc:183-197 expands logical capacities into per-run physical ones and applies NewMonkeyFilterPolicy. moose_bench.sh:6 additionally passes -num_levels=64 with 14 capacities. Using moose_bench.sh as-is would not reproduce the paper's setup; prefer rw_test.",
+    "Fig. 9(A)'s 'column store' points look unreproducible: no column-layout code path was found in the repo (tools/rw_test.cc writes flat zero-padded values only). Restrict that target to the row-store points.",
+    "No artifact badge, no reproduction scripts, no Moose-specific unit tests, 6 stars, and a single substantive commit window ending 2024-06-11 - there is no evidence anyone outside the authors has rebuilt this.",
+    "License is an 'NTUITIVE PTE LTD Dual License' (README.md:57-58; GitHub reports NOASSERTION), not RocksDB's Apache-2/GPLv2. Check the terms before publishing derived code.",
+    "Two of the most natural research directions are already taken - dynamic structural adaptation by ArceKV and LSM growth by Vertiorizon - so any proposal in that area needs a sharper differentiator than 'make Moose adaptive'."
+  ]
+}

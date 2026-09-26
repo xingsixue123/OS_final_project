@@ -1,0 +1,149 @@
+{
+  "title": "Nemo: A Low-Write-Amplification Cache for Tiny Objects on Log-Structured Flash Devices",
+  "one_line": "A CacheLib flash-cache engine that flushes whole zone-sized 'Set-Groups' of 4 KB sets sequentially instead of doing per-set read-modify-writes, cutting application-level write amplification from ~15x to 1.56x for ~250 B objects while keeping metadata at 8.3 bits/object via a parallel bloom-filter index.",
+  "topic": "caching",
+  "repo": {
+    "official": "yes",
+    "evidence": "Paper Artifact Appendix A.3.1 (p. 16) names https://github.com/XMU-DISCLab/Cachelib-Nemo and https://doi.org/10.5281/zenodo.18332674; the Zenodo record is titled 'XMU-DISCLab/Cachelib-Nemo: Zenodo-nemo-asplos26-artifact' and archives commit 66db041, which is the head of this clone (repo_facts.json). Org XMU-DISCLab matches the authors' institution (Xiamen University). README.md contains the paper's BibTeX.",
+    "last_commit": "2026-01-21",
+    "artifact_badges": [],
+    "badge_evidence": "No ACM badge images on the arXiv PDF (pages/page-01.png) and no badge mention on the Zenodo record; a full Artifact Appendix (paper pp. 16-17) plus a Zenodo DOI indicate an AE submission, but no badge award could be confirmed."
+  },
+  "hard_filters": {
+    "H1_open_repo": {
+      "result": "pass",
+      "evidence": "repo/cachelib/navy/znskvcache/ holds the complete engine (ZNSKVCache.cpp ~940 lines, PBFG/PBFGList, RegionBucket, ZonePool) matching paper Sections 4.1-4.4, wired in via cachelib/allocator/nvmcache/NavySetup.cpp:103 and cachelib/navy/Factory.cpp:428. Not a stub or plotting-only drop. Officially linked from the paper's Artifact Appendix and archived on Zenodo at the same commit."
+    },
+    "H2_no_root": {
+      "result": "unclear",
+      "evidence": "As shipped the harness needs root: test.sh:118 'sudo nvme zns reset-zone /dev/$device -a', test.sh:120 writes /sys/block/$device/queue/scheduler, test.sh:143 runs cachebench under sudo on a raw NVMe device; contrib/build-package.sh:360 does 'sudo make install' for libzbd. None of these is a kernel change and each is individually removable (libzbd installs to $PREFIX; the scheduler write is tuning). But obtaining any zoned block device on this machine would itself require root (null_blk zoned modprobe / QEMU+KVM / zloop on kernel >= 6.14), so root-freedom holds only after replacing the libzbd ZNSDevice with a file-backed pseudo-zoned device - a code change that nobody has made."
+    },
+    "H3_hardware_fit": {
+      "result": "unclear",
+      "evidence": "Paper Artifact Appendix A.3.2: 'If a ZNS SSD is not available locally, the experiments cannot be fully reproduced on alternative hardware' (14 TB WD ZN540, 360 GB cache, 1077 MB zones; paper Section 5.1 and Table 4). This machine has conventional PM9A3 NVMe in software RAID under /home, no raw-device access and ~257 GB free; CPU/RAM fit (16c/125 GB vs 24c/128 GB) and no GPU is needed. The ZNS coupling is thin, however: cachelib/navy/common/Device.cpp:291-307 shows ZNSDevice read/write are plain pread/pwrite and only finishImpl/resetImpl (:277-289) call libzbd, while FileDevice's resetImpl already returns true (:232); the headline ALWA metric comes from in-engine counters (ZNSKVCache.cpp:227 logicalWrittenCount_, clean_wa.py:44-59), so it is device-independent, and the paper's own Figure 8 studies SGs down to 64 MB, making a file-backed 64 GB / 256 MB-zone scale-down a meaningful test of the claim. Read-latency results (Figure 15) could not be reproduced."
+    },
+    "H4_obtainable_deps_data": {
+      "result": "pass",
+      "evidence": "contrib/build-package.sh:113-255 builds every heavy dependency from source into $PWD/opt/cachelib (:290): libzbd, zstd, gflags, glog, googletest, fmt, sparsemap, folly, fizz, wangle, fbthrift; contrib/build.sh -O skips the apt step, and the remaining system libs listed in contrib/prerequisites-debian10.sh (boost, libevent, double-conversion, libsodium, libunwind, elfutils/libdwarf, jemalloc, snappy, lz4, openssl) are all available from conda-forge. Data are the public Twitter cache traces (paper refs [27,28], github.com/twitter/cache-trace) and the replay format is a 4-column CSV (cachelib/cachebench/workload/ReplayGenerator.h:39-50), so preprocessing is a small script. No proprietary traces or model weights. Caveats (not failures): no Debian 12 recipe in contrib/build.sh:151-158, 2022-era folly submodule pins vs gcc 12.2, and the repo ships no script to build the merged 'merge.csv' described in Section 5.1."
+    }
+  },
+  "reproduce": {
+    "level": "M",
+    "target": "Figure 12a (p. 11): steady-state write amplification of Nemo (1.56) vs FairyWREN (15.20) on the merged Twitter trace - the paper's central 9x-fewer-flash-writes claim. Cheaper secondary target: Figure 17 (p. 12), the fill-rate ablation naive 6.78% -> B 31.32% -> B+P 64.13% -> B+P+W 89.34%, which needs Nemo only and is driven by existing config flags.",
+    "scale_down": "Add a file-backed pseudo-zoned device (new branch in cachelib/allocator/nvmcache/NavySetup.cpp:359 plus a ~80-line device class in cachelib/navy/common/Device.cpp reusing the zone-aware Device ctor at Device.h:77, with finish/reset as no-ops), backed by a 64 GB file on /home with 256 MB pseudo-zones. That gives numBuckets = 65536 (safely under the hard-coded NUM_BUCKETS 275712 in ZNSKVCache.h:27) and 256 zones (>= 51 required because METADATARATIO is 50, ZNSKVCache.cpp:121-125); in-memory SGs cost 2 x 256 MB and visitedMask ~130 MB. Set navyRegionSizeMB 256, nvmCacheSizeMB ~65000 in znscache_test.json. Replay Twitter clusters 52 + 34 (smallest WSS) merged with ampFactor tuned so WSS is 2-3x the cache, keeping the eviction+writeback regime at ~1/6 the paper's scale. Skip Figure 15 (latency) entirely - a file on the shared RAID is not a ZNS SSD.",
+    "effort": "10-14 person-days (3-5 d no-root CacheLib/folly build on Debian 12, 2 d pseudo-zoned device, 1-2 d trace preprocessing, 3-4 d runs and debugging, for both Nemo and the FairyWREN branch) + ~100 wall-clock machine-hours of trace replay; no GPU time.",
+    "rationale": "Nothing is actually missing: the engine, the bug-fixed FairyWREN baseline (branch FairyWREN, confirmed via the GitHub API), a runner (test.sh), a WA post-processor (clean_wa.py) and public traces all exist, and the headline metric is computed from software counters rather than device telemetry. But four separate pieces of real porting work stand between the team and the first number - building 2022-era CacheLib/folly with gcc 12.2 and no root on a distro the build script does not recognise, writing the pseudo-zoned device, re-deriving the merged trace (no preprocessing script is shipped), and repeating the device port on the FairyWREN branch so the comparison stays fair. The authors themselves state the artifact cannot be fully reproduced without a ZNS SSD. That is squarely 'reproducible with real porting work' (M), not H; it is not L because every obstacle is localized and understood, and the paper's own Figure 8 legitimises the SG-size scale-down."
+  },
+  "addons": [
+    {
+      "name": "Nemo under real op mixes: updates, deletes and stale copies",
+      "hypothesis": "We hypothesize that replaying the Twitter traces' actual operation mix (get/set/delete) instead of the GET-only replay used in the paper raises Nemo's effective write amplification and miss ratio disproportionately relative to FairyWREN, because Nemo never invalidates superseded or deleted copies, and that SG-level tombstones with bloom-filter-guided invalidation restore Nemo's advantage for under 1 extra bit per object.",
+      "mechanism": "(1) Teach the replay generator to parse the operation-type column it currently reads and throws away, and issue real set/delete requests. (2) Implement ZNSKVCache::remove - today a counter bump that returns Ok without touching data - as a tombstone in the in-memory SG recorded in the set-level bloom filter plus a deleted-slot bitmap per on-flash set, consulted by scanBucket during lookup. (3) Account for duplicate versions of a key living in several SGs when computing effective capacity. Report WA, miss ratio, wasted capacity, and the fraction of lookups that would return a stale version, for Nemo and for the FairyWREN baseline (which does implement removal).",
+      "code_locations": [
+        "cachelib/navy/znskvcache/ZNSKVCache.cpp:630",
+        "cachelib/navy/znskvcache/ZNSKVCache.cpp:582",
+        "cachelib/navy/znskvcache/RegionBucket.cpp",
+        "cachelib/cachebench/workload/ReplayGenerator.h:81",
+        "cachelib/cachebench/workload/AmplifiedReplayGenerator.h"
+      ],
+      "motivating_evidence": "cachelib/cachebench/workload/ReplayGenerator.h:81 carries the comment 'TODO optype parsing' and hard-codes OpType::kGet, so the entire evaluation is GET-only with lookaside fill; ZNSKVCache.cpp:630-633 makes remove() a no-op returning Status::Ok. Yet paper Section 2.1 (p. 3) defines a KV cache precisely by 'deletion is user-driven, while eviction is initiated by the cache', and Twitter's own trace study (ref [27]) reports substantial set/delete fractions in several clusters. The headline 9x WA win in Figure 12a is therefore measured in a regime that never exercises invalidation.",
+      "feasibility": "M",
+      "feasibility_rationale": "Tombstones touch the on-flash bucket format and the set-level bloom filter, and every baseline must be re-run for a fair comparison; but the change is confined to one engine plus one workload generator, the trace files already carry the op-type column, and the existing harness reports both metrics. No new hardware or evaluation infrastructure.",
+      "research_value": "H",
+      "research_value_rationale": "It asks whether the paper's central result survives the workload the system is pitched at. Either outcome teaches something: if WA holds up, Nemo's case is stronger than the paper shows; if not, the FairyWREN comparison was made under conditions that favoured Nemo, which an ASPLOS/FAST reviewer would consider material.",
+      "scoop_check": {
+        "result": "clear",
+        "details": "Searches (2026-09-14): 'Nemo low write amplification cache tiny objects log-structured flash ASPLOS 2026' and 'FairyWREN Kangaroo flash cache follow-up write amplification set-associative 2026'. The paper appeared on arXiv 2026-03-10 (arxiv.org/abs/2603.09605) and no citing or follow-up work surfaced. Closest neighbour: 'Towards Efficient Flash Caches with Emerging NVMe Flexible Data Placement SSDs' (EuroSys'25, https://arxiv.org/pdf/2503.11665), which studies FDP data placement, not cache invalidation semantics."
+      }
+    },
+    {
+      "name": "Fill-rate-budgeted writeback (stop the free-riders)",
+      "hypothesis": "We hypothesize that replacing Nemo's 'reinsert hot objects, then reinsert cold ones until the set is full' writeback with a fill-rate-budgeted, frequency-ranked writeback lowers the miss ratio at equal write amplification, most visibly on the least-skewed trace (cluster 34, Zipf alpha = 1.14).",
+      "mechanism": "writeBack() runs two passes over each victim bucket: the first reinserts objects whose hotness bit is set, the second reinserts objects whose bit is clear, purely to top up the destination set. Replace the second pass with an explicit budget: admit cold objects only while the destination set is below a target fill rate (equivalently, a WA target), rank candidates by a 2-bit counter instead of the current 1-bit flag, and charge reinserted-cold bytes to logical writes so the trade-off becomes visible. Sweep the budget from 0 (hot-only) to unbounded (current behaviour) and plot the WA vs miss-ratio Pareto frontier that the paper reports only at its own operating point.",
+      "code_locations": [
+        "cachelib/navy/znskvcache/ZNSKVCache.cpp:846",
+        "cachelib/navy/znskvcache/ZNSKVCache.cpp:909",
+        "cachelib/navy/znskvcache/ZNSKVCache.h:140"
+      ],
+      "motivating_evidence": "Paper Section 6 admits the limitation: 'some cold objects may be mistakenly kept because they are part of a group marked as hot. This free-riding may reduce the accuracy of eviction.' The code is blunter: the second loop at ZNSKVCache.cpp:874-890 reinserts objects whose visitedMask bit is clear, and even computes 'auto random = folly::Random::randDouble01();' at :883 which is never used - an abandoned probabilistic admission policy. Figure 17 attributes 25 points of fill rate (64.13% -> 89.34%) to this mechanism, so its eviction-quality cost is material rather than marginal.",
+      "feasibility": "H",
+      "feasibility_rationale": "Roughly 200 LOC inside one function plus widening one counter; evaluated with the existing harness on the two metrics it already reports (WA via clean_wa.py, miss ratio via progress.log). Fits a 2-4 student team comfortably within 10 weeks alongside the reproduction.",
+      "research_value": "M",
+      "research_value_rationale": "It repairs a limitation the authors themselves named, so the direction is expected rather than surprising; the contribution is quantifying a WA/miss-ratio trade-off curve the paper never draws, and showing whether 89% fill rate was bought with eviction accuracy.",
+      "scoop_check": {
+        "result": "clear",
+        "details": "Searched for Nemo follow-ups and for hot-object writeback/reinsertion policies in flash caches; nothing addresses Nemo's writeback. Related but distinct prior art: Kangaroo's threshold-based reinsertion (SOSP'21, https://dl.acm.org/doi/10.1145/3477132.3483568) and Flashield's admission policy (NSDI'19)."
+      }
+    },
+    {
+      "name": "The index cache is the hotness oracle: FIFO -> lazy promotion",
+      "hypothesis": "We hypothesize that replacing Nemo's strict-FIFO PBFG index cache with a lazy-promotion policy (CLOCK / S3-FIFO-style, one reference bit per entry) simultaneously reduces index reads from flash (Figure 19b: ~8% of requests at a 50% cached ratio) and improves eviction accuracy - because index-cache membership is also the recency half of the hotness signal - at identical memory and without LRU's lock contention.",
+      "mechanism": "PBFGList is a deque plus a map: push evicts from the front and getPBFG performs no promotion on a hit, so residency reflects insertion order, not access recency. Add a reference bit set in getPBFG and evict with a CLOCK sweep, optionally with a small probationary FIFO for one-hit-wonder PBFGs. Then measure (i) PBFG miss ratio against the paper's Figure 19b curve, (ii) read amplification, which Section 5.5 concedes is over 3x FairyWREN's, (iii) object miss ratio, since the hotness rule 'hot = counter bit set AND PBFG cached' changes meaning, and (iv) lookup p99 to check the contention argument the authors used to justify FIFO.",
+      "code_locations": [
+        "cachelib/navy/znskvcache/PBFGList.cpp",
+        "cachelib/navy/znskvcache/PBFGList.h",
+        "cachelib/navy/znskvcache/ZNSKVCache.cpp:582"
+      ],
+      "motivating_evidence": "Paper Section 5.1 Implementation: 'The index cache is FIFO-style, which reduces lock contention under high access pressure compared to LRU [78,79]' - the choice is defended only on contention grounds, never on hit ratio, even though Section 4.4 makes the same structure the recency signal for eviction decisions. PBFGList.cpp:20-35 confirms insertion-order-only eviction with no promotion, and ZNSKVCache.cpp:622-625 shows entries are pushed on a miss. Section 5.5 names index retrieval as one of the two sources of Nemo's >3x read amplification.",
+      "feasibility": "H",
+      "feasibility_rationale": "PBFGList is 52 lines of .cpp plus a small header; the counters needed (PBFGListHitMiss_, readSSDCount_, lookupInSSDCount_) are already instrumented in ZNSKVCache.h:264-269, and the evaluation reuses the reproduction harness unchanged.",
+      "research_value": "M",
+      "research_value_rationale": "Borrowing modern FIFO-family policies for an approximate-index cache is well motivated and the coupling to eviction accuracy makes it more than a policy swap, but a reviewer would expect lazy promotion to beat plain FIFO; the interest lies in the size of the read-amplification win and in whether the hotness inference degrades or improves.",
+      "scoop_check": {
+        "result": "clear",
+        "details": "Searched 'flash cache bloom filter index cache replacement policy S3-FIFO SIEVE lazy promotion 2026 key-value cache on SSD'. S3-FIFO (SOSP'23, https://s3fifo.com/blog/2023/06/01/fifo-is-better-than-lru-the-power-of-lazy-promotion-and-quick-demotion/) and SIEVE (NSDI'24, https://blog.jasony.me/system/cache/2024/06/12/sieve) are the policies to borrow, not prior work on Nemo; nobody has applied them to a PBFG-style approximate index or used index residency as a hotness oracle."
+      }
+    },
+    {
+      "name": "Wake the dormant two-choice / kick-off path: past 89% fill",
+      "hypothesis": "We hypothesize that two-choice set placement with bounded cuckoo-style kicking raises the Set-Group fill rate from 89.3% toward over 95% (WA 1.56 -> ~1.05-1.15, i.e. within noise of the log-structured lower bound of 1.08) at the cost of up to 2x lookup read amplification, and that a hybrid that uses the second choice only for sets below the flush threshold lies strictly inside that Pareto frontier.",
+      "mechanism": "The engine already ships a second hash (getZNSKVCacheBucketId2 / keyHash2), a load-balancing two-choice insert, a bounded kickLoop and a two-probe lookup, all gated by isEnableDoubleHash / isEnableKickOff which are false in the shipped config and never mentioned in the paper. Enable them, complete the missing pieces (the PBFG must be consulted for both candidate sets and bfRebuild must run after every kick), sweep maxNumKicks, then add the hybrid gate that only consults the second choice when the primary set is below FLUSH_THRESHOLD. Measure SG fill rate (the Figure 17 metric), WA, read amplification and p99 lookup latency.",
+      "code_locations": [
+        "cachelib/navy/znskvcache/ZNSKVCache.cpp:352",
+        "cachelib/navy/znskvcache/ZNSKVCache.cpp:489",
+        "cachelib/navy/znskvcache/ZNSKVCache.cpp:537",
+        "cachelib/cachebench/util/CacheConfig.h",
+        "cachelib/cachebench/test_configs/ssd_perf/znskvcache/znscache_test.json"
+      ],
+      "motivating_evidence": "znscache_test.json ships navyZNSKVCacheEnableDoubleHash: false and navyZNSKVCacheEnableKickOff: false, and CacheConfig.h:169-178 declares both as disabled defaults, so an entire placement mechanism sits in the artifact unevaluated and unmentioned by the paper. The paper's challenge C1 (Section 4.2) attacks short-term hash skew only by delaying flushes (buffering, probabilistic flushing, writeback); two-choice placement attacks the same skew directly, and the 10.7% of an SG still unfilled at 89.34% fill rate is exactly the residual WA.",
+      "feasibility": "H",
+      "feasibility_rationale": "The flags, the second hash, the kick loop and the two-probe lookup all exist; the work is completing the index side and sweeping parameters, evaluated with the fill-rate and WA counters already used for Figures 17 and 12a. No new harness.",
+      "research_value": "M",
+      "research_value_rationale": "That two-choice hashing raises set-associative load factor is textbook, so the direction is unsurprising; what is unreported and genuinely useful is the WA-versus-read-amplification exchange rate in a design that already pays over 3x read amplification - i.e. whether Nemo has any headroom left at all, or whether 1.56 is effectively its floor.",
+      "scoop_check": {
+        "result": "clear",
+        "details": "Searched 'cuckoo two-choice hashing set-associative flash cache fill rate write amplification 2026'. Results are generic cuckoo-hashing literature (e.g. concurrent cuckoo hashing, EuroSys'14, https://www.cs.princeton.edu/~mfreed/docs/cuckoo-eurosys14.pdf) plus the Nemo paper itself; no work evaluates two-choice placement inside Nemo or reports its WA/read-amplification trade-off for zone-sized set groups."
+      }
+    },
+    {
+      "name": "Generality: skew sensitivity and SG-pool partitioning",
+      "hypothesis": "We hypothesize that Nemo's miss-ratio parity with FairyWREN and its read-amplification budget both degrade as workload skew falls (Zipf alpha 1.2 -> 0.7) or as the SG-pool size N grows, because candidate SGs per lookup scale as 1 + (N-1)*fp and the hotness inference relies on strong set-level skew, and that the partitioning scheme the paper proposes but never evaluates bounds read amplification at a measurable write-amplification and miss-ratio cost.",
+      "mechanism": "(a) Drive CacheBench's synthetic generator at alpha in {0.7, 0.9, 1.1, 1.3} with a 246 B mean object size and compare Nemo against FairyWREN on miss ratio, WA and read amplification. (b) Sweep the SG count N by shrinking the pseudo-zone size at constant total capacity, instrument the candidate-SG count per lookup inside calZoneId, and check it against the paper's Equation (10). (c) Implement partitioning by instantiating k independent ZNSKVCache engines over disjoint zone ranges - the engine is already parameterized by cacheBaseOffset and dataZoneOffsetId - and sweep k to find where read amplification stops falling and WA starts rising.",
+      "code_locations": [
+        "cachelib/navy/znskvcache/ZNSKVCache.cpp:782",
+        "cachelib/navy/znskvcache/ZNSKVCache.cpp:746",
+        "cachelib/allocator/nvmcache/NavySetup.cpp",
+        "cachelib/navy/znskvcache/ZonePool.cpp"
+      ],
+      "motivating_evidence": "Appendix A, 'Impact of scaling flash capacity': partitioning into independent instances is asserted to bound read amplification with no experiment at all. Table 5 shows the four evaluated traces were selected for Zipf alpha in 1.14-1.30, and Figure 19a's 'top 30% of sets serve ~70% of accesses' - the property the hotness machinery leans on - is a consequence of that selection. Section 5.5 already concedes read amplification over 3x FairyWREN's at N = 350 SGs, so the scaling term is not hypothetical.",
+      "feasibility": "M",
+      "feasibility_rationale": "The skew sweep is cheap and uses stock CacheBench generators, but multi-instance partitioning means touching setupCacheProtos/NavySetup, which assumes a single small-object engine, and the parameter sweep multiplies already long replay runs. Still fits the machine (CPU and disk only) and a 10-week schedule if the reproduction lands early.",
+      "research_value": "H",
+      "research_value_rationale": "It tests the generality of the central claim outside the operating point the authors chose, and settles an assertion the paper itself makes without evidence. A negative result (the advantage is skew- or scale-dependent) would be a real contribution; a positive one materially strengthens the design's case.",
+      "scoop_check": {
+        "result": "clear",
+        "details": "Same searches as A1 plus a scan of the ASPLOS 2026 program listing; no follow-up evaluates Nemo at other skews or with a partitioned SG pool. Related context only: the extended FairyWREN journal version (ACM TOS 2025, https://doi.org/10.1145/3718390), which predates Nemo."
+      }
+    }
+  ],
+  "risks": [
+    "No zoned block device and no root: the whole plan depends on a file-backed pseudo-zoned device being as easy as Device.cpp:277-309 suggests (only finishImpl/resetImpl use libzbd). If the engine implicitly depends on real zone semantics we did not read (zone-open limits, write-pointer behaviour), the project stalls - prototype this in week 1.",
+    "Building 2022-era CacheLib/folly without root on Debian 12: contrib/build.sh:151-158 has no debian12 case and calls die (must use -O), the system libs from contrib/prerequisites-debian10.sh must come from conda, and folly pinned at a 2022 submodule commit typically needs gcc-12 include patches. Also note cachelib/CMakeLists.txt:20 requires cmake >= 3.12 and the pip cmake 4.x in env.md would reject it - use the system cmake 3.25.",
+    "Fidelity: on a shared software-RAID volume under /home, read-latency results (Figure 15) and any device-level WA statement are not reproducible; only ALWA and fill-rate results should be claimed, and page-cache effects must be controlled (the O_DIRECT flags in Device.cpp openInFile were not verified).",
+    "Baseline symmetry: the FairyWREN comparison requires porting the identical pseudo-zoned device to the FairyWREN branch, otherwise the 9x gap is not a fair measurement. The paper's FairyWREN numbers already come from the authors' own bug-fixed fork (Section 3, p. 4), an unverified claim about a third party's artifact.",
+    "Hard-coded parameters diverge from the paper: ZNSKVCache.h:27 NUM_BUCKETS 275712 and :23 METADATARATIO 50 are compile-time constants, and :228 maxWaitTimesBeforeFlush is 1000 whereas Table 3 states a flushing threshold of 4096 - the shipped default may not land on WA 1.56 without a recompile.",
+    "Latent code defects constrain add-on workloads: ZNSKVCache.cpp:615-616 shifts an int into an int64_t mask ('1 << objId'), undefined for objId >= 31 and reachable with objects much smaller than 246 B; reInsert (:897) is declared bool but returns nothing; findEuId (:166) has no return statement.",
+    "Run length: Figure 14 extends to ~1e5 million operations to reach steady state and the Artifact Appendix budgets 'one to two weeks' for the full experiment set; even scaled down, expect multi-day unattended runs, so plan around one or two long runs rather than many short ones.",
+    "The reproduced numbers describe a GET-only regime: cachelib/cachebench/workload/ReplayGenerator.h:81 discards the trace's operation type, so updates and deletes are never exercised (this is both add-on A1 and a caveat on every number the team reproduces)."
+  ]
+}

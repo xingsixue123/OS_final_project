@@ -1,0 +1,11 @@
+{
+  "id": "mlsys25-marconi-prefix-caching-for-the-era-of-hy",
+  "title": "Marconi: Prefix Caching for the Era of Hybrid LLMs",
+  "venue": "mlsys",
+  "year": 2025,
+  "paper_url": "https://proceedings.mlsys.org/paper_files/paper/2025/hash/7c180af017258d239bac6248d1eb26ac-Abstract-Conference.html",
+  "pdf_url": "https://proceedings.mlsys.org/paper_files/paper/2025/file/7c180af017258d239bac6248d1eb26ac-Paper-Conference.pdf",
+  "repo_url": "https://github.com/ruipeterpan/marconi",
+  "topic": "caching",
+  "note": "Prefix-cache admission and eviction policy for hybrid LLMs - the artifact is a trace-driven Python simulator so the whole evaluation runs on CPU, with the GPU only needed for optional end-to-end checks - ideal project target"
+}

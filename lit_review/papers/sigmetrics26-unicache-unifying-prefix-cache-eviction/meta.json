@@ -1,0 +1,11 @@
+{
+  "id": "sigmetrics26-unicache-unifying-prefix-cache-eviction",
+  "title": "UniCache: Unifying Prefix Cache Eviction for Heterogeneous LLM Serving Workloads",
+  "venue": "sigmetrics",
+  "year": 2026,
+  "paper_url": "https://doi.org/10.1145/3805652",
+  "pdf_url": "https://dl.acm.org/doi/pdf/10.1145/3805652",
+  "repo_url": "https://github.com/xsyslab/UniCache",
+  "topic": "llm-inference",
+  "note": "Prefix KV-cache eviction policy for LLM serving. Trace-driven prefix-cache simulator plus a vLLM implementation - both run on one 24 GB GPU with a 7-8B model. Ideal improvement target: swap in a better eviction policy and re-run the simulator"
+}

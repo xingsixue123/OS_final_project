@@ -1,0 +1,11 @@
+{
+  "id": "osdi26-kairox-adaptive-gpu-cpu-hybrid-llm-infer",
+  "title": "Kairox: Adaptive GPU-CPU Hybrid LLM Inference via Online Neuron Balancing",
+  "venue": "osdi",
+  "year": 2026,
+  "paper_url": "https://www.usenix.org/conference/osdi26/presentation/jiang-yapeng",
+  "pdf_url": "https://www.usenix.org/system/files/osdi26-jiang-yapeng.pdf",
+  "repo_url": "https://github.com/Anhelor/kairox.cpp",
+  "topic": "llm-inference",
+  "note": "Textbook fit: a llama.cpp-derived hybrid GPU+CPU engine that dynamically rebalances hot/cold FFN neuron groups between a single GPU and host CPU - 24 GB GPU + 125 GiB RAM + 16 cores is the target hardware class"
+}

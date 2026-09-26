@@ -1,0 +1,154 @@
+{
+  "title": "LRU-C: Parallelizing Database I/Os for Flash SSDs",
+  "one_line": "A MySQL/InnoDB buffer manager that keeps a pointer to the least-recently-used clean page so page misses never wait on a dirty-page write, and splits the LRU mutex into mixed/dirty regions so foreground reads and background batch writes hit the SSD in parallel.",
+  "topic": "caching",
+  "repo": {
+    "official": "yes",
+    "evidence": "Paper p.1 'PVLDB Artifact Availability: The source code, data, and/or other artifacts have been made available at https://github.com/LeeBohyun/LRU-C' -- the repo under the first author's (Bohyun Lee) GitHub account. The tree contains the real mechanism, not a stub: storage/innobase/include/buf0buf.h:1979 (LRU_oldest_clean_page), storage/innobase/buf/buf0lru.cc:456 (buf_update_oldest_clean_page), storage/innobase/buf/buf0lru.cc:1414-1446 (rewritten page-miss path), storage/innobase/buf/buf0flu.cc:2309 (dynamic batch write), storage/innobase/include/buf0buf.h:2041 (LRU-D mutex).",
+    "last_commit": "2023-01-18",
+    "artifact_badges": ["available"],
+    "badge_evidence": "Paper p.1 'PVLDB Artifact Availability' statement pointing at https://github.com/LeeBohyun/LRU-C. No PVLDB reproducibility/'Results Reproduced' badge found for this paper."
+  },
+  "hard_filters": {
+    "H1_open_repo": {
+      "result": "pass",
+      "evidence": "Official per the paper's artifact-availability statement (p.1). Full MySQL 5.6.26 fork (VERSION file) with LRU-C changes confined to the buffer module as README.md claims: 67 LRU-C identifier matches across storage/innobase/{buf/buf0lru.cc, buf/buf0flu.cc, buf/buf0buf.cc, include/buf0buf.h, include/buf0buf.ic}. Not a placeholder, not plotting-only, not binary-only."
+    },
+    "H2_no_root": {
+      "result": "pass",
+      "evidence": "Pure user-space C++ change inside InnoDB; CMake+make into $HOME, mysqld runs unprivileged (port>1024, socket and datadir in $HOME). All metrics the paper uses are root-free: performance_schema mutex waits (Table 3), SHOW ENGINE INNODB STATUS (Table 7), iostat over /proc/diskstats (Table 5). repo_facts red flags are stock-MySQL false positives: 'reboot' strings in sql/nt_servc.cc:479 and storage/ndb/...; 'docker' is packaging/rpm-docker at CMakeLists.txt:498; 'Infiniband' is an NDB SCI transporter comment; 'Hugepagesize' is stock mysys/my_largepage.c:103, only used with --large-pages (leave off). Root-only steps in the paper (dd device pre-conditioning, raw/separate log device, nobarrier mount per the authors' install guide) are skippable at the cost of absolute-number comparability."
+    },
+    "H3_hardware_fit": {
+      "result": "pass",
+      "evidence": "CPU + NVMe only, no GPU. 16c/32t covers the paper's 64-client operating point (paper's own Fig. 9 sweeps 8-128 clients). The 100 GB database of Sec. 5.1 does not fit comfortably in ~257 GB free alongside two datadirs and logs, but the paper itself uses a 10 GB / 100-warehouse configuration with 10% buffer for Fig. 10 and Fig. 12, giving a documented scale-down that still tests the claim. Out of reach and secondary: Fig. 10 (Cosmos+ OpenSSD channel count), Fig. 11 (SSD-B/C/D), Fig. 12 (GCP/Azure), Fig. 13 (HDD)."
+    },
+    "H4_obtainable_deps_data": {
+      "result": "pass",
+      "evidence": "Deps are user-space installable: system cmake 3.25.1 (required -- CMakeLists.txt:16 is CMAKE_MINIMUM_REQUIRED(VERSION 2.6), which pip cmake 4.x rejects), conda gcc 9/10 toolchain, bison, ncurses, libaio (needed for LINUX_NATIVE_AIO=1 at storage/innobase/CMakeLists.txt:25-30); bundled SSL/zlib/libedit avoid OpenSSL 3.x. No boost needed at 5.6. Workloads are synthetic and public: Percona tpcc-mysql (ref [37], github.com/Percona-Lab/tpcc-mysql) and LinkBench (ref [17], github.com/facebookarchive/linkbench); no proprietary traces. Vanilla baseline = publicly archived MySQL 5.6.26 source. Only the WAR (SIGMOD'22) baseline has no public implementation I could find, which removes one comparison curve but no dataset."
+    }
+  },
+  "reproduce": {
+    "level": "M",
+    "target": "Figure 7a at the 10% buffer point (equivalently the Vanilla=247 vs final LRU-C=755 TPS endpoints of Figure 6), with companion Table 3 (read-stall ratio -> ~0, LRU mutex wait 0.18->0.07 ms) and Table 7 (LRU-C miss ratio ~1.25x Vanilla). Claim: LRU-C delivers ~3x the TPC-C throughput of knob-tuned Vanilla MySQL at 5-25% buffer ratios while giving up only ~20-30% hit ratio.",
+    "scale_down": "100 warehouses (~10 GB TPC-C database) instead of 1,000 (~100 GB) -- the paper's own configuration for Sec. 5.2.6 and the cloud experiments. Buffer pool swept 5-25% => 0.5-2.5 GB, 8 buffer-pool instances, 64 client threads, innodb_flush_method=O_DIRECT, redo log on the same NVMe (no second device available), 10-minute measurement after 5-minute warm-up, 3 runs, datadir restored from snapshot between runs. Absolute TPS will not match (different SSD, file on ext4/RAID instead of a pre-conditioned raw device, no separate log device, no nobarrier); the testable quantity is the LRU-C/Vanilla ratio per buffer size. Do not target the intermediate Fig. 6 bars first -- the repo has no knob to disable dynamic-batch-write or the LRU-D mutex individually.",
+    "effort": "6-9 person-days + ~30-40 machine-hours (0 GPU-hours)",
+    "rationale": "Not H: the artifact ships no evaluation harness at all -- no my.cnf, no run or plotting scripts (scripts/ is stock MySQL tooling); README.md delegates to an external guide targeting MySQL 5.7.24. The 'tuned Vanilla' baseline of Sec. 5.2.1 exists only as prose and must be rebuilt from a separate mysql-5.6.26 tree, since there is no LRU-C on/off system variable (no 'lbh' matches in storage/innobase/handler/ha_innodb.cc) and the original RAW fallback was deleted from buf_LRU_get_free_block. The codebase is from 2015 and will not compile under gcc 12.2's default -std=gnu++17 without a conda gcc 9/10 toolchain. The released code also has a live hot-path debug print (storage/innobase/buf/buf0lru.cc:1399 fprintf on every free-list hit), an apparently unbalanced mutex release (storage/innobase/buf/buf0flu.cc:2412 vs :2419), and an uninitialized read (buf0flu.cc:2326) that must be fixed before any timing is trustworthy. Not L: the mechanism is fully present and maps cleanly to the paper's sections, workloads are public and synthetic, every metric is root-free, and the paper supplies its own 10 GB scale-down configuration."
+  },
+  "addons": [
+    {
+      "name": "adaptive-clean-window",
+      "hypothesis": "We hypothesize that making LRU-C's clean-eviction window adaptive (AIMD-controlled from free-list starvation and observed miss-ratio slope) halves LRU-C's miss-ratio penalty at <=5% TPS cost, and that LRU-C throughput is materially sensitive to the window size that the artifact currently fixes implicitly -- under TPC-C and LinkBench at 5-25% buffer ratios.",
+      "mechanism": "Reading the code shows the LRU-C pointer is confined to the InnoDB 'old' sublist: the search stops at buf_pool->LRU_old, breaks once scanned > buf_pool->LRU_old_len, and requires buf_page_is_old(bpage). Implemented LRU-C is therefore clean-first eviction with a fixed window of innodb_old_blocks_pct plus an O(1) pointer. Step 1: expose that window as a first-class system variable and sweep it -- this is Table 4's CF-LRU window sweep but without the scan cost that made CF-LRU non-monotone, directly testing Sec. 6's claim that LRU-C 'is not just a victim selection policy'. Step 2: replace the fixed bound with an AIMD controller that grows the window when the free list starves (read stalls imminent) and shrinks it when the miss ratio rises faster than the throughput gain.",
+      "code_locations": [
+        "storage/innobase/buf/buf0lru.cc:456",
+        "storage/innobase/buf/buf0lru.cc:1417",
+        "storage/innobase/buf/buf0flu.cc:2309",
+        "storage/innobase/handler/ha_innodb.cc:16044",
+        "storage/innobase/srv/srv0srv.cc:223"
+      ],
+      "motivating_evidence": "Sec. 4.4 and Table 7 concede a 1.21-1.36x miss-ratio penalty and never study how to bound it. Table 4 shows CF-LRU's window is strongly non-monotone (TPS 243 -> 346 -> 316 as scan depth goes 512 -> 4,096 -> 16,384) and Sec. 6 argues LRU-C is categorically different -- but the artifact shows LRU-C is itself window-bounded, with an undeclared and never-swept window. Sec. 5.2.2 (p.8) further says the pointer 'can eventually meet the LRU head' during working-set shifts, which the bound in the code prevents: paper and artifact disagree.",
+      "feasibility": "H",
+      "feasibility_rationale": "~300-600 LOC across two InnoDB files plus one system variable; evaluated with the same tpcc-mysql harness at the 10 GB scale-down; no new hardware and no new workload generator (a working-set-shift variant can be built by swapping the warehouse hot set). Comfortably sized for 2-4 students over 10 weeks once the build is working.",
+      "research_value": "M",
+      "research_value_rationale": "The CF-LRU-equivalence question is one a VLDB reviewer would genuinely ask, and the sensitivity sweep is cheap and informative about whether the paper's headline mechanism or its window is doing the work. Capped at M because the delivered mechanism (an adaptive window) is a standard, expected fix and a meaningful fraction of the effort is a parameter sweep.",
+      "scoop_check": {
+        "result": "partial",
+        "details": "Queries: 'clean-first eviction hit ratio loss adaptive CF-LRU window workload shift database buffer 2024 2025'; Semantic Scholar citation list for DOI 10.14778/3598581.3598605 (16 citing papers). Adaptive clean-first variants predate LRU-C (CFDC; FD-Buffer, paper ref [35]) and adaptive multi-grained buffering is adjacent (https://www.mdpi.com/1999-5903/13/12/303), but no work re-examines LRU-C's own clean window or the CF-LRU-equivalence question."
+      }
+    },
+    {
+      "name": "modern-flusher-baseline",
+      "hypothesis": "We hypothesize that porting LRU-C to an InnoDB generation with multiple page-cleaner threads and a natively split LRU-list mutex (MySQL 5.7.x, stretch 8.0.x) shrinks the reported 3x TPC-C speedup over Vanilla to well under 2x, because much of the paper's gain comes from a single-cleaner 2015-vintage baseline rather than from the LRU-C pointer itself.",
+      "mechanism": "Re-apply the LRU-C changes (LRU-C pointer, LRU-D mutex, dynamic batch write) onto MySQL 5.7's buf0lru.cc/buf0flu.cc, which are structurally close to 5.6 but add innodb_page_cleaners and a cleaner coordinator/worker split. Then run a 2x2 design -- {stock, LRU-C} x {1 cleaner, N cleaners} -- decomposing how much of the reported gain is read-stall removal, how much is mutex splitting, and how much simply evaporates once the baseline flusher is allowed to be parallel.",
+      "code_locations": [
+        "storage/innobase/buf/buf0lru.cc:1414",
+        "storage/innobase/buf/buf0flu.cc:2309",
+        "storage/innobase/buf/buf0flu.cc:1857",
+        "storage/innobase/include/buf0buf.h:1979",
+        "storage/innobase/buf/buf0buf.cc:1364"
+      ],
+      "motivating_evidence": "The artifact is MySQL 5.6.26 (VERSION file), released 2015 and EOL 2021, with a single buf_flush_page_cleaner_thread (storage/innobase/srv/srv0start.cc:2727; Sec. 4.5). Sec. 2.3's argument rests on InnoDB having only 'recently' split buffer_pool_mutex into three mutexes. Fig. 9 shows Vanilla TPS halving from 8 to 16 client threads -- an unusually fragile baseline a reviewer would immediately question. The paper never tests a modern flusher, and the course rubric explicitly accepts a nuanced reproduction as a landing spot.",
+      "feasibility": "M",
+      "feasibility_rationale": "A cross-version port, not a patch application: InnoDB's buffer module changed between 5.6 and 5.7 (page cleaner coordinator/worker split, different flush-batch plumbing), and 5.7 additionally needs boost. Roughly 300-1,000 LOC re-written plus a second full build/tuning cycle for the 5.7 baseline. Evaluation reuses the reproduction harness and fits the machine. Heavy but sized for a 10-week team.",
+      "research_value": "H",
+      "research_value_rationale": "It attacks the headline number at its weakest joint -- the baseline -- in a regime the paper never touches. Both outcomes teach: 'the 3x is largely a stale-baseline artifact' is a genuinely useful negative result, and 'LRU-C still wins against N parallel cleaners' substantially strengthens the original claim. This is exactly the question a reviewer at VLDB would raise about a 2023 paper evaluated on a 2015 engine.",
+      "scoop_check": {
+        "result": "clear",
+        "details": "Queries: Semantic Scholar citation list for DOI 10.14778/3598581.3598605 (16 citing works: Cache-Aware I/O Cost Modeling arXiv'26, Hot-Page-Aware Checkpointing ICDEW'26, FlashANNS SIGMOD'26, How to Write to SSDs VLDB'26, twCache ICDE'25, CAM ICDE'25, LeanStore VLDB'24, xNVMe CIDR'26, ...); 'LRU-C buffer manager flash SSD MySQL citing follow-up 2025'; 'io_uring InnoDB buffer pool page cleaner asynchronous I/O database 2025'. None re-implements or re-evaluates LRU-C on a newer engine. Closest systems work, LeanStore VLDB'24 (https://dl.acm.org/doi/10.14778/3685800.3685915), is a different engine and does not revisit LRU-C."
+      }
+    },
+    {
+      "name": "feedback-controlled-write-batch",
+      "hypothesis": "We hypothesize that replacing LRU-C's fixed LRU_len/8 flush batch with a controller targeting a free-list level and a bounded device queue occupancy improves TPC-C 99.9th-percentile latency by >=2x at equal or better TPS, under write-heavy mixes (R:W 1:1-2:1) at 5-10% buffer ratios.",
+      "mechanism": "buf_flush_LRU_tail currently bursts up to UT_LIST_GET_LEN(buf_pool->LRU)/8 pages per wakeup and then calls buf_dblwr_flush_buffered_writes() once at the end -- a synchronous serialization point per burst. Replace the fixed cap with a PI/AIMD controller over (free-list length, in-flight n_flush[BUF_FLUSH_LRU]) and chunk the doublewrite flush so foreground reads are never queued behind a whole batch. Measure p50/p99/p99.9 with a per-transaction latency histogram instead of the paper's single 95th/99th figures.",
+      "code_locations": [
+        "storage/innobase/buf/buf0flu.cc:2309",
+        "storage/innobase/buf/buf0flu.cc:2348",
+        "storage/innobase/buf/buf0flu.cc:1510",
+        "storage/innobase/buf/buf0dblwr.cc",
+        "storage/innobase/handler/ha_innodb.cc:16044"
+      ],
+      "motivating_evidence": "Sec. 4.3 claims the batch is 'all dirty pages left behind the LRU-C pointer', but the artifact caps it at LRU_len/8 (storage/innobase/buf/buf0flu.cc:2348) and at LRU_old_len/2 (buf0flu.cc:1539), and skips the batch entirely when lru_len < free_len*2 (buf0flu.cc:2331) -- the described mechanism and the released one disagree, and neither cap is justified by any measurement. Table 6 shows LRU-C's 99th latency is still 391 ms, 7.4x its own 95th, so the tail is far from solved despite the paper advertising tail-latency reduction. Table 5 shows LRU-C reaching only 64% of device peak bandwidth with the paper conceding 'there is still some room for further optimization'.",
+      "feasibility": "H",
+      "feasibility_rationale": "Localized to the flusher: one file plus a few hundred LOC, one new system variable, and a latency histogram on the client side. Reuses the reproduction harness and the 10 GB scale-down; no extra hardware and no root.",
+      "research_value": "M",
+      "research_value_rationale": "Tail-latency control for buffer-pool flushing is well-trodden (InnoDB's own adaptive flushing, MySQL WL#7868, the 8.0.19 chunked furious-flush change), so a win is expected rather than surprising. The genuinely new part is the LRU-C-specific interaction between dynamic batching and the clean window, and the fact that it exposes a paper/artifact discrepancy.",
+      "scoop_check": {
+        "result": "partial",
+        "details": "Queries: 'adaptive batch size page cleaner flush tail latency database buffer pool SSD 2024 2025'; Semantic Scholar citation list. InnoDB already chunks furious flushing by innodb_io_capacity since 8.0.19 (https://dev.mysql.com/doc/refman/8.4/en/innodb-buffer-pool-flushing.html), and 'Set associative address mapping to improve data throughput and reduce tail latency in SSDs' (J. Systems Architecture 2025, cites LRU-C) attacks tail latency inside the device rather than in the buffer manager. No LRU-C-specific batch-sizing work found."
+      }
+    },
+    {
+      "name": "io-uring-dynamic-batch",
+      "hypothesis": "We hypothesize that issuing LRU-C's dynamic batch write through io_uring instead of libaio/io_submit raises achieved write IOPS and closes a meaningful part of the 64%-of-device-peak gap in Table 5, improving TPC-C TPS at 5-10% buffer ratios where the background flusher is the bottleneck.",
+      "mechanism": "Add an io_uring backend alongside InnoDB's native-AIO path in os0file.cc, selected by a system variable, with one ring per write-I/O thread and registered files/buffers. Keep the existing completion handshake (the aio_write_finished flag on buf_page_t) so the LRU-C pointer logic is untouched, and chunk doublewrite submissions into the same ring. liburing is built into $HOME; kernel 6.1 supports io_uring for unprivileged users, so no root is needed.",
+      "code_locations": [
+        "storage/innobase/os/os0file.cc",
+        "storage/innobase/buf/buf0flu.cc:2396",
+        "storage/innobase/buf/buf0dblwr.cc",
+        "storage/innobase/include/buf0buf.h:1470"
+      ],
+      "motivating_evidence": "Table 5: LRU-C uses 524 MB/s of a measured 815 MB/s FIO device ceiling (64%) and the paper explicitly says 'there is still some room for further optimization'. Sec. 2.2 notes background flushers 'use Linux AIO', and storage/innobase/CMakeLists.txt:25-30 confirms libaio is the only async path (absent, InnoDB silently degrades to simulated AIO). The paper never determines whether the residual 36% is a buffer-manager limit or an I/O-submission-layer limit -- which is precisely the diagnostic question.",
+      "feasibility": "M",
+      "feasibility_rationale": "Cross-cutting and the riskiest of the four to land: InnoDB 5.6's AIO layer is tightly coupled to its simulated-AIO abstraction and its I/O-thread bookkeeping, so touching it risks destabilizing the whole engine. No root is needed and the compute fits the machine, but debugging async-I/O bugs inside a 2015 InnoDB is expensive.",
+      "research_value": "M",
+      "research_value_rationale": "The diagnostic framing (is the residual gap in the buffer manager or the syscall layer?) is worthwhile and specific to LRU-C's claim of saturating the device. But 'io_uring beats libaio for DBMS writes' is close to an expected result and the general question has already been studied.",
+      "scoop_check": {
+        "result": "partial",
+        "details": "Queries: 'io_uring InnoDB buffer pool page cleaner asynchronous I/O database 2025'; Semantic Scholar citation list. 'io_uring for High-Performance DBMSs: When and How to Use It' (https://arxiv.org/pdf/2512.04859) covers io_uring in DBMSs generally, and 'Flexible I/O for Database Management Systems with xNVMe' (CIDR'26) cites LRU-C while doing I/O-interface work -- the general io_uring-for-DBMS question is taken. The LRU-C-specific question (does the clean-pointer architecture still gate throughput once submission is cheap?) is not."
+      }
+    },
+    {
+      "name": "checkpoint-deserialization",
+      "hypothesis": "We hypothesize that making checkpoint flushing of mixed-region dirty pages lock-free with respect to LRU-M (flush from the flush list under flush_list_mutex only, with deferred LRU repositioning) removes the last RW-serialization LRU-C admits to and improves TPS during checkpoint-heavy phases (small redo logs, write-heavy mixes).",
+      "mechanism": "Today the flusher must acquire LRU-M to checkpoint dirty pages that sit ahead of the LRU-C pointer. Instead, checkpoint writes would touch only flush_list state and enqueue LRU repositioning onto a per-instance deferred queue, drained by whichever foreground thread next holds LRU-M. Evaluate by varying innodb_log_file_size to force different checkpoint pressures, measuring TPS and mutex wait during checkpoint bursts.",
+      "code_locations": [
+        "storage/innobase/buf/buf0flu.cc:1864",
+        "storage/innobase/buf/buf0flu.cc:1090",
+        "storage/innobase/log/log0log.cc",
+        "storage/innobase/include/buf0buf.h:2029"
+      ],
+      "motivating_evidence": "Sec. 4.3, final paragraph: 'LRU-C is not free from RW-serialization: it incurs another RW-serialization due to the checkpointing ... the background flusher in LRU-C also has to acquire the LRU-M mutex, and thus it has to compete for the mutex with the foreground processes.' The paper then asserts without any measurement that 'the peril of checkpoint-induced I/O serialization is insignificant' -- an untested simplifying assumption, and the paper's own stated loose end.",
+      "feasibility": "M",
+      "feasibility_rationale": "Deferred-reposition queues inside InnoDB's buffer pool are delicate (page relocation, flush_list_hp, shutdown and crash-recovery paths), so the change is cross-cutting though bounded. Evaluation reuses the existing harness plus one extra knob sweep (innodb_log_file_size), so no new compute is needed.",
+      "research_value": "M",
+      "research_value_rationale": "It closes the paper's own explicitly stated remaining serialization and falsifies-or-confirms an unmeasured assertion, which a reviewer would appreciate. Downgraded from H because the original group appears to have already moved into flash-aware checkpointing, so the headline may be partly taken.",
+      "scoop_check": {
+        "result": "partial",
+        "details": "Queries: '\"Hot-Page-Aware Checkpointing for Flash SSDs\" ICDEW 2026'; Semantic Scholar citation list. 'Hot-Page-Aware Checkpointing for Flash SSDs' (Park & Lee, ICDEW 2026, doi 10.1109/ICDEW71238.2026.00007, https://borecraft.com/2026/05/03/hot-page-aware-checkpointing-for-flash-ssds/) is by the same group and targets flash-aware checkpointing; I could not read it to confirm whether it specifically removes the LRU-M/checkpoint interaction. Read that paper before committing. Separately, twCache (ICDE 2025, https://ieeexplore.ieee.org/document/11113152/) already does thread-wise sublist partitioning to kill LRU lock contention, so a 'shard the LRU mutex further' add-on was deliberately not proposed."
+      }
+    }
+  ],
+  "risks": [
+    "Building the 2015 MySQL 5.6.26 tree with gcc 12.2 / glibc 2.36 is the single largest unknown and could not be verified by desk review; gcc 12's default -std=gnu++17 will reject removed constructs (register, dynamic exception specs). Mitigation: conda gcc 9/10 toolchain plus -std=gnu++03 -fpermissive. If this fails the project fails -- spend day 1 on it.",
+    "cmake version trap: CMakeLists.txt:16 declares CMAKE_MINIMUM_REQUIRED(VERSION 2.6), which the pip-installed cmake 4.x on this machine rejects. The system cmake 3.25.1 must be used.",
+    "libaio availability is unconfirmed on this machine. Without it storage/innobase/CMakeLists.txt:25-30 silently falls back to simulated AIO, and the paper's central 'parallel asynchronous writes' premise is no longer under test. Verify LINUX_NATIVE_AIO=1 in the cmake log before trusting any number.",
+    "The released binary is not obviously the one that produced the figures: storage/innobase/buf/buf0lru.cc:1399 leaves a live fprintf(stderr, ...) on every free-list hit (every other LRU-C debug print is commented out); storage/innobase/buf/buf0flu.cc:2412 vs :2419 appear to release LRU_dirty_tail_list_mutex twice when the loop exits normally; storage/innobase/buf/buf0flu.cc:2326 reads scan_depth uninitialized. These must be fixed before any timing result is trustworthy.",
+    "The artifact ships no evaluation harness -- no my.cnf, no run scripts, no plotting code (scripts/ is stock MySQL tooling). The 'tuned Vanilla' baseline of Sec. 5.2.1 is described only in prose, so there is a real risk of accidentally inflating the 3x ratio by under-tuning the baseline.",
+    "No LRU-C on/off system variable exists (no 'lbh' matches in storage/innobase/handler/ha_innodb.cc) and the original RAW fallback was deleted from buf_LRU_get_free_block, so Vanilla and LRU-C are separate binaries; compiler, -O level and INNODB_PAGE_ATOMIC_REF_COUNT (default ON at CMakeLists.txt:327, required because the new buf_page_t fields live inside that #ifdef at buf0buf.h:1461-1472) must be pinned identically or the comparison is invalid.",
+    "Storage budget and shared-machine noise: ~257 GB free on a shared 2xNVMe software RAID. The 10 GB scale-down is mandatory; even so two datadirs plus snapshots plus reloads will consume 100+ GB, and sustained write benchmarks on a shared box both suffer and cause interference. Absolute IOPS/bandwidth will not match Table 5.",
+    "No root means no raw block device, no dd pre-conditioning to the paper's half-full steady state, and no nobarrier log mount; experiments run on a file in ext4 on a RAID, which changes write amplification and SSD GC behaviour relative to Sec. 5.1.",
+    "Unreproducible figures on this machine: Fig. 10 (Cosmos+ OpenSSD channel count), Fig. 11 (SSD-B/C/D), Fig. 12 (GCP/Azure), Fig. 13 (HDD). The WAR baseline (Fig. 7, Tables 5-6) appears to have no public implementation, so the 1.52x-over-WAR claim cannot be checked here.",
+    "Open scientific question: the implemented LRU-C confines its clean-page search to the InnoDB old sublist (storage/innobase/buf/buf0lru.cc:494, :506, :515), contradicting Sec. 4.2/5.2.2's description of a pointer that can reach the LRU head, and making the implemented policy much closer to CF-LRU than Sec. 6 argues. Whether the evaluated system is the system the paper describes is unresolved; add-on A1 is designed to answer it."
+  ]
+}

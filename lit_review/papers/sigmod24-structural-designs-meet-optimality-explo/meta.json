@@ -1,0 +1,11 @@
+{
+  "id": "sigmod24-structural-designs-meet-optimality-explo",
+  "title": "Structural Designs Meet Optimality: Exploring Optimized LSM-tree Structures in a Colossal Configuration Space",
+  "venue": "sigmod",
+  "year": 2024,
+  "paper_url": "https://dl.acm.org/doi/10.1145/3654978",
+  "pdf_url": "https://dl.acm.org/doi/pdf/10.1145/3654978",
+  "repo_url": "https://github.com/NTU-Siqiang-Group/MooseLSM",
+  "topic": "storage",
+  "note": "LSM-tree level-capacity and run-count design space built on RocksDB; single-node NVMe; only limit is the 257 GB free disk for very large datasets"
+}

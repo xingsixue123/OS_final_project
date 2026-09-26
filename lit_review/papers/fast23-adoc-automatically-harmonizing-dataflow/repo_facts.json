@@ -1,0 +1,164 @@
+{
+  "url": "https://github.com/supermt/FEAT_7.11",
+  "head_commit": "5ed60f50d6cd8259b94e7f842ff06c6ab4df40a1",
+  "head_commit_date": "2023-03-06T15:20:29+08:00",
+  "file_count": 1952,
+  "size_mb": 33.2,
+  "top_level": [
+    ".circleci/",
+    ".clang-format",
+    ".github/",
+    ".gitignore",
+    ".lgtm.yml",
+    ".watchmanconfig",
+    "AUTHORS",
+    "CMakeLists.txt",
+    "CODE_OF_CONDUCT.md",
+    "CONTRIBUTING.md",
+    "COPYING",
+    "DEFAULT_OPTIONS_HISTORY.md",
+    "DUMP_FORMAT.md",
+    "HISTORY.md",
+    "INSTALL.md",
+    "LANGUAGE-BINDINGS.md",
+    "LICENSE.Apache",
+    "LICENSE.leveldb",
+    "Makefile",
+    "PLUGINS.md",
+    "README.md",
+    "ROCKSDB_LITE.md",
+    "SILK_Get.png",
+    "TARGETS",
+    "USERS.md",
+    "Vagrantfile",
+    "WINDOWS_PORT.md",
+    "architecture.png",
+    "buckifier/",
+    "build_tools/",
+    "cache/",
+    "cmake/",
+    "common.mk",
+    "coverage/",
+    "crash_test.mk",
+    "db/",
+    "db_stress_tool/",
+    "docs/",
+    "env/",
+    "examples/",
+    "file/",
+    "fuzz/",
+    "include/",
+    "issue_template.md",
+    "java/",
+    "logging/",
+    "memory/",
+    "memtable/",
+    "microbench/",
+    "monitoring/",
+    "options/",
+    "plugin/",
+    "port/",
+    "rocksdb.pc.in",
+    "rocksdb_get.png",
+    "src.mk",
+    "table/",
+    "test_util/",
+    "third-party/",
+    "thirdparty.inc",
+    "tools/",
+    "trace_replay/",
+    "util/",
+    "utilities/",
+    "ycsb_workload/",
+    "ycsbcore/"
+  ],
+  "build_files": [
+    "CMakeLists.txt",
+    "Makefile",
+    "Vagrantfile",
+    "build_tools/ubuntu20_image/Dockerfile",
+    "db_stress_tool/CMakeLists.txt",
+    "examples/CMakeLists.txt",
+    "examples/Makefile",
+    "fuzz/Makefile",
+    "java/CMakeLists.txt",
+    "java/Makefile",
+    "java/crossbuild/Vagrantfile",
+    "java/jmh/pom.xml",
+    "microbench/CMakeLists.txt",
+    "tools/CMakeLists.txt",
+    "tools/Dockerfile"
+  ],
+  "lines_by_extension": {
+    ".cc": 453003,
+    ".h": 157465,
+    ".java": 65123,
+    ".py": 9921,
+    ".sh": 5700,
+    ".c": 3667,
+    ".proto": 28
+  },
+  "red_flags": {
+    "sudo": {
+      "count": 35,
+      "examples": [
+        ".circleci/config.yml:26: sudo sysctl -w kern.maxfiles=1048576",
+        ".circleci/config.yml:27: sudo sysctl -w kern.maxfilesperproc=1048576",
+        ".circleci/config.yml:28: sudo launchctl limit maxfiles 1048576",
+        ".circleci/config.yml:80: sudo apt-get update -y && sudo apt-get install -y libgflags-dev",
+        "INSTALL.md:56: * Install gflags. First, try: `sudo apt-get install libgflags-dev`"
+      ]
+    },
+    "custom_kernel": {
+      "count": 9,
+      "examples": [
+        "include/rocksdb/options.h:1723: // crashes (i.e., the machine does not reboot), no writes will be",
+        "include/rocksdb/utilities/backup_engine.h:61: // restore even on a machine crash/reboot. Backup and restore processes are",
+        "java/src/main/java/org/rocksdb/BackupEngineOptions.java:144: *   backup even on a machine crash/reboot. Backup process is slower with sync",
+        "java/src/main/java/org/rocksdb/BackupEngineOptions.java:146: *   reboot. However, chances are some of the backups are consistent.",
+        "java/src/main/java/org/rocksdb/DBOptionsInterface.java:259: * filesystem like ext3 that can lose files after a reboot.</p>"
+      ]
+    },
+    "docker": {
+      "count": 46,
+      "examples": [
+        ".circleci/config.yml:147: linux-docker:",
+        ".circleci/config.yml:148: docker:",
+        ".circleci/config.yml:152: #  $ docker build -t zjay437/rocksdb:0.5 .",
+        ".circleci/config.yml:153: #  $ docker push zjay437/rocksdb:0.5",
+        ".circleci/config.yml:155: #  $ docker login --username zjay437"
+      ]
+    },
+    "cxl_pmem": {
+      "count": 1,
+      "examples": [
+        "PLUGINS.md:7: * [PMEM](https://github.com/pmem/pmem-rocksdb-plugin): a collection of plugins to enable Persistent Memory on RocksDB."
+      ]
+    },
+    "sysctl_hugepages": {
+      "count": 69,
+      "examples": [
+        ".circleci/config.yml:26: sudo sysctl -w kern.maxfiles=1048576",
+        ".circleci/config.yml:27: sudo sysctl -w kern.maxfilesperproc=1048576",
+        "HISTORY.md:522: * Fixed a bug that could lead to duplicate DB ID or DB session ID in POSIX environments without /proc/sys/kernel/random/uuid.",
+        "include/rocksdb/advanced_options.h:445: //      sysctl -w vm.nr_hugepages=20",
+        "include/rocksdb/memtablerep.h:408: //                          sysctl -w vm.nr_hugepages=20"
+      ]
+    },
+    "multi_node": {
+      "count": 1,
+      "examples": [
+        "USERS.md:77: [Netflix](http://techblog.netflix.com/2016/05/application-data-caching-using-ssds.html) Netflix uses RocksDB on AWS EC2 instances with local SSD drives to cache"
+      ]
+    }
+  },
+  "github": {
+    "stargazers_count": 21,
+    "forks_count": 7,
+    "archived": false,
+    "pushed_at": "2023-03-06T07:19:11Z",
+    "created_at": "2022-09-01T16:33:54Z",
+    "open_issues_count": 2,
+    "license": "GPL-2.0"
+  }
+}

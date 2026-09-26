@@ -1,0 +1,43 @@
+{
+  "url": "https://github.com/NadavKeren/Adaptive-Pipeline-Cache",
+  "head_commit": "e7413d1b62c14dd05e6c089e8a5a0fdddbd6150b",
+  "head_commit_date": "2026-02-18T22:47:47+02:00",
+  "file_count": 27,
+  "size_mb": 0.1,
+  "top_level": [
+    ".gitignore",
+    "LICENSE",
+    "README.md",
+    "aliases.sh",
+    "containers/",
+    "experiments/",
+    "graph_generators/",
+    "trace_processing/"
+  ],
+  "build_files": [],
+  "lines_by_extension": {
+    ".py": 2548,
+    ".sh": 4
+  },
+  "red_flags": {
+    "sudo": {
+      "count": 1,
+      "examples": [
+        "containers/lhd-lrb/Containerfile:7: RUN apt-get update && apt-get install -y git sudo libconfig++-dev python3 && \\"
+      ]
+    },
+    "docker": {
+      "count": 17,
+      "examples": [
+        "README.md:27: - **Pre-configured containers**: Docker/Podman containers with all dependencies installed",
+        "README.md:66: - Docker or Podman installed",
+        "README.md:71: We provide two pre-built containers available on Docker Hub:",
+        "README.md:93: **Using Podman:**",
+        "README.md:95: podman run -it --name nsdi-experiments \\"
+      ]
+    }
+  },
+  "github": {
+    "error": "HTTP Error 403: rate limit exceeded"
+  }
+}

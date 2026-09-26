@@ -1,0 +1,14 @@
+{
+  "pdf": {
+    "status": "ok",
+    "source_url": "https://arxiv.org/pdf/2312.12621",
+    "version": "from list",
+    "notes": ""
+  },
+  "repo": {
+    "status": "ok",
+    "url": "https://github.com/msr-fiddle/blox",
+    "official": "unclear",
+    "evidence": "link taken from the research list; not independently verified"
+  }
+}

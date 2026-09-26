@@ -1,0 +1,154 @@
+{
+  "title": "Kairox: Adaptive GPU-CPU Hybrid LLM Inference via Online Neuron Balancing",
+  "one_line": "A llama.cpp fork that keeps a GPU-resident cache of co-activation-grouped FFN neurons and continuously swaps groups in and out from host DRAM using a decaying activation-momentum score, a one-layer-lookahead prefetch pipeline, and a runtime feedback loop that throttles balancing intensity.",
+  "topic": "llm-inference",
+  "repo": {
+    "official": "yes",
+    "evidence": "repo/ARTIFACTS_EVALUATION.md:1-30 names the paper, all eight authors and 'OSDI 26', declares itself the artifact and gives this exact URL (github.com/Anhelor/kairox.cpp); the same 'Anhelor' account hosts the model-split GGUFs the code loads (huggingface.co/Anhelor/SPIF-GGUF, referenced at ARTIFACTS_EVALUATION.md:101-127). The tree contains the real system (src/llama-kairox.cpp, ggml/include/ggml-kairox.hpp, ggml/src/ggml-cuda/dfr-fusion.cu), not a stub.",
+    "last_commit": "2026-05-19",
+    "artifact_badges": [],
+    "badge_evidence": "repo/ARTIFACTS_EVALUATION.md:13-21 states the artifact was submitted for the OSDI'26 'Artifacts Available' badge only (explicitly not Functional/Reproduced). The USENIX presentation page returned HTTP 403 to automated fetching, so no awarded badge could be confirmed independently."
+  },
+  "hard_filters": {
+    "H1_open_repo": {
+      "result": "pass",
+      "evidence": "Official OSDI'26 artifact (repo/ARTIFACTS_EVALUATION.md:1-30, MIT). Contains the full online system: cache manager src/llama-kairox.cpp:91-393, per-layer state ggml/include/ggml-kairox.hpp:52-101, TAM/top-K graph build src/llama-graph.cpp:1295-1319, fused CUDA kernels ggml/src/ggml-cuda/dfr-fusion.cu, reload executor ggml/src/ggml-cuda/ggml-cuda.cu:2580-2648, sparse AVX kernels ggml/src/ggml-cpu/ggml-cpu.c:1692-2470, and eval drivers bench_models.sh / test_kairox.sh / parse_bench_logs.py. Caveat (not a fail): the offline stage of Fig. 6 (C4 activation profiling, predictor training, METIS co-activation grouping, split-GGUF generation) is not released - only its pre-built outputs on Hugging Face; grep for metis/co-activation/reorder_perm finds only consumers (src/llama-kairox.cpp:256, :340-351)."
+    },
+    "H2_no_root": {
+      "result": "pass",
+      "evidence": "No kernel module, eBPF, perf counter, KVM or /proc/sys write is required. The Docker image in ARTIFACTS_EVALUATION.md:63-96 (pytorch:2.11.0-cuda12.8) only supplies a CUDA toolkit, git-lfs and huggingface_hub, all installable per-user with conda/pip. compile_kairox.sh:3-6 attempts 'apt install libssl-dev' but is unguarded by set -e, output is discarded, and the need disappears with -DLLAMA_OPENSSL=OFF (CMakeLists.txt:116); none of the three build targets (llama-completion, llama-speculative, llama-quantize, compile_kairox.sh:43) need the HTTP stack. NVIDIA Nsight Systems appears only for the GPU-utilization figure (paper Sec 9.3 / Fig. 12), which is off the reproduction path. Single GPU is hard-coded (CUDA_VISIBLE_DEVICES=0, test_kairox.sh:3). repo_facts.json red flags for sudo/docker/multi-gpu all trace to upstream llama.cpp CI, docs and unrelated backends."
+    },
+    "H3_hardware_fit": {
+      "result": "pass",
+      "evidence": "The machine is essentially the paper's PC-High profile: 1 x 24 GB GPU, 16 CPU threads, PCIe 4.0, >64 GB host RAM (paper Sec 9.1); test_kairox.sh:81-95 hard-codes '4090 -> gpu_vram=24, threads=16'. PC-Low (12 GB) is reachable via -vb 12 (common/arg.cpp:2338). Ampere sm_86 needs no FP8/Hopper kernels; CMAKE_CUDA_ARCHITECTURES=native (compile_kairox.sh:15) resolves correctly. Concerns to note: the A5000 has roughly a third of a 4090's FP16 throughput, so absolute t/s and the CPU/IO balance point shift (magnitudes of the speedups will differ); and the three biggest models (ReLUFalcon-40B-Q8 ~43 GB, opt-30b-Q8, opt-66b-Q4) must be dropped or run one at a time to fit ~257 GB of free disk."
+    },
+    "H4_obtainable_deps_data": {
+      "result": "pass",
+      "evidence": "Models and their companion neuron-split files are public, non-gated and MIT at huggingface.co/Anhelor/SPIF-GGUF (checked 2026-09-14), downloaded with hf download --include per ARTIFACTS_EVALUATION.md:101-128. The ShareGPT prompt subset is already materialized in repo/prompts.txt. Dependencies are user-space: CUDA 12.x toolkit via conda (system nvcc 11.8 is probably too old - upstream CI at .github/workflows/build.yml:813,852 uses 12.4/12.6), cmake >=3.18 via pip, gcc 12 present. No proprietary trace. PowerInfer and Q-Infer are explicitly optional (ARTIFACTS_EVALUATION.md:28) and are public on GitHub anyway."
+    }
+  },
+  "reproduce": {
+    "level": "M",
+    "target": "Figure 9, top row (standard completion), PC-High panel, restricted to Prosparse-LLaMA2-13B and OPT-13B - supporting the claim that under a 24 GB VRAM budget Kairox's decode throughput beats llama.cpp layer offloading (paper: 7.54x and 6.61x) and beats the eager-reload policy. This is the artifact's own pass criterion 'kairox > llama_cpp AND kairox > neuralink' (ARTIFACTS_EVALUATION.md:174-178).",
+    "scale_down": "Use the 'high' profile unchanged (24 GB, 16 threads). Trim MODELS in bench_models.sh:32-38 to the prosparse-llama-2-13b and opt-13b entries (~70 GB of downloads incl. split + draft models), dropping ReluFalcon-40B-Q8 / opt-30b-Q8 / opt-66b-Q4 which would exceed the 257 GB disk. Lower BENCH_RUNS from 20 to 8-10 (bench_models.sh:30). Repoint MODEL_ROOT (bench_models.sh:4) away from /root. Start with 'bash bench_models.sh high simple' (one model, all three backends). Success criterion is the ordering and a large ratio, not the paper's absolute 7.5x, since the A5000 is a different GPU class. Bonus at no extra cost: sweep -vb 14/18/22/24 on OPT-13B to recreate the shape of Fig. 13(right).",
+    "effort": "5 person-days + ~10 GPU-hours + ~80 GB disk",
+    "rationale": "Not H: the documented path is Docker + CUDA 12.8 and must be ported to conda + CUDA 12.2 on driver 535 (whether the current llama.cpp base still compiles against 12.2 is unclear from reading - upstream CI tests 12.4/12.6 only, .github/workflows/build.yml:813,852); no expected-results file or plotting script ships, so 'did it reproduce' is only an ordering test; 2 of the 5 Fig. 9 baselines (PowerInfer, Q-Infer) are outside the artifact and 'Neuralink' is just Kairox with lambda=0 (test_kairox.sh:97-116); and the GPU class differs from both paper machines. Not L: one command builds and runs everything (bench_models.sh:131-135), the harness computes the headline 'decode mean' itself (tools/completion/completion.cpp:503-523), a fixed seed and prompt set are shipped, and every input is a public download. The simple_validation sub-path alone is close to H."
+  },
+  "addons": [
+    {
+      "name": "Score-ordered admission under a constrained reload budget",
+      "hypothesis": "We hypothesize that ordering the reload plan by TAM score - loading the highest-scoring absent groups and evicting the lowest-scoring resident ones - instead of by group index improves decode throughput and reduces per-token latency variance under tight VRAM and reload budgets (the 14-18 GB region of Fig. 13 and the I/O-bound layers of Fig. 11), compared with the paper's system.",
+      "mechanism": "kairox_reload_plan scans groups in ascending index order to fill groups_to_load/groups_to_evict and then takes the FIRST reload_budget pairs, pairing each load with whatever eviction candidate sits at the same list position. When demand exceeds the budget - exactly the state the adaptive rate limiter drives the system into - admission is therefore decided by group index, which after METIS reordering is arbitrary with respect to score. Change: copy the top-K scores (already computed on the GPU at llama-graph.cpp:1308) to the host alongside the existing load/evict mask copies, sort load candidates by descending score and evict candidates by ascending score, and pair greedily. ~150 LOC plus one extra D2H copy of at most 1024 floats inside the already-synchronous plan step.",
+      "code_locations": [
+        "src/llama-kairox.cpp:41",
+        "src/llama-graph.cpp:1295",
+        "ggml/src/ggml-cuda/ggml-cuda.cu:2558",
+        "ggml/include/ggml-kairox.hpp:52"
+      ],
+      "motivating_evidence": "src/llama-kairox.cpp:52-88 shows index-order selection and positional load/evict pairing, with truncation at :63-64 to the clamp budget. The paper's Sec 6 argues at length that WHICH group is resident is what matters, and Fig. 13 shows Kairox's advantage is largest exactly where the memory budget binds; Fig. 11(right) shows reload intensity is actively clamped, so budget truncation is the common case rather than an edge case.",
+      "feasibility": "H",
+      "feasibility_rationale": "Localized to one host function plus a small device-to-host copy on a path that already synchronizes (ggml-cuda.cu:2561-2565). No new data, no offline pipeline, no new harness: evaluable with the shipped -vb sweep, the existing reload_count/reload_planned_count counters (ggml-kairox.hpp:91-92) and --bench-token-latency. Comfortable for 2-4 students in 10 weeks.",
+      "research_value": "M",
+      "research_value_rationale": "It closes the cache-admission question the paper raises but never resolves, in the low-VRAM regime that matters on 24 GB consumer hardware, and either outcome is reportable. But 'score-ordered beats index-ordered' is the expected direction; only the magnitude and the interaction with the rate limiter are genuinely uncertain, so it is a solid rather than surprising result.",
+      "scoop_check": {
+        "result": "partial",
+        "details": "Queries: 'activation sparsity neuron cache eviction policy GPU CPU offloading LLM inference dynamic reload budget'; 'admission control cache one-hit wonder expert cache prefetch budget score-aware eviction 2026 LLM'. Closest work is in the MoE expert-cache line - ExpertFlow (https://arxiv.org/pdf/2510.26730) and Fine-Grained Expert Offloading (https://arxiv.org/pdf/2502.05370) use explicit prefetch/eviction priority scores and deadline-constrained prefetch budgets - but at expert granularity in MoE models, not neuron groups in dense FFNs, and never against Kairox. Nothing found that revisits Kairox's admission order."
+      }
+    },
+    {
+      "name": "Implement Algorithm 1 as written: adaptive lambda, tau_load filter, measured stall signal",
+      "hypothesis": "We hypothesize that the controller actually described in Sec 7 / Algorithm 1 - per-layer adaptive lambda plus the tau_load = (1-lambda)+epsilon one-hit-wonder filter, driven by measured per-layer reload-wait versus CPU-FFN time - achieves higher throughput and lower reload volume than the released implementation's reload-rate limiter, on models with short activation windows (the OPT family, per Fig. 8), compared with the paper's system as shipped.",
+      "mechanism": "(a) Write a per-layer lambda into the existing dfr_ema_coeffs host tensor, which is already re-uploaded to the GPU on every SCALE_ADD call (binbcast.cu:432-440) - the plumbing for a time-varying lambda exists and only the writer is missing. (b) Add the S > (1-lambda)+epsilon candidate filter before the top-K, either as a bias inside the fused mask kernel or as a shifted-step mask over dfr_scores. (c) Replace the boolean 'no compute queued behind the I/O anchor' signal with real timings: CUDA events around the reload window plus a host timer around the CPU sparse-FFN split, both reachable from the existing scheduler split anchors. Then A/B the three controllers (shipped K-limiter, lambda controller, both), which is exactly the Top-K / TAM / TAM-T comparison of Fig. 10 plus the lambda trace of Fig. 11.",
+      "code_locations": [
+        "ggml/include/ggml-kairox.hpp:168",
+        "src/llama-kairox.cpp:338",
+        "src/llama-graph.cpp:1300",
+        "ggml/src/ggml-cuda/binbcast.cu:432",
+        "ggml/src/ggml-cuda/dfr-fusion.cu"
+      ],
+      "motivating_evidence": "Sec 7 and Algorithm 1 lines 1-15 specify lambda adaptation and the tau_load filter, but the code adapts an atomic reload-pair cap dfr_clamp_k instead (ggml/include/ggml-kairox.hpp:194-201, consumed at src/llama-kairox.cpp:63-64) and contains no epsilon anywhere; lambda is written once at init (src/llama-kairox.cpp:338,384) and has no other writer. build_sparse_ffn_dfr (src/llama-graph.cpp:1300-1318) does a bare top-K with no threshold. Fig. 15 attributes roughly the last 15% of the end-to-end gain to +ANB, so the mechanism is load-bearing, and Fig. 11 is not derivable from the artifact as shipped.",
+      "feasibility": "H",
+      "feasibility_rationale": "All three pieces are localized; the per-call host-to-constant upload of the EMA coefficients means a time-varying lambda needs no new plumbing; the evaluation reuses the shipped benchmark plus counters the code already maintains (reload_count, reload_planned_count at ggml-kairox.hpp:91-92). Fits the machine and the 10-week budget.",
+      "research_value": "M",
+      "research_value_rationale": "Measuring which controller actually wins is useful and both outcomes teach something - if the shipped rate limiter wins, the paper's central Sec 7 story is weaker than claimed, which is a real finding about a published OSDI design. But it is a re-derivation of the paper's own algorithm rather than a new idea, so a reviewer would call it careful rather than novel.",
+      "scoop_check": {
+        "result": "clear",
+        "details": "Queries: 'Kairox OSDI 2026 online neuron balancing GPU-CPU hybrid LLM inference'; 'DynamicInfer runtime-aware sparse neuron offloading ICLR 2026 scheduler eviction'. The only closely adjacent system found is DynamicInfer (ICLR 2026, https://openreview.net/forum?id=CvjmvjlczZ), concurrent work with its own hierarchical neuron cache, load-aware activation and prefetch pipeline - it neither reimplements nor evaluates Kairox's controller. No re-implementation study or follow-up on Kairox found."
+      }
+    },
+    {
+      "name": "Pinned staging for neuron reloads, and re-tuning group size on top of it",
+      "hypothesis": "We hypothesize that DMA-ing neuron groups out of pinned host memory (a double-buffered staging ring, or registering the FFN weight buffers) raises achieved PCIe bandwidth and lets Kairox run at a smaller group size at equal bandwidth - improving throughput at a given VRAM budget by cutting over-fetch - compared with the paper's system.",
+      "mechanism": "With -cffn the FFN weights are placed in ggml_backend_cpu_buffer_type() (common/common.h:994-996), i.e. ordinary malloc'd pageable memory, and the reload path issues cudaMemcpyAsync host-to-device straight out of it (ggml-cuda.cu:2587-2594). Copies from pageable memory are staged by the driver and are not truly asynchronous, a plausible explanation for Table 2's 18-21% of theoretical peak at GS=1. Change: allocate a pinned staging ring in the I/O executor, or route the hot fraction of FFN weights through ggml_backend_cuda_host_buffer_type() (already used for the cache-manager tensors at src/llama-kairox.cpp:264), then memcpy group -> pinned -> DMA, double-buffered against the existing reload window (reload_window_size = 4, ggml-kairox.hpp:93). The optional second half sweeps GS, which requires rebuilding a minimal co-activation + pymetis grouper that emits a compatible split GGUF (the loader needs keys ffn_group_size, ffn_normalized_pattern and blk.N.ffn_reorder_perms, src/llama-kairox.cpp:140-142, 256).",
+      "code_locations": [
+        "ggml/src/ggml-cuda/ggml-cuda.cu:2580",
+        "common/common.h:994",
+        "src/llama-kairox.cpp:262",
+        "ggml/include/ggml-kairox.hpp:106"
+      ],
+      "motivating_evidence": "Table 2 is the paper's own evidence that PCIe utilization is far below peak (3.3/16 and 5.8/32 GB/s at single-neuron granularity, only ~10.8/22.3 at GS=24), and Sec 5.2 frames the group size purely as a granularity trade-off without considering the host-memory pinning that bounds achievable bandwidth. Every shipped split uses only GS=16 or GS=32 (the file-name suffixes in bench_models.sh:17-38 are group counts: 11008/688=16, 16384/1024=16, 18944/592=32), so the GS trade-off curve asserted in Sec 5.2 is never swept in the artifact.",
+      "feasibility": "H",
+      "feasibility_rationale": "The pinning half is a few hundred LOC confined to the reload path plus buffer allocation, and is measurable immediately with the shipped reload-latency accounting and end-to-end benchmark on this machine. The optional GS sweep is M because it requires rewriting the unreleased offline grouper; scope the project as 'pinning first, GS sweep if time permits' and the overall risk stays low.",
+      "research_value": "M",
+      "research_value_rationale": "The bandwidth result alone is an engineering win a reviewer would expect. What lifts it above polish is the second-order claim - that better transfer efficiency shifts the optimal transfer granularity and therefore the over-fetch tax - which is a design-space statement the paper makes (Sec 5.2) without evidence.",
+      "scoop_check": {
+        "result": "partial",
+        "details": "Queries as in add-on 1 plus 'pinned host memory async DMA weight streaming llama.cpp'. Pinned-buffer streaming is standard practice and appears throughout the MoE offloading literature (SeqMoE https://arxiv.org/html/2609.12978, ExpertFlow https://arxiv.org/pdf/2510.26730) and in llama.cpp's own expert-streaming work (https://github.com/ggml-org/llama.cpp/discussions/24528), so the technique itself is not novel; its interaction with co-activation group size in Kairox is unpublished. Note: the pageable-memory diagnosis is a code-reading inference, not a measurement."
+      }
+    },
+    {
+      "name": "Does online neuron balancing survive realistic context lengths?",
+      "hypothesis": "We hypothesize that Kairox's speedup over llama.cpp shrinks substantially as context grows from 1k to 8k-32k tokens - because the KV cache takes VRAM away from the neuron cache and attention takes a growing share of each decode step - and that a context-aware budget policy (KV offload, or a guaranteed neuron-cache floor) recovers part of the loss, compared with the paper's system.",
+      "mechanism": "The neuron-cache budget is computed once at context creation as min(budget - already_used, free) where already_used includes the fully pre-allocated KV cache (src/llama-kairox.cpp:102-130), and is then distributed over layers by the offline ffn_normalized_pattern weighting (src/llama-kairox.cpp:177-194). At ctx=1024 the KV cache is negligible; at 8k-32k on a 13B model it is several GB subtracted directly from the neuron cache. Build a long-context workload (long prompts through --bench-prompt-file), measure decode throughput and per-layer cached-neuron fraction (already logged at src/llama-kairox.cpp:387-389) versus context length for llama.cpp / the lambda=0 eager-reload config / Kairox, then evaluate policies: (i) -nkvo to push KV to host, (ii) a minimum guaranteed neuron-cache size with KV spill, (iii) layer-skewed re-allocation of the freed budget.",
+      "code_locations": [
+        "src/llama-kairox.cpp:102",
+        "src/llama-kairox.cpp:177",
+        "common/arg.cpp:2026",
+        "test_kairox.sh:6",
+        "tools/completion/completion.cpp:391"
+      ],
+      "motivating_evidence": "Sec 9.2 caps context at 1024 tokens and output at 512 for every single experiment (mirrored by ctx_size=1024 at test_kairox.sh:6), and no experiment in Sec 9 varies context length - yet the paper's motivating use case is a local assistant on a consumer PC, where 8k+ contexts are routine. The one-shot budget computation at src/llama-kairox.cpp:102-130 makes the KV-versus-neuron-cache competition static and invisible at the evaluated scale.",
+      "feasibility": "M",
+      "feasibility_rationale": "No new kernels and the host RAM (125 GB) comfortably absorbs offloaded KV, but it needs a new long-context workload generator, occupancy instrumentation per configuration, and noticeably more compute (32k-context decode runs on 13B models take minutes each, so a full sweep is tens of GPU-hours). Budget policy changes touch context creation, making it mildly cross-cutting.",
+      "research_value": "H",
+      "research_value_rationale": "This is the classic 'important regime the paper ignores' case: it tests whether the headline claim generalizes beyond a 1k-token bench that is maximally favourable to weight-side optimization. Both outcomes are informative - if the speedup holds, the paper is stronger than it shows; if it collapses, KV/weight-cache co-partitioning under a fixed VRAM budget becomes a well-motivated follow-on that a reviewer at OSDI would care about.",
+      "scoop_check": {
+        "result": "partial",
+        "details": "Queries: 'KV cache growth competing with weight cache GPU memory elastic partitioning long context sparse offloading inference'; 'co-partition GPU memory between offloaded weight cache and KV cache dynamically LLM inference consumer GPU 2026'. The KV-versus-weights memory tension is well covered in the KV-offloading literature (KVSwap https://arxiv.org/pdf/2511.11907, KVDrive https://arxiv.org/pdf/2605.18071) and long-context on-device KV offloading is active, but none of that work is paired with neuron-level weight caching, and no paper evaluates Kairox at long contexts."
+      }
+    },
+    {
+      "name": "Batch-aware group scoring for speculative and multi-request decoding",
+      "hypothesis": "We hypothesize that a batch-aware group score - weighting a group by how many sequences in the batch activate it, and/or scoring per request and unioning only at admission time - improves decode throughput at draft widths of 8-16 and at 4-8 concurrent requests, relative to Kairox's single global TAM score, compared with the paper's system.",
+      "mechanism": "At batch > 1 the activation mask is collapsed across tokens before scoring: ggml_sum_cols over the predictor output (src/llama-graph.cpp:1301-1303) and the multi-token branch of the mask kernel (dfr-fusion.cu:175-185) reduce all tokens to one group intensity, normalized by sparse_idx->ne[1] * group_size (llama-graph.cpp:1307), so a group fired by one sequence out of eight scores like one fired weakly by all eight. Change: keep the per-column counts the DFR update kernel already accumulates (dfr-fusion.cu:30-46) and expose a coverage-weighted score; additionally re-measure the hard-coded dense-GEMM cutover at b->ne[1] <= 8 (src/llama-graph.cpp:1284). Evaluate with --draft-max sweeps through test_kairox.sh:226-239 and, if the server path can be made to work, with multiple parallel slots.",
+      "code_locations": [
+        "src/llama-graph.cpp:1284",
+        "src/llama-graph.cpp:1301",
+        "ggml/src/ggml-cuda/dfr-fusion.cu:151",
+        "examples/speculative/speculative.cpp:608",
+        "test_kairox.sh:226"
+      ],
+      "motivating_evidence": "Sec 3.1's first motivating bottleneck is batch workload expansion (throughput saturating at batch 4-8, CPU latency rising 102.8 -> 551.7 ms from batch 1 to 20), yet Sec 9.2 evaluates only batch 1 plus 5-token speculative decoding. Sec 9.2 itself concedes that under speculative decoding llama.cpp sometimes beats the sparse baselines because dense batched GEMMs can surpass sparse kernels, and Fig. 9(bottom) contains several sub-1x bars for the sparse baselines. So the batched regime is simultaneously the paper's stated motivation and its weakest set of results.",
+      "feasibility": "M",
+      "feasibility_rationale": "The scoring change itself is contained, but llama-server is not among the build targets (compile_kairox.sh:43) and the Kairox graph path's interaction with continuous batching is untested, so a true multi-request harness carries real integration risk. The speculative-decoding-only version reuses the shipped harness and would be H on its own.",
+      "research_value": "M",
+      "research_value_rationale": "The regime matters and the paper under-serves it, but the sparsity literature already establishes that union activation sparsity collapses as batch size grows, so a modest and partly predictable improvement is the likely outcome rather than a surprising one.",
+      "scoop_check": {
+        "result": "partial",
+        "details": "Query: 'batched decoding union activation sparsity diminishes batch size neuron offloading scheduling policy per-request'. Polar Sparsity (NeurIPS 2025, https://arxiv.org/pdf/2505.14884) directly studies the collapse of MLP union sparsity under batching and shifts sparsity to attention heads - it pre-empts the diagnosis but not the offloading/admission policy, and does no GPU-CPU weight balancing. DynamicInfer (https://openreview.net/forum?id=CvjmvjlczZ) also does token- and sentence-level scheduling, but on a single stream."
+      }
+    }
+  ],
+  "risks": [
+    "Paper/artifact divergence on the headline adaptive mechanism: Sec 7 and Algorithm 1 adapt the momentum decay lambda, but the released code keeps lambda fixed from KAIROX_DFR_LAMBDA_INIT (src/llama-kairox.cpp:338, no other writer) and instead scales an atomic reload-pair cap dfr_clamp_k by (1 +/- alpha) based on a boolean 'was anything queued behind the I/O anchor' signal (ggml/include/ggml-kairox.hpp:194-201). Fig. 11 (lambda evolution) is therefore not reproducible as shipped, and the +ANB bar of Fig. 15 measures a different mechanism from the one described.",
+    "The tau_load = (1-lambda)+epsilon one-hit-wonder filter of Sec 6 / Algorithm 1 lines 10-15 does not exist in the code: build_sparse_ffn_dfr (src/llama-graph.cpp:1300-1318) does a bare argsort-top-K with no threshold, and no epsilon appears anywhere in the tree. Any add-on that 'adds thresholding' is implementing the paper, not extending it.",
+    "The entire offline stage of Fig. 6 is unreleased - no C4 activation profiling, predictor training, co-activation graph construction or METIS driver; only the pre-built split GGUFs on Hugging Face. Add-ons needing new models, new group sizes or new architectures must rebuild that pipeline from Sec 5.2/Sec 8 and the GGUF keys the loader expects (src/llama-kairox.cpp:140-142). Budget at least a person-week if it lands on the critical path.",
+    "Two of the five Fig. 9 baselines (PowerInfer, Q-Infer) are outside the artifact (ARTIFACTS_EVALUATION.md:28), and 'Neuralink' is the same Kairox binary with KAIROX_DFR_LAMBDA_INIT=0 and adapt rate 0 (test_kairox.sh:97-116) because the original is closed source (Sec 9.1). Comparisons against Neuralink are against the authors' interpretation, not third-party validation.",
+    "GPU class mismatch: an RTX A5000 has roughly a third of an RTX 4090's FP16 throughput at the same 24 GB and PCIe 4.0, which shifts the CPU-bound / I/O-bound balance point and will change the magnitude of every speedup. All add-on claims must be stated against a re-measured local baseline, never against the paper's absolute numbers.",
+    "CUDA/driver risk is the largest first-week schedule threat: the artifact prescribes CUDA 12.8 while driver 535 supports 12.2 natively. A conda CUDA 12.2 toolkit is the safe route, but whether this llama.cpp base (upstream CI tests 12.4/12.6 only, .github/workflows/build.yml:813,852) still compiles cleanly against 12.2 is unclear from reading alone.",
+    "Disk: the full SPIF-GGUF set exceeds the ~257 GB free (one advertised file is 62.3 GB), so selective per-experiment downloads are mandatory and must be planned in advance.",
+    "The pageable-host-memory diagnosis behind the pinning add-on is a code-reading inference (common/common.h:994 plus ggml-cuda.cu:2592), not a measurement; whether it actually costs the bandwidth Table 2 implies can only be settled by running.",
+    "Artifact badge status is unconfirmed: ARTIFACTS_EVALUATION.md:13-21 says the artifact was submitted for Artifacts Available only, and the USENIX presentation page returned HTTP 403 to automated fetching, so no Functional/Reproduced badge should be assumed.",
+    "The repository is young and low-traffic (created 2026-05-05, last push 2026-05-19, 2 stars, 1 fork, 0 open issues), so there is no community to fall back on when a build or a model-split mismatch breaks, and no evidence of post-AE maintenance."
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "pdf": {
+    "status": "ok",
+    "source_url": "https://www.usenix.org/system/files/fast23-yu.pdf",
+    "version": "from list",
+    "notes": ""
+  },
+  "repo": {
+    "status": "ok",
+    "url": "https://github.com/supermt/FEAT_7.11",
+    "official": "unclear",
+    "evidence": "link taken from the research list; not independently verified"
+  }
+}

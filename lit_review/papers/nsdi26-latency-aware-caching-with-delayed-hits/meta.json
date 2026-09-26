@@ -1,0 +1,11 @@
+{
+  "id": "nsdi26-latency-aware-caching-with-delayed-hits",
+  "title": "Latency-Aware Caching with Delayed Hits: From Bursty Traffic to Pipeline Architectures",
+  "venue": "nsdi",
+  "year": 2026,
+  "paper_url": "https://www.usenix.org/conference/nsdi26/presentation/keren",
+  "pdf_url": "https://www.usenix.org/system/files/nsdi26-keren.pdf",
+  "repo_url": "https://github.com/NadavKeren/Adaptive-Pipeline-Cache",
+  "topic": "caching",
+  "note": "Pipeline of orthogonal cache policies with adaptive memory split, plus latency-aware handling of delayed hits - trace-driven simulation on top of the Caffeine framework, purely CPU and memory bound. Concern - Java build and large public cache traces need disk, both fine here."
+}

@@ -1,0 +1,11 @@
+{
+  "id": "fast23-adoc-automatically-harmonizing-dataflow",
+  "title": "ADOC: Automatically Harmonizing Dataflow Between Components in Log-Structured Key-Value Stores for Improved Performance",
+  "venue": "fast",
+  "year": 2023,
+  "paper_url": "https://www.usenix.org/conference/fast23/presentation/yu",
+  "pdf_url": "https://www.usenix.org/system/files/fast23-yu.pdf",
+  "repo_url": "https://github.com/supermt/FEAT_7.11",
+  "topic": "storage",
+  "note": "Excellent fit. Pure user-space RocksDB auto-tuning framework that controls write stalls by adjusting thread count and batch size to limit data overflow. Evaluation is single-node RocksDB on NVMe SSDs - exactly the target machine. 16 cores and local NVMe are enough to reproduce the write-stall regimes. Concern: the paper sweeps several device classes (SATA SSD, NVMe SSD, Optane) and we only have NVMe, so device-sensitivity results would have to be narrowed or emulated with cgroup v2 I/O throttling."
+}

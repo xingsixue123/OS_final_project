@@ -1,0 +1,56 @@
+{
+  "url": "https://github.com/leanstore/leanstore",
+  "head_commit": "90fcf185c1c8506344a7aa779928787d494348f4",
+  "head_commit_date": "2025-09-11T17:53:15+02:00",
+  "file_count": 158,
+  "size_mb": 1.0,
+  "top_level": [
+    ".clang-format",
+    ".github/",
+    ".gitignore",
+    ".projectile",
+    "CMakeLists.txt",
+    "LICENSE",
+    "README.md",
+    "backend/",
+    "frontend/",
+    "libs/",
+    "shared-headers/"
+  ],
+  "build_files": [
+    "CMakeLists.txt",
+    "backend/CMakeLists.txt",
+    "frontend/CMakeLists.txt"
+  ],
+  "lines_by_extension": {
+    ".hpp": 12972,
+    ".cpp": 10768
+  },
+  "red_flags": {
+    "sudo": {
+      "count": 7,
+      "examples": [
+        ".github/workflows/ccpp.yml:17: run: sudo apt install -y libtbb2-dev libaio-dev libsnappy-dev zlib1g-dev libbz2-dev liblz4-dev libzstd-dev librocksdb-dev liblmdb++-dev libwiredtiger-dev liburi",
+        "README.md:9: `sudo apt-get install cmake libtbb2-dev libaio-dev libsnappy-dev zlib1g-dev libbz2-dev liblz4-dev libzstd-dev librocksdb-dev liblmdb-dev libwiredtiger-dev libur",
+        "frontend/CMakeLists.txt:46: # sudo apt-get install libsnappy-dev  zlib1g-dev libbz2-dev liblz4-dev libzstd-dev librocksdb-dev",
+        "frontend/CMakeLists.txt:55: # prefer https://source.wiredtiger.com/10.0.0/build-posix.html over sudo apt-get install wiredtiger libwiredtiger-dev",
+        "frontend/CMakeLists.txt:65: # sudo apt-get install liblmdb-dev"
+      ]
+    },
+    "perf_counters": {
+      "count": 1,
+      "examples": [
+        "shared-headers/PerfEvent.hpp:100: event.fd = syscall(__NR_perf_event_open, &event.pe, 0, -1, -1, 0);"
+      ]
+    }
+  },
+  "github": {
+    "stargazers_count": 651,
+    "forks_count": 98,
+    "archived": false,
+    "pushed_at": "2026-08-13T13:32:30Z",
+    "created_at": "2021-01-11T11:52:44Z",
+    "open_issues_count": 14,
+    "license": "MIT"
+  }
+}

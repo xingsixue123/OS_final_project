@@ -1,0 +1,57 @@
+{
+  "url": "https://github.com/Thesys-lab/fast23-glcache",
+  "head_commit": "fbb824091209f390f7c921aadee1fbf0d35209c2",
+  "head_commit_date": "2023-05-12T17:11:07-04:00",
+  "file_count": 410,
+  "size_mb": 12.4,
+  "top_level": [
+    "README.md",
+    "diagram.png",
+    "micro-implementation/",
+    "prototype/"
+  ],
+  "build_files": [
+    "micro-implementation/CMakeLists.txt",
+    "micro-implementation/doc0/Makefile",
+    "micro-implementation/test/CMakeLists.txt",
+    "prototype/Cargo.toml"
+  ],
+  "lines_by_extension": {
+    ".c": 27139,
+    ".h": 16539,
+    ".rs": 13844,
+    ".cpp": 2993,
+    ".hpp": 1905,
+    ".py": 108,
+    ".sh": 73
+  },
+  "red_flags": {
+    "sudo": {
+      "count": 17,
+      "examples": [
+        "micro-implementation/.github/workflows/build.yml:22: #       run: sudo apt install libglib2.0-dev libgoogle-perftools-dev build-essential cmake google-perftools",
+        "micro-implementation/.github/workflows/build.yml:56: #       run: sudo apt install libglib2.0-dev libgoogle-perftools-dev build-essential cmake google-perftools",
+        "micro-implementation/.travis.yml:15: sudo: true",
+        "micro-implementation/.travis.yml:51: - sudo make install",
+        "micro-implementation/.travis.yml:89: ##  - sudo apt-get -qq update"
+      ]
+    },
+    "cxl_pmem": {
+      "count": 3,
+      "examples": [
+        "prototype/src/l2cache/CHANGES:11: 6. move freq from hash table to item metadata (so that we can get freq with much lower cost when scanning a seg, and it helps with concurrency: hash table lock ",
+        "prototype/src/l2cache/src/datapool/file.rs:6: //! storage on persistent memory (PMEM) and fast NVMe drives.",
+        "prototype/src/segcachev1/src/datapool/file.rs:6: //! storage on persistent memory (PMEM) and fast NVMe drives."
+      ]
+    }
+  },
+  "github": {
+    "stargazers_count": 51,
+    "forks_count": 7,
+    "archived": false,
+    "pushed_at": "2023-05-12T21:11:07Z",
+    "created_at": "2022-12-17T15:26:25Z",
+    "open_issues_count": 0,
+    "license": null
+  }
+}

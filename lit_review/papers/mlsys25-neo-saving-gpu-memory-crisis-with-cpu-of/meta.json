@@ -1,0 +1,11 @@
+{
+  "id": "mlsys25-neo-saving-gpu-memory-crisis-with-cpu-of",
+  "title": "NEO: Saving GPU Memory Crisis with CPU Offloading for Online LLM Inference",
+  "venue": "mlsys",
+  "year": 2025,
+  "paper_url": "https://proceedings.mlsys.org/paper_files/paper/2025/hash/66a026c0d17040889b50f0dfa650e5e0-Abstract-Conference.html",
+  "pdf_url": "https://proceedings.mlsys.org/paper_files/paper/2025/file/66a026c0d17040889b50f0dfa650e5e0-Paper-Conference.pdf",
+  "repo_url": "https://github.com/NEO-MLSys25/NEO",
+  "topic": "llm-inference",
+  "note": "CPU-offloaded attention and KV cache for online LLM inference - explicitly designed for one GPU plus host CPU, evaluated on T4/A10G which are weaker than the A5000, and the 16-core/125 GB host is exactly the regime it targets"
+}

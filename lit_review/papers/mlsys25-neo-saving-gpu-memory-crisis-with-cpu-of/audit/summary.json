@@ -1,0 +1,157 @@
+{
+  "title": "NEO: Saving GPU Memory Crisis with CPU Offloading for Online LLM Inference",
+  "one_line": "An online LLM serving engine that offloads the decoding attention compute and KV cache of a selected subset of requests to the local host CPU, using asymmetric GPU-CPU sub-batch pipelining and a load-aware per-iteration scheduler to raise GPU batch size and throughput at equal latency.",
+  "topic": "llm-inference",
+  "repo": {
+    "official": "yes",
+    "evidence": "Paper abstract p1 gives https://github.com/NEO-MLSys25/NEO; Artifact Appendix C.2 (p15) repeats it and adds Zenodo DOI 10.5281/zenodo.14964833, whose record is uploaded by first author Xuanlin Jiang and contains NEO-master.zip. The repo holds the real system (swiftllm/ engine, pacpu/ ISPC CPU attention kernel, csrc/ CUDA extension, swiftllm/server/scheduler.py) plus two reproduction scripts, not a stub.",
+    "last_commit": "2025-06-16",
+    "artifact_badges": [],
+    "badge_evidence": "No badge image found on the MLSys 2025 proceedings page or on the Zenodo record. The paper does carry a full Artifact Appendix (pp. 15-16) following the cTuning/ACM artifact-review-badging methodology (Section C.9) with an archived Zenodo DOI, which strongly suggests artifact evaluation, but no awarded badge is displayed anywhere I could check."
+  },
+  "hard_filters": {
+    "H1_open_repo": {
+      "result": "pass",
+      "evidence": "Official repo NEO-MLSys25/NEO linked from the paper (p1) and Artifact Appendix C.2 (p15) + Zenodo 10.5281/zenodo.14964833. Contains the engine (swiftllm/server/scheduler.py, swiftllm/worker/layers/transformer_layer.py), the CPU attention kernel (pacpu/pacpu.ispc, pacpu/core.h), the CUDA extension (csrc/src/*.cu, csrc/src/block_swapping.cpp) and eval drivers (evaluation/reproduce-fig6c.py, evaluation/reproduce-fig10a.py). Apache-2.0, 5.5K Python + 1.5K C/C++/CUDA."
+    },
+    "H2_no_root": {
+      "result": "pass",
+      "evidence": "No kernel module, eBPF, perf-counter, KVM, hugepage or /proc/sys use anywhere in the tree; no Dockerfile. The single sudo hit is README.md:17 (snap install ispc) and Artifact C.4's apt install g++-13/libomp-dev/numactl; ISPC 1.23 ships prebuilt Linux tarballs on GitHub Releases and g++-13 is available via conda-forge, both installable under $HOME. numactl is only an optional wrapper at evaluation/server.py:21 and is unnecessary on this single-NUMA-node host. Host-pinned KV memory (swiftllm/worker/block_swapper.py:53, pin_memory=True) is CUDA page-locking and needs no root."
+    },
+    "H3_hardware_fit": {
+      "result": "pass",
+      "evidence": "The design point is explicitly one GPU plus its local host CPU (paper Section 1, p2); both shipped configs set tensor_parallel_size: 1 (evaluation/configs/config-t4-7b.json:9, config-a10-8b.json:9) and SingleProcExecutor (swiftllm/server/executor.py:61) is the TP=1 path. Our 24 GB Ampere A5000 matches the paper's A10G and exceeds its T4; 16 cores/32 threads sits inside the paper's g5.8x/16x sweep (Fig 10a). --num-gpu-blocks-override (swiftllm/engine_config.py:97, already 54 in config-t4-7b.json:11) lets us pin the GPU KV budget and emulate the memory-constrained regime the claim depends on. PACPU does NOT require AVX-512: pacpu/CMakeLists.txt:7-8 leaves ISPC_TARGETS commented out (host-detected) and README:102 requires only AVX2. Out of reach: the 70B / 2xH100 results (Figs 6a, 8, 9a, 10b) - the paper's weakest gains (14%). config-a10-8b.json:12 asks for 120 GB pinned CPU KV and must be cut to ~40-60 GB on this shared 125 GiB host."
+    },
+    "H4_obtainable_deps_data": {
+      "result": "pass",
+      "evidence": "Workload data ships in the repo: evaluation/data/osc-Llama-2-7b-hf.json holds the OSC request lengths for Fig 6c and prompts are synthesized as dummy tokens (evaluation/benchmark.py:115), while Fig 10a is fully synthetic (evaluation/benchmark.py:92). No dataset download or licence is needed. Deps install in user space: torch/ray/fastapi/transformers/safetensors via pip, gxx=13 and CUDA 12.2 toolkit via conda (driver 535 supports CUDA <=12.2), ISPC 1.23 from its GitHub release tarball. Llama-2-7B / Llama-3.1-8B weights are gated on HF but have ungated mirrors, and --use-dummy (swiftllm/engine_config.py:79) removes the dependency entirely for performance measurement since prompts are dummy tokens and output lengths are forced."
+    }
+  },
+  "reproduce": {
+    "level": "M",
+    "target": "Figure 6c (p8): T4 + Llama-2-7B + OSC load-latency curve, supporting the claim that on a GPU with a tiny KV budget NEO sustains ~6x the request rate of vLLM at equal per-token latency (Section 5.2: '563% higher on T4 at 1 sec latency'). Driver script evaluation/reproduce-fig6c.py exists. Secondary: Figure 10a via evaluation/reproduce-fig10a.py (the x16large line, 79.3% gain).",
+    "scale_down": "No T4 available, so reproduce the claim rather than the absolute curve: keep config-t4-7b.json's num_gpu_blocks_override: 54 (864 KV tokens on GPU) so the A5000 is artificially KV-starved like the T4, and compare NEO vs vLLM on the same machine (which both scripts already do). The falsifiable statement becomes the ratio of sustainable rates at a fixed latency target, not the raw rates. reproduce-fig6c.py:21-22 already uses a reduced rate sweep and benchmark.py:114 truncates the trace to 100 requests. For Fig 10a: cut swap_space 120 -> 48 GB (config-a10-8b.json:12), keep num_data=2000 (script warns against <800), trim output_lens (reproduce-fig10a.py:30) to 3 points for a first pass.",
+    "effort": "~6 person-days + ~20 GPU-hours",
+    "rationale": "Not H: four toolchain hazards must be cleared by hand - two GCC versions under the exact names g++-11/g++-13 (pacpu/build.sh:2-3), ISPC 1.23 documented only via snap (README:17), CUDA >=12.2 required (Artifact C.3.3) while the system nvcc is 11.8, and a top-level import of vllm_flash_attn_2_cuda (transformer_layer.py:8) that is taken on compute capability >=8 (transformer_layer.py:277) and is ABI-pinned to an unmaintained wheel. Plus the target GPU differs from the paper's (emulated via --num-gpu-blocks-override) and the A10G config's 120 GB pinned swap space does not fit this shared host. Not L: the exact figure has a released driver script, the workload ships inside the repo, configs are checked in, all knobs are CLI flags, and the mechanism's design point (1 GPU + host CPU) is exactly this machine."
+  },
+  "addons": [
+    {
+      "name": "chunked-prefill-aware load-aware scheduling",
+      "hypothesis": "We hypothesize that replacing NEO's all-or-nothing prefill admission with chunked prefill admission inside the asymmetric pipeline improves sustained throughput at a fixed per-token latency target under long-prompt workloads (input >= 4K tokens) on a memory-constrained GPU, compared with NEO as published.",
+      "mechanism": "Give Request a prefilled_len so a prompt can be admitted in chunks. In scheduler step 3, admit min(chunk, remaining_prompt) tokens instead of whole prompts. In step 5 (_decide_mode_and_gen_batch's prefill-reduction loop), shrink the chunk size rather than evicting an entire prefill request, giving continuous instead of discrete control over Tl0 for CPU-GPU balancing. Defer the KV swap-out of a CPU-request until its final chunk completes. The cost tables are already parameterised by token count S (perfpredictor.get_pref_T), so chunk sizes interpolate for free. Add a long-prompt workload by raising input_len in the synthetic generator.",
+      "code_locations": [
+        "swiftllm/server/scheduler.py:286",
+        "swiftllm/server/scheduler.py:217",
+        "swiftllm/structs.py:226",
+        "swiftllm/server/block_manager.py:79",
+        "swiftllm/worker/layers/transformer_layer.py:181",
+        "evaluation/benchmark.py:92"
+      ],
+      "motivating_evidence": "The paper proposes exactly this and does not implement it (Section 6, p10): 'NEO could integrate with chunked-prefill ... instead of removing the whole prefilling requests, NEO could remove chunks of prefilling requests, thereby having a finer-grained control for CPU-GPU balancing. Chunked prefill would be especially useful for NEO when context length gets very large while GPU memory is limited.' The published evaluation never enters that regime: the T4 config caps max_model_len at 832 tokens (evaluation/configs/config-t4-7b.json:6) and Fig 9c tops out at 500-token inputs.",
+      "feasibility": "M",
+      "feasibility_rationale": "Cross-cutting: request state, scheduler steps 3-5, block allocation and the swap-out trigger all change, and a new long-prompt workload generator is needed. But no new kernels are required, the perf tables already cover arbitrary token counts S, and the eval harness (evaluation/server.py, evaluation/benchmark.py) is reusable as-is. Compute is modest (one GPU, 7B model). Realistic for 2-4 students in 10 weeks.",
+      "research_value": "H",
+      "research_value_rationale": "Closes the paper's own explicitly stated gap, and both outcomes teach something: if chunking helps, it extends NEO to the long-context regime it currently cannot serve (its own T4 config is limited to 832 tokens); if it does not, it validates the paper's Appendix B counter-argument - that chunked prefill is useless on memory-constrained GPUs because too few decodes can be piggybacked - in the offloaded setting, which nobody has tested.",
+      "scoop_check": {
+        "result": "partial",
+        "details": "Queries: '\"chunked prefill\" combined with CPU attention offloading LLM serving scheduler 2026 asymmetric pipelining long context'; 'NEO MLSys 2025 CPU offloading attention \"chunked prefill\" follow-up scheduling paper 2026'. Closest work is APEX (https://arxiv.org/abs/2506.03296), a NEO successor that replaces the greedy heuristic with profiling-informed asynchronous dispatch on T4/A10 + Llama-2-7B/3.1-8B, but describes no chunked prefill. Chunked-prefill scheduling papers exist (Sarathi-Serve; https://arxiv.org/pdf/2606.09061) but none inside a CPU-offload pipeline. Nothing found doing the specific combination."
+      }
+    },
+    {
+      "name": "closed-loop online-recalibrated performance predictor",
+      "hypothesis": "We hypothesize that replacing NEO's one-shot offline profiling tables with an online, feedback-calibrated predictor removes the sub-baseline throughput region of Figure 9 (short output lengths) and the decay at long output lengths, improving relative throughput by >=5% across the output-length sweep while eliminating the ~10-minute cold-start profiling pass.",
+      "mechanism": "The engine already measures, per layer and per pipeline stage, the four quantities the cost model needs (TransformerEvents.linr_time / pref_time / gdec_time / cdec_time). Add a FeedbackPerfPredictor subclass of PerfPredictor that starts from a coarse table and, after each iteration, folds the measured times back into the table cells that were actually used, via EWMA with a per-cell confidence; sample monitor_performance cheaply instead of only during profiling. Also replace the hard-coded lnch_T = 0.8 (perfpredictor.py:128) and the magic linr_S_threshold = 128 (perfpredictor.py:89) with measured values.",
+      "code_locations": [
+        "swiftllm/perfpredictor.py:70",
+        "swiftllm/server/profiler.py:41",
+        "swiftllm/worker/layers/transformer_layer.py:33",
+        "swiftllm/worker/model.py:48",
+        "swiftllm/server/engine.py:189"
+      ],
+      "motivating_evidence": "Section 5.4 (p9): NEO is 'sometimes slightly worse [than baseline] due to suboptimal scheduling decisions caused by the inevitable inaccuracy of the offline performance profiling', and Fig 9b/9c show relative throughput dipping below 1.0. Artifact C.8 (p16) notes the profiling pass makes first startup take 'less than ten minutes'. The predictor is also workload-blind: _profile_cdec (swiftllm/server/profiler.py:311) profiles only evenly-split sequence lengths, while real traces are heavily skewed (Fig 7 caption).",
+      "feasibility": "H",
+      "feasibility_rationale": "Localized: one new class in swiftllm/perfpredictor.py plus one hook in the engine's main loop, reusing instrumentation that already exists in TransformerEvents and ModelPerfResult. Evaluable with the shipped reproduce-fig10a.py sweep on this machine. Well under 1K LOC.",
+      "research_value": "M",
+      "research_value_rationale": "A solid, expected improvement in a regime the paper admits it loses, with practical appeal (removing offline profiling entirely). But the direction is predictable to a reviewer, and APEX has already staked out 'better cost-model-driven dispatch for NEO'.",
+      "scoop_check": {
+        "result": "partial",
+        "details": "Queries: 'LLM inference scheduler \"offline profiling\" inaccurate replace with online feedback cost model CPU offload adaptive calibration 2026'; 'papers citing NEO \"CPU offloading\" LLM inference 2026 GPU-CPU pipelining scheduler improvement'. APEX (https://arxiv.org/abs/2506.03296) explicitly criticises NEO's 'greedy, heuristic algorithm that can lead to suboptimal decisions' and uses profiling-informed dynamic dispatch with up to 96% claimed throughput improvement; Pie (https://arxiv.org/pdf/2411.09317) does online 'adaptive expansion' of CPU swap memory. Neither is described as recalibrating the cost table from in-flight measurements, but the territory is occupied - an implementation would have to position against APEX explicitly."
+      }
+    },
+    {
+      "name": "latency-aware mode selection instead of throughput-greedy",
+      "hypothesis": "We hypothesize that replacing the scheduler's throughput-only objective (tokens per iteration-time) with a latency-aware objective that accounts for queueing delay removes NEO's documented per-token latency penalty at intermediate request rates without lowering the maximum sustainable rate, measured on the Figure 6c load-latency curve and the p99 of Figure 7.",
+      "mechanism": "Step 6 of the scheduler currently compares len(batch)/gpu_time for the GPU-only and pipelined schedules and takes the larger. Replace it with a cost that adds an estimated queueing term derived from the already-tracked waiting_q / cpu_decoding_q lengths and each request's accumulated per-token latency, so pipelining is chosen only when the throughput gain pays for the longer iteration. Add hysteresis to the swap-out/swap-in thresholds so a request is not offloaded and swapped back within a few iterations. Optionally give requests a deadline and prefer GPU placement near it.",
+      "code_locations": [
+        "swiftllm/server/scheduler.py:224",
+        "swiftllm/server/scheduler.py:252",
+        "swiftllm/server/scheduler.py:184",
+        "swiftllm/structs.py:27",
+        "evaluation/benchmark.py:30"
+      ],
+      "motivating_evidence": "Section 5.2 (p8) concedes NEO shows 'slightly higher latencies at intermediate rates' and attributes part of it to the fact that 'NEO actively seeks opportunities to offload requests, even though offloading may not help, which consequently leads to more system-level overheads in scheduling and swapping'. Section 5.4 blames the sub-1.0 region of Fig 9 at short output lengths on the same cause. The scheduler is strict FCFS with a throughput-only objective (swiftllm/server/scheduler.py:89 docstring), so CPU-tier requests get no latency protection.",
+      "feasibility": "H",
+      "feasibility_rationale": "Confined to swiftllm/server/scheduler.py plus one field on Request; the latency metrics are already emitted by evaluation/benchmark.py:67-73 and plotted by evaluation/illustrator.py. Same compute budget as the baseline experiments, on one GPU.",
+      "research_value": "M",
+      "research_value_rationale": "Fixes a weakness the paper names, and online-serving reviewers care about tail latency - but SLO-aware LLM scheduling is a crowded area, so the contribution is 'SLO-awareness for the CPU-offload tier' rather than a new idea.",
+      "scoop_check": {
+        "result": "partial",
+        "details": "Query: '\"NEO\" LLM inference CPU offload \"latency-aware\" OR \"SLO-aware\" scheduling tail latency offloaded requests 2026'. Closest: OmniServe (https://arxiv.org/abs/2603.12831), which does CPU-GPU attention piggybacking with SLO guarantees for mixed latency-sensitive/best-effort loads, and Memory Offloading for LLM Inference with Latency SLO Guarantees (https://arxiv.org/pdf/2502.08182). Both are cluster/multi-tenant framings; neither modifies NEO's greedy per-iteration mode choice."
+      }
+    },
+    {
+      "name": "quantized CPU-tier KV cache to relieve CPU memory bandwidth",
+      "hypothesis": "We hypothesize that storing the CPU-resident KV cache in 8-bit (per-block scaled) instead of FP16 raises NEO's peak relative throughput and shifts the peak toward longer output lengths on a fixed-bandwidth host, because CPU decoding attention is memory-bandwidth-bound - measured on the Figure 9b / Figure 10a output-length sweep at equal GPU configuration.",
+      "mechanism": "Change data_t for the CPU cache only (pacpu/dtype.h) to int8 with a per-(block, head) scale; quantize during swap-out and in the store_kv fast path; dequantize inside the ISPC inner loops, which already accumulate in FP32 (itmd_t), so only the load-and-convert step changes. Halving bytes per KV token also doubles CPU cache capacity for a given --swap-space. Report perplexity/accuracy next to throughput so the accuracy cost is on the record.",
+      "code_locations": [
+        "pacpu/dtype.h:5",
+        "pacpu/pacpu.ispc:5",
+        "pacpu/pacpu.ispc:68",
+        "pacpu/core.h:11",
+        "swiftllm/worker/block_swapper.py:53",
+        "csrc/src/block_swapping.cpp:22"
+      ],
+      "motivating_evidence": "Section 5.5 (p9-10) is unambiguous: 'The peak throughput gain is positively related to the CPU memory bandwidth. This supports the fact that the memory bandwidth, rather than computing power (i.e., number of cores), is the factor that determines the performance of attention operation on CPUs.' Figure 10a shows a 12.2% -> 79.3% spread driven purely by bandwidth. The paper positions itself as explicitly not trading accuracy (Sections 1 and 7), so it never explores this axis - and our Threadripper host has fewer memory channels than the g5.16xlarge that produced the 79.3% number, making bandwidth the binding constraint here.",
+      "feasibility": "M",
+      "feasibility_rationale": "The ISPC kernel, the swap path and the C++ byte arithmetic must change together, and a mixed-dtype swap (FP16 on GPU, INT8 on CPU) means swap_blocks can no longer be a plain cudaMemcpyAsync - a conversion kernel is needed. Doable in 10 weeks but touches ISPC, C++/CUDA and Python at once.",
+      "research_value": "M",
+      "research_value_rationale": "KV quantization is a well-trodden literature, so the surprise is limited; the specific contribution is quantifying how much of NEO's CPU-bandwidth wall a cheap quantization buys - useful, but the sign of the result is not in doubt.",
+      "scoop_check": {
+        "result": "partial",
+        "details": "Query: 'CPU attention offloading LLM inference INT8 quantized KV cache CPU memory bandwidth 2026'. KV quantization for offloaded caches is widespread (INT8 KV-cache compression work, Q-Hitter); ScoutAttention (https://arxiv.org/abs/2603.27138) reduces CPU-side work via block-wise sparsity rather than quantization. Nothing found that quantizes the CPU tier inside a NEO-style asymmetric pipeline and reports the bandwidth-to-throughput transfer function."
+      }
+    },
+    {
+      "name": "intra-sequence tiering across GPU and CPU",
+      "hypothesis": "We hypothesize that relaxing NEO's 'a request's KV lives entirely on one device' invariant - computing partial attention on the GPU-resident suffix and the CPU-resident prefix and merging with log-sum-exp - increases throughput and reduces swap traffic for workloads with highly skewed sequence lengths, compared with NEO's whole-request placement.",
+      "mechanism": "Allow a sequence's block table to span both tiers with a split point; issue the GPU paged-attention kernel over its GPU blocks and the PACPU kernel over its CPU blocks for the same request in the same iteration; merge the two partial outputs with the log-sum-exp combination pacpu.ispc already implements for intra-CPU segments (gather_output_one_seq returns log(sum)+max per head). The scheduler then places blocks rather than requests, using the last few otherwise-wasted GPU blocks and removing the all-or-nothing 'swap the whole sequence' decision.",
+      "code_locations": [
+        "pacpu/pacpu.ispc:156",
+        "swiftllm/worker/layers/transformer_layer.py:258",
+        "swiftllm/worker/kernels/paged_attn.py",
+        "swiftllm/server/block_manager.py:153",
+        "swiftllm/server/scheduler.py:120"
+      ],
+      "motivating_evidence": "Section 3.1 (p4) states the simplifying assumption explicitly: 'its KV cache will either reside entirely in the GPU-cache ... or entirely in the CPU-cache'. The consequence is visible in the code: whole requests are swapped out one at a time (swiftllm/server/scheduler.py:265-271) and CPU admission is cut off by a single length threshold min_out_cpu_len (swiftllm/server/scheduler.py:190-199). With the skewed real traces the paper itself uses (Fig 7 caption) this granularity is coarse.",
+      "feasibility": "M",
+      "feasibility_rationale": "No new numerical algorithm is needed - the log-sum-exp merge exists in pacpu.ispc and both attention kernels already produce partial results over sequence blocks - but block tables, the block manager, the two-tier accounting in the scheduler and the cost model all have to learn about split sequences, and numerical equivalence with the unsplit path must be validated.",
+      "research_value": "M",
+      "research_value_rationale": "Relaxing an explicit design assumption is the kind of thing a reviewer likes, but the mechanism has been demonstrated elsewhere (HGCA, RetrievalAttention, HybridGen), so the novelty would be the online-serving-throughput framing rather than the technique itself.",
+      "scoop_check": {
+        "result": "partial",
+        "details": "Query: 'split single sequence KV cache across GPU and CPU partial attention log-sum-exp merge hybrid decode 2026'. Close to scooped: HGCA (https://arxiv.org/abs/2507.03153) does dense GPU attention on recent KV plus sparse CPU attention on selected KV and merges with log-sum-exp fusion; RetrievalAttention (https://arxiv.org/pdf/2409.10516) splits the KV set across GPU/CPU and combines partial outputs; HybridGen (arXiv 2604.18529) preserves attention semantics under CPU-GPU KV partitioning. All target long-context latency rather than batch-size-limited online throughput, so the NEO framing is not literally done - but the core mechanism is."
+      }
+    }
+  ],
+  "risks": [
+    "vllm_flash_attn ABI pin: swiftllm/worker/layers/transformer_layer.py:8 imports vllm_flash_attn_2_cuda at module scope and :277 selects that path on compute capability >= 8 (our A5000). Standalone vllm-flash-attn wheels are tied to specific torch builds and no longer released independently. Escape hatch: force the in-repo Triton prefill kernel (swiftllm/worker/kernels/prefill_attn.py) at some prefill-throughput cost.",
+    "Toolchain: pacpu/build.sh:2-3 requires two GCC versions under the literal names g++-11 and g++-13; CUDA >= 12.2 is required (Artifact C.3.3) while the system nvcc is 11.8; ISPC 1.23 is documented only via snap (README:17). All solvable inside $HOME with conda and the ISPC release tarball, but none of it was verified by running.",
+    "Host RAM on a shared machine: evaluation/configs/config-a10-8b.json:12 requests 120 GB of pinned CPU KV cache (swiftllm/worker/block_swapper.py:53). With 111 GiB available and other users on the box this must be cut; how much the reduction eats into the Fig 10a gain is unknown until measured. Whether CUDA page-locking of tens of GB succeeds under this host's RLIMIT_MEMLOCK is unverified.",
+    "Result transferability: the headline 7.5x comes from a T4 with a tiny KV budget. We emulate that via --num-gpu-blocks-override, but the A5000's much higher compute shifts the GPU/CPU balance point, so the reproduced ratio may legitimately differ from the paper's - a reproduction nuance to report, not a failure.",
+    "Coverage of released scripts: only Figs 6c and 10a have drivers. Figs 7, 8, 9, 10b and 11 (including the FastDecode+ comparison, whose server mode exists as 'fsdc' in evaluation/server.py:52-66) must be re-derived from the paper text.",
+    "Model geometry is compile-time: pacpu/dtype.h:21-39 hard-codes layer and head counts for four Llama variants and #errors otherwise; evaluating on any other model needs a code edit plus a rebuild.",
+    "Measurement noise: PACPU takes omp_get_max_threads() threads (pacpu/core.h:239) and the scheduler runs in the same Python process, so on a shared 32-thread host other users' CPU load directly perturbs the CPU-attention timings the cost model depends on. Repeat runs and record host load.",
+    "APEX overlap: arXiv 2506.03296 already attacks NEO's scheduler on the same hardware class with large claimed gains. Any scheduler-centric add-on must read APEX first and position against it; the chunked-prefill and quantized-CPU-tier add-ons are the least exposed.",
+    "Unresolved by desk review: whether MLSys 2025 awarded artifact badges (full Artifact Appendix and Zenodo DOI exist, but no badge is displayed on the proceedings page or Zenodo record), and the real end-to-end cost of the cold-start profiling pass on this machine."
+  ]
+}

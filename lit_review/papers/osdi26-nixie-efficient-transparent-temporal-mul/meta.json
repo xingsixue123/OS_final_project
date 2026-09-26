@@ -1,0 +1,11 @@
+{
+  "id": "osdi26-nixie-efficient-transparent-temporal-mul",
+  "title": "Nixie: Efficient, Transparent Temporal Multiplexing for Consumer GPUs",
+  "venue": "osdi",
+  "year": 2026,
+  "paper_url": "https://www.usenix.org/conference/osdi26/presentation/xu-yechen",
+  "pdf_url": "https://www.usenix.org/system/files/osdi26-xu-yechen.pdf",
+  "repo_url": "https://github.com/XOR-op/Nixie",
+  "topic": "scheduling",
+  "note": "Best-matched paper in the venue for this machine: a *user-space system service* that time-multiplexes several near-GPU-memory-filling ML jobs on a **consumer GPU** with \"no application or driver changes\", plus an MLFQ-style scheduler. Eval repo: https://github.com/XOR-op/nixie-eval . Concern: pinned-host-memory pressure experiments assume a large host RAM budget (we have it)"
+}

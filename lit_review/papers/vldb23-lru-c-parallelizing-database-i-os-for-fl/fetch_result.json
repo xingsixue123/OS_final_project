@@ -1,0 +1,14 @@
+{
+  "pdf": {
+    "status": "ok",
+    "source_url": "https://www.vldb.org/pvldb/vol16/p2364-lee.pdf",
+    "version": "from list",
+    "notes": ""
+  },
+  "repo": {
+    "status": "ok",
+    "url": "https://github.com/LeeBohyun/LRU-C",
+    "official": "unclear",
+    "evidence": "link taken from the research list; not independently verified"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "url": "https://github.com/ds2-lab/MorphServe",
+  "head_commit": "1c42999ded0014717e48c947d13450848cc1b796",
+  "head_commit_date": "2026-04-20T23:46:24-04:00",
+  "file_count": 2,
+  "size_mb": 0.0,
+  "top_level": [
+    "LICENSE",
+    "README.md"
+  ],
+  "build_files": [],
+  "lines_by_extension": {},
+  "red_flags": {},
+  "github": {
+    "stargazers_count": 0,
+    "forks_count": 0,
+    "archived": false,
+    "pushed_at": "2026-04-21T03:46:24Z",
+    "created_at": "2026-04-21T03:33:55Z",
+    "open_issues_count": 0,
+    "license": "MIT"
+  }
+}

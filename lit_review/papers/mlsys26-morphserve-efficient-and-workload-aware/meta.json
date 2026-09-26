@@ -1,0 +1,11 @@
+{
+  "id": "mlsys26-morphserve-efficient-and-workload-aware",
+  "title": "MorphServe: Efficient and Workload-Aware LLM Serving via Runtime Quantized Layer Swapping and KV Cache Resizing",
+  "venue": "mlsys",
+  "year": 2026,
+  "paper_url": "https://proceedings.mlsys.org/paper_files/paper/2026/hash/8144a9d62e506af0fcdeac0e456b2710-Abstract-Conference.html",
+  "pdf_url": "https://proceedings.mlsys.org/paper_files/paper/2026/file/8144a9d62e506af0fcdeac0e456b2710-Paper-Conference.pdf",
+  "repo_url": "https://github.com/ds2-lab/MorphServe",
+  "topic": "llm-inference",
+  "note": "Runtime quantized layer swapping plus pressure-aware KV-cache resizing on Vicuna and Llama models, driven by public Azure and BurstGPT traces which the authors already downscale to fit modest hardware. Single GPU, released code"
+}

@@ -1,0 +1,150 @@
+{
+  "title": "CAPSULE: A Storage Prefetcher Harnessing Spatio-Temporal Locality for Cloud-Scale Workloads",
+  "one_line": "A storage-cache prefetcher that buckets LBAs into adaptive fixed-width spatial clusters (a cheap DBSCAN approximation) and prefetches frequently accessed members of the current and neighbouring buckets, layered on top of OBL/PG/Mithril inside libCacheSim.",
+  "topic": "storage",
+  "repo": {
+    "official": "yes",
+    "evidence": "Paper \u00a71 contributions state 'We publicly release the source code and experimental artifacts at https://github.com/imagesid/capsule'; repo/README.md:3-10 self-identifies as the artifact for the ACM SIGMETRICS 2026 camera-ready and documents the libCacheSim fork relationship. The CAPSULE implementation is present (libCacheSim/cache/prefetch/Capsule.c + ClusterPrefetcher.h, ~2.2k lines, matching the paper's '2,056 lines of code' in \u00a75.1).",
+    "last_commit": "2026-01-08",
+    "artifact_badges": [],
+    "badge_evidence": "none found - no badge mentioned in the paper text, and the ACM DL record (https://dl.acm.org/doi/10.1145/3788088) / SIGMETRICS 2026 accepted-papers page show none"
+  },
+  "hard_filters": {
+    "H1_open_repo": {
+      "result": "pass",
+      "evidence": "Official (URL printed in \u00a71 of the paper; README.md:3-10). Contains the real system, not a placeholder: libCacheSim/cache/prefetch/Capsule.c (244 lines) plus libCacheSim/cache/prefetch/ClusterPrefetcher.h (1,935 lines) implement cluster assignment (:605), neighbour prefetch (:1027), adaptive epsilon/DBI (:1759, :1542), LFU cluster eviction under a metadata budget (:408, :605-698) and I/O load control (:65, :1119-1271); hybrids in OBLCluster.c/Cluster4.c/PGCluster.c; CLI registration in libCacheSim/include/libCacheSim/prefetchAlgo.h:55-90; figure-reproduction scripts in test/."
+    },
+    "H2_no_root": {
+      "result": "pass",
+      "evidence": "All hit-rate results come from the pure user-space trace-replay path libCacheSim/bin/cachesim/sim.c:373 (simulate); the real-I/O IOBlazer path (sim.c:45-368, hard-coded /mnt/new_root at sim.c:63,136) is opt-in and defaults off (cli_parser.c:116 and cli_parser.c:273 set --io=false). No kernel module, eBPF, perf counter, KVM or /proc/sys write anywhere. USE_HUGEPAGE (CMakeLists.txt:21) only guards madvise(MADV_HUGEPAGE) in bulkChainingHashTable.c.unfinished, which is not compiled, and madvise needs no root. The 'sudo' grep hits are in .travis.yml and a comment at CMakeLists.txt:20. Docker is not used at all."
+    },
+    "H3_hardware_fit": {
+      "result": "pass",
+      "evidence": "Single-machine, CPU-only trace simulation. The paper's own platform (Table 3: i7-10700K, 32 GB RAM, 1 TB SATA SSD, one node) is weaker than the target machine (16C/32T, 125 GB RAM, NVMe). Simulated caches are 128 MB-32 GB (\u00a75.4) and CAPSULE metadata is capped at 10% of cache (ClusterPrefetcher.h:605-698) plus a 1-4M-entry 2-byte PrefStat table (ClusterPrefetcher.h:890-896). The only 'multi-node' experiment (\u00a75.5, Figs 18/19) is N simulated shards inside one process, so it needs no second machine. No GPU is used."
+    },
+    "H4_obtainable_deps_data": {
+      "result": "pass",
+      "evidence": "Dependencies are glib-2.0 via pkg-config (CMakeLists.txt:155, cmake/Modules/FindGLib.cmake:30-34), argp (in glibc 2.36), zstd (CMakeLists.txt:165-177) and libaio (ioblazer/ioblazer.h:99, unconditionally pulled in by ClusterPrefetcher.h:25 and sim.c:8) - all available from conda-forge or buildable into $HOME without root; doc/install.md's apt commands can be replayed that way. Traces are the public cacheMon oracleGeneral corpus downloaded over HTTPS by test/download-msr.sh and test/download-cp.sh from cache-datasets.s3.amazonaws.com; README.md:123-133 points at github.com/cacheMon/cache_dataset. Caveat (not a fail): the Baleen/Meta-Tectonic comparison of Fig 13 has no code in this repo (grep -i baleen returns nothing)."
+    }
+  },
+  "reproduce": {
+    "level": "M",
+    "target": "Figure 8 (\u00a75.2) - hit rate of 12 policies on the 14 MSR traces - supporting the claim 'OBL-CAPSULE achieves the highest hit rates, averaging a 43.56% improvement over OBL' (\u00a75.2, Table 4). Secondary, nearly free: Figure 9a (CloudPhysics w90-w95) and the 6.1x w94 claim.",
+    "scale_down": "None needed: Fig 8 runs at full paper scale (14 traces, ~410M requests, 256 MB simulated cache, a few GB of zstd traces) on this machine. If runtime bites, restrict to the 6 traces the paper names (msr_web_2, msr_proj_0, msr_proj_4, msr_prxy_1, msr_hm_0, msr_src1_0) and drop the slow 'cacheus' baseline. For the 729-trace claims, subsample Tencent CBS to ~50 of 597 traces rather than mirroring the corpus.",
+    "effort": "3-5 person-days + ~10-20 CPU-hours (0 GPU-hours)",
+    "rationale": "H-grade on paper: test/download-msr.sh + test/run-msr.py + test/plot-msr.py target exactly this figure (README.md:201-209), data is public and scripted, and the workload fits the machine at paper scale. Knocked to M by porting work that reading the code makes near-certain: (1) doc/install.md is apt/sudo-only and must be replayed under conda without root (glib, zstd, libaio); (2) ClusterPrefetcher.h:883,1407-1408 and ioblazer/ioblazer.h:1395-1402 define non-static globals in headers included by 6-7 translation units, so gcc 12.2's default -fno-common should produce multiple-definition link errors that the authors' Ubuntu-18.04 gcc 7 (-fcommon) never saw; (3) test/plot-msr.py:26 uses matplotlib.cm.get_cmap, removed in matplotlib 3.9, while requirements.txt is unpinned; (4) the repo (created 2026-01-06, 0 stars, 0 forks, CI referencing a missing scripts/install_dependency.sh) has evidently never been built elsewhere; (5) the paper never states which flag configuration produced Fig 8, while test/run-msr.py:74-88 uses CLI defaults (--neighbor=false, --adaptive=true, --max-prefetch=100000), so a flag sweep may be needed to match the numbers."
+  },
+  "addons": [
+    {
+      "name": "Utility-driven epsilon selection (and the paper/code divergence it exposes)",
+      "hypothesis": "We hypothesize that selecting the clustering granularity epsilon by an online prefetch-utility criterion (hits per prefetched block in the previous window) improves hit rate per prefetched block, under the MSR and CloudPhysics suites at 256 MB, compared with CAPSULE's released selector - and that CAPSULE's published gains are largely insensitive to the Davies-Bouldin criterion the paper credits them to.",
+      "mechanism": "Replace the selection loop in preAssignment with a sliding-window multi-armed bandit (UCB or epsilon-greedy) over the 11 candidate epsilons, rewarded by (prefetched-and-later-hit)/(prefetched) taken from the PrefStat counters the code already maintains. Evaluate four arms on identical traces: (i) the artifact's selector as released, (ii) true minimum-DBI as \u00a74.3 describes, (iii) per-trace best fixed epsilon chosen offline, (iv) the bandit. Report hit rate and prefetch volume jointly so the comparison is on a Pareto frontier.",
+      "code_locations": [
+        "libCacheSim/cache/prefetch/ClusterPrefetcher.h:1759",
+        "libCacheSim/cache/prefetch/ClusterPrefetcher.h:1542",
+        "libCacheSim/cache/prefetch/ClusterPrefetcher.h:89",
+        "libCacheSim/bin/cachesim/cli_parser.c:113",
+        "test/run-msr.py"
+      ],
+      "motivating_evidence": "\u00a74.3 states 'the epsilon yielding the lowest DBI score is selected'. The artifact does the opposite: ClusterPrefetcher.h:1892 keeps the candidate with `if (dbi > best_dbi)` (maximum DBI), and ClusterPrefetcher.h:1884 short-circuits on the first (smallest) epsilon producing any bucket with more than `min` members (min=25 when sparse else 5, ClusterPrefetcher.h:1545-1548,1592-1594). So the released 'adaptive epsilon' is a density threshold, not a DBI minimiser. The paper's own Figure 14 hints the criterion may not matter: fixed epsilon=512K reaches ~52% hit rate on msr_proj_4 while adaptive variants sit at 45-50%, adaptive winning only on prefetch volume.",
+      "feasibility": "H",
+      "feasibility_rationale": "One function plus a small bandit (<300 LOC) in a single header; evaluated with the existing test/run-msr.py and test/run-cp.py harness and the existing --fixed/--adaptive flags; no new data, no new compute regime. Comfortably a 10-week project for 2-4 students.",
+      "research_value": "H",
+      "research_value_rationale": "It probes the paper's headline novelty (adaptive, DBI-guided spatial clustering) precisely where artifact and text disagree, and separates 'spatial clustering helps' from 'this clustering-quality metric helps'. Both outcomes are informative to a SIGMETRICS reviewer: either a better, cheaper selector, or evidence that CAPSULE's gains do not come from the mechanism the paper credits.",
+      "scoop_check": {
+        "result": "clear",
+        "details": "Queries: 'CAPSULE clustering-assisted prefetching scheme storage prefetcher SIGMETRICS 2026 Ramadhan Choi' (returns only the paper itself, the ACM DL record https://dl.acm.org/doi/10.1145/3788088 and the SIGMETRICS 2026 accepted-papers page) and 'spatial region based history prefetcher block storage LBA 2025'. No work cites or re-examines CAPSULE (published March 2026; repo created 2026-01-06, 0 stars/forks/issues). Adaptive prefetch-granularity selection exists in the CPU world (DSPatch, https://arxiv.org/pdf/1910.03075), but no re-audit of CAPSULE's epsilon selector exists."
+      }
+    },
+    {
+      "name": "Demand/prefetch priority split (a real prefetch buffer)",
+      "hypothesis": "We hypothesize that inserting CAPSULE's prefetched blocks into a bounded low-priority segment, promoted into the main stack only on a demand hit, improves hit rate on pollution-prone traces (msr_prxy_1, msr_proj_0) without regressing the traces where CAPSULE already wins, compared with the paper's full-priority insertion into the shared cache.",
+      "mechanism": "Today prefetchCluster evicts from and inserts into the single shared cache at full priority (ClusterPrefetcher.h:1140-1147, repeated at 1204-1212 and 1256-1262). Add an is_prefetched bit on the cache object, implement a segmented-LRU wrapper in which prefetch insertions can only evict other not-yet-hit prefetched blocks and a demand hit promotes the block, and expose the probationary-segment fraction as a CLI flag so the paper's current behaviour is one endpoint of the sweep.",
+      "code_locations": [
+        "libCacheSim/cache/prefetch/ClusterPrefetcher.h:1027",
+        "libCacheSim/cache/cache.c:254",
+        "libCacheSim/cache/eviction/LRU.c",
+        "libCacheSim/bin/cachesim/cli_parser.c:112"
+      ],
+      "motivating_evidence": "\u00a77 (Discussion): 'prefetches may waste cache space and evict useful demand-fetched data. This behavior is already evident in Figure 8, where prefetching techniques underperform Belady in workloads such as msr_proj_0, and even lag behind LRU and ARC in msr_prxy_1.' Additionally, Figure 6 and \u00a74 describe prefetched blocks landing in a distinct 'prefetch buffer' with its own eviction, but the code inserts them straight into the shared cache governed by the user-selected eviction policy - a gap between the described design and the artifact.",
+      "feasibility": "H",
+      "feasibility_rationale": "Localized change: one bit on the cache object plus one eviction wrapper (a few hundred LOC touching prefetchCluster, cache.c and LRU.c), evaluated with the existing MSR/CloudPhysics harness at 256 MB with no new data and negligible extra compute.",
+      "research_value": "M",
+      "research_value_rationale": "It addresses a limitation the authors themselves name and would probably fix the Figure 8 regressions, but low-priority insertion / prefetch-buffer segregation is a well-established technique, so a positive result is the expected outcome rather than a surprise.",
+      "scoop_check": {
+        "result": "partial",
+        "details": "Query: 'storage cache prefetch low-priority insertion prevent cache pollution block trace libCacheSim 2025'. The general technique is prior art in CPU caches - 'Mitigating Prefetcher-Caused Pollution Using Informed Caching Policies for Prefetched Blocks' (TACO 2015, https://dl.acm.org/doi/10.1145/2677956) and 'Reducing cache pollution of prefetching in a small data cache' (https://ieeexplore.ieee.org/document/955085/). Nothing applies it to CAPSULE or to cluster-based storage prefetching on these public block traces."
+      }
+    },
+    {
+      "name": "Cost-aware prefetch controller replacing the fixed 100-per-100 rate cap",
+      "hypothesis": "We hypothesize that replacing CAPSULE's constant prefetch rate cap and its 2-strike aliased utility filter with a closed-loop controller targeting a measured prefetch-accuracy setpoint improves hit rate at equal or lower total storage I/O (the Table 5 metric) under prefetch-dominated workloads such as CloudPhysics w92 and Alibaba ns101.",
+      "mechanism": "(a) Replace get_prefstat, which indexes a 1-4M-entry table by `lba % PREFSTAT_TABLE_SIZE` and therefore conflates unrelated LBAs from a ~10^9-wide address space, with a tagged or counting-Bloom structure. (b) Replace the constant limiter.prefetch_limit with AIMD control driven by windowed prefetch accuracy, and make the per-cluster prefetch degree adaptive instead of the global --max-prefetch constant. (c) Report hit rate per prefetched block alongside hit rate, reconstructing Table 5's I/O accounting.",
+      "code_locations": [
+        "libCacheSim/cache/prefetch/ClusterPrefetcher.h:54",
+        "libCacheSim/cache/prefetch/ClusterPrefetcher.h:65",
+        "libCacheSim/cache/prefetch/ClusterPrefetcher.h:1027",
+        "libCacheSim/bin/cachesim/cli_parser.c:112"
+      ],
+      "motivating_evidence": "\u00a74.7 concedes 'Both parameters are heuristically chosen based on empirical observation and can be tuned according to workload characteristics.' \u00a75.6 reports that without load control CAPSULE issues ~16M requests at 70.2% hit vs ~9.4M at 48.9% with it on w92 - a large operating curve collapsed to one point by a constant. Table 5 shows prefetch I/O of 2.3M vs Mithril's 1.4M on Alibaba ns101, and Fig 21a shows CAPSULE's I/O budget consumed almost entirely by speculation. The undocumented BILLION_L=3000 override that raises the cap 30x for large-LBA traces (ClusterPrefetcher.h:1909, ioblazer/ioblazer.h:119) is exactly the kind of magic constant a controller would subsume.",
+      "feasibility": "H",
+      "feasibility_rationale": "Confined to three functions in one header plus one CLI flag; driven by counters the code already keeps; measurable with the existing MSR/CloudPhysics harness on this machine with no new traces.",
+      "research_value": "M",
+      "research_value_rationale": "The I/O-efficiency axis is genuinely under-explored in the paper and the PrefStat aliasing is a real defect, but feedback-directed throttling of prefetch aggressiveness is well-known, so a reviewer would expect the improvement rather than learn something new from it.",
+      "scoop_check": {
+        "result": "partial",
+        "details": "Query: 'feedback directed adaptive prefetch aggressiveness accuracy timeliness storage cache AMP adaptive multi-stream prefetching degree control'. Prior art: Feedback Directed Prefetching, HPCA 2007 (https://dl.acm.org/doi/abs/10.1109/HPCA.2007.346185), APAC (https://par.nsf.gov/servlets/purl/10251073), and AMP (FAST'07), which the paper itself cites as a baseline family. Nothing applies feedback control to CAPSULE's cluster prefetcher, and the PrefStat hash-aliasing defect is specific to this artifact."
+      }
+    },
+    {
+      "name": "Tenant-aware cluster metadata under multi-tenant mixes",
+      "hypothesis": "We hypothesize that partitioning CAPSULE's cluster table and metadata budget per tenant (per-tenant epsilon, per-tenant LFU victim pools, proportional budget shares) improves both aggregate hit rate and worst-tenant hit rate under the four-workload multi-tenant mix of \u00a75.4, compared with the paper's single global cluster table.",
+      "mechanism": "Extend CompositeClusterId with a tenant/namespace id so numerically overlapping LBAs from different tenants cannot share an epsilon-bucket; keep one LFU list per tenant in lfu_buckets; split the 10% metadata budget by equal or hit-rate-proportional shares. Build the missing harness: a trace mixer that interleaves MSR msr_proj_4, CloudPhysics w85, Tencent ns11904 and Alibaba ns105 into one tagged stream (the paper's Fig 17 setup, ~19.8M requests) and reports per-tenant as well as aggregate hit rate.",
+      "code_locations": [
+        "libCacheSim/cache/prefetch/ClusterPrefetcher.h:100",
+        "libCacheSim/cache/prefetch/ClusterPrefetcher.h:408",
+        "libCacheSim/cache/prefetch/ClusterPrefetcher.h:605",
+        "test/run-cp.py"
+      ],
+      "motivating_evidence": "Multi-tenancy is the paper's stated motivation (\u00a71: 'cloud storage environments, where multi-tenancy and dynamic scheduling result in highly heterogeneous workloads'; repeated in \u00a72.3), yet \u00a75.4's multi-tenant experiment merely concatenates four traces into one stream and reports only aggregate hit rate (Fig 17). The implementation keeps exactly one global epsilon (ClusterPrefetcher.h:841), one global cluster hash table (:152) and one global LFU victim pool (:192, :408), so one aggressive tenant can evict another's clusters and unrelated tenants' LBAs collide in the same buckets. Interference is entirely unmeasured.",
+      "feasibility": "M",
+      "feasibility_rationale": "Cross-cutting: the tenant id must thread through every `switch (scheme)` site in ClusterPrefetcher.h, and all CAPSULE state is file-scope static in a header duplicated across six translation units, so it must first be moved into prefetcher_t->params. The multi-tenant mixer and per-tenant accounting do not exist in the repo and must be written. Compute stays cheap and single-node.",
+      "research_value": "H",
+      "research_value_rationale": "It attacks the exact regime the paper claims as its target and never isolates, introduces a measurement the paper never reports (per-tenant hit rate / prefetcher interference), and a negative result - clustering is robust to tenant mixing because LBA ranges rarely collide - would itself be a useful characterisation of cloud block traces.",
+      "scoop_check": {
+        "result": "partial",
+        "details": "Query: 'multi-tenant interference storage cache prefetching per-tenant isolation block cache 2026'. Multi-tenant cache-space partitioning is well covered - OC-Cache (https://ranger.uta.edu/~sjiang/pubs/papers/wang18-oc-cache.pdf), NyxCache FAST'22 (https://research.cs.wisc.edu/wind/Publications/fast22-kan.pdf), Delta Fair Sharing (https://arxiv.org/pdf/2601.20030) - but partitioning a prefetcher's clustering metadata per tenant, and measuring prefetcher-specific interference, was not found."
+      }
+    },
+    {
+      "name": "Locality-preserving sharding for the multi-node hierarchy",
+      "hypothesis": "We hypothesize that replacing modulo/hash sharding with a locality-preserving mapping (range-based or p-stable LSH, so numerically adjacent LBAs stay on one node) raises CAPSULE's per-node hit rate at 4-16 simulated storage nodes, especially on MSR where the paper reports CAPSULE degrading beyond eight nodes.",
+      "mechanism": "Wire a prefetcher into the currently LRU-only, consistent-hash cluster simulator; add a pluggable shard function (modulo-N as the paper's baseline, fixed-range, p-stable LSH); reproduce the two-level setup of \u00a75.5 (per-client LRU absorbing short-term reuse, per-node server cache running LRU/Mithril/CAPSULE, 256 MB per node, N in {2,4,8,16}) with aggregate cache capacity held constant, and report hit rate plus cross-node prefetch redundancy.",
+      "code_locations": [
+        "example/cacheCluster/main.cpp",
+        "example/cacheCluster/consistentHash.c",
+        "example/cacheCluster/include/cacheCluster.hpp",
+        "libCacheSim/include/libCacheSim/prefetchAlgo.h:55"
+      ],
+      "motivating_evidence": "\u00a75.5 verbatim: 'MSR is an exception - it dips slightly beyond eight nodes as spatial locality fragments under modulo sharding... Simple hashing destroys adjacency by scattering nearby LBAs across nodes. A locality-aware mapping such as LSH could co-locate proximate LBAs, which would further improve CAPSULE's prefetch efficiency.' The same section admits the Fig 19 gains are confounded ('increasing the node count also increases aggregate cache capacity'), so a capacity-controlled re-run is itself a contribution.",
+      "feasibility": "M",
+      "feasibility_rationale": "example/cacheCluster is upstream libCacheSim scaffolding with no prefetcher plumbing (main.cpp:55-60 builds Cache(size, algo, hashpower) only) and is not even added by the top-level CMakeLists.txt, so the whole Fig 18/19 harness must be rebuilt, including the client-side LRU tier. Compute stays trivial: still one process on one machine.",
+      "research_value": "M",
+      "research_value_rationale": "The paper explicitly names LSH sharding as the fix, so a positive result is the expected outcome; the genuinely new part is the capacity-controlled ablation that disentangles 'more nodes' from 'more aggregate cache', which the paper flags but does not perform.",
+      "scoop_check": {
+        "result": "clear",
+        "details": "Query: 'locality preserving sharding LSH distributed cache prefetching co-locate adjacent blocks storage nodes'. LSH-based data distribution exists generally (Layered LSH, https://web.stanford.edu/~ashishg/papers/darpa_unpub2.pdf) but nothing applies it to prefetcher-aware block-cache sharding, and no follow-up to CAPSULE exists."
+      }
+    }
+  ],
+  "risks": [
+    "Predicted link failure on this machine: ClusterPrefetcher.h:883 (`Point *points;`), :1407-1408 (`int last_prefetched_cluster; int next_ts;`) and ioblazer/ioblazer.h:1395-1402 define non-static globals in headers included by 6-7 translation units; gcc 12.2 defaults to -fno-common (the authors' Ubuntu 18.04 gcc 7 did not), so expect multiple-definition errors. Workaround: -DCMAKE_C_FLAGS=-fcommon.",
+    "Paper-vs-code divergences that change what 'reproducing CAPSULE' means: epsilon selection maximises DBI / picks the first dense bucket instead of minimising DBI (\u00a74.3 vs ClusterPrefetcher.h:1877-1917); Algorithm 1's epsilon-neighbour distance test (Eq. 2) is unimplemented - setLeftNeighbor/setRightNeighbor (ClusterPrefetcher.h:935-948) are empty stubs, the Cluster struct (:120-149) has no left/right fields, and prefetchCluster walks buckets +/-1 unconditionally (:1070-1077); \u00a74.6's rejected LRU cluster eviction is commented out (:650); cluster members are appended without de-duplication (:765-767, :816-818), which interacts with the 10% metadata budget claim of \u00a74.6 and Fig 20.",
+    "The configuration behind Figure 8 is never stated in the paper, while test/run-msr.py:74-88 uses CLI defaults (--neighbor=false, --adaptive=true, --max-prefetch=100000, --max-metadata=0.1) and \u00a75.3 evaluates neighbour-on variants; a flag sweep may be needed before the numbers match.",
+    "Only 2 of ~15 figures have scripts. Figs 9b, 11, 12, 13, 14-20 and Table 5 have no harness; in particular the Baleen / Meta-Tectonic comparison (Fig 13, the largest claimed margin at +24.58 %p) cannot be re-run at all - there is no Baleen code or Tectonic loader in the repo.",
+    "All CAPSULE state is file-scope `static` inside ClusterPrefetcher.h, duplicated per translation unit and never reset, so any add-on needing two caches, two tenants or two prefetchers in one process (A4, A5) must first refactor that state into prefetcher_t->params.",
+    "Both hot paths write to /dev/shm on the request path and never truncate (sim.c:417-428 opens/closes /dev/shm/lll.txt per request; ClusterPrefetcher.h:1291-1316 rewrites /dev/shm/prefetched<N>.txt and appends to /dev/shm/lll.txt per prefetching request). This taxes runtime and makes parallel runs collide on a shared machine - patch it out before scaling across 16 cores.",
+    "Repo health signals are weak: created 2026-01-06, single HEAD commit dated 2026-01-08, 0 stars / 0 forks / 0 issues, CI (.github/workflows/build.yml:38) calls a scripts/install_dependency.sh that does not exist, ioblazer/CMakeLists.txt:1 references a missing ioblazerbup.c, and requirements.txt is unpinned while test/plot-msr.py:26 uses matplotlib.cm.get_cmap (removed in matplotlib 3.9). Nobody outside the author appears to have built this.",
+    "Not settleable by desk review: whether the simulator actually reproduces the reported miss ratios, whether zstd trace reading plus the belady and cacheus baselines work in this fork, real per-run wall-clock, and the on-disk size of the 20 downloaded traces."
+  ]
+}

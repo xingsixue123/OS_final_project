@@ -1,0 +1,151 @@
+{
+  "title": "Latency-Aware Caching with Delayed Hits: From Bursty Traffic to Pipeline Architectures",
+  "one_line": "A modular cache built as a pipeline of simple single-bias policies (recency LRU*, frequency LFU*, and a new burstiness policy LBU) whose block sizes are re-allocated on the fly by a ghost-cache hill climber that minimizes average request latency under delayed hits.",
+  "topic": "caching",
+  "repo": {
+    "official": "yes",
+    "evidence": "README.md:1-3 declares itself the NSDI '26 artifact for this exact title; the paper's availability statement (p. 13) and reference [35] point to github.com/NadavKeren/Adaptive-Pipeline-Cache; the Artifact Appendix (p. 18) describes the same modules. The policy implementation itself is in the author's pinned Caffeine fork (containers/test-container/Containerfile:4-7 clones NadavKeren/caffeine and checks out tag adaptive-pipeline-v1; README.md:49-53 lists all three code repos); I verified that tag contains simulator/.../policy/latency_aware/pipeline/{PipelinePolicy,PipelineBlock,LbuBlock,LALruBlock,LALfuBlock,SampledHillClimber,FetchStage}.java.",
+    "last_commit": "2026-02-18",
+    "artifact_badges": [],
+    "badge_evidence": "none found - the PDF has an Artifact Appendix (p. 18) and an availability statement (p. 13), but no badge is printed in the PDF and the USENIX presentation page returned HTTP 403 when fetched"
+  },
+  "hard_filters": {
+    "H1_open_repo": {
+      "result": "pass",
+      "evidence": "Official artifact (README.md:1-3, paper p. 13 ref [35]). This clone holds the full experiment harness (experiments/run_experiments.py with the paper's exact RFB/RF hyper-parameters at :39-113, trace_processing/*, graph_generators/adaptation_graph_gen.py). The system itself is public and tagged in the author's Caffeine fork referenced by containers/test-container/Containerfile:4-7 and README.md:49-53, whose latency_aware/pipeline/ directory I confirmed contains the 14 Java classes implementing the pipeline, LBU and the sampled hill climber. No placeholder, no binary-only release."
+    },
+    "H2_no_root": {
+      "result": "pass",
+      "evidence": "Core route is user-space Java + Python: experiments/simulatools.py:41 runs './gradlew simulator:run ... -PjvmArgs=-Xmx8g'; containers/test-container/Containerfile has only git clone, ./gradlew compileJava and pip install, all replayable natively (README.md:55-62 documents the non-container route: any Linux, Python 3.14+, Java 11+, 7 pip packages). No kernel module, eBPF, perf counter, KVM or /proc/sys use anywhere in the repo. The single sudo grep hit is containers/lhd-lrb/Containerfile:7 (apt-get inside an Ubuntu 18.04 image used only for the LHD and LRB comparison rows of Table 4); those two baselines must be rebuilt from source in $HOME or dropped, which does not affect the paper's own system."
+    },
+    "H3_hardware_fit": {
+      "result": "pass",
+      "evidence": "Pure trace-driven simulation, CPU and RAM only, one JVM per run capped at 8 GB (experiments/simulatools.py:41). README.md:36: '2 cores and ~8GB of RAM will suffice' (LRB wants 4 cores). Cache sizes are 512-65536 entries (paper Table 3, p. 11; mirrored in experiments/run_experiments.py:33-37) and the largest trace is 200M requests. The machine (16c/32t, 125 GiB RAM, ~257 GB free) exceeds this by roughly 8x; no GPU is needed."
+    },
+    "H4_obtainable_deps_data": {
+      "result": "pass",
+      "evidence": "Deps are pip/conda-installable (README.md:60-62: rich, pandas, pyhocon, xxhash, polars, matplotlib, numpy) and JDK 17/21 are already installed. Traces are public: IBM Object Storage and Twitter memcached from SNIA IOTTA (README.md:133-141, paper refs [29][55]) and Meta KV from unauthenticated S3 with the exact wget URLs in containers/test-container/aliases.sh:1-2. No proprietary trace. The synthetic latency column is regenerated locally and deterministically from committed per-trace seeds (trace_processing/common_data.py:1-4) and the paper's distributions (trace_processing/latency_distributions.json). Caveat: the full Twitter dataset is ~2.8 TB compressed (README.md:141), so the Twitter columns need an explicit storage plan; the IBM/Meta subset does not."
+    }
+  },
+  "reproduce": {
+    "level": "H",
+    "target": "Table 4 (p. 12), the IBM012 and IBM010 columns - ARL relative to the best static RFB pipeline: RFB_1 = +11.7% / 0.0%, RFB_1/4 = +16.8% / +0.1%, RF_1 = +35.3% / +0.1%, LBU alone = 24.0% / 44.0%, ARC = 25.4% / 0.3%, SIEVE = 25.1% / 21.1%, S3-FIFO = 22.7% / 16.2%, ACA-TLFU = 55.7% / 37.8%. IBM012 is the decisive trace for the paper's core claim: Table 3 (p. 11) gives best static RFB = (1,1,14) vs RF = (1,15), a 19% gap, so the RFB_1 vs RF_1 delta there directly tests whether burstiness-awareness buys anything. Secondary, zero-download target: Table 1 (p. 7), the LRU*/LFU*/LBU 3x3 synthetic matrix via experiments/run_synthetic_experiments.py.",
+    "scale_down": "First pass on IBM traces only - IBM012 (533K requests, cache 1024; the README itself recommends starting here, README.md:32), then IBM010 (13.2M, cache 512) and optionally IBM024 (33.4M, cache 512). Skip Twitter and Meta (200M-request traces, hundreds of GB of raw download, 'up to a day to process' each). Skip the LHD and LRB rows (legacy Ubuntu 18.04 container). Run the 153-point static grid search (run_experiments.py:289) only on IBM012 to establish the Table 4 denominator; for IBM010 reuse the paper's published best static config (14,2,0) from Table 3. Use --rounds 3 instead of the paper's 10 for the sampled-ghost variance.",
+    "effort": "4 person-days + ~40-80 CPU-hours (0 GPU-hours)",
+    "rationale": "Everything needed for the target is present and pinned: the Java system is tagged (adaptive-pipeline-v1), the runner hard-codes the paper's exact block configuration and LBU hyper-parameters (run_experiments.py:39-113), the per-trace cache sizes match Table 3 (run_experiments.py:33-37), the latency distributions and per-trace RNG seeds are committed so the synthesized latencies should be bit-identical to the authors', and README.md:55-62 documents a native (non-container) route so the missing Docker is a 4-command replay of containers/test-container/Containerfile rather than a port. The machine is ~8x the stated requirement. Held back from a perfect score by: no dependency pins or lockfile, no script that assembles Table 4 from the per-run CSVs (the normalization must be redone by hand), no artifact badge evidence, and an unverified Gradle/JDK toolchain step in a large Caffeine fork - risks, but not a porting project."
+  },
+  "addons": [
+    {
+      "name": "Load-coupled fetch latency (congestion feedback)",
+      "hypothesis": "We hypothesize that making fetch latency depend on the number of concurrently outstanding fetches (an origin-queue model) increases the ARL advantage of burstiness-aware admission (LBU) and shifts the adaptive pipeline's steady-state quota toward the LBU block, under bursty traces (IBM012, Twi28) and small-cache/high-miss regimes, compared with the paper's load-independent i.i.d. latency model.",
+      "mechanism": "Today L_i is drawn once per key at trace-generation time from one of three fixed normals selected by hash(key) mod sum(weights) (trace_processing/latency_appender.py:63-72,140-154) and becomes a constant column in the trace. Replace it with L_i = L_base(i) + q(|F_t|), where |F_t| is the current fetch-buffer occupancy and q is a queueing term (linear, then knee-shaped past a service-capacity parameter c). Tier 1, entirely inside this repo: compute an instantaneous request-density signal per timestamp in latency_appender.py and modulate the drawn latency by it (correlated, open-loop). Tier 2, the real closed loop: resolve latency at simulation time in the fork's FetchStage.java, which already maintains F_t, exposed through a new pipeline.latency-model config key. Then re-run Table 4 and the Fig. 3 quota traces under both models and compare both the absolute ARL and the policy ranking.",
+      "code_locations": [
+        "trace_processing/latency_appender.py",
+        "trace_processing/latency_generators.py",
+        "trace_processing/latency_distributions.json",
+        "experiments/run_experiments.py",
+        "graph_generators/adaptation_graph_gen.py"
+      ],
+      "motivating_evidence": "Paper section 4 'The datasets' (p. 11): latencies are drawn from three static per-site normals with 'items distributed uniformly at random across sites' - independent of load, of the trace and of the cache's own behaviour; footnote 1 (p. 3) admits the system only estimates L_i by the most recent observed fetch latency. But delayed hits are by definition a congestion phenomenon: a burst creates many simultaneous pending requests (Eq. 2, p. 4), which at any real origin would lengthen the very fetch they are queued behind. The paper's model structurally cannot exhibit that feedback loop, so the 10% headline could be either understated (if congestion amplifies burst penalties) or overstated (if congestion flattens differences between policies).",
+      "feasibility": "M",
+      "feasibility_rationale": "Tier 1 is a ~200-line change to files in this repo; tier 2 is a contained edit to one Java class (FetchStage.java) plus a config knob, and the existing harness re-runs everything unchanged. Marked M rather than H because all 11 usable baselines must be re-run under the new model for the comparison to be fair (roughly doubling the reproduction compute) and the queueing parameters need a defensible calibration. Cross-cutting, but no redesign and no hardware we lack.",
+      "research_value": "H",
+      "research_value_rationale": "It attacks a simplifying assumption shared by the entire delayed-hits line of work since Atre et al. (SIGCOMM '20), not just this paper. Either outcome teaches something a reviewer at NSDI would care about: if LBU's edge grows under congestion, the paper under-sells itself and identifies the regime worth targeting; if the ranking reorders, the reported 10% is partly an artifact of a benign latency model.",
+      "scoop_check": {
+        "result": "partial",
+        "details": "Queries: 'caching with delayed hits load-dependent fetch latency queueing congestion cache policy 2025'; \"'delayed hits' cache eviction policy latency-aware follow-up 2025 2026 burstiness'. Closest work: arXiv:2505.15531 'Modeling and Optimizing Latency for Delayed Hit Caching with Stochastic Miss Latency' (https://arxiv.org/abs/2505.15531) and VA-CDH arXiv:2504.20335 (https://arxiv.org/pdf/2504.20335), which both replace deterministic latency with an i.i.d. random (exponential) latency and derive variance-aware ranking functions, plus Jiang et al. PEVA 2025 on non-stationary environments (https://jhc.sjtu.edu.cn/~bjiang/papers/Jiang_PEVA2025_Cache.pdf). None makes latency a function of the instantaneous outstanding-fetch count (closed loop), and none evaluates a multi-block adaptive pipeline under such a model. Those variance-aware ranking functions become useful extra baselines for this add-on."
+      }
+    },
+    {
+      "name": "Does the pipeline actually compose? A fourth block and block order",
+      "hypothesis": "We hypothesize that (i) adding a fourth, reuse-distance-oriented block (FRD/LIRS-style) to the RFB pipeline lowers ARL on the traces where adaptive RFB is farthest from the best static configuration (IBM031 +27.1%, Meta2 +16.0% in Table 4) and (ii) ARL is significantly sensitive to block order, i.e. the pipeline is not the order-free plug-and-play abstraction the paper advertises.",
+      "mechanism": "The pipeline is already config-driven (pipeline.num-of-blocks, pipeline.blocks.N.type in experiments/run_experiments.py:39-50). Implement one new PipelineBlock subclass in the fork (FRD or LIRS scored latency-aware) and register its type string; then (a) run the m=4 adaptive pipeline, where the ghost count rises from m(m-1)=6 to 12, directly testing the overhead-scalability argument on p. 11, and (b) run all 6 permutations of the R/F/B blocks at the best static quotas of Table 3 to quantify order sensitivity. Extend the grid search (run_experiments.py:296-313 enumerates 153 configs for m=3; m=4 would be 969, so sample it or pin the new block's quota).",
+      "code_locations": [
+        "experiments/run_experiments.py:39",
+        "experiments/run_experiments.py:289",
+        "experiments/run_experiments.py:216",
+        "experiments/policies.py"
+      ],
+      "motivating_evidence": "Section 3 (p. 9): 'The order of the blocks in the pipeline may well, and indeed often does, affect the behavior and performance of the overall pipeline cache architecture' - asserted, never measured anywhere in the evaluation. Section 5 (p. 13) sells the whole design as 'to address a new access pattern, one merely adds a simple policy (akin to LBU) to the pipeline and allows the adaptive mechanism to self-tune allocations', yet m never exceeds 3 and the ghost cost is quadratic in m (p. 11), so the extensibility claim has a built-in tension. Table 4 also shows RFB_1 is still 16-27% off the static optimum on IBM031/Meta2/Meta4, leaving headroom for a fourth bias.",
+      "feasibility": "H",
+      "feasibility_rationale": "One new Java class against an existing PipelineBlock interface; everything else is configuration plus the scripts that already ship (run_full_ghost, run_grid_search). Evaluable on the IBM traces within this machine's compute budget, no new harness needed, and naturally splittable among 2-4 students over 10 weeks.",
+      "research_value": "M",
+      "research_value_rationale": "It directly tests the paper's central architectural claim, which is the right target, but the expected outcome - a fourth block helps a little, order matters somewhat, ghosts get more expensive - is roughly what a reviewer would predict. It would only rise to H if m=4 actually hurts, which would be a real negative result about the hill climber's ability to search a larger simplex.",
+      "scoop_check": {
+        "result": "partial",
+        "details": "Queries: 'modular pipeline cache architecture multiple eviction policies adaptive partitioning bandit allocation cache blocks 2025'. Closest work: SCION, 'Size-aware Policy Orchestration for Nonstationary Object Caches', arXiv:2605.01055 (https://arxiv.org/pdf/2605.01055, May 2026), which selects one of six whole policies via a workload fingerprint. It is miss-ratio/byte-miss-ratio oriented, explicitly not latency- or delayed-hit aware, and does not compose policies by victim chaining or size blocks - overlapping motivation, different mechanism. No work found that extends this paper's pipeline beyond three blocks."
+      }
+    },
+    {
+      "name": "A better allocator than fixed-step greedy hill climbing",
+      "hypothesis": "We hypothesize that replacing the fixed one-quantum greedy hill climber with an adaptive step size plus regret-based ghost pruning reduces ARL and, more importantly, shortens re-convergence time after a workload shift, measured on the concatenated trace of Figure 3, at equal or lower ghost overhead.",
+      "mechanism": "Today, every 10*M requests (adaption-multiplier = 10, run_experiments.py:101,240) the policy evaluates m(m-1) ghosts each exactly one quantum away and takes the argmin (Algorithm 2, p. 10) over 16 quanta. Changes: (1) accelerate the step when the same direction wins k consecutive intervals and decelerate on oscillation; (2) maintain per-direction regret estimates so consistently losing ghosts are simulated at a lower sampling rate, pushing metadata overhead below the current +75% at R=1/4; (3) make the adaptation interval itself adaptive - short after a detected shift, long when stable. Evaluate with final ARL per trace (Table 4) plus a new re-convergence metric (requests needed to come within 5% of the post-shift best static quota), read from the .quota_dump the runner already preserves (run_experiments.py:183-196) and plotted by the existing adaptation_graph_gen.py on a trace_merger.py concatenation.",
+      "code_locations": [
+        "experiments/run_experiments.py:100",
+        "experiments/run_experiments.py:233",
+        "graph_generators/adaptation_graph_gen.py",
+        "trace_processing/trace_merger.py"
+      ],
+      "motivating_evidence": "The paper credits the hill climber, not LBU, with most of its win: 'RF_1 exhibits an improvement of almost 25% when compared with Adaptive-CA-WTinyLFU, which can be mostly attributed to our novel hill-climbing approach' (section 4.1, p. 12). It also explicitly settles for less than optimal: 'our goal is not to find a local minimum, but rather to avoid allocations that result in unnecessary performance degradation ... merely being near a good allocation is sufficient' (section 3.1, p. 9). Figure 3a (p. 13) shows visibly slow ramps at the concatenation boundaries, and RFB_1 remains +27.1% off the static optimum on IBM031 (Table 4) - an adaptivity failure rather than an LBU failure.",
+      "feasibility": "M",
+      "feasibility_rationale": "Confined to one or two Java classes (SampledHillClimber.java, RandomHillClimber.java) plus new config keys, and both the runner and the Figure 3 plotter already exist. Marked M because the re-convergence metric needs new analysis code, each concat-trace run is 85M requests, and a regret/bandit formulation needs care to avoid destabilising the live cache.",
+      "research_value": "M",
+      "research_value_rationale": "Squarely on the paper's own critical path, and its 'near-optimal is enough' claim is falsifiable with the artifact as shipped. Marked down because regret-based adaptation of cache policies is well-trodden ground (LeCaR, CACHEUS, discussed as prior art in section 1.2 refs [2,13,51]) even if not for multi-block latency-aware quotas, and a moderate ARL improvement would surprise nobody.",
+      "scoop_check": {
+        "result": "partial",
+        "details": "Queries: 'adaptive cache partitioning miniature simulation ghost cache multi-armed bandit reinforcement learning choose eviction policy per workload 2024 2025'. Closest work: LeCaR/CACHEUS (regret-weighted LRU-vs-LFU selection, pre-2023, cited by the paper itself) and DynamicAdaptiveClimb, arXiv:2511.21235 (https://arxiv.org/abs/2511.21235, Nov 2025), which adapts promotion distance and total cache size - hit-ratio oriented, single policy, no ghost simulation, not delayed-hit aware. Nothing found that does bandit-style allocation across pipeline blocks under an average-request-latency objective."
+      }
+    },
+    {
+      "name": "What does the pipeline cost? Throughput and memory of RFB in a real cache",
+      "hypothesis": "We hypothesize that the pipeline plus sampled-ghost machinery costs substantially more than the paper's analytical estimate (0.875 extra metadata operations per request, +75% ghost entries) once implemented in a concurrent cache, and that a sharded pipeline with a single background adaptation thread recovers throughput to within a modest margin of Caffeine's W-TinyLFU while preserving most of the ARL gain, measured under multi-threaded replay of IBM010 on 16 cores.",
+      "mechanism": "Two parts. (1) Measurement: instrument the simulator path to report wall-clock requests/second and resident metadata bytes per policy - the harness already parses whatever the simulator emits into a DataFrame (experiments/simulatools.py:80-87), so adding columns and a sweep over policies is mechanical, and it immediately produces the overhead table the paper never presents. (2) Prototype: implement the pipeline over Caffeine's real (non-simulator) cache with per-shard pipelines and one background thread owning the ghost caches and the adaptation event, then drive it with a JMH-style multi-threaded replay harness and measure throughput vs thread count and ARL vs the single-threaded simulator number.",
+      "code_locations": [
+        "experiments/simulatools.py",
+        "experiments/policies.py",
+        "experiments/run_experiments.py",
+        "containers/test-container/Containerfile"
+      ],
+      "motivating_evidence": "Section 5 (p. 13), verbatim: 'From a systems perspective, the main technical hurdle is efficient parallelization, which is not currently addressed in our simulation-based implementation', and 'we aim to integrate RFB into existing open-source projects ... The primary challenge is to develop a Caffeine branch that replaces its internal caching policy with RFB'. The overhead argument on p. 11 is purely analytical (ghost-entry counts compared against ARC/LIRS/FOMO) and Table 4 reports ARL only - no throughput, no memory, no CPU. A policy that wins 10% ARL but halves throughput is not deployable, and nothing in the paper rules that out.",
+      "feasibility": "M",
+      "feasibility_rationale": "Part (1) is a few days and is a guaranteed fallback deliverable. Part (2) is substantial Java engineering inside a large unfamiliar codebase plus a new concurrent benchmark harness - but it needs no special hardware (16 cores / 32 threads is a legitimate concurrency testbed), no root, and can be descoped to a sharded prototype with JMH if full Caffeine integration stalls. Risky for 10 weeks, not out of reach.",
+      "research_value": "H",
+      "research_value_rationale": "It answers the paper's own declared open question and is exactly what a deployment-minded reviewer would ask. Both outcomes teach something: cheap-and-parallel validates the modularity pitch and makes RFB a credible Caffeine contribution; expensive-and-serial shows the pipeline is partly a simulator artifact and that the analytical overhead argument on p. 11 does not survive contact with a concurrent cache.",
+      "scoop_check": {
+        "result": "clear",
+        "details": "Queries: 'Caffeine cache library W-TinyLFU throughput concurrent adaptive policy overhead evaluation 2026 latency-aware integration'; \"'Keren' Einziger Scalosub pipeline cache LBU citing follow-up 2026'. No follow-up to this NSDI '26 paper was found (presented May 2026, no citing work indexed), and no RFB branch exists in upstream ben-manes/caffeine. The closest relevant art is 'Limited Associativity Makes Concurrent Software Caches a Breeze', arXiv:2109.03021 (https://arxiv.org/pdf/2109.03021), a concurrency technique for software caches rather than an evaluation of this policy - a design input, not a scoop."
+      }
+    },
+    {
+      "name": "Variable object sizes and size-proportional latency",
+      "hypothesis": "We hypothesize that when fetch latency is modelled as RTT + size/bandwidth and the cache is byte-capacity-bounded, the ARL ranking of Table 4 changes materially and RFB's advantage over size-aware baselines shrinks, on the IBM and Meta traces whose native size fields the artifact currently discards.",
+      "mechanism": "trace_processing/parse_IBM.py:8-18 keeps only time and object_id, and parse_meta.py:9-22 keeps only timestamp and key - the size column present in both raw formats is thrown away. Restore it, extend the trace format to carry size, make latency_appender.py compute a size-dependent latency instead of a per-key i.i.d. draw, and switch the simulator's capacity accounting to weighted entries (Caffeine's simulator already supports weighted traces). Add at least one size-aware baseline (GDSF or AdaptSize) and optionally a size-aware pipeline block, then re-run the Table 4 comparison under byte-capacity.",
+      "code_locations": [
+        "trace_processing/parse_IBM.py",
+        "trace_processing/parse_meta.py",
+        "trace_processing/parse_twitter.py",
+        "trace_processing/latency_appender.py",
+        "experiments/run_experiments.py"
+      ],
+      "motivating_evidence": "Section 1.2 (p. 5-6) explicitly assumes unit-sized items and defers size handling to slabbing: 'cluster items of similar size using a technique such as slabbing, and then apply a unit-sized cache policy (as in this work)'. In object storage - the IBM traces' own domain - object sizes span orders of magnitude and fetch time is dominated by transfer rather than RTT, so the size assumption and the latency model interact directly with the delayed-hit accounting the paper optimizes.",
+      "feasibility": "M",
+      "feasibility_rationale": "The trace-side changes are easy and live in this repo, but weighted capacity accounting plus a size-aware block touches the simulator's core bookkeeping, every baseline must be re-run, and defining a fair size-aware ARL metric (per-request vs per-byte) is itself a design decision that has to be argued.",
+      "research_value": "M",
+      "research_value_rationale": "A real and explicitly acknowledged gap, but size-aware caching is a mature area and one of this paper's own authors has published in it (reference [19], 'Lightweight Robust Size Aware Cache Management'), so a reviewer would read this as filling in a known box rather than opening a new question.",
+      "scoop_check": {
+        "result": "partial",
+        "details": "Query: 'variable object size delayed hits cache latency proportional to object size byte miss ratio policy evaluation'. The latency model 'constant delay plus a component proportional to object size' already appears in the delayed-hit literature surfaced above (related work of arXiv:2505.15531), and SCION (https://arxiv.org/pdf/2605.01055) plus AdaptSize and 'Lightweight Robust Size Aware Cache Management' (https://arxiv.org/pdf/2105.08770) cover size-aware policies and policy selection. What is not covered is size-aware pipeline block composition under an average-request-latency objective with delayed hits."
+      }
+    }
+  ],
+  "risks": [
+    "The system under study lives in a second repository: PipelinePolicy, LbuBlock, SampledHillClimber and FetchStage are in github.com/NadavKeren/caffeine @ adaptive-pipeline-v1 (containers/test-container/Containerfile:4-7, README.md:49-53), not in this clone. It is public, tagged and author-owned, so availability is fine - but every add-on does its real work in a large Java codebase the team did not write, and a desk review cannot judge how readable those classes are.",
+    "The Gradle/JDK build step is unverified from desk review. './gradlew compileJava' on a Caffeine fork pulls a large plugin stack and may pin a JDK toolchain; JDK 17 and 21 are installed but a different major version would need a user-space JDK install. This is the most likely week-1 time sink.",
+    "Probable bug in the synthetic trace generator: experiments/synthetic_trace_gen.py:70 appends 4-tuples (time, item, 0, latency) inside the recency loop while :73/:83/:102/:201 append 3-tuples, and gen_trace writes only three fields (:212). Recency requests therefore appear to be written with miss penalty 0 rather than the configured 1000 ms, which would prevent Table 1's recency column (LRU* 65.61 vs LBU 606.73) from reproducing. Cheap to check first (no downloads) - either a quick fix or the first real finding.",
+    "Disk and wall-clock for the large traces: the full Twitter set is ~2.8 TB compressed (README.md:141) and the two Meta traces are 200M requests each, against ~257 GB free; README.md:32 warns these take 'up to a day to process'. Any plan requiring Table 4's Twitter/Meta columns needs an explicit storage budget; the IBM subset does not.",
+    "Two baselines are effectively unavailable on this machine: LHD and LRB require the Ubuntu 18.04 image (containers/lhd-lrb/Containerfile, apt-get + sudo) and must be rebuilt from source in $HOME or dropped. LRB is the best prior-art row in Table 4 (+14.6%), so dropping it weakens any 'we beat the best baseline' framing; ARC, SIEVE, S3-FIFO and ACA-TLFU remain available.",
+    "No dependency pins and no table-assembly script: README.md:62 lists library names without versions, there is no requirements.txt or lockfile and no build file in the repo at all, and the 'percent relative to best static RFB' normalization of Table 4 must be redone by hand from the per-run CSVs. Friction rather than a blocker, and worth fixing early.",
+    "No artifact-badge evidence: the PDF has an Artifact Appendix (p. 18) and an availability statement (p. 13), but the USENIX presentation page returned HTTP 403 and no badge appears in the PDF or the repository. Treat 'artifact evaluated / results reproduced' as unconfirmed.",
+    "Add-on A (and E) change the metric definition, so results are not numerically comparable to Table 4; the project must re-run all usable baselines under the new latency model and report both sets, roughly doubling the evaluation compute. This has to be planned from week 1, not discovered in week 8."
+  ]
+}

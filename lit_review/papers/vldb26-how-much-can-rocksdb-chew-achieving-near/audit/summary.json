@@ -1,0 +1,150 @@
+{
+  "title": "How Much Can RocksDB Chew? Achieving Near-Zero Write Stalls with Sustainable RocksDB",
+  "one_line": "S-RocksDB adds an out-of-process controller that regulates RocksDB's foreground write-admission rate with a safety-gated online Q-learner (SAFE/SEMI-SAFE/UNSAFE), so ingress tracks time-varying flush/compaction capacity and write stalls are almost eliminated.",
+  "topic": "storage",
+  "repo": {
+    "official": "yes",
+    "evidence": "The paper's PVLDB Artifact Availability statement (p. 1) names https://github.com/shinhojin/Sustainable-RocksDB; the GitHub owner 'shinhojin' matches first author Hojin Shin (Dankook University). The tree contains the real system, not a stub: RocksDB-side actuator at db/db_impl/db_impl.cc:4770 and db/db_impl/db_impl_write.cc:495, poller/actuator srocksdb_src/rl_poller.cc, Linear-Q controller srocksdb_src/agent_rl_fifo.py:231, the two option presets of Table 1 in srocksdb_options/, and runners for the microbenchmark, YCSB, time-varying and sensitivity experiments in srocksdb_scripts/.",
+    "last_commit": "2026-05-31",
+    "artifact_badges": [],
+    "badge_evidence": "none found - only the paper's own 'PVLDB Artifact Availability' statement; no PVLDB reproducibility badge or report located for Vol 19 No 11"
+  },
+  "hard_filters": {
+    "H1_open_repo": {
+      "result": "pass",
+      "evidence": "Official (paper p.1 artifact statement + author-owned GitHub account). Full implementation present and mappable to the paper: actuator db/db_impl/db_impl.cc:4770-4857, throttle hook db/db_impl/db_impl_write.cc:495-499, metrics sampler db/db_impl/db_impl.cc:827-980, 12-dim state vector of Eq.12 at srocksdb_src/agent_rl_fifo.py:421-487, Q-learning update Eq.13-14 at srocksdb_src/agent_rl_fifo.py:231-272, reward Eq.15-16 at srocksdb_src/agent_rl_fifo.py:1512-1536, SAFE/SEMI-SAFE/UNSAFE FSM at srocksdb_src/agent_rl_fifo.py:1250-1323."
+    },
+    "H2_no_root": {
+      "result": "pass",
+      "evidence": "Pure user-space: one process plus a Python controller communicating over a /tmp FIFO (srocksdb_scripts/run_agent_fifo.sh:503); resource monitoring uses ps and /proc/meminfo (run_agent_fifo.sh:392-446). SUDO_CMD defaults to empty (run_agent_rl_LQ.sh:97) and is only used for optional log copying. No kernel module, eBPF, perf counters, KVM, hugepages or /proc/sys writes. The sudo/docker/sysctl red-flag hits in repo_facts.json are all upstream RocksDB CI and doc comments (.github/workflows/*, build_tools/ubuntu20_image/Dockerfile, include/rocksdb/advanced_options.h:355). Minor caveat: run_sensitivity_3h.sh:4 runs 'ulimit -n 1048576' under set -e and would abort if the hard nofile limit is lower - a one-line edit, and the main runner does not do it."
+    },
+    "H3_hardware_fit": {
+      "result": "pass",
+      "evidence": "Single node, CPU-only, no GPU; max_background_jobs=4 (srocksdb_options/rl_options_s.ini:18); paper's peak memory is 10.86 GB and S-RocksDB uses 2.4-3.5 GB (paper Fig.12) vs our 125 GB. Binding constraint is disk: WriterThread uses random int32 keys (srocksdb_src/rl_poller.cc:925-935) so the DB grows monotonically; a 12h/24h run at the paper's 14-19 MB/s stores 0.8-1.3 TB vs ~257 GB free. Mandatory scale-down: the paper's own 3-hour ablation (Table 4, ~160-180 GB per arm) fits at paper scale, and longer runs can use the in-tree bounded-keyspace modes (--ycsb_workload r10w90 --ycsb_record_count, srocksdb_src/rl_poller.cc:1199) which the paper itself uses for Fig.15. Our NVMe differs from the paper's primary SATA SSD, but paper Sec.6.5/Table 2 (HW-B, HW-C) already validates NVMe with write_mb_per_sec=3000, which is the default at run_agent_rl_LQ.sh:28."
+    },
+    "H4_obtainable_deps_data": {
+      "result": "pass",
+      "evidence": "Dependencies are gcc/g++, make, python3 and numpy only (README.md 'Requirements'; the sole Python import of consequence is numpy at srocksdb_src/agent_rl_fifo.py:31; rl_poller.cc includes only rocksdb headers, no gflags). No pinned/abandoned versions, no CUDA, no ML framework. No external data: both workload generators are in-tree (fillrandom WriterThread srocksdb_src/rl_poller.cc:918; YCSB A-F + r10w90/r90w10/r50w50 with built-in Zipf at srocksdb_src/rl_poller.cc:1010-1227). The SILK 5.7.0 and ADOC 7.7.0 baselines are not in this repo but are publicly released, and none of the proposed add-ons require them."
+    }
+  },
+  "reproduce": {
+    "level": "M",
+    "target": "Table 4 (Sec.6.6, p.3213): S-RocksDB(R) with SEMI-SAFE on = 14.55 MB/s, 1 stalled write, P99.99 = 81.3 us; with SEMI-SAFE off = 16.31 MB/s, 69,828 stalled writes, P99.99 = 1194.6 us. Supports the core claim that the deterministic pre-stall guardrail, not the learner alone, suppresses stalls. A third vanilla-RocksDB arm reproduces the ~31M-stall reference of Table 3 in 3-hour form.",
+    "scale_down": "3 hours per arm (paper scale for Table 4), DB on /home ext4 instead of /mnt/f2fs, --write_mb_per_sec 3000 (the paper's NVMe normalization reference, Sec.6.5), arms run strictly sequentially with the default CLEAR_DB_BEFORE=1 since each arm peaks at ~180 GB against ~257 GB free. For any run longer than ~4 h, switch to the bounded-keyspace mode (--ycsb_workload r10w90 --ycsb_record_count 100000000) so the DB saturates near 100 GB while compaction stays saturated.",
+    "effort": "4 person-days + ~15 machine-hours (CPU only, no GPU) + ~200 GB scratch disk",
+    "rationale": "Not H: the repo ships no plotting or analysis scripts for any figure or table, so every reported number must be re-derived from rl_metrics.csv/agent_log.csv/db_LOG; there is no runner for the vanilla-RocksDB arm (it must be assembled by disabling rl_enable_write_throttling and not starting the agent); DB paths are machine-specific (/mnt/f2fs in run_agent_rl_LQ.sh:20); the 12h/24h headline runs exceed our free disk so only the 3h ablation is reproducible at paper scale; no artifact badge. Not L: the build is a single make target (Makefile:1345) with a trivial dependency set, the ablation switch already exists as a CLI flag (--soft_guard_disabled, run_agent_fifo.sh:308), all ~90 controller and safety constants of Sec.5 are exposed on the command line, the workload generator is in-tree, and every quantity the paper plots is already emitted as a CSV column."
+  },
+  "addons": [
+    {
+      "name": "End-to-end admission latency accounting + delay-target pacer",
+      "hypothesis": "We hypothesize that measuring Put latency at the client, including the ingress rate-limiter wait, erases most of S-RocksDB's reported P99.99/P99.999 advantage over vanilla RocksDB at matched offered load, and that replacing the burst-refill rate limiter with a delay-target pacer (admission that regulates queueing delay rather than rate) restores a genuine end-to-end tail-latency improvement under sustained fillrandom and YCSB-A.",
+      "mechanism": "(1) Instrument the fillrandom WriterThread with the per-op latency histogram machinery that already exists for the YCSB path, so the microbenchmark reports client-observed P99..P99.999 next to the internal DB_WRITE numbers. (2) Add an end-to-end StopWatch above the throttle call so the two measurement boundaries can be compared directly in one run. (3) Replace the actuator: instead of SetBytesPerSecond(base*m) on a GenericRateLimiter with a 100 ms refill period, pace each write batch with a smooth token bucket and export the achieved admission queueing delay as a new controller signal; then change the SAFE-region reward to penalize measured admission delay rather than only the delta of the internal DB_WRITE P99.",
+      "code_locations": [
+        "db/db_impl/db_impl_write.cc:495",
+        "db/db_impl/db_impl.cc:807",
+        "db/db_impl/db_impl.cc:278",
+        "srocksdb_src/rl_poller.cc:918",
+        "srocksdb_src/agent_rl_fifo.py:1512"
+      ],
+      "motivating_evidence": "MaybeThrottleWriteIngress is called at db/db_impl/db_impl_write.cc:498, at the top of WriteImpl (which begins at :370), while the DB_WRITE StopWatch is only constructed at :556 - so S-RocksDB's own admission wait is excluded from that histogram. RocksDB's native stall delay, by contrast, happens inside PreprocessWrite (:1498), inside the StopWatch, and is fully counted. The paper's Fig.11 and Table 2 percentiles are read from exactly that histogram (db/db_impl/db_impl.cc:904-913), and the fillrandom driver records no per-Put latency of its own (srocksdb_src/rl_poller.cc:918), so no end-to-end cross-check exists. Sec.6.2 concedes S-RocksDB 'trades transient throughput peaks' but never accounts for where the traded time goes from the client's point of view.",
+      "feasibility": "H",
+      "feasibility_rationale": "Instrumentation is ~100 LOC reusing the existing RecordYcsbLogicalOpLatencyUs/QuantileFromYcsbLatencyDeltas helpers in rl_poller.cc; the pacer is a localized change to one function (MaybeThrottleWriteIngress) plus the limiter construction; the reward change is a few lines. Evaluable with the unmodified 3-hour runners on this machine. Clearly doable by 2-4 students in ~10 weeks.",
+      "research_value": "H",
+      "research_value_rationale": "This is a soundness question about the paper's headline claim ('bounds P99.99 tail latency to sub-0.11 ms'), and both outcomes teach something: if the end-to-end tail still wins, the result is stronger than the paper shows; if it does not, the community learns that admission control relocates rather than removes the wait, and the delay-target variant is the constructive fix. A VLDB reviewer would ask exactly where the latency is measured.",
+      "scoop_check": {
+        "result": "partial",
+        "details": "Queries: 'LSM-tree key-value store write stall admission control client-observed tail latency rate limiting 2026'; 'CruiseDB admission control LSM-tree SLA write stall tail latency ICDE'. Closest work is CruiseDB (ICDE 2021, https://ieeexplore.ieee.org/document/9458700/), an SLA-oriented RocksDB extension that adaptively admits 'only an appropriate number of user requests ... in unit time' against explicit latency SLAs - the same family of idea with a different controller, and notably not cited by this paper. RaKV (ACM TACO, https://dl.acm.org/doi/full/10.1145/3774424) uses token-bucket admission for cloud block storage SLAs. Neither audits S-RocksDB's measurement boundary; no work found performs the internal-vs-end-to-end comparison for a learned LSM admission controller."
+      }
+    },
+    {
+      "name": "Drain-rate-tracking controller: is the Q-learning load-bearing?",
+      "hypothesis": "We hypothesize that a non-learned controller that directly estimates B_int(t) = B_f(t) + B_c(t) from RocksDB's flush/compaction byte counters and sets the multiplier from that estimate plus a backlog-integral correction achieves throughput within 5% of the SAFE-region Q-learner at equal or fewer stalled writes, on the same 3-hour fillrandom and time-varying workloads - i.e. that the benefit comes from the SEMI-SAFE guardrail and the admission abstraction rather than from reinforcement learning.",
+      "mechanism": "Export COMPACT_WRITE_BYTES and FLUSH_WRITE_BYTES and their per-epoch deltas as new rl_metrics.csv columns from the poller's statistics read (the WRITE_STALL histogram is already read the same way). Add a CAPACITY controller mode alongside RL_DELTA_M / PID / AIMD in the agent's SAFE-region dispatch, reusing the identical SAFE/SEMI-SAFE/UNSAFE state machine, hysteresis and hard lock so that only the SAFE-region policy differs. Run head-to-head with the existing runners and report the throughput-vs-stalls Pareto point against Table 3.",
+      "code_locations": [
+        "srocksdb_src/rl_poller.cc:1654",
+        "srocksdb_src/agent_rl_fifo.py:1411",
+        "srocksdb_src/agent_rl_fifo.py:616",
+        "srocksdb_scripts/run_agent_pid_backlog.sh"
+      ],
+      "motivating_evidence": "Sec.4.1 states outright 'In S-RocksDB, we do not require direct estimation of B_f(t) or B_c(t)', even though the whole model (Eq.3-4) is written in those terms and the counters are available for free from RocksDB statistics. Both heuristic baselines in Table 3 are pressure-driven - PID on a backlog target and AIMD on stall events (srocksdb_src/agent_rl_fifo.py:1411-1469) - so neither observes the actual drain bandwidth, leaving a gap in the paper's 'heuristics are insufficient' argument. Table 4 further shows that disabling SEMI-SAFE alone inflates stalls from 1 to 69,828, suggesting the guardrail carries most of the benefit.",
+      "feasibility": "H",
+      "feasibility_rationale": "Two new CSV columns in the poller plus one new controller branch reusing the existing PID plumbing - roughly 250 LOC, no changes to the RocksDB core, evaluated with the unmodified 3-hour harness and the existing PID/AIMD runners as comparison points on this machine.",
+      "research_value": "M",
+      "research_value_rationale": "A strengthened baseline and a clean 'is the RL necessary?' ablation that is genuinely useful, but Table 3's PID/AIMD comparison already occupies part of this ground, and a well-tuned closed-loop capacity estimator performing comparably is a plausible and only mildly surprising outcome.",
+      "scoop_check": {
+        "result": "clear",
+        "details": "Queries: 'estimate compaction drain bandwidth feedback controller admission rate LSM write stall compaction bandwidth controller RocksDB'; 'multi-tenant RocksDB per-tenant write admission control fairness compaction backlog 2025 2026'. Related but different: RBC-style SSD bandwidth contention control (cited as [55] by the paper) and FlexEngine (PACMMOD 2025, https://doi.org/10.1145/3786667), which does two-level I/O admission control for multi-tenant serverless RocksDB but targets bandwidth over-subscription across partitions, not a single-instance drain-rate estimator benchmarked against an RL admission controller. No follow-up to this paper exists (repo has 2 stars, 0 forks; no citing work found)."
+      }
+    },
+    {
+      "name": "Burst/idle offered load and an idle-earned drain credit",
+      "hypothesis": "We hypothesize that under on/off bursty offered load (10-50% duty cycles with 30-300 s idle gaps), S-RocksDB's learned equilibrium multiplier leaves the device idle at burst arrival and therefore increases burst completion time relative to vanilla RocksDB at the same stall budget, and that a 'drain credit' - permitting m above the learned equilibrium while backlog and L0 are near zero, repaid as pressure rises - recovers burst completion time without increasing stalled writes.",
+      "mechanism": "Add burst parameters to the fillrandom driver (--burst_period_sec, --burst_duty, --burst_rate_mb_per_sec) so the offered rate is a square wave instead of the constant pacing loop. Add a credit accumulator to the controller: track time spent with backlog below a threshold, allow m_cap = m_learned + credit in the SAFE region, and decay the credit as backlog rises; expose the credit as a state feature. Report burst completion time and per-burst P99.9 as new metrics, swept over duty cycle and burst amplitude.",
+      "code_locations": [
+        "srocksdb_src/rl_poller.cc:918",
+        "srocksdb_src/agent_rl_fifo.py:1470",
+        "srocksdb_src/agent_rl_fifo.py:421",
+        "srocksdb_scripts/run_agent_rl_LQ_timevarying.sh"
+      ],
+      "motivating_evidence": "Every microbenchmark in Sec.6.2 uses a constant open-loop offered rate (srocksdb_src/rl_poller.cc:949-958), and the only dynamic experiment (Sec.6.5, Fig.15) consists of three 3-hour phases, far coarser than real burst timescales. Sec.6.4 already shows the failure mode in mild form: on YCSB A and F 'S-RocksDB shows comparable or slightly lower throughput ... the controller adopts conservative admission'. Sec.5.2 caps m_max at 0.5 explicitly 'to restrict aggressive admission during long-run training', and Fig.13b shows m settling into a narrow 0.01-0.2 band - exactly the behaviour that would waste idle capacity. The reward (Eq.16, srocksdb_src/agent_rl_fifo.py:1512-1536) contains no term for unused capacity.",
+      "feasibility": "M",
+      "feasibility_rationale": "Cross-cutting rather than localized: needs a new workload generator mode in the C++ driver, a new metric (burst completion time) in the analysis path, and a controller change, followed by a sweep over duty cycles. Compute is cheap - bursty runs write far less data, so disk is not a constraint - but it is meaningfully more work than a single-module change.",
+      "research_value": "H",
+      "research_value_rationale": "Bursty, diurnal ingest is the dominant real-world pattern for the microservice and AI-serving backends the paper's introduction invokes, and it is precisely the regime where an equilibrium-seeking admission controller is most suspect. Either outcome is worth reporting: it extends the paper's claim to a regime it never tested, or it identifies a genuine limit of the design that the 24-hour steady-state framing hides.",
+      "scoop_check": {
+        "result": "clear",
+        "details": "Query: 'bursty write workload LSM-tree idle time compaction scheduling burst completion time key-value store 2025'. Nearest work is all compaction-side: SILK's use of idle periods to schedule compaction (cited as [5]), STEM's pipelined compaction, and a 2025 LSM survey (https://arxiv.org/pdf/2507.09642) noting 'cumulative bursty compaction' after deferred L0 work. Nothing found regulates admission with an idle-earned credit, and no follow-up work to this paper exists."
+      }
+    },
+    {
+      "name": "Warm-started policy and a real epsilon schedule",
+      "hypothesis": "We hypothesize that persisting the learned Q weights across runs (warm start) and annealing epsilon from 0.25 toward ~0 after convergence reduces time-to-sustainable-rate and raises first-hour admitted throughput by at least 10% at equal or fewer stalled writes, relative to the shipped cold-start configuration, on 3-hour fillrandom and on the YCSB load phase.",
+      "mechanism": "Serialize LinearQAgent.W to disk on a timer and at shutdown and add --rl_load_policy to restore it at startup (the agent already has a --rl_ckpt_dir flag, but it is wired to a different, disabled learner). Extend the epsilon schedule, which currently uses the configured value for the first 180 s and then a hard-coded 0.1 forever, with a decay to a small floor gated on TD-error stability. Measure the transient explicitly: time until m first reaches 90% of its stabilized band, cumulative bytes admitted in the first hour, and stalls during the transient.",
+      "code_locations": [
+        "srocksdb_src/agent_rl_fifo.py:231",
+        "srocksdb_src/agent_rl_fifo.py:814",
+        "srocksdb_src/agent_rl_fifo.py:1211",
+        "srocksdb_scripts/run_agent_fifo.sh:60"
+      ],
+      "motivating_evidence": "LinearQAgent.W is zero-initialized at srocksdb_src/agent_rl_fifo.py:247 and :814-824 and is never written to disk; the only checkpointing code (OnlineLearner.ckpt_dir at :194) belongs to a different learner that is disabled by default (RL_ONLINE_LEARNING_ENABLED=0 at srocksdb_scripts/run_agent_fifo.sh:60, and run_agent_rl_LQ.sh never enables it), so every experiment in the paper relearns from scratch. Separately, srocksdb_src/agent_rl_fifo.py:1211-1216 pins epsilon at 0.1 for the entire remaining run unless the schedule is 'constant' - a permanent 10% random-action rate over a +/-0.02 action set that the paper never discusses. Fig.13a shows TD error 'initially elevated', and Sec.6.4 attributes low YCSB A/F write throughput to early conservatism; both are consistent with a cold-start cost.",
+      "feasibility": "H",
+      "feasibility_rationale": "np.save/np.load plus a schedule change, roughly 100 LOC, no RocksDB core changes, measurable with the existing harness. The transient is short so the experiments are cheap in both wall-clock and disk.",
+      "research_value": "M",
+      "research_value_rationale": "Warm-starting a linear policy helping is an expected result and the gain is confined to the transient. What lifts it above L is that the permanent epsilon=0.1 floor is an undocumented design choice that plausibly costs steady-state throughput as well, which makes the ablation a real if narrow correction to the paper's evaluation.",
+      "scoop_check": {
+        "result": "clear",
+        "details": "Queries: 'S-RocksDB Sustainable RocksDB write stall admission control reinforcement learning VLDB 2026'; 'reinforcement learning storage controller warm start policy persistence'. No citing or follow-up work found - the paper is PVLDB Vol 19 (2026) and the repository has 2 stars and 0 forks, so no third party has built on it yet. Transfer/warm-start is standard practice in learned DB tuning (CDBTune, OtterTune, cited as [54,60]) but has not been applied to this controller."
+      }
+    },
+    {
+      "name": "Read-aware admission control",
+      "hypothesis": "We hypothesize that adding read-side signals (read P99 and L0 file count as an explicit read-amplification penalty) to the state vector and the reward lets S-RocksDB reduce read P99/P99.9 by at least 20% under YCSB-A and YCSB-F at equal write throughput, compared with the shipped write-only controller.",
+      "mechanism": "Split the poller's single YCSB latency histogram into per-op-type histograms (read / write / scan) and export read percentiles as new rl_metrics.csv columns. Extend make_state with normalized read-P99 and a read-amplification proxy, and add a read-latency penalty term to the reward alongside the existing backlog and write-P99 terms. Evaluate the achievable read-tail vs write-throughput Pareto frontier on YCSB A, F and r50w50.",
+      "code_locations": [
+        "srocksdb_src/rl_poller.cc:686",
+        "srocksdb_src/rl_poller.cc:1671",
+        "srocksdb_src/agent_rl_fifo.py:421",
+        "srocksdb_src/agent_rl_fifo.py:1522"
+      ],
+      "motivating_evidence": "The 12-dimensional state of Eq.12, implemented at srocksdb_src/agent_rl_fifo.py:468-484, contains no read metric whatsoever, and the reward at :1522-1536 penalizes only write-path P99 growth and backlog. The paper's own read-side gains in Sec.6.4 (209K vs 68K ops/s on YCSB-C) are an incidental consequence of finishing the load phase with zero L0 files, never an optimization target. RecordYcsbLogicalOpLatencyUs (srocksdb_src/rl_poller.cc:686, called at :1125 and :1222) aggregates reads and writes into one histogram, so the artifact cannot currently even report read tail latency separately.",
+      "feasibility": "M",
+      "feasibility_rationale": "Requires poller changes (per-op-type histograms and new CSV columns), controller changes (state and reward), and a YCSB-based evaluation whose load phase (LOAD_RECORD_COUNT=50000000, about 50 GB, srocksdb_scripts/run_agent_rl_ycsb.sh:13) must be re-run per configuration - several hours per Pareto point. Fits our disk and time budget but is cross-cutting rather than localized.",
+      "research_value": "M",
+      "research_value_rationale": "A natural and defensible extension that broadens the controller from pure write-stall avoidance to read/write SLA balancing, but the direction of the result - admitting fewer writes helps reads - is largely predictable; the interesting contribution is the shape of the achievable Pareto frontier rather than the existence of the trade-off.",
+      "scoop_check": {
+        "result": "partial",
+        "details": "Queries: 'LSM-tree read tail latency admission control read-write trade-off reinforcement learning'; 'CruiseDB admission control LSM-tree SLA write stall tail latency ICDE'. CruiseDB (ICDE 2021, https://ieeexplore.ieee.org/document/9458700/) already optimizes admission against combined read/write SLA objectives, and vLSM (https://arxiv.org/pdf/2407.15581) targets read tail latency structurally. Neither does read-aware learned admission inside a SAFE/SEMI-SAFE/UNSAFE safety framework, and neither is a follow-up to this paper, so the specific hypothesis is unclaimed but the surrounding ground is partly occupied."
+      }
+    }
+  ],
+  "risks": [
+    "Disk is the binding constraint: fillrandom uses random int32 keys (srocksdb_src/rl_poller.cc:925-935) so the DB grows monotonically; a 12h or 24h paper-scale run needs 0.8-1.3 TB against ~257 GB free on /home. Any run longer than ~4 hours must use the bounded-keyspace YCSB modes, and a team that copies the paper's run lengths verbatim will fill the shared partition.",
+    "The paper's reported tail latency excludes the controller's own delay: the throttle call at db/db_impl/db_impl_write.cc:498 precedes the DB_WRITE StopWatch at :556, while RocksDB's native stall wait sits inside PreprocessWrite (:1498) and is counted. Reproducing Fig.11 therefore reproduces a measurement that does not reflect client-observed latency; this is the primary validity question, not a detail.",
+    "Absolute numbers will not transfer: paper uses a SATA 870 EVO on F2FS with 2x Xeon 6338 (32 cores); we have NVMe PM9A3 on ext4 with a 16-core Threadripper. The paper's own Table 2 shows the sustainable admission rate moves with the device, so only the ordering and the order-of-magnitude stall gap should be treated as reproducible.",
+    "No plotting or analysis code exists anywhere in the tree; every figure and table must be re-derived from rl_metrics.csv, agent_log.csv and db_LOG. This is the single largest unlisted cost in the artifact.",
+    "The entire evaluation uses exactly one concurrent writer thread (srocksdb_src/rl_poller.cc:1490-1497). Behaviour of the shared GenericRateLimiter actuator under 8-32 concurrent writers is untested and unknown - attractive as a research direction but also a source of undiscovered behaviour. Note that per-tenant fairness in RocksDB is partly occupied ground (FlexEngine, FAIRDB), so frame any multi-writer work as a mechanism question rather than a fairness paper.",
+    "Repository maturity is low: 2 stars, 0 forks, created 2026-02-27, last push 2026-05-31, no open issues, no tests or CI covering the S-RocksDB code paths, and no artifact-evaluation badge or reproducibility report found for PVLDB Vol 19.",
+    "srocksdb_scripts/run_sensitivity_3h.sh:4 runs 'ulimit -n 1048576' under set -e and will abort the entire sweep if the user's hard nofile limit is lower - a one-line fix, but it will look like a build failure if unanticipated.",
+    "Reproducing the SILK and ADOC comparisons (Figs 8-12) is out of scope for a 10-week project: they are RocksDB 5.7.0 and 7.7.0 forks in external repositories with their own build stacks. Add-ons should be framed against vanilla RocksDB 10.6.0 and against S-RocksDB's own PID/AIMD modes, all of which live in this one tree."
+  ]
+}

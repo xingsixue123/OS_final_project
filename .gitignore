@@ -19,3 +19,6 @@ lit_review/.lr.lock
 lit_review/*.out
 __pycache__/
 *.pyc
+
+# --- node deps ---
+node_modules/

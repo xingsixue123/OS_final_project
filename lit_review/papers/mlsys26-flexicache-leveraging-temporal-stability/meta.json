@@ -1,0 +1,11 @@
+{
+  "id": "mlsys26-flexicache-leveraging-temporal-stability",
+  "title": "FlexiCache: Leveraging Temporal Stability of Attention Heads for Efficient KV Cache Management",
+  "venue": "mlsys",
+  "year": 2026,
+  "paper_url": "https://proceedings.mlsys.org/paper_files/paper/2026/hash/94bcb01789fccf15afe2764d8fe0f40e-Abstract-Conference.html",
+  "pdf_url": "https://proceedings.mlsys.org/paper_files/paper/2026/file/94bcb01789fccf15afe2764d8fe0f40e-Paper-Conference.pdf",
+  "repo_url": "https://github.com/NazmulTakbir/FlexiCache",
+  "topic": "llm-inference",
+  "note": "Hierarchical KV-cache manager on top of vLLM that classifies KV heads as stable or unstable and offloads cold pages to host memory; explicitly aimed at cutting GPU memory. Single GPU plus large host RAM is the ideal setup, and there is a Zenodo-archived artifact"
+}

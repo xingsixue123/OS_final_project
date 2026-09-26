@@ -1,0 +1,101 @@
+{
+  "url": "https://github.com/XMU-DISCLab/Cachelib-Nemo",
+  "head_commit": "66db04116d43f42c7622c9aa2299afbda7e0812f",
+  "head_commit_date": "2026-01-21T22:30:38+08:00",
+  "file_count": 812,
+  "size_mb": 95.7,
+  "top_level": [
+    ".clang-format",
+    ".github/",
+    ".gitignore",
+    ".gitmodules",
+    ".packit.yaml",
+    "BENCHMARKS.md",
+    "BUILD.md",
+    "CHANGELOG.md",
+    "CODE_OF_CONDUCT.md",
+    "CONTRIBUTING.md",
+    "CacheLib-Logo.png",
+    "LICENSE",
+    "README.md",
+    "cachelib/",
+    "clean_wa.py",
+    "contrib/",
+    "examples/",
+    "test(invalid).sh",
+    "test.sh",
+    "website/"
+  ],
+  "build_files": [
+    "cachelib/CMakeLists.txt",
+    "cachelib/allocator/CMakeLists.txt",
+    "cachelib/benchmarks/CMakeLists.txt",
+    "cachelib/cachebench/CMakeLists.txt",
+    "cachelib/common/CMakeLists.txt",
+    "cachelib/compact_cache/CMakeLists.txt",
+    "cachelib/datatype/CMakeLists.txt",
+    "cachelib/navy/CMakeLists.txt",
+    "cachelib/rust/Cargo.toml",
+    "cachelib/shm/CMakeLists.txt",
+    "examples/simple_cache/CMakeLists.txt",
+    "examples/simple_compact_cache/CMakeLists.txt"
+  ],
+  "gitmodules": "[submodule \"fbthrift\"]\n\tpath = cachelib/external/fbthrift\n\turl = https://github.com/facebook/fbthrift\n[submodule \"folly\"]\n\tpath = cachelib/external/folly\n\turl = https://github.com/facebook/folly\n[submodule \"fizz\"]\n\tpath = cachelib/external/fizz\n\turl = https://github.com/facebookincubator/fizz\n[submodule \"wangle\"]\n\tpath = cachelib/external/wangle\n\turl = https://github.com/facebook/wangle\n[submodule \"cachelib/external/fbthrift\"]\n\tpath = cachelib/external/fbthrift\n\turl = git@github.com:facebook/fbthrift.git\n[submodule \"cachelib/external/fizz\"]\n\tpath = cachelib/external/fizz\n\turl = git@github.com:facebookincubator/fizz.git\n[submodule \"cachelib/external/folly\"]\n\tpath = cachelib/external/folly\n\turl = git@github.com:facebook/folly.git\n[submodule \"cachelib/external/wangle\"]\n\tpath = cachelib/external/wangle\n\turl = git@github.com:facebook/wangle.git\n",
+  "lines_by_extension": {
+    ".h": 65568,
+    ".cpp": 62627,
+    ".rs": 2024,
+    ".sh": 1377,
+    ".js": 811,
+    ".c": 803,
+    ".py": 69,
+    ".ts": 2
+  },
+  "red_flags": {
+    "sudo": {
+      "count": 65,
+      "examples": [
+        ".github/workflows/build-cachelib-centos-8-1.yml:52: - name: \"install sudo,git\"",
+        ".github/workflows/build-cachelib-centos-8-1.yml:53: run: dnf install -y sudo git cmake gcc",
+        ".github/workflows/build-cachelib-centos-8-5.yml:51: - name: \"install sudo,git\"",
+        ".github/workflows/build-cachelib-centos-8-5.yml:52: run: dnf install -y sudo git cmake gcc",
+        ".github/workflows/build-cachelib-debian-10.yml:30: - name: \"install sudo,git\""
+      ]
+    },
+    "docker": {
+      "count": 7,
+      "examples": [
+        ".github/workflows/build-cachelib-centos-8-1.yml:24: # Docker container image name",
+        ".github/workflows/build-cachelib-centos-8-5.yml:23: # Docker container image name",
+        ".github/workflows/build-cachelib-debian-10.yml:23: # Docker container image name",
+        ".github/workflows/build-cachelib-fedora-36.yml:23: # Docker container image name",
+        ".github/workflows/build-cachelib-rockylinux-8.yml:23: # Docker container image name"
+      ]
+    },
+    "cxl_pmem": {
+      "count": 1,
+      "examples": [
+        "cachelib/allocator/CacheAllocatorConfig.h:206: // byte-addressable memory such as DRAM, Pmem, CXLmem."
+      ]
+    },
+    "sysctl_hugepages": {
+      "count": 5,
+      "examples": [
+        "cachelib/common/Utils.cpp:45: const char* kProcShmMaxPath = \"/proc/sys/kernel/shmmax\";",
+        "cachelib/common/Utils.cpp:46: const char* kProcShmAllPath = \"/proc/sys/kernel/shmall\";",
+        "cachelib/common/Utils.h:72: std::string ret(\"/proc/sys/\");",
+        "cachelib/shm/SysVShmSegment.cpp:29: constexpr static uint32_t kHugePageSize = 1 << 21; // 2MB",
+        "cachelib/shm/SysVShmSegment.cpp:190: if (size % kHugePageSize) {"
+      ]
+    }
+  },
+  "github": {
+    "stargazers_count": 5,
+    "forks_count": 0,
+    "archived": false,
+    "pushed_at": "2026-01-22T02:23:34Z",
+    "created_at": "2026-01-21T07:14:37Z",
+    "open_issues_count": 0,
+    "license": "Apache-2.0"
+  }
+}

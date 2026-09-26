@@ -1,0 +1,14 @@
+{
+  "pdf": {
+    "status": "ok",
+    "source_url": "https://www.usenix.org/system/files/nsdi26-keren.pdf",
+    "version": "from list",
+    "notes": ""
+  },
+  "repo": {
+    "status": "ok",
+    "url": "https://github.com/NadavKeren/Adaptive-Pipeline-Cache",
+    "official": "unclear",
+    "evidence": "link taken from the research list; not independently verified"
+  }
+}

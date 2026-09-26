@@ -236,3 +236,75 @@
 [2026-09-14 10:47:14] paper osdi26-learning-augmented-heuristics-simple-yet: audited -> shortlist 
 [2026-09-14 10:47:51] audit-osdi23-take-out-the-trache-maximizing-tra-nsact: agent start (fresh session)
 [2026-09-14 10:48:31] audit-fast24-symbiosis-the-art-of-application-and-ker: agent start (fresh session)
+[2026-09-14 10:55:47] audit-mlsys24-prompt-cache-modular-attention-reuse-for: agent done (cost $3.95891195), 0 validation errors
+[2026-09-14 10:55:47] paper mlsys24-prompt-cache-modular-attention-reuse-for: audited -> shortlist 
+[2026-09-14 10:55:50] audit-nsdi26-latency-aware-caching-with-delayed-hits: agent start (fresh session)
+[2026-09-14 10:56:21] audit-osdi24-fairness-in-serving-large-language-model: agent done (cost $5.896567500000002), 0 validation errors
+[2026-09-14 10:56:21] paper osdi24-fairness-in-serving-large-language-model: audited -> shortlist 
+[2026-09-14 10:56:22] paper sigmetrics26-capsule-a-storage-prefetcher-harnessing: driver fetch incomplete (PDF https://dl.acm.org/doi/pdf/10.1145/3788088: failed (curl: (22) The requested URL returned error: 403); repo https://github.com/imagesid/capsule.git: ok (21 top-level entries)); spawning fetch agent
+[2026-09-14 10:56:22] fetch-sigmetrics26-capsule-a-storage-prefetcher-harnessing: agent start (fresh session)
+[2026-09-14 10:59:33] audit-osdi23-take-out-the-trache-maximizing-tra-nsact: agent done (cost $5.222360500000001), 0 validation errors
+[2026-09-14 10:59:33] paper osdi23-take-out-the-trache-maximizing-tra-nsact: audited -> shortlist 
+[2026-09-14 10:59:47] audit-vldb26-arcekv-towards-workload-driven-lsm-compa: agent start (fresh session)
+[2026-09-14 11:01:12] fetch-sigmetrics26-capsule-a-storage-prefetcher-harnessing: agent done (cost $1.0304875000000002), 0 validation errors
+[2026-09-14 11:01:17] audit-sigmetrics26-capsule-a-storage-prefetcher-harnessing: agent start (fresh session)
+[2026-09-14 11:01:39] audit-fast24-symbiosis-the-art-of-application-and-ker: agent done (cost $6.393707499999999), 0 validation errors
+[2026-09-14 11:01:39] paper fast24-symbiosis-the-art-of-application-and-ker: audited -> shortlist 
+[2026-09-14 11:02:06] audit-vldb23-lru-c-parallelizing-database-i-os-for-fl: agent start (fresh session)
+[2026-09-14 11:07:25] audit-nsdi26-latency-aware-caching-with-delayed-hits: agent done (cost $3.9599159999999998), 0 validation errors
+[2026-09-14 11:07:25] paper nsdi26-latency-aware-caching-with-delayed-hits: audited -> shortlist 
+[2026-09-14 11:07:27] paper sigmod24-structural-designs-meet-optimality-explo: driver fetch incomplete (PDF https://dl.acm.org/doi/pdf/10.1145/3654978: failed (curl: (22) The requested URL returned error: 403); repo https://github.com/NTU-Siqiang-Group/MooseLSM.git: ok (67 top-level entries)); spawning fetch agent
+[2026-09-14 11:07:27] fetch-sigmod24-structural-designs-meet-optimality-explo: agent start (fresh session)
+[2026-09-14 11:08:34] fetch-sigmod24-structural-designs-meet-optimality-explo: agent done (cost $0.6368145), 0 validation errors
+[2026-09-14 11:08:44] audit-sigmod24-structural-designs-meet-optimality-explo: agent start (fresh session)
+[2026-09-14 11:12:32] audit-vldb26-arcekv-towards-workload-driven-lsm-compa: agent done (cost $5.593696), 0 validation errors
+[2026-09-14 11:12:32] paper vldb26-arcekv-towards-workload-driven-lsm-compa: audited -> shortlist 
+[2026-09-14 11:12:40] audit-mlsys26-morphserve-efficient-and-workload-aware: agent start (fresh session)
+[2026-09-14 11:14:46] audit-vldb23-lru-c-parallelizing-database-i-os-for-fl: agent done (cost $4.6871485), 0 validation errors
+[2026-09-14 11:14:46] paper vldb23-lru-c-parallelizing-database-i-os-for-fl: audited -> shortlist 
+[2026-09-14 11:14:59] audit-fast23-adoc-automatically-harmonizing-dataflow: agent start (fresh session)
+[2026-09-14 11:15:04] audit-sigmetrics26-capsule-a-storage-prefetcher-harnessing: agent done (cost $6.1241925), 0 validation errors
+[2026-09-14 11:15:04] paper sigmetrics26-capsule-a-storage-prefetcher-harnessing: audited -> shortlist 
+[2026-09-14 11:15:07] audit-osdi26-nixie-efficient-transparent-temporal-mul: agent start (fresh session)
+[2026-09-14 11:19:23] audit-sigmod24-structural-designs-meet-optimality-explo: agent done (cost $3.9443065), 0 validation errors
+[2026-09-14 11:19:23] paper sigmod24-structural-designs-meet-optimality-explo: audited -> shortlist 
+[2026-09-14 11:19:28] audit-mlsys26-morphserve-efficient-and-workload-aware: agent done (cost $1.9390147499999997), 0 validation errors
+[2026-09-14 11:19:28] paper mlsys26-morphserve-efficient-and-workload-aware: audited -> reject failed H1_open_repo
+[2026-09-14 11:19:42] audit-asplos26-nemo-a-low-write-amplification-cache-for: agent start (fresh session)
+[2026-09-14 11:19:45] audit-mlsys26-flexicache-leveraging-temporal-stability: agent start (fresh session)
+[2026-09-14 11:25:49] audit-fast23-adoc-automatically-harmonizing-dataflow: agent done (cost $4.2569379), 0 validation errors
+[2026-09-14 11:25:49] paper fast23-adoc-automatically-harmonizing-dataflow: audited -> shortlist 
+[2026-09-14 11:25:50] paper sigmetrics26-unicache-unifying-prefix-cache-eviction: driver fetch incomplete (PDF https://dl.acm.org/doi/pdf/10.1145/3805652: failed (curl: (22) The requested URL returned error: 403); repo https://github.com/xsyslab/UniCache.git: ok (40 top-level entries)); spawning fetch agent
+[2026-09-14 11:25:50] fetch-sigmetrics26-unicache-unifying-prefix-cache-eviction: agent start (fresh session)
+[2026-09-14 11:27:46] fetch-sigmetrics26-unicache-unifying-prefix-cache-eviction: agent done (cost $0.86513625), 0 validation errors
+[2026-09-14 11:28:08] audit-sigmetrics26-unicache-unifying-prefix-cache-eviction: agent start (fresh session)
+[2026-09-14 11:28:30] audit-osdi26-nixie-efficient-transparent-temporal-mul: agent done (cost $4.744560750000001), 0 validation errors
+[2026-09-14 11:28:30] paper osdi26-nixie-efficient-transparent-temporal-mul: audited -> shortlist 
+[2026-09-14 11:28:48] audit-osdi26-kairox-adaptive-gpu-cpu-hybrid-llm-infer: agent start (fresh session)
+[2026-09-14 11:32:20] audit-asplos26-nemo-a-low-write-amplification-cache-for: agent done (cost $5.080850000000001), 0 validation errors
+[2026-09-14 11:32:20] paper asplos26-nemo-a-low-write-amplification-cache-for: audited -> maybe unclear H2_no_root, H3_hardware_fit
+[2026-09-14 11:32:25] audit-eurosys24-blox-a-modular-toolkit-for-deep-learning: agent start (fresh session)
+[2026-09-14 11:33:31] audit-mlsys26-flexicache-leveraging-temporal-stability: agent done (cost $6.640541), 0 validation errors
+[2026-09-14 11:33:31] paper mlsys26-flexicache-leveraging-temporal-stability: audited -> shortlist 
+[2026-09-14 11:33:34] audit-mlsys25-neo-saving-gpu-memory-crisis-with-cpu-of: agent start (fresh session)
+[2026-09-14 11:40:33] audit-sigmetrics26-unicache-unifying-prefix-cache-eviction: agent done (cost $6.588883999999999), 0 validation errors
+[2026-09-14 11:40:33] paper sigmetrics26-unicache-unifying-prefix-cache-eviction: audited -> shortlist 
+[2026-09-14 11:40:37] audit-fast23-gl-cache-group-level-learning-for-effici: agent start (fresh session)
+[2026-09-14 11:42:17] audit-osdi26-kairox-adaptive-gpu-cpu-hybrid-llm-infer: agent done (cost $6.7723144999999985), 0 validation errors
+[2026-09-14 11:42:17] paper osdi26-kairox-adaptive-gpu-cpu-hybrid-llm-infer: audited -> shortlist 
+[2026-09-14 11:42:19] audit-vldb23-write-aware-timestamp-tracking-effective: agent start (fresh session)
+[2026-09-14 11:45:22] audit-mlsys25-neo-saving-gpu-memory-crisis-with-cpu-of: agent done (cost $4.751620750000002), 0 validation errors
+[2026-09-14 11:45:22] paper mlsys25-neo-saving-gpu-memory-crisis-with-cpu-of: audited -> shortlist 
+[2026-09-14 11:45:25] audit-mlsys25-marconi-prefix-caching-for-the-era-of-hy: agent start (fresh session)
+[2026-09-14 11:45:36] audit-eurosys24-blox-a-modular-toolkit-for-deep-learning: agent done (cost $7.445336999999999), 0 validation errors
+[2026-09-14 11:45:36] paper eurosys24-blox-a-modular-toolkit-for-deep-learning: audited -> shortlist 
+[2026-09-14 11:45:51] audit-vldb26-how-much-can-rocksdb-chew-achieving-near: agent start (fresh session)
+[2026-09-14 11:53:51] audit-fast23-gl-cache-group-level-learning-for-effici: agent done (cost $7.424493250000001), 0 validation errors
+[2026-09-14 11:53:51] paper fast23-gl-cache-group-level-learning-for-effici: audited -> shortlist 
+[2026-09-14 11:55:48] audit-mlsys25-marconi-prefix-caching-for-the-era-of-hy: agent done (cost $3.4050517499999993), 0 validation errors
+[2026-09-14 11:55:48] paper mlsys25-marconi-prefix-caching-for-the-era-of-hy: audited -> shortlist 
+[2026-09-14 11:56:03] audit-vldb23-write-aware-timestamp-tracking-effective: agent done (cost $4.3796085), 0 validation errors
+[2026-09-14 11:56:03] paper vldb23-write-aware-timestamp-tracking-effective: audited -> shortlist 
+[2026-09-14 11:58:25] audit-vldb26-how-much-can-rocksdb-chew-achieving-near: agent done (cost $5.1555409999999995), 0 validation errors
+[2026-09-14 11:58:25] paper vldb26-how-much-can-rocksdb-chew-achieving-near: audited -> shortlist 
+[2026-09-14 11:58:25] rank: 30 audited, 1224 not audited -> /home/xing/project/os_hw/lit_review/ranking.md

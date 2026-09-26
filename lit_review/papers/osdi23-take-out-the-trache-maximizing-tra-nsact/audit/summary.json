@@ -1,0 +1,156 @@
+{
+  "title": "Take Out the TraChe: Maximizing (Tra)nsactional Ca(che) Hit Rate",
+  "one_line": "DeToX is a Redis+Postgres transactional caching system that scores groups of keys accessed in parallel within a transaction (rather than individual objects) to maximize transactional hit rate, the fraction of a transaction's critical path that caching removes.",
+  "topic": "caching",
+  "repo": {
+    "official": "yes",
+    "evidence": "Paper Appendix B (Artifact Appendix, page 22) names https://github.com/audreyccheng/detox as the artifact at commit 604c9bd; the GitHub account audreyccheng is first author Audrey Cheng (audreyccheng.com). The repo README.md mirrors the Artifact Appendix text verbatim, and the DeToX eviction policy is actually present in redis/src/t_string.c:557-612 and redis/src/evict.c:150-196.",
+    "last_commit": "2023-08-24",
+    "artifact_badges": ["available"],
+    "badge_evidence": "USENIX 'Artifact Evaluated - Available' stamp visible top-right of the paper's first content page (pages/page-02.png); no Functional or Reproduced badge found. https://www.usenix.org/conference/osdi23/presentation/cheng"
+  },
+  "hard_filters": {
+    "H1_open_repo": {
+      "result": "pass",
+      "evidence": "Official artifact per paper Appendix B. Contains the real system, not a placeholder: DeToX group scoring in redis/src/t_string.c:590-603 (min(F)/S + aging), aging factor in redis/src/evict.c:293-300 and 806-807, eviction sampling in redis/src/evict.c:150-196, shim + 2PL + prefetching in sys/src/main/java/shield/client/RedisPostgresClient.java:43-111 and 971-1154, THR metric in sys/src/main/java/shield/benchmarks/utils/CacheStats.java:18-51, plus TAOBench/SmallBank/TPC-C drivers and simulator/. CAVEAT: the complete-group (S4.1) and interchangeability (S5.1) machinery is absent everywhere -- grep for 'interchangeab|completeGroup|criticalLength' matches only vendored third-party files, and 'roup' across sys/src/main/java/shield gives 42 hits all of which are Netty EventLoopGroup or TAOBench key-range vars. The released DeToX is the levels-only variant (S5.2), which is what the paper itself used for the headline TAOBench figures (S8.1 footnote 1)."
+    },
+    "H2_no_root": {
+      "result": "pass",
+      "evidence": "No kernel module, eBPF, perf counter, KVM, hugepage or /proc/sys write in any DeToX code path. redis/Makefile is a plain source build with vendored deps. The only root steps are README.md:62-74 (sudo apt install postgresql, systemctl, editing /etc/postgresql/12/main/pg_hba.conf); all are replaceable by a user-space Postgres (conda-forge or source build) with initdb into $HOME on a non-default port, and since every tier is co-located the 'allow 0.0.0.0/0' step is unnecessary. repo_facts.json red flags are false positives: sysctl_hugepages hits are vendored jemalloc READING /proc/sys/vm/overcommit_memory (redis/deps/jemalloc/src/pages.c:475-496), custom_kernel hits are upstream Redis source comments (redis/src/sentinel.c, redis/src/config.c), kernel_module is an unused dstat plugin in oltpbench-chronocache/tools/rs-sysmon/. Maven is not installed on this machine but installs as a user-space tarball into $HOME."
+    },
+    "H3_hardware_fit": {
+      "result": "pass",
+      "evidence": "No GPU is used at all. The paper's four EC2 roles (S8.1: shim+Postgres c5a.4xlarge, Redis r5.4xlarge, clients c5a.16xlarge) are all ordinary user processes and co-locate on 16 cores / 125 GB RAM for a scaled-down dataset. The 1 TB datasets are a config knob, not a design requirement: sys/src/main/java/shield/benchmarks/taobench/TaoBenchExperimentConfiguration.java:32 already defaults NB_OBJECTS to 100000 and exposes nb_objects/base_size/nb_accounts via JSON (lines 170-171, 191). Every THR figure plots cache size RELATIVE to data size, and S8.6 argues THR is independent of system specifics, so a 100x-1000x scale-down still tests the claim. Multi-node is needed only for the optional TiKV result (Figure 16); the Postgres path is single-host. ~250 GB free disk is far more than the few hundred MB a 1M-object TAOBench needs."
+    },
+    "H4_obtainable_deps_data": {
+      "result": "pass",
+      "evidence": "No datasets are downloaded at all -- every workload is synthesised in-process by sys/src/main/java/shield/benchmarks/taobench/TaoBenchGenerator.java, smallbank/SmallBankGenerator.java and tpcc/TPCCGenerator.java; TAOBench here is the open benchmark generator, not a Meta production trace, so there is no proprietary data dependency. All sys/pom.xml dependencies (jedis 4.1.1, tikv-client-java 3.1.0, json-simple, netty, guava, mapdb, bouncycastle, aws-java-sdk, mysql-connector) are public Maven Central artifacts resolvable into ~/.m2 in user space. Redis vendors its own C deps. Java 17 and 21 are already on PATH and both accept the pom's -source 8 (sys/pom.xml:97-99). Only friction: the 2011-era postgresql 9.1-901-1.jdbc4 driver pin (sys/pom.xml:17-20) cannot do SCRAM-SHA-256, so either pin an older server, set md5/trust in the user-space pg_hba.conf, or bump to org.postgresql:postgresql:42.x."
+    }
+  },
+  "reproduce": {
+    "level": "M",
+    "target": "Figure 8a (TAOBench Product Group 2): transactional hit rate vs relative cache size for DeToX against LRU/LFU/GDSF/LIFE, supporting the S8.2 claim that at 25% relative cache size DeToX reaches ~88% THR while the best single-object policy needs 3.4x more cache. Companion/fallback target: Figure 10b (SmallBank, 1.3x THR), which has a complete driver and fewer undocumented knobs.",
+    "scale_down": "nb_objects = 1,000,000 instead of 100,000,000 (75-byte values => ~100-200 MB in Postgres instead of 1 TB); Redis maxmemory swept over {1,5,10,25,40,55,70,85,100}% of the loaded data size; all four tiers (clients, shim, Redis, Postgres) co-located on the single 16-core box with ~4 benchmark threads x 3 request threads; 90 s measured runs with 30 s ramp-up and 2 repeats instead of 3 x 5-minute runs with 60 s warm-up. THR (the target metric) is argued setup-independent in S8.6; absolute throughput/latency will NOT match because loopback removes the paper's 0.2 ms inter-tier RTT, which per Figure 15a shrinks DeToX's advantage -- inject artificial store latency as in S8.6 if the throughput delta is wanted.",
+    "effort": "5-8 person-days (2 students) + ~25 CPU-hours, 0 GPU-hours",
+    "rationale": "The policy code, all five baselines and the THR metric are present and print the target number directly (CacheStats.printReport at sys/src/main/java/shield/benchmarks/utils/CacheStats.java:34-51 emits spedUpLayers/totalLayers = THR), and the machine comfortably fits the scale-down -- that is the H-grade part. But this is not run-the-script territory: (1) no *ExpConfig.json files exist anywhere (grep for ExpConfig under sys/ returns nothing; sys/benchmarks/ holds only unrelated ORAM configs from the Shield project), so every config must be re-derived from the getProp* calls in TaoBenchExperimentConfiguration.java:170-195 and NodeConfiguration.java:640-650; (2) RedisPostgresClient.java:52 hard-codes USE_SQL=false and never reassigns it, so a fresh build silently targets TiKV rather than the README's default Postgres; (3) which shipped policy is DeToX is ambiguous -- redis.conf:1114 ships min-fsl (raw instance score) but S4.2.3/Figure 13b describe the averaged variant, i.e. avg-fsl at t_string.c:596-603; (4) the PG1/PG2/PG3 workload parameters are undocumented commented-out constants (TaoBenchExperimentConfiguration.java:27-43, ReadTransaction.java:45-47, ReadScan.java:49-53); (5) the Postgres install must be substituted into user space; (6) the JDBC pin is from 2011; (7) there are no run or plotting scripts. Only the Available badge exists -- no Reproduced badge to lean on. That is exactly the rubric's M: reproducible with real porting work."
+  },
+  "addons": [
+    {
+      "name": "Does dependency analysis actually pay off? Complete/interchangeable groups vs levels on real workloads",
+      "hypothesis": "We hypothesize that implementing complete groups and interchangeability (S4.1/S5.1) improves transactional hit rate by less than 5 percentage points over the shipped levels policy on every real OLTP benchmark (TPC-C, SmallBank, Epinions) -- i.e. the paper's most complex mechanism is unnecessary outside its hand-built Microbenchmark 2 -- while costing measurable run-time CPU on deep, unbalanced transaction topologies.",
+      "mechanism": "Add a compile-time pass over a declarative description of each benchmark's transaction DAG (already implicit in the driver code, e.g. OrderStatusTransaction.java), enumerate complete groups via the powerset + critical-length algorithm of S4.1, compress them into interchangeable equivalence classes per S5.1, and replace the single per-level MGET score update with a shim-side instance-scoring pass (S4.2.2 greedy superset iteration) that pushes explicit per-key scores into Redis through a new command or an extended MGET-like verb. Then sweep complete / interchangeable / levels / T-DeToX on the real benchmarks rather than only on the synthetic topology of Figure 6a, measuring both THR and run-time CPU overhead.",
+      "code_locations": [
+        "sys/src/main/java/shield/client/RedisPostgresClient.java",
+        "sys/src/main/java/shield/client/RedisStatement.java",
+        "sys/src/main/java/shield/benchmarks/tpcc/OrderStatusTransaction.java",
+        "redis/src/t_string.c",
+        "redis/src/server.h"
+      ],
+      "motivating_evidence": "The mechanism is entirely absent from the artifact: grep for 'interchangeab|completeGroup|criticalLength' over the repo matches only vendored third-party files, and no DAG / longest-path / powerset code exists under sys/src. The paper itself concedes in S8.2 that 'Since all transactions in these workloads have symmetric structures, there is no difference in performance between our various grouping techniques', and S5.2 states levels 'produce identical results to our previous grouping strategies ... including all the ones we evaluate in Section 8'. The only place complete groups win is Microbenchmark 2 (Figure 12d), a single hand-designed hot/cold-branch transaction type. So the paper's own text says the headline evaluation never exercises S4.1/S5.1, and nobody has shown whether they matter on a real workload.",
+      "feasibility": "M",
+      "feasibility_rationale": "Cross-cutting: a new compile-time component, a new shim-to-Redis per-key scoring path, and a new comparison harness. But the algorithms are fully specified in S4.1/S4.2.2/S5.1, the transaction sets are small (TPC-C 5 types, SmallBank 6), the evaluation reuses the existing CacheStats THR counter, and everything fits on this machine with no extra data. A 10-week task for 2-4 students, but not a localized patch.",
+      "research_value": "H",
+      "research_value_rationale": "It fills the artifact's biggest hole and simultaneously tests the paper's central design claim in the exact regime the paper skipped. Either outcome is publishable-shaped: 'levels are enough, drop the compile-time analysis' is a strong simplification result that an OSDI reviewer would care about; 'complete groups win by X% on TPC-C' completes the paper's own missing evaluation.",
+      "scoop_check": {
+        "result": "clear",
+        "details": "Queries: 'DeToX transactional hit rate caching follow-up paper cites Take Out the TraChe 2025'; 'learned cache eviction transaction dependency groups DeToX improvement 2024 2025'; 'Audrey Cheng Berkeley transactional caching follow-up 2024 2025'. No follow-up work on transactional caching found. The first author's later work is on transaction scheduling (Towards Optimal Transaction Scheduling, VLDB '24, https://www.vldb.org/pvldb/vol17/p2694-cheng.pdf) and concurrency conflicts, not caching. Closest related work is PACMan (NSDI '12, https://www.usenix.org/system/files/conference/nsdi12/pacman.pdf), which is already a baseline in the paper and only handles flat dependencies."
+      }
+    },
+    {
+      "name": "Write-aware group scoring (fixing the TPC-C null result)",
+      "hypothesis": "We hypothesize that discounting a group's score by the write rate of its member keys (their expected residency before invalidation) improves transactional hit rate by at least 10% relative on write-heavy transactional workloads (TPC-C, and a TAOBench variant with the write fraction raised from ~4% to 20-40%), compared with DeToX's write-oblivious min(F)/S score.",
+      "mechanism": "Add a per-object write counter and a decayed write-rate estimate to robj alongside the existing fsl/total_fs/number_fs fields, incremented on the cache-update path taken when the shim refreshes the cache at commit (setGenericCommand). Change the group score from min(F_g)/S_g to a survival-weighted form such as min_k(F_k/(1+w_k))/S_g, so that a group containing one frequently-invalidated key is de-prioritised exactly the way a cold key contaminates its partners today. Expose the write-penalty weight as a redis.conf knob and sweep it against the unmodified policy.",
+      "code_locations": [
+        "redis/src/t_string.c",
+        "redis/src/server.h",
+        "redis/src/db.c",
+        "redis/src/evict.c",
+        "redis/src/config.c",
+        "sys/src/main/java/shield/benchmarks/tpcc/NewOrderTransaction.java"
+      ],
+      "motivating_evidence": "The paper reports an explicit negative result on TPC-C (S8.2: 'TPC-C cannot benefit from transactional caching ... DeToX performs on par with single-object policies') and attributes it to hot/cold key mixing and recency, never considering invalidation. Yet S7.1 says all writes go straight to the data store and the cache is updated at commit, so in a write-heavy workload a group's members are repeatedly reset. Write behaviour visibly already affects scoring in the code -- redis/src/db.c:226-229 deliberately carries fsl across an overwrite while redis/src/object.c:57-60 resets it on creation -- but is never modelled in SCORE_G. Furthermore THR as measured counts a level as a hit only if every request in it was served from cache (CacheStats.java:20), so write-containing levels can never be transactional hits, an interaction the paper does not discuss.",
+      "feasibility": "H",
+      "feasibility_rationale": "Localized: a few hundred lines across four Redis source files plus config plumbing, with no change to the shim protocol. The TPC-C driver, the baselines and the THR counter already exist, the workload is generated (no data to obtain), and the whole sweep runs on this machine in CPU-hours.",
+      "research_value": "H",
+      "research_value_rationale": "It targets the paper's own clearest failure case with a mechanism the paper never considered, and both outcomes teach something: if write-aware scoring works, transactional caching extends to write-heavy OLTP, which is the regime that matters for real databases; if it does not, the paper's hot/cold-contamination explanation for TPC-C is confirmed against a real competing hypothesis rather than asserted.",
+      "scoop_check": {
+        "result": "partial",
+        "details": "Write-aware / cost-aware eviction is well-trodden for single objects (GD-Wheel, cost-aware GreedyDual, TinyLFU https://dl.acm.org/doi/10.1145/3149371), but I found nothing applying it to transactional GROUP scores. Queries: 'transactional hit rate cache admission policy transaction groups OLTP write-aware eviction research'; 'arxiv transactional caching variable object sizes all-or-nothing group caching 2025 database cache eviction dependency'. Related but distinct: Lightweight Inter-transaction Caching with Precise Clocks and Dynamic Self-invalidation (https://arxiv.org/pdf/2003.04150), which is an invalidation protocol rather than a scoring policy."
+      }
+    },
+    {
+      "name": "Transaction-aware cache admission",
+      "hypothesis": "We hypothesize that a group-aware admission filter -- refusing to admit keys whose enclosing level's min(F) falls below the current eviction-pool score -- raises transactional hit rate at small relative cache sizes (1-10%) by at least 15% relative and cuts cache write traffic by at least 2x, compared with DeToX's admit-everything policy, on TAOBench PG3 and TPC-C.",
+      "mechanism": "Today every miss is populated into Redis unconditionally by the shim's write-back after a store read, and mgetCommand merely scores whatever is already resident. Add an admission decision at the level boundary: compute the prospective group score before insertion and compare it against FSLGetL(), the global aging factor that already equals the last evicted key's score (redis/src/evict.c:806-807); then admit the whole group or none of it, since the all-or-nothing property applies to admission exactly as it does to eviction. Implement as a new Redis command invoked in place of the current per-key SET, plus a shim-side batching of the level's population.",
+      "code_locations": [
+        "redis/src/t_string.c",
+        "redis/src/evict.c",
+        "redis/src/config.c",
+        "sys/src/main/java/shield/client/RedisPostgresClient.java",
+        "redis/redis.conf"
+      ],
+      "motivating_evidence": "The paper states this as explicit future work in S9 (Admission algorithms): 'While we focus on eviction and prefetching in this paper, our grouping and scoring strategies can feasibly extend to admission, which we will explore in future work.' The regime where it should matter most is directly visible in Figures 8 and 10: at 1-10% relative cache size all policies including DeToX sit near the bottom of the THR curve, and S8.5/Figure 14 shows DeToX already sacrifices object hit rate, so cache-write traffic is a real secondary cost the paper never measures.",
+      "feasibility": "H",
+      "feasibility_rationale": "Small and localized: it reuses the existing global aging factor as the admission threshold and the existing CacheStats THR harness, touches one new Redis command plus the shim population path, and the 1-10% cache-size points are the cheapest runs in the sweep.",
+      "research_value": "M",
+      "research_value_rationale": "Well-motivated and genuinely useful, but it is precisely the extension the authors themselves signposted as future work, and 'group-level admission helps at small caches' is close to the expected outcome. A solid, expected improvement rather than a surprising one.",
+      "scoop_check": {
+        "result": "clear",
+        "details": "Queries: 'transactional hit rate cache admission policy transaction groups OLTP write-aware eviction research'; 'DeToX transactional hit rate caching follow-up 2025'; 'Audrey Cheng Berkeley transactional caching follow-up 2024 2025'. Nothing found applying admission control at the transactional-group level, and no authors' follow-up on the S9 promise. All admission literature surfaced is single-object: TinyLFU (https://dl.acm.org/doi/10.1145/3149371) and size-aware admission (https://arxiv.org/pdf/2105.08770)."
+      }
+    },
+    {
+      "name": "Variable object sizes: the regime the formalism claims but the evaluation never tests",
+      "hypothesis": "We hypothesize that under heavy-tailed object sizes (value sizes spanning three orders of magnitude, as in real key-value caches) the shipped DeToX loses its transactional-hit-rate advantage over GDSF, and that restoring the paper's true S_group = sum of key byte sizes (instead of the implemented key count) recovers at least 10 percentage points of THR at 10-25% relative cache size on TAOBench PG3.",
+      "mechanism": "(i) Fix mgetCommand to accumulate stringObjectLen(o) rather than the current S++ per key, matching S4.2.1. (ii) Extend the TAOBench generator and loader to draw value sizes from a configurable heavy-tailed distribution -- the DATA_SIZES / DATA_WEIGHTS lists already exist in the config class and are currently set to the degenerate [75] / [1.0]. (iii) Sweep DeToX with count-S vs byte-S against GDSF, LRU, LFU and LIFE, reporting THR and bytes-per-transactional-hit so that cache efficiency is measured in bytes rather than key counts.",
+      "code_locations": [
+        "redis/src/t_string.c",
+        "sys/src/main/java/shield/benchmarks/taobench/TaoBenchExperimentConfiguration.java",
+        "sys/src/main/java/shield/benchmarks/taobench/TaoBenchGenerator.java",
+        "sys/src/main/java/shield/benchmarks/taobench/TaoBenchLoader.java"
+      ],
+      "motivating_evidence": "The paper's NP-hardness proof reduces from VARIABLE-SIZED caching (S3.4 and Appendix A.2), and S_group is one of the three terms in SCORE_G (S4.2.1). Yet every evaluated workload uses near-uniform objects -- TaoBenchExperimentConfiguration.java:34 sets DATA_SIZES = [75] with weight 1.0 -- and the shipped code does not even measure bytes: redis/src/t_string.c:581 increments S by one per non-null string key. The size term of the paper's own scoring function is therefore entirely untested, and GDSF, the size-aware baseline DeToX was explicitly derived from (S4.2.1), has never been given the regime it was designed for.",
+      "feasibility": "H",
+      "feasibility_rationale": "A one-line semantic fix in redis/src/t_string.c plus a generator/loader change to honour DATA_SIZES/DATA_WEIGHTS, then the same sweep with the same harness. No new data, no new infrastructure, and it fits easily in CPU-hours on this machine.",
+      "research_value": "M",
+      "research_value_rationale": "Variable object size is the canonical caching regime and surfacing a concrete paper/implementation divergence is a genuine contribution a reviewer would note. But the expected story -- 'the size term matters once sizes vary' -- is not surprising by itself; the value hinges on whether the DeToX-vs-GDSF ranking actually flips, which is not guaranteed.",
+      "scoop_check": {
+        "result": "clear",
+        "details": "Query: 'arxiv transactional caching variable object sizes all-or-nothing group caching 2025 database cache eviction dependency'. All results were single-object size-aware caching -- Practical Bounds on Optimal Caching with Variable Object Sizes (https://arxiv.org/pdf/1711.03709) and Lightweight Robust Size Aware Cache Management (https://arxiv.org/pdf/2105.08770) -- related in technique but not transactional. No work found that studies variable object sizes under a transactional-hit-rate objective."
+      }
+    },
+    {
+      "name": "How far is DeToX from the transactional optimum?",
+      "hypothesis": "We hypothesize that a sharing-aware offline policy (greedy over a bounded lookahead, maximizing transactional hits per cached byte while accounting for keys shared across transactions) achieves at least 10 percentage points higher transactional hit rate than Transactional Belady on TAOBench PG3 and SmallBank, showing that the DeToX-to-optimum gap in Figure 14b is substantially larger than the paper's Transactional Belady line suggests.",
+      "mechanism": "Add a trace dumper to the shim that emits one line per transaction with ';'-separated levels and ','-separated keys -- exactly the format the simulator already parses at dag_txn_belady.py:44-50. Repair the simulator (the dead 'import workload' at line 2 refers to a module that does not exist, and dag_txn_belady.py:176 hardcodes a missing test3.txt). Then add a third policy that scores cached sets by (number of future transactional hits enabled) / (bytes retained) over a lookahead window, rather than by next-hit distance as Transactional Belady does, and compare all three plus online DeToX on the same traces.",
+      "code_locations": [
+        "simulator/dag_txn_belady.py",
+        "simulator/dag_belady_cache.py",
+        "sys/src/main/java/shield/client/RedisPostgresClient.java",
+        "sys/src/main/java/shield/benchmarks/utils/CacheStats.java"
+      ],
+      "motivating_evidence": "Appendix A.1 (Figure 17) proves Transactional Belady is not optimal, precisely because 'Transactional Belady does not account for shared keys across transactions' -- it caches a set shared by two transactions instead of one shared by three. Yet Figure 14b uses Transactional Belady as the de-facto upper bound and the paper never quantifies the residual gap to the true optimum. Without a real bound, nobody building on the THR metric knows whether DeToX's remaining headroom is 5 points or 40. The paper also proves the true optimum is NP-hard (S3.4), so a tractable better-than-Belady bound is the only practical way to answer this.",
+      "feasibility": "M",
+      "feasibility_rationale": "The policy work is pure Python over dumped traces and cheap to run, and the only new system work is the trace dumper in the shim. But the shipped simulator is not runnable (missing module, missing trace file, no generator), so a new harness must be built, and a lookahead-based policy over millions of requests needs care to stay tractable. More than a localized patch, but well within budget.",
+      "research_value": "M",
+      "research_value_rationale": "A headroom study is genuinely useful to anyone building on the transactional-hit-rate metric and follows directly from the paper's own Appendix A.1, but it produces a measurement rather than a system improvement. A reviewer would call it a strong section of a paper rather than the paper itself.",
+      "scoop_check": {
+        "result": "clear",
+        "details": "Queries: 'transactional hit rate cache admission policy transaction groups OLTP write-aware eviction'; 'arxiv transactional caching variable object sizes all-or-nothing group caching 2025'; 'DeToX transactional hit rate caching follow-up 2025'. No work found computing offline bounds for transactional hit rate. The nearest analogue is Berger et al., Practical Bounds on Optimal Caching with Variable Object Sizes (https://arxiv.org/pdf/1711.03709), which does exactly this for the OBJECT hit rate -- a good methodological template, and its absence in the transactional setting is precisely the gap."
+      }
+    }
+  ],
+  "risks": [
+    "Ambiguous policy identity: redis/redis.conf:1114 ships maxmemory-policy min-fsl, which assigns the raw instance score (minF/S + aging, redis/src/t_string.c:590-595), but S4.2.3 and Figure 13b say DeToX averages instance scores -- that is the avg-fsl branch at redis/src/t_string.c:596-603. README.md:87 lists both without saying which is the paper's system. Reading the code cannot settle it; both must be run and compared against Figure 8.",
+    "Wrong backend by default: sys/src/main/java/shield/client/RedisPostgresClient.java:52 hard-codes USE_SQL = false and it is never reassigned anywhere in the tree, so a fresh build routes to TiKV while README.md:27 says Postgres is the default. Silent misconfiguration risk that would waste days.",
+    "Missing configuration: no *ExpConfig.json exists in the repo (grep for ExpConfig under sys/ returns nothing); sys/benchmarks/ contains only cs6410/ and cs6410tmp/ ORAM configs from the unrelated Shield project. The per-product-group TAOBench parameters are undocumented commented-out constants (TaoBenchExperimentConfiguration.java:27-43, ReadTransaction.java:45-47, ReadScan.java:49-53), so absolute THR values may differ from the paper even if the policy ordering reproduces.",
+    "Sections 4.1 and 5.1 are unreleased: Figures 12a-12d (complete groups, interchangeability, Microbenchmarks 1 and 2) cannot be reproduced from this artifact. Any project claim about complete groups must be about the team's own reimplementation, not the authors'.",
+    "Single-host timing distortion: co-locating clients, shim, Redis and Postgres on 16 cores removes the paper's 0.2 ms inter-tier network, and S8.6 / Figure 15a shows DeToX's throughput advantage grows with store latency, so the co-located setup is the least favourable case for DeToX. RedisPostgresClient.java:1115 also busy-waits (while (!r.done) {}) per request, burning cores under oversubscription. THR should be unaffected; throughput and latency will be.",
+    "Dependency age: sys/pom.xml:17-20 pins the 2011 postgresql 9.1-901-1.jdbc4 driver, which predates SCRAM-SHA-256 and will fail against a modern Postgres server's default auth. Must pin an older server, set md5/trust in the user-space pg_hba.conf, or bump to org.postgresql:postgresql:42.x.",
+    "Maven is not installed on this machine (absent from env.md's software table) and must be unpacked into $HOME before anything in sys/ builds -- no root needed, but it is the first thing that will fail.",
+    "The simulator is not runnable as shipped: both simulator/*.py begin with 'import workload' and no workload.py exists (the directory has exactly two files), dag_txn_belady.py:176 hardcodes a missing test3.txt, and there is no trace dumper in the shim. Any work touching Figure 14 must build the trace pipeline first.",
+    "Repo hygiene: 293 MB / 15,117 files dominated by sys/external-jars/openemr-5.0.0/ (a vendored PHP EMR application, source of the 716K lines of .js) and sys/benchmarks/cs6410*/ ORAM leftovers. Harmless but it makes locating the ~7K LOC of real DeToX code slow.",
+    "Only the USENIX 'Artifacts Available' badge was found (pages/page-02.png); no Functional or Reproduced badge, so there is no external evidence that anyone outside the authors has re-run these numbers.",
+    "Epinions (Figure 10a) has no DeToX driver: it exists only under oltpbench-chronocache/ for the ChronoCache baseline, so that figure requires porting a new benchmark into sys/src/main/java/shield/benchmarks/."
+  ]
+}

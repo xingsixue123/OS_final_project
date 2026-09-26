@@ -1,0 +1,63 @@
+{
+  "url": "https://github.com/ruipeterpan/marconi",
+  "head_commit": "08016617b1524e6bf6ac29b680641cc945bda7f0",
+  "head_commit_date": "2025-03-05T16:14:00-05:00",
+  "file_count": 29,
+  "size_mb": 0.2,
+  "top_level": [
+    ".gitignore",
+    "LICENSE.md",
+    "README.md",
+    "artifact_evaluation.md",
+    "config_tuner.py",
+    "data/",
+    "environment.yml",
+    "plotting/",
+    "policy_exploration.py",
+    "radix_cache_hybrid.py",
+    "radix_cache_vllm.py",
+    "run_all_experiments.sh",
+    "toy_example.py",
+    "utils.py",
+    "utils/"
+  ],
+  "build_files": [
+    "environment.yml"
+  ],
+  "lines_by_extension": {
+    ".py": 4253,
+    ".sh": 14
+  },
+  "red_flags": {
+    "big_gpu": {
+      "count": 3,
+      "examples": [
+        "plotting/plotting.py:81: ax.axhline(y=80*1000, color=\"red\", linestyle=\"dashed\")  # A100-80GB memory",
+        "plotting/plotting.py:85: ax.text(x=700,y=20*1000, s=\"Memory of A100-80GB GPU\", color=\"red\", fontsize=11)",
+        "plotting/plotting.py:347: ax.axhline(y=40*1000, color=\"black\", linestyle=\"dashed\")  # A100-80GB memory"
+      ]
+    },
+    "multi_gpu": {
+      "count": 1,
+      "examples": [
+        "environment.yml:147: - nvidia-nccl-cu12==2.20.5"
+      ]
+    },
+    "multi_node": {
+      "count": 2,
+      "examples": [
+        "artifact_evaluation.md:29: We have tested Marconi on Cloudlab nodes with Ubuntu 22.04 and Python 3.11.9 (in theory, our source code should be runnable on any Linux machine).",
+        "artifact_evaluation.md:32: > :wave: Artifact evaluators: Hello! If you want access to Cloudlab, please send your public key to ruipan@princeton.edu and we will set up a Cloudlab node for "
+      ]
+    }
+  },
+  "github": {
+    "stargazers_count": 68,
+    "forks_count": 10,
+    "archived": false,
+    "pushed_at": "2025-03-05T21:14:00Z",
+    "created_at": "2025-03-05T21:00:54Z",
+    "open_issues_count": 0,
+    "license": "NOASSERTION"
+  }
+}

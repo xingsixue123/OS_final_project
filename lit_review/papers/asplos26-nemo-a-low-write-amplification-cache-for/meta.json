@@ -1,0 +1,11 @@
+{
+  "id": "asplos26-nemo-a-low-write-amplification-cache-for",
+  "title": "Nemo: A Low-Write-Amplification Cache for Tiny Objects on Log-Structured Flash Devices",
+  "venue": "asplos",
+  "year": 2026,
+  "paper_url": "https://doi.org/10.1145/3779212.3790191",
+  "pdf_url": "https://arxiv.org/pdf/2603.09605",
+  "repo_url": "https://github.com/XMU-DISCLab/Cachelib-Nemo",
+  "topic": "storage",
+  "note": "Set-associative flash-cache design built as a CacheLib module; runs in user space on the local NVMe drives"
+}

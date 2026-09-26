@@ -1,0 +1,152 @@
+{
+  "title": "Nixie: Efficient, Transparent Temporal Multiplexing for Consumer GPUs",
+  "one_line": "A user-space daemon plus LD_PRELOAD shim that time-multiplexes unmodified CUDA applications on a single consumer GPU by coupling an MLFQ-style scheduler with explicit, full-duplex migration of each application's whole working set across a GPU/pinned/paged/disk memory hierarchy, replacing UVM demand paging.",
+  "topic": "scheduling",
+  "repo": {
+    "official": "yes",
+    "evidence": "Paper §1 states 'Our source is available at https://github.com/XOR-op/Nixie'; repo README.md:31 links to the USENIX OSDI '26 presentation page and README.md:83-91 contains the paper's BibTeX. Content matches the paper: 13,159 LOC Rust vs the paper's '~10,000 lines of Rust' (§7), with sidecar (shim, §4), daemon (§3), migration planner/orchestrator (§5) and MLFQ policy (§6) all present and unit-tested.",
+    "last_commit": "2026-09-06",
+    "artifact_badges": ["available"],
+    "badge_evidence": "USENIX 'Artifact Evaluated - Available' badge graphic on the first page of the paper (pages/page-02.png, top right). The USENIX presentation page https://www.usenix.org/conference/osdi26/presentation/xu-yechen returned HTTP 403, so no Functional/Reproduced badge could be confirmed."
+  },
+  "hard_filters": {
+    "H1_open_repo": {
+      "result": "pass",
+      "evidence": "Official implementation, not a placeholder. src/sidecar/ is the LD_PRELOAD shim (intercept.rs:82 cudaMalloc, intercept_launch.rs, init.rs:91 cuMemHostRegister); src/daemon/ is the service with the chunk planner (runtime/migration/migration_plan.rs:129 realtime_migrate_task), the full-duplex orchestrator (runtime/migration/execution.rs:257/546/632) and Algorithm 1 (runtime/schedule/policy.rs:392 update_priority). Real unit tests at policy.rs:590-1150 and execution.rs:1356-1472. Apache-2.0, Cargo.lock committed."
+    },
+    "H2_no_root": {
+      "result": "pass",
+      "evidence": "Entirely unprivileged: LD_PRELOAD injection (docs/cli.md:8), Unix socket /tmp/nixie-ctl.sock (docs/cli.md:9), POSIX shm_open on /dev/shm (src/common/src/shm_buffer.rs:22, src/daemon/src/runtime/shm.rs:13), cuMemHostRegister on that region (src/sidecar/src/init.rs:91), CUDA VMM API and NVML (src/daemon/src/config.rs:182). Grep over src/ finds no mlock/RLIMIT//proc/sys/hugepage/kernel-module/eBPF/perf usage; repo_facts.json red_flags is empty; no Dockerfile. The only root-adjacent item is the unused 'is-root' crate line at src/daemon/Cargo.toml:61. Caveat (baseline only, not Nixie): the TGS baseline in the companion nixie-eval repo is container/Kubernetes-oriented and will likely have to be dropped."
+    },
+    "H3_hardware_fit": {
+      "result": "pass",
+      "evidence": "The paper itself runs Nixie on exactly our GPU: §7.3 'Performance on Other Hardware' / Figure 15 evaluates Case #2 on a single RTX A5000 24 GB (Ampere, PCIe 4.0x16) with Q4 models chosen because 'RTX A5000 has smaller memory', reporting 3.4x over nvshare. The mechanism is single-GPU by construction; the '2 GPUs' bars in Figures 6/11/15 are a zero-switch upper-bound reference that can simply be omitted. Daemon defaults of 32 GiB pinned + 32 GiB paged (src/daemon/src/config.rs:168-169) fit 125 GiB RAM; ~35-50 GB of GGUFs fit in 257 GB free disk. No FP8 kernels needed on the llama.cpp/GGUF path (Ampere lacks them); only the ComfyUI Qwen-Image case uses FP8 weights, and Z-Image BF16 is the cheaper substitute."
+    },
+    "H4_obtainable_deps_data": {
+      "result": "pass",
+      "evidence": "Rust via rustup into $HOME; all crates from crates.io with Cargo.lock committed and current pins (cudarc 0.19.8, tokio 1.38, tarpc 0.35, nix 0.29, nvml-wrapper 0.10). Building with '--no-default-features --features cuda-12' selects cudarc/cuda-12000 + fallback-dynamic-loading (src/{common,daemon,sidecar}/Cargo.toml), so libcuda.so is dlopen'ed at runtime and no CUDA toolkit is needed at build time, avoiding the nvcc probe at src/sidecar/build.rs:61. Evaluation harness https://github.com/XOR-op/nixie-eval (README fetched 2026-09-14) is Python/uv and lists every runner and figure script. All models/datasets public: Qwen3 / Qwen3-VL / Qwen3-Coder / Gemma3 GGUFs (auto-downloaded), Comfy-Org/z_image_turbo and Comfy-Org/qwen_image on Hugging Face, DreamBench++, GSM8K, HumanEval-FIM. No proprietary traces."
+    }
+  },
+  "reproduce": {
+    "level": "M",
+    "target": "Figure 13 (§7.2 Case #3): Nixie gives 3.1x-3.8x lower interactive code-completion latency than nvshare (W=4) while keeping background throughput competitive, and far lower latency than the Nixie-RR round-robin ablation. This is the paper's abstract-level 3.8x claim and exercises the MLFQ scheduler, not just the transfer engine.",
+    "scale_down": "Replace the paper's 32 GB-RTX-5090 models with the authors' own A5000 recipe from §7.3: Qwen3-Coder-30B-A3B Q4_K_M (~18 GB, FIM completion) + Gemma3-27B-it Q4_K_M (~16.5 GB, background agent) under llama.cpp b7027. Each fits individually in 24 GB; combined 34.5 GB still oversubscribes by ~11 GB so whole-working-set switching is preserved. Daemon: 'nixie daemon --shmem 20g --hostmem 24g --device-limit g:0.92'. Keep all three arrival regimes (1s/3s/6s) and the 4s Nixie-RR window. Compare ratios between systems, not absolute seconds (PCIe 4.0x16 vs their 5.0x8, and lower quantisation).",
+    "effort": "6 person-days + ~15 GPU-hours (1 pd Rust build/smoke test, 1 pd llama.cpp CUDA build + ~35 GB model download, 2 pd porting nixie-eval's command_server/config which has hard-coded paths and no container, 1.5 pd nvshare + naive-UVM baselines, 0.5 pd plotting; 8-10 GPU-h for the 3x4 sweep plus ~5 GPU-h debugging)",
+    "rationale": "In favour of H: a complete evaluation harness exists with an explicit figure map (nixie-eval figure/case_study_coding.py -> Fig 13), the runner is a single command, dependency pins are current, and the authors themselves validated this exact GPU in §7.3/Figure 15. Held to M because: (a) the eval code is in a SECOND repository that pins main-repo commit b7466db, not the audited head 56f3fc1, so the team must checkout/port; (b) the harness is machine-specific (config/service_config.toml absolute paths) with no container, so it must be ported by hand; (c) our driver 535 / CUDA <=12.2 is two major releases behind the authors' 580.95 / CUDA 12.9, the repo's CI only ever builds --features cuda-13 (.github/workflows/check.yml:46), and the runtime behaviour of CUDA VMM plus a 16-32 GiB cuMemHostRegister on driver 535 is unverified - the paper itself saw driver-dependent PCIe idleness on its A5000 box (§7.3); (d) the headline ratio needs the nvshare baseline built from source with the harness's CUDA-graph patch, without which only the self-contained Nixie-RR ablation is reproducible; (e) re-quantisation to Q4 means only ratios can be matched. The artifact carries only the 'Available' badge - no third party has certified reproduction."
+  },
+  "addons": [
+    {
+      "name": "Scheduler-aware pinned-tier eviction",
+      "hypothesis": "We hypothesize that choosing pinned-tier (SHM) eviction victims by scheduler order - demoting blocks of the application furthest from the head of the MLFQ queue - reduces mean and p95 context-switch time and interactive TTFT under four or more co-located applications whose combined footprint spills past SHM+host into disk, compared with Nixie's current arbitrary victim choice.",
+      "mechanism": "realtime_migrate_task builds shm_eviction_candidates from all SHM buffers, removes only the incoming pid (migration_plan.rs:192-193), and then pops victims with shm_eviction_candidates.iter().next() (migration_plan.rs:286-291) - i.e. randomised Rust HashMap iteration order. Thread the scheduler's already-computed queue order (compute_prioritization, policy.rs:489) into the planner as a per-pid rank, sort candidates by (rank, last-scheduled-time) instead of hash order, and apply the same rule in local_prefetch_task (migration_plan.rs:430). ~200-400 LOC plus rank plumbing through perform_migration (scheduler.rs:329).",
+      "code_locations": [
+        "src/daemon/src/runtime/migration/migration_plan.rs:286",
+        "src/daemon/src/runtime/schedule/policy.rs:489",
+        "src/daemon/src/runtime/schedule/scheduler.rs:329"
+      ],
+      "motivating_evidence": "A documented design/implementation gap: §5.2 claims 'When the scheduler already exposes a likely next application, the planner treats its blocks as less attractive eviction candidates, which preserves useful prefetching state', but the released planner only excludes the incoming pid and otherwise picks arbitrarily. The paper also never evaluates more than three co-located applications (Case #4 uses exactly three), and its only scheduler/memory-interaction ablation is auto-prefetch on/off, worth +5% (Figure 14).",
+      "feasibility": "H",
+      "feasibility_rationale": "Localized to one planner function plus a rank argument; existing unit tests (policy.rs:1072 construct_prefetch_plan_builds_expected_moves, execution.rs:1356) give a regression harness; evaluable by extending the existing 'run.py -b batching-all' (Fig 14) runner to 4-5 llama.cpp instances of 6-14B Q4 models on one 24 GB A5000, a few GPU-hours.",
+      "research_value": "M",
+      "research_value_rationale": "Closes a stated-vs-implemented gap and probes a co-location regime the paper skips, but 'pick better eviction victims' is an expected win; the interesting part is the >3-app regime rather than the policy itself, so a reviewer would see it as solid but unsurprising.",
+      "scoop_check": {
+        "result": "clear",
+        "details": "Queries: 'Nixie temporal multiplexing consumer GPUs OSDI 2026 follow-up spatial multiplexing'; 'transparent GPU time-sharing LD_PRELOAD CUDA VMM API context switch scheduler 2026'. No work found on Nixie's pinned-tier victim policy. Nearest neighbours are MSched (https://arxiv.org/abs/2512.24637) and XSched (https://www.usenix.org/system/files/atc25-fan.pdf), neither of which manages a pinned staging tier this way."
+      }
+    },
+    {
+      "name": "Migration-cost-adaptive time quanta",
+      "hypothesis": "We hypothesize that sizing each application's time quantum from the measured cost of the switch that admitted it - targeting a fixed switch-overhead fraction rather than the fixed 8/16/32/64/128 s ladder - moves the interactive-latency vs background-throughput frontier outward, specifically recovering most of the 23.5% background-throughput loss Nixie suffers in the 'frequent' (1 s interval) regime of Figure 13 at equal or better completion latency.",
+      "mechanism": "priority_level_to_time_quantum and priority_level_to_cooldown are hard-coded ladders (policy.rs:74-93), and compute_cooldown estimates migration time from a hard-coded pcie_speed = 16.0 GB/s with a x1.5 fudge (policy.rs:149-160) - wrong on both PCIe 5.0x8 and our PCIe 4.0x16. Replace with (i) an EWMA of observed per-switch bytes and wall-clock duration, using the swap_out byte count the orchestrator already returns into scheduler.rs:359; (ii) a rule T_p = max(T_min, k * T_migrate_est(p)) with the overhead fraction 1/k as the single tunable; (iii) leave MLFQ promotion/demotion untouched. ~300-600 LOC plus a config knob in config.rs.",
+      "code_locations": [
+        "src/daemon/src/runtime/schedule/policy.rs:74",
+        "src/daemon/src/runtime/schedule/policy.rs:149",
+        "src/daemon/src/runtime/migration/execution.rs:257",
+        "src/daemon/src/runtime/schedule/scheduler.rs:359",
+        "src/daemon/src/config.rs"
+      ],
+      "motivating_evidence": "The paper makes the tradeoff explicit and unresolved in §7.2 Case #3: 'under frequent interactive arrivals, Nixie sacrifices background throughput to keep code-completion latency low' (-23.5%), and §8 'Policy extensibility' invites exactly this refinement ('These policies are intentionally conservative; refining them is a promising direction for future work'). The hard-coded 16 GB/s constant in compute_cooldown is a concrete, citable simplification.",
+      "feasibility": "H",
+      "feasibility_rationale": "Confined to one module; the measurement plumbing already exists (perform_migration returns swapped-out bytes to handle_sched_request); evaluated with the existing 'run.py -b coding-all:all' and 'batching-all' runners on the Q4 scale-down, ~10-15 GPU-hours on one A5000.",
+      "research_value": "M",
+      "research_value_rationale": "A clean, well-motivated Pareto study that the paper explicitly defers, but 'make the quantum proportional to the switch cost' is the textbook answer; the only real surprise would be the magnitude or a non-monotonic frontier.",
+      "scoop_check": {
+        "result": "partial",
+        "details": "MSched, 'Towards Fully-fledged GPU Multitasking via Proactive Memory Scheduling' (https://arxiv.org/abs/2512.24637, Dec 2025), co-designs scheduling and memory placement for GPU multitasking, but by predicting working sets to replace demand paging on a UVM substrate, not by sizing quanta from measured migration cost inside a chunk planner. Query: 'migration-cost-aware adaptive time quantum GPU context switch scheduler interactive latency throughput tradeoff 2026'. Nothing found that adapts Nixie's MLFQ quanta."
+      }
+    },
+    {
+      "name": "Opportunistic co-residency (spatial sharing when working sets fit)",
+      "hypothesis": "We hypothesize that letting two applications stay simultaneously resident and runnable whenever their combined footprint fits under the device limit - instead of always paying a full context switch - reduces interactive p95 latency substantially and raises aggregate throughput, under the common consumer mix of a small latency-sensitive model (Qwen3-4B-Q4, ~2.5 GB, code completion) beside a large background model (Qwen3-Coder-30B-Q4, ~18 GB); and that the crossover point at which SM contention makes co-residency worse than switching is measurable and workload-predictable.",
+      "mechanism": "The daemon hard-codes a single runnable application: ActiveClientState::Active { pid } (scheduler.rs:47, :342), and handle_sched_request unconditionally sends SchedulingArgs::Disable to the incumbent (scheduler.rs:311-328) before migrating and Enable-ing the incoming one (scheduler.rs:347). Change: (i) generalise ActiveClientState to a small set of resident-and-enabled pids; (ii) in handle_sched_request, ask the planner whether the incoming residual can be admitted without evicting the incumbent - it already computes into_gpu_requirement against gpu_free_space (migration_plan.rs:142-184) - and if so skip the Disable+migration path entirely; (iii) keep the MLFQ as the arbiter for shrinking the set, and leave the shim's set_allow_running semantics (src/sidecar/src/schedule/mod.rs:78) untouched so transparency and the graph-capture/sync invariants survive. Add a --max-coresident knob in config.rs.",
+      "code_locations": [
+        "src/daemon/src/runtime/schedule/scheduler.rs:311",
+        "src/daemon/src/runtime/schedule/scheduler.rs:342",
+        "src/daemon/src/runtime/migration/migration_plan.rs:142",
+        "src/sidecar/src/schedule/mod.rs:78",
+        "src/daemon/src/config.rs"
+      ],
+      "motivating_evidence": "§8 'Co-locating with small models' names this as the paper's own open problem: 'Nixie's target workloads are those in which each application utilizes most of the GPU memory... When there is a set of small models, it is possible to perform spatial multiplexing... How to integrate spatial multiplexing into Nixie is a promising future direction.' Every workload in §7 is large-vs-large, so the small+large regime - arguably the most common consumer case (a 3-8B completion model next to one big agent) - is entirely unmeasured. Either outcome teaches: if SM contention costs the interactive app more than a 1-2 s switch would, that is a publishable negative result about when temporal multiplexing is the right primitive at all.",
+      "feasibility": "M",
+      "feasibility_rationale": "Cross-cutting: the single-active-client invariant is threaded through scheduler.rs (poll_queue at :184, handle_activity_idle at :633, handle_activity_yield at :661, handle_prefetch_request at :369) and through the planner's assumption that the victim's blocks are being evicted; it also needs a new mixed-size workload generator since the harness only has same-scale pairs. But it needs no new hardware, fits comfortably on one 24 GB A5000 (2.5 + 18 GB under a 22 GB device limit), and leaves the transfer engine alone. Realistically the core of a 10-week project for 2-4 students.",
+      "research_value": "H",
+      "research_value_rationale": "It attacks the paper's explicitly stated limitation in a regime the paper never measures, and the answer determines the scope of Nixie's central design decision (whole-application temporal multiplexing). An OSDI reviewer would care about a crossover characterisation regardless of which side wins.",
+      "scoop_check": {
+        "result": "partial",
+        "details": "Concurrent 2026 work does transparent spatial GPU sharing - 'Performance Isolation and Semantic Determinism in Efficient GPU Spatial Sharing' / Detshare-Vitamin-E (https://arxiv.org/abs/2603.15042), also LD_PRELOAD-based, and VUDA (https://arxiv.org/abs/2605.01352) for CUDA-Vulkan spatial sharing. Neither integrates spatial sharing with a memory-oversubscription temporal multiplexer, and neither cites or extends Nixie (checked 2026-09-14). Must be positioned against Detshare explicitly."
+      }
+    },
+    {
+      "name": "History-driven predictive prefetch into free GPU memory",
+      "hypothesis": "We hypothesize that predicting the next application from the scheduler's own execution history and prefetching its blocks during idle windows all the way into free GPU memory - not merely up to the pinned tier - cuts interactive TTFT in the sparse (6 s) and modest (3 s) arrival regimes of Figure 13 by substantially more than the +5% Nixie's current reactive prefetch delivers in Figure 14.",
+      "mechanism": "Auto-prefetch fires only once sched_req is already non-empty, i.e. after a request has arrived (policy.rs:283-299), and construct_prefetch_plan (policy.rs:336-389) emits only Storage->Shm, HostMem->Shm and Storage->HostMem moves - never into the GPU. Meanwhile ClientStatistics already keeps a 64-entry History of run chunks with durations, stop reasons and priorities (statistics.rs:108-131, :169) that is used only by the 'nixie history' CLI. Change: (i) fit a trivial next-app predictor (last-app or a Markov chain over the history ring) and trigger prefetch on idleness notification rather than request arrival; (ii) extend construct_prefetch_plan to emit Shm->Gpu moves sized to gpu_free_space minus a safety margin, reusing the GPU-destination prefetch path already present in handle_prefetch_request (scheduler.rs:369) and documented at docs/cli.md:224-234; (iii) add an abort path so a real schedule request preempts an in-flight speculative fetch.",
+      "code_locations": [
+        "src/daemon/src/runtime/schedule/policy.rs:283",
+        "src/daemon/src/runtime/schedule/policy.rs:336",
+        "src/daemon/src/runtime/schedule/statistics.rs:108",
+        "src/daemon/src/runtime/schedule/scheduler.rs:369"
+      ],
+      "motivating_evidence": "§6.3 admits the heuristic is one-step and reactive ('when there is already an application at the head of scheduler queue, it is most likely to run after the current application is scheduled out'); Figure 14 measures its worth at only +5% ('Auto-prefetching yields an additional 5% throughput improvement over the no-prefetch variant'); and §8 'Policy extensibility' proposes 'learning scheduling decisions from recent execution history' as future work. The sparse 6 s-interval regime of Figure 13 leaves long idle windows currently unused.",
+      "feasibility": "H",
+      "feasibility_rationale": "Confined to the policy module plus a prefetch-plan extension; the transport for every move type, including GPU destinations, already exists in execution.rs and handle_prefetch_request; evaluated with the existing coding-all and batching-all runners on the Q4 scale-down, ~10 GPU-hours.",
+      "research_value": "M",
+      "research_value_rationale": "A well-targeted improvement to a mechanism the authors flag as conservative, but speculative prefetch of a predicted next task is a familiar idea; the only genuine surprise would be wasted-bandwidth regressions when the predictor is wrong.",
+      "scoop_check": {
+        "result": "partial",
+        "details": "MSched, 'Towards Fully-fledged GPU Multitasking via Proactive Memory Scheduling' (https://arxiv.org/abs/2512.24637), does predictive working-set preparation at context-switch time with a template-based predictor keyed on kernel launch arguments over a UVM/page-fault substrate - the same spirit, but not keyed on a scheduler's inter-application history and not inside Nixie's chunk/tier planner. Treat as related work to beat rather than a scoop."
+      }
+    },
+    {
+      "name": "Cross-process content dedup in the pinned tier",
+      "hypothesis": "We hypothesize that content-addressing the 2 MB blocks of the pinned (SHM) tier, so identical blocks are stored once across processes, reduces pinned-memory usage and eliminates redundant PCIe traffic on context switches under the consumer-realistic case of two applications backed by the same model weights (the two identical instances of the paper's own Figure 6 microbenchmark, or an editor plug-in and a CLI agent sharing one GGUF), improving on the paper's 66.8% pinned-memory reduction (Figure 9); and that on heterogeneous mixes the hashing cost is small enough for dedup to be a free option.",
+      "mechanism": "ShmBufferManager keys buffers by BufferId { pid, device_id, block_id, size } (migration/shm_buffer.rs, constructed at migration_plan.rs:207-212), so two processes holding byte-identical weight blocks occupy two copies. Add an xxh3 content hash per 2 MB block, computed by the multi-threaded staging workers that already touch every block (execution.rs:829 backend_to_shm_transfer, :546 device_to_host_transfer), plus a refcounted interning table; a block already resident for another process can then be reused without re-reading the lower tier, and eviction becomes a refcount decrement. Copy-on-write is unnecessary because pinned-tier blocks are written only by the migration engine, never by the application. Extend the planner's capacity accounting (shm_free_blocks_count, migration_plan.rs:185) to count unique blocks.",
+      "code_locations": [
+        "src/daemon/src/runtime/migration/shm_buffer.rs",
+        "src/daemon/src/runtime/migration/execution.rs:829",
+        "src/daemon/src/runtime/migration/migration_plan.rs:185",
+        "src/common/src/shm.rs"
+      ],
+      "motivating_evidence": "The paper's own context-switch microbenchmark is 'running an application executing a model and then switching to another identical instance of the same application and model on a single GPU' (§7.1) - a workload where dedup would be nearly total, yet Nixie pays the full migration cost. §8 'White-box solutions' identifies the same redundancy from the other direction ('CUDA memory copies inherently leave duplicate data in both CPU and GPU memory') and declines to exploit it because it would need tensor semantics; content hashing needs none, preserving full transparency.",
+      "feasibility": "M",
+      "feasibility_rationale": "Hashing is easy and 16 Zen-3 cores hash far faster than PCIe delivers, but interning changes the ownership model of the SHM tier: refcounts, interaction with the existing alloc_generation ABA scheme (src/common/src/shm.rs:26-40), and every release path in the planner. Cross-cutting rather than local, though the evaluation reuses 'run.py -b rotate-builtin' (Figs 6/7) and the Figure-9 pinned-memory sweep unchanged.",
+      "research_value": "M",
+      "research_value_rationale": "A real, measurable saving with a clean transparency story, but its best case (two instances of the same model) is partly an artifact of the paper's microbenchmark; on the genuinely heterogeneous mixes of Cases #1-#4 the expected gain is near zero, which caps how much a reviewer would learn.",
+      "scoop_check": {
+        "result": "clear",
+        "details": "Query: 'cross-process deduplication GPU model weights pinned host memory multiplexing same model 2025 2026'. Related but different: CrossPool (https://arxiv.org/abs/2606.24506) disaggregates weights and KV-cache for multi-LLM serving, and Aegaeon (https://ennanzhai.github.io/pub/sosp25-aegaeon.pdf) pools GPUs for concurrent serving - both datacenter, application-integrated systems. No work found doing transparent block-level dedup of a pinned staging tier for GPU multiplexing."
+      }
+    }
+  ],
+  "risks": [
+    "The evaluation harness lives in a second, unaudited repository (https://github.com/XOR-op/nixie-eval) and pins main-repo commit b7466db, not the audited head 56f3fc1; only its README could be inspected, so its internal assumptions (absolute paths in config/service_config.toml, command-server ports, GPU count) are unverified.",
+    "Driver 535.216.01 / CUDA <= 12.2 is two major releases behind the authors' 580.95.05 / CUDA 12.9. The build path is fine (--features cuda-12 dlopens libcuda.so), but runtime CUDA VMM behaviour and cuMemHostRegister over a 16-32 GiB /dev/shm mapping (src/sidecar/src/init.rs:91) on driver 535 are unverified by desk review; the paper itself observed driver-dependent PCIe idleness on its own A5000 box (§7.3). Largest single reproduction risk.",
+    "CI never builds the configuration we need: .github/workflows/check.yml only runs cargo check/clippy/test with --no-default-features --features cuda-13. The cuda-12 path is untested upstream, and the default cuda-system feature would auto-detect our system CUDA 11.8 via src/sidecar/build.rs:61, a version no feature path targets - expect a small patch on first build.",
+    "Baselines, not Nixie, are the porting bottleneck: nvshare needs a source build plus the harness's CUDA-graph patch, and TGS is container/Kubernetes-oriented and likely unreachable without root. Without nvshare the headline 3.1x-3.8x ratio of Figure 13 cannot be reproduced at all - only the self-contained Nixie-RR ablation.",
+    "Scaling models from Q8/Q6 to Q4 and moving from PCIe 5.0x8 to PCIe 4.0x16 changes both the per-switch byte count and the duplex characteristics; only ratios between systems are meaningful and the team must say so rather than claiming to match absolute latencies.",
+    "Shared machine vs large pinned allocations: the daemon defaults to 32 GiB pinned + 32 GiB paged (src/daemon/src/config.rs:168-169) and cuMemHostRegisters the whole SHM region. With 111 GiB free and other users this is antisocial and may fail; /dev/shm is capped at RAM/2 by default and cannot be enlarged without root. Start at --shmem 16g and treat the Figure-9 pinned-memory sweep as the riskiest experiment.",
+    "SGLang 0.5.4 pulls recent PyTorch CUDA wheels that rely on CUDA minor-version compatibility against driver 535 (unverified), and ComfyUI's Qwen-Image FP8 checkpoints have no native Ampere kernels and will be upcast. Keep llama.cpp-only figures (11 with Z-Image, 12, 13, 14, 15) on the critical path.",
+    "Correctness hazard in the highest-value add-on (A3): allowing two applications to be Enable'd simultaneously weakens the paper's safety argument in §4 ('valid memory access during migration' relies on blocking launches and synchronising before any chunk moves). The design must guarantee that admitting a co-resident app never evicts the incumbent, or the invariant breaks.",
+    "Single-user threat model: §8 'Security' notes all processes share one UID and one pinned region, and any process under that UID can read the shared data. Acceptable for a course project but worth stating if run on a shared departmental machine.",
+    "Artifact badge is 'Available' only (pages/page-02.png); the USENIX presentation page returned HTTP 403 so no Functional or Reproduced badge could be confirmed - no third party has certified that these scripts reproduce these figures."
+  ]
+}

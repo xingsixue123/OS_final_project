@@ -1,0 +1,14 @@
+{
+  "pdf": {
+    "status": "ok",
+    "source_url": "https://jxing.me/pdf/unicache-sigmetrics26.pdf",
+    "version": "camera-ready",
+    "notes": "ACM DL (https://dl.acm.org/doi/pdf/10.1145/3805652) returns HTTP 403 behind a Cloudflare 'Just a moment...' JS challenge, even with full browser headers and a cookie jar. OpenAlex and Semantic Scholar both report the article as open access CC-BY (hybrid) but expose no direct PDF URL, and Unpaywall has no record. No arXiv preprint exists. Obtained the author-hosted copy from last author Jiarong Xing's homepage (https://jxing.me/, Rice University). The file is the published camera-ready: first page carries the ACM Reference Format 'Proc. ACM Meas. Anal. Comput. Syst. 10, 2, Article 54 (June 2026), 27 pages. https://doi.org/10.1145/3805652'. Verified %PDF- magic, 27 pages, 1158356 bytes. Authors: Bei Ouyang (Rice), Yifan Qiao (UC Berkeley), Jiarong Xing (Rice)."
+  },
+  "repo": {
+    "status": "ok",
+    "url": "https://github.com/xsyslab/UniCache",
+    "official": "yes",
+    "evidence": "Already cloned by the driver; verified git remote is https://github.com/xsyslab/UniCache.git. The URL 'github.com/xsyslab/UniCache' appears verbatim in the camera-ready PDF text, and xsyslab is the GitHub org of the last author's lab (Jiarong Xing, Rice). README describes the trace-driven CPU prefix-caching simulator built on vLLM with the LRU/LFU/FIFO/OPT/LeCAR/ARC/WA eviction policies described in the paper. 31 visible top-level entries, 38 MB on disk."
+  }
+}

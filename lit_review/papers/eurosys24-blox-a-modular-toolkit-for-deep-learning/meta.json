@@ -1,0 +1,11 @@
+{
+  "id": "eurosys24-blox-a-modular-toolkit-for-deep-learning",
+  "title": "Blox: A Modular Toolkit for Deep Learning Schedulers",
+  "venue": "eurosys",
+  "year": 2024,
+  "paper_url": "https://doi.org/10.1145/3627703.3629583",
+  "pdf_url": "https://arxiv.org/pdf/2312.12621",
+  "repo_url": "https://github.com/msr-fiddle/blox",
+  "topic": "scheduling",
+  "note": "Explicitly a simulator-plus-toolkit for DL cluster scheduling policies, validated by reproducing prior schedulers from traces. Cluster behaviour is simulated, so no multi-node hardware is needed and new policies are cheap to prototype - a near-ideal 10-week improvement target"
+}

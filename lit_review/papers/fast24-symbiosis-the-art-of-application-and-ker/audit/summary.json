@@ -1,0 +1,156 @@
+{
+  "title": "Symbiosis: The Art of Application and Kernel Cache Cooperation",
+  "one_line": "An in-engine online ghost-cache simulator that continuously re-splits a fixed memory budget between a key-value store's uncompressed application cache and the kernel's compressed page cache, implemented in LevelDB, WiredTiger and RocksDB.",
+  "topic": "caching",
+  "repo": {
+    "official": "yes",
+    "evidence": "Paper reference [1] (p.15) is literally 'Symbiosis Repository. https://github.com/daiyifandanny/Symbiosis, 2023'; the GitHub account daiyifandanny is first author Yifan Dai (UW-Madison). The tree contains the modified engines (leveldb/util/adapter.{h,cc}, rocksdb/adapter/, wiredtiger/app/), the Section 3 simpy simulator (simulator/main.py), all 36 evaluation traces (traces/) and artifact-evaluation drivers (scripts/ae_eval_static.py, ae_eval_dynamic.py, ae_eval_final.py, ae_simulator.py) described in ae_readme.txt.",
+    "last_commit": "2023-12-16",
+    "artifact_badges": [],
+    "badge_evidence": "none found - ae_readme.txt:1-2 only states an aspiration ('We aim for Available and Functional flag due to inability to provide access to our machine with Optane device'); the USENIX presentation page returns HTTP 403 to automated fetch and web search surfaced no badge listing. The authors themselves disclaimed 'Results Reproduced'."
+  },
+  "hard_filters": {
+    "H1_open_repo": {
+      "result": "pass",
+      "evidence": "Official repo linked from the paper (reference [1], p.15) under the first author's account. Contains the actual system, not a placeholder: Tracker/GhostSim in leveldb/util/adapter.h:77-443 and adapter.cc:28, the stack-property ghost cache in leveldb/util/cache.cc:322, the read-path hook in leveldb/table/table.cc:201, the RocksDB port in rocksdb/adapter/adapter.cc, the WiredTiger port in wiredtiger/app/adapter.cc, plus traces/ and scripts/ae_eval_*.py."
+    },
+    "H2_no_root": {
+      "result": "pass",
+      "evidence": "No kernel patch, module, eBPF or perf counter on the result path. Timing uses the unprivileged __rdtscp instruction (leveldb/util/timer.cc:16,:23), not perf_event_open. Two root touch points, both substitutable: (a) leveldb/benchmarks/db_bench.cc:1411 runs system(\"sync; echo 3 | sudo tee /proc/sys/vm/drop_caches; sudo fstrim -av\") but already ignores its return value, and can be replaced with posix_fadvise(POSIX_FADV_DONTNEED) over the DB files - an idiom already present in the codebase at leveldb/util/env_posix.cc:614; (b) the M=1GB budget is set with cgroup v1 'cgexec -g memory:10' (scripts/run_eval_static.py:4, run_eval_dynamic.py:4, run_eval_final.py:4), replaceable by writing memory.max in a cgroup v2 sub-cgroup under the user slice, which env.md says has cpu/memory/pids delegated. scripts/setup_cgroup.py:8-19 (swapoff, SMT off, cpufreq pinning) is noise reduction only and is skippable. The vendored bpf/bcc/ tree - the source of essentially every sudo/ebpf/kernel-module/kvm/perf red-flag hit in repo_facts.json - is an unmodified upstream BCC copy used only by scripts/run_*_cachestat.py, which produce motivation-section statistics and are not needed for Figures 8, 12 or 15."
+    },
+    "H3_hardware_fit": {
+      "result": "pass",
+      "evidence": "CPU + SSD only, no GPU anywhere. Paper scale is M=1GB with Du<=5GB and one single-threaded process (db_bench.cc:84 FLAGS_threads=1; Section 5 Setup, p.9: 'the available memory M is fixed at 1 GB by cgroup'). Repo is ~3.2 GB and the generated LevelDB is ~2.5 GB on disk (db_bench.cc:78 FLAGS_num=50000000, :87 value_size=80, alpha=0.5), against ~257 GB free. Even the largest variant, Figure 8(a) at M=10GB / Du=50GB via scripts/run_eval_static10.py, fits in 125 GiB RAM. Single node throughout; no distributed component."
+    },
+    "H4_obtainable_deps_data": {
+      "result": "pass",
+      "evidence": "Dependencies are cmake/gcc (3.25.1 and 12.2 present), snappy and zstd (leveldb/CMakeLists.txt:45,:288-289 - available from conda-forge in user space), systemtap-sdt-dev for <sys/sdt.h> (included by leveldb/table/block.cc:12, table/table.cc:19, db/table_cache.cc:11, benchmarks/db_bench.cc:10; the DTRACE_PROBE2 call sites are dead code for our purposes so a stub header suffices), python3 + numpy + simpy for simulator/main.py, and libcgroup-tools (replaced by direct cgroup v2 writes). All third-party C++ deps are vendored in-tree (leveldb/third_party/ordered-map, googletest, benchmark all present; no submodule fetch needed). All 36 evaluation traces are committed under traces/ (uniform/zipfian/hotspot{70,80,90} at every M/Du ratio, plus the four rocksdb_* mix_graph traces for Figure 15); the database is generated locally with db_bench --benchmarks=fillseq. No proprietary data."
+    }
+  },
+  "reproduce": {
+    "level": "M",
+    "target": "Figure 8(b) 'Basic setting' (p.10), produced by scripts/ae_eval_static.py: LevelDB + snappy (alpha=0.5), M=1GB, Du in {5, 2.5, 1.67, 1.25, 1} GB, five YCSB access patterns, three configurations (Ma=8MB, Ma=1GB, Symbiosis) = 75 runs of 10M reads. Claim under test: at every one of the 25 workload points Symbiosis matches the better of the two static baselines, and at some points beats both (Section 5.1.1: up to 5.77x over the worse baseline, up to 1.32x over both).",
+    "scale_down": "No data-size scale-down needed - the paper already uses the small configuration (Section 5.1.1(b): 'to reduce the running time of our experiments, we use 1/10-th the data set sizes and M = 1GB ... the full range of results are extremely similar to that of (a)'). The platform must be adapted instead: (1) restore the M=1GB budget with a cgroup v2 sub-cgroup (memory.max=1G, memory.swap.max=0) - the shipped ae_eval_static.py omits the cgexec that the paper's own scripts/run_eval_static.py:4 has; (2) replace the sudo drop_caches at db_bench.cc:1411 with posix_fadvise(POSIX_FADV_DONTNEED) over the DB directory; (3) recalibrate Statistics::frequency (stats.h:30, currently the 2900 MHz HW1 TSC rate), the kernel-hit timing threshold '< 8' (format.cc:177), and Ca=3/Ck=16 (adapter.h:84-85) for this machine's Zen 3 TSC and PM9A3 NVMe (~70-90 us, i.e. a Ca/Ck ratio near the paper's HW2 point, so Figure 8(e) is as relevant a shape reference as 8(b)); (4) optionally cut the sweep to 3 access patterns x 5 ratios x 3 configs = 45 runs, which still tests the claim. A zero-risk day-1 warm-up is scripts/ae_simulator.py, which reproduces the Figure 4 offline sweep in pure Python in minutes.",
+    "effort": "5-7 person-days + ~20 machine-hours (CPU/SSD only, 0 GPU-hours)",
+    "rationale": "Not H: five separate pieces of porting stand between git clone and a comparable number - the AE script silently drops the memory limit the paper's own script sets, cgroup v1 must become v2, a sudo drop_caches call is compiled into db_bench, three undocumented hardware-specific constants (TSC rate, kernel-hit latency threshold, Ca/Ck) silently change what Symbiosis decides, and no plotting script exists for the target figure (scripts/plot_*.py cover only the Section 3 simulator figures). Not L: every evaluation trace is committed in traces/, the eval driver exists (scripts/ae_eval_static.py), the artifact is a ~1 kLoC delta on LevelDB 1.23 with all third-party deps vendored in-tree and a build that gcc 12.2 / cmake 3.25 should handle, and nothing about the experiment exceeds this machine. That is textbook 'reproducible with real porting work'."
+  },
+  "addons": [
+    {
+      "name": "Self-calibrating cost model",
+      "hypothesis": "We hypothesize that replacing Symbiosis's compile-time miss costs and fixed kernel-hit timing threshold with an online self-calibrated cost model improves the steady-state latency of the <Ma,Mk> split Symbiosis chooses, on storage devices and compression libraries it was not tuned for (Samsung PM9A3 NVMe, zstd), compared with the shipped constants.",
+      "mechanism": "ReadBlock3 already times every block read. (i) Keep a rolling sample of those latencies, split the bimodal distribution at its valley (histogram valley or a 2-component 1-D GMM) instead of the hard-coded '< 8', and set Ck = mean(device mode) - mean(hit mode). (ii) Time the decompress + 'new Block' path in BlockReader2 to obtain Ca online. (iii) Feed both into CacheStat::Calculate in place of the static members app_miss_cost_ / kernel_miss_cost. (iv) Derive Statistics::frequency at startup by calibrating __rdtscp against clock_gettime(CLOCK_MONOTONIC) rather than hard-coding 2900 MHz. Evaluate by rerunning the Figure 8 sweep with shipped vs calibrated constants and comparing the chosen Ma against an exhaustive 9-point static oracle sweep.",
+      "code_locations": [
+        "leveldb/util/adapter.h",
+        "leveldb/table/format.cc",
+        "leveldb/util/stats.h",
+        "leveldb/util/timer.cc",
+        "leveldb/table/table.cc"
+      ],
+      "motivating_evidence": "Section 4.1.1 states the assumption outright: 'Tracker continuously audits the hit/miss result of each cache and calculates Le with statically configured miss costs by offline measurement.' Table 1 (p.9) shows Ca moving 3->9 us by switching snappy->zstd and Ck 16->80 us by switching hardware, while Figure 4 I(a) (p.5) shows the global minimum flipping from Mk = alpha*Du to Mk = 0 as Ca crosses 60 - so the system's central decision is a step function of exactly the constants it hard-codes. In the code these are adapter.h:84-85 (Ca=3, Ck=16), format.cc:177 (*kernel_hit = pair.second - pair.first < 8) and stats.h:30 (frequency = 2900, the HW1 TSC rate in MHz). The paper's 'no manual tuning' value proposition rests on four magic numbers.",
+      "feasibility": "H",
+      "feasibility_rationale": "Localized: four files, a few hundred LoC, no new evaluation harness - the existing scripts/ae_eval_static.py sweep is exactly the experiment. Pure CPU/SSD, runs in hours on this machine. The team must do most of this calibration anyway just to reproduce the paper, so the marginal cost is small.",
+      "research_value": "M",
+      "research_value_rationale": "A reviewer would recognize it as closing a real portability hole the authors themselves flag, and 'the published constants mis-size the cache by X% on a different SSD' is a genuine finding about a system whose selling point is automatic tuning. But it is a robustness fix rather than a new mechanism, so the ceiling is moderate rather than high.",
+      "scoop_check": {
+        "result": "clear",
+        "details": "Searched Semantic Scholar / Google / arXiv for follow-ups: 'papers citing Symbiosis FAST 2024 application kernel cache partitioning key-value store 2025 2026', 'Symbiosis Dai Arpaci-Dusseau cache sizing ghost cache follow-up 2025 storage engine block cache page cache co-tuning', 'inferring page cache hit miss from read latency threshold user space calibration storage engine self-tuning'. No follow-up by the authors or anyone else; https://pages.cs.wisc.edu/~yifann/ lists no successor paper. Latency-threshold hit inference is folklore but nobody has published it as a portability fix for this system."
+      }
+    },
+    {
+      "name": "Exclusive app/kernel caching via fadvise",
+      "hypothesis": "We hypothesize that making the application and kernel caches approximately exclusive - dropping the page-cache pages fully covered by a block right after that block is admitted to the application cache - reduces average read latency in the mid-range M/Du in [0.3, 0.8] regime, where the paper shows both endpoint configurations are poor, and shifts the optimum Symbiosis finds away from the two endpoints.",
+      "mechanism": "In BlockReader2/ReadBlock3, after a block is inserted into the block cache, compute the page range *fully* covered by [handle.offset(), handle.offset()+handle.size()) - the misalignment arithmetic already exists in Simulator::Simulate at adapter.h:260-261 - and issue posix_fadvise(fd, off, len, POSIX_FADV_DONTNEED) on it, leaving partially covered pages alone so live neighbours survive. Then extend GhostSim's kernel model to be exclusive (skip inserting kernel keys for blocks currently resident in the app ghost cache) so the simulator predicts the new regime rather than the duplicated one, otherwise the Section 4.2.4 guardrail will reject every candidate. Add the paper's own guardrail pattern: enable only above an Ma threshold, and measure the per-miss syscall cost against Ca ~ 3 us.",
+      "code_locations": [
+        "leveldb/table/format.cc",
+        "leveldb/table/table.cc",
+        "leveldb/util/env_posix.cc",
+        "leveldb/util/adapter.h",
+        "leveldb/util/adapter.cc"
+      ],
+      "motivating_evidence": "Section 6 names it explicitly: 'Achieving exclusiveness in the application-kernel cache structure with one compressed layer would be an interesting future work.' Section 3.2.1 explains why the middle of the space is bad: 'when 0 < Mk < alpha*Du, Le is larger than at both extremes because both caches are non-zero and contain duplicates.' If the duplicates go away, the endpoint-optimality result of Section 3 (Figure 4 I(a)-(d)) should change qualitatively. The mechanism is already available in the codebase - leveldb/util/env_posix.cc:614 uses posix_fadvise(POSIX_FADV_DONTNEED) - and needs no root.",
+      "feasibility": "M",
+      "feasibility_rationale": "The fadvise call is a few lines, but three things make it cross-cutting: partial-page ownership must be handled correctly or live blocks get evicted; DONTNEED interacts badly with kernel read-ahead, the very effect Section 4.2.3 had to model with a heuristic (adapter.h:150, :274); and GhostSim has to be re-derived for the exclusive regime. Evaluable with the existing Figure 8 harness on this machine, no new workloads needed.",
+      "research_value": "H",
+      "research_value_rationale": "It is the authors' own named future work, it targets precisely the regime where their mechanism has least to offer, and both outcomes teach something: if exclusivity wins, the paper's endpoint-optimality analysis is incomplete; if fadvise overhead or read-ahead destruction kills it, that is a concrete negative result about why exclusive caching is hard across the app/kernel boundary with a compressed lower layer.",
+      "scoop_check": {
+        "result": "partial",
+        "details": "Classic exclusive-caching work (DEMOTE, X-RAY, eviction-based placement) is already cited in the paper's Section 6 but predates compressed second-level caches and does not use fadvise. Closest modern work is 'Cache is King: Smart Page Eviction with eBPF' (https://arxiv.org/abs/2502.02750), which lets applications customize page-cache *eviction policy* via eBPF - related goal, different mechanism, and it needs eBPF which this machine forbids. Queries: 'exclusive caching posix_fadvise DONTNEED eliminate duplication page cache application block cache LSM 2025', 'Cache is King eBPF page eviction double caching duplication'. No paper found doing fadvise-based app/kernel exclusivity for a compressed LSM block cache."
+      }
+    },
+    {
+      "name": "Compaction-aware adaptation for write-mixed workloads",
+      "hypothesis": "We hypothesize that making GhostSim compaction-aware - invalidating ghost entries whose SST files were rewritten and discounting simulation windows that overlap high compaction throughput - reduces the application-cache hit-rate prediction error of Figure 9(b) and lets Symbiosis retain a latency advantage over both static baselines at >=20% overwrites, where Figure 9(a) shows its benefit largely disappears.",
+      "mechanism": "Hook compaction completion in DBImpl (the BackgroundCompaction / InstallCompactionResults path) to notify Adapter. On notification either (a) erase ghost entries keyed on the obsoleted cache_id - the ghost key is (cache_id << 12) + block_index, adapter.h:191 - or (b) extend/abort the current simulation round when the rewritten fraction of the working set exceeds a threshold, which applies the existing Section 4.2.4 guardrail philosophy to a new failure mode. Additionally scale the measured Le by an estimate of compaction-induced read amplification so Tracker does not mistake compaction noise for a workload change. Evaluate with db_bench --benchmarks=writetrace (db_bench.cc:1055 WriteTrace, driven by scripts/run_eval_write.py) at 0/10/20/40% overwrites and reproduce Figure 9(b)'s predicted-vs-observed hit-rate curve.",
+      "code_locations": [
+        "leveldb/db/db_impl.cc",
+        "leveldb/util/adapter.cc",
+        "leveldb/util/adapter.h",
+        "leveldb/benchmarks/db_bench.cc",
+        "scripts/run_eval_write.py",
+        "scripts/gen_ycsb.py"
+      ],
+      "motivating_evidence": "Section 4.2.5 is an explicit open-problem statement: 'The idea of simulation-based cache size adaption can work with write-heavy workloads, yet will require additional research to realize in robust form. For example, LSM-based engines often schedule asynchronous background compaction in the write path; thus, speed differences in the foreground workload caused by different cache size configurations can lead to varying tree structures and thus different cache access traces.' Figure 9(b) (p.10) quantifies the damage - the predicted Ma=1GB hit ratio diverges from the observed one as compaction throughput rises from 20 to 40 MB/s - and the paper's only remedy is 'by limiting the compaction rate', a workaround rather than a fix. Figure 9(a) shows the resulting loss of benefit at 20% overwrites.",
+      "feasibility": "M",
+      "feasibility_rationale": "Cross-cutting: touches the compaction path in db_impl.cc and the adapter state machine. The write traces are not shipped (traces/ holds read traces only) and must be generated with scripts/gen_ycsb.py, and scripts/run_eval_write.py:10 needs the same cgroup v1 -> v2 port as the read scripts. Compute is comfortable - write-mixed runs are the same 10M-op scale, no GPU.",
+      "research_value": "H",
+      "research_value_rationale": "The authors named it as the main unaddressed regime, and read-only is a strong assumption for an LSM paper - a FAST reviewer would press on it. Both outcomes teach something: either compaction-awareness suffices, or the deviation is fundamental (the trace you measure is not the trace an alternative configuration would produce), which is a crisp statement about the limits of online ghost simulation in mutating data structures.",
+      "scoop_check": {
+        "result": "partial",
+        "details": "Compaction-aware caching exists as a separate line of work (cache-warmth preservation across SSTable rewrites; see the survey 'Rethinking LSM-tree based Key-Value Stores' https://arxiv.org/pdf/2507.09642, and AC-Key ATC '20 https://www.usenix.org/system/files/atc20-wu-fenggang.pdf, which uses ghost caches to size application-level KV/KP/block caches). None addresses the application<->kernel split or the trace-deviation problem Symbiosis identifies. Query: 'compaction-aware block cache sizing write-heavy LSM ghost cache prediction 2025 2026 adaptive memory allocation'. No follow-up to Symbiosis itself found."
+      }
+    },
+    {
+      "name": "Co-located instances sharing one page cache",
+      "hypothesis": "We hypothesize that when two or more Symbiosis-enabled engines share a single memory budget, their independent sizing decisions degrade aggregate latency relative to the best static split (mutual eviction and oscillation), and that a shared-budget arbiter exchanging the per-instance Le(Ma) curves GhostSim already computes recovers most of the single-instance gain.",
+      "mechanism": "Phase 1 (measurement): run two db_bench instances with different workloads (e.g. hotspot10 + uniform) inside one cgroup v2 memory.max, logging both Ma trajectories and aggregate latency against a 2-D static oracle sweep. Phase 2 (fix): Simulator::BestStat (adapter.h:290) already produces the full 9-point Le-vs-Ma curve; publish it to a shared memory segment or Unix socket and have a coordinator choose the joint allocation by marginal-benefit greedy across both curves subject to sum(Ma) + Mk <= M, instead of each instance independently claiming memory. Reuse the existing guardrail so a joint decision is applied only above a gain threshold.",
+      "code_locations": [
+        "leveldb/util/adapter.h",
+        "leveldb/util/adapter.cc",
+        "leveldb/benchmarks/db_bench.cc",
+        "leveldb/db/db_impl.cc",
+        "scripts/ae_eval_static.py"
+      ],
+      "motivating_evidence": "The entire evaluation is single-instance and single-threaded (db_bench.cc:84 FLAGS_threads = 1; Section 5 Setup, p.9: 'the available memory M is fixed at 1 GB by cgroup' for one engine), yet Section 3.1 explicitly motivates M as 'a containers' resource limit [26, 38, 72]' - the multi-tenant setting is the paper's own framing and is never tested. The kernel page cache is a globally shared resource, so instance A shrinking its app cache hands memory to a page cache instance B also competes for: the implicit Ma + Mk = M invariant the whole design rests on simply does not hold with co-tenants.",
+      "feasibility": "M",
+      "feasibility_rationale": "Needs a new harness (multi-process launcher, joint-latency accounting, 2-D oracle sweep) plus a small IPC layer, but everything is user space and the machine has 16 cores / 125 GiB, so several instances at M = 1-4 GB fit easily. The 2-D oracle sweep is the main compute cost (9 x 9 points x a few workload pairs, a few hundred runs, tens of machine-hours) - heavy but affordable.",
+      "research_value": "H",
+      "research_value_rationale": "This is the first question a FAST reviewer asks of any single-tenant memory-partitioning system, and the paper pre-emptively cites the container setting without evaluating it. The negative result alone (independent adapters fight and oscillate under a shared page cache) would be worthwhile; the arbiter, if it works, is a genuine design extension that reuses machinery Symbiosis already has.",
+      "scoop_check": {
+        "result": "clear",
+        "details": "Multi-tenant KV interference is a studied area (Performance Interference on Key-Value Stores in Multi-tenant Environments, ICPE '21 companion, https://dl.acm.org/doi/10.1145/3447545.3451191; Memshare ATC '17), but those partition an *application* cache among tenants rather than the app-cache/page-cache split, and none builds on Symbiosis. Query: 'multi-tenant co-located key-value stores sharing Linux page cache independent cache sizing interference 2025'. No follow-up found."
+      }
+    },
+    {
+      "name": "Model-guided candidate search for faster convergence",
+      "hypothesis": "We hypothesize that replacing GhostSim's exhaustive 9-candidate sweep with a search that exploits the smoothness of the Le(Ma) curve (ternary/golden-section search, or a 1-D surrogate refined by a few probes) halves the convergence time reported in Figure 12 without degrading the quality of the chosen Ma, and thereby extends Symbiosis to workloads that change faster than its current 15-40 s round.",
+      "mechanism": "Simulator::IncrementSearchStage (adapter.h:145) currently walks stages 0..8 in order, shrinking the kernel ghost cache monotonically to exploit reuse. Replace the fixed walk with an adaptive order: evaluate the endpoints and midpoint first, inspect/fit the shape, then probe only the promising sub-interval. Because pipelined reuse depends on monotonically increasing Ma, a non-monotonic order costs extra ghost-cache warm-up - the research question is whether fewer stages beats worse reuse. Compare against the shipped scheme on convergence time, chosen Ma and steady-state latency using the Figure 12 dynamic suite (scripts/ae_eval_dynamic.py), plus a new faster-oscillation workload the current system explicitly cannot serve. Prototype the policy first in the pure-Python offline simulator.",
+      "code_locations": [
+        "leveldb/util/adapter.h",
+        "leveldb/util/adapter.cc",
+        "scripts/ae_eval_dynamic.py",
+        "simulator/main.py"
+      ],
+      "motivating_evidence": "Section 4.2.2 states the design choice and its cost: GhostSim divides the space 'into a fixed number of equal ranges (currently 8) without skipping candidates or stopping early' (num_searches_ = 8 at adapter.h:83). Section 5.2.2 reports 15.4 s average and 40 s worst-case convergence, and Section 4.2.5 turns that into a hard limitation: 'We assume that workloads change infrequently. ... If the workload changes repeatedly during simulation, Symbiosis stops the simulation as it is unable to finish and yield benefits.' Section 3.3 supplies the enabling observation: 'the curves are relatively smooth without abrupt changes.' Table 3 (p.13) also shows the reuse/convergence tension directly - No-Reuse converges in 7.35 s vs Reuse 16.7 s, at 3.5x the per-op overhead.",
+      "feasibility": "H",
+      "feasibility_rationale": "Confined to two C++ files and a few hundred LoC; the offline simulator (simulator/main.py, simulator/adapter.py) lets the search policy be prototyped in Python before touching C++; scripts/ae_eval_dynamic.py already measures exactly the target metric (convergence time and steady-state latency per phase). Pure CPU, no new data.",
+      "research_value": "M",
+      "research_value_rationale": "Convergence time is a real, author-acknowledged limitation, and halving it unlocks a workload class the paper explicitly excludes. But replacing an exhaustive sweep with a smoothness-exploiting search is an expected optimization, and a reviewer would find the direction unsurprising. It becomes more interesting if the ghost-cache-reuse vs search-order tension (visible in Table 3) turns out to be fundamental, i.e. if fewer candidates do not in fact mean faster convergence.",
+      "scoop_check": {
+        "result": "clear",
+        "details": "No follow-up to Symbiosis found. Adjacent adaptive cache-sizing work - DynamicAdaptiveClimb (https://arxiv.org/pdf/2511.21235) and AdCache, EDBT '26 (https://openproceedings.org/2026/conf/edbt/paper-89.pdf) - tunes single-level or application-level caches with hill-climbing / RL, not the candidate-ordering problem inside a pipelined two-level ghost simulator. Query: 'online ghost cache simulation adaptive block cache size RocksDB LevelDB 2025 2026 arXiv two-level cache partitioning compressed'."
+      }
+    }
+  ],
+  "risks": [
+    "The shipped AE driver scripts/ae_eval_static.py has no cgexec, while the paper's own scripts/run_eval_static.py:4 wraps every run in 'cgexec -g memory:10' (1 GB, cgroup v1). Running the AE script verbatim leaves the page cache unbounded and measures nothing meaningful - this is the highest-probability way to 'fail to reproduce' for the wrong reason.",
+    "Three undocumented hardware constants silently change the system's decisions: Statistics::frequency = 2900 (leveldb/util/stats.h:30, the HW1 TSC rate in MHz), the kernel-hit timing threshold '< 8' (leveldb/table/format.cc:177), and Ca=3 / Ck=16 (leveldb/util/adapter.h:84-85). All are wrong for a Zen 3 CPU with a PM9A3 NVMe, and nothing in the repo says so. Getting them wrong does not crash anything - Symbiosis just picks the wrong Ma.",
+    "Device mismatch: the paper's headline HW1 is an Optane 900P (~10 us) while this machine has a TLC NVMe (~70-90 us), putting our Ca/Ck near the paper's HW2 point. Absolute latencies will not match Figure 8(b); only the relative ordering claim should be asserted, and Figure 8(e) is the more relevant shape reference.",
+    "Timing-based kernel-hit inference (format.cc:177) is fragile on a shared machine with SMT on and no frequency pinning. scripts/setup_cgroup.py:8-19 disables SMT, pins cpufreq and turns swap off - none of which is possible without root. Expect higher run-to-run variance than the paper and budget repeats; set memory.swap.max=0 in the cgroup v2 group as a partial substitute for swapoff.",
+    "No plotting scripts for the headline figures. scripts/plot_*.py cover only the Section 3 simulator figures; Figures 8/12/15 must be re-derived from the *.latency / *.output text files whose format is only discoverable by reading db_bench.cc:992 and :1031.",
+    "RocksDB 6.27 (rocksdb/include/rocksdb/version.h) with gcc 12 typically needs several '#include <cstdint>' patches, and wiredtiger/app/makefile:5 hard-codes /usr/local/lib/libwiredtiger.a so WiredTiger must be rebuilt with a $HOME prefix. Treat both non-LevelDB ports as stretch goals, not part of the core reproduction.",
+    "Artifact badges are unverified: ae_readme.txt:1-2 only states an aspiration ('We aim for Available and Functional flag'), the USENIX page returns HTTP 403 to automated fetch, and the authors themselves disclaimed 'Results Reproduced' because their Optane machine could not be shared.",
+    "Substantial dead/disabled code: simulator/adapter.py:383 begins Adapter2.Record with an unconditional 'return' (the simulator's own online adapter is switched off - only the Section 3 parameter sweep is live), State::SKETCH is assert(false) in both adapter.h:435 and adapter.cc:117, and simulator/main.py:14 hard-codes base_dir = '/home/yifan/research/cache/'. Verify which paths actually execute before extending anything.",
+    "Repo is ~3.2 GB / 7662 files, dominated by traces/ and vendored copies of BCC, RocksDB and WiredTiger. Cheap on 257 GB free, but every kernel/eBPF/KVM/perf red flag in repo_facts.json originates in bpf/bcc/, an unmodified upstream tree irrelevant to the headline results - do not let the grep hits drive the verdict.",
+    "No license file (GitHub reports license: null). Fine for a course project but worth noting before any public release of derived work."
+  ]
+}

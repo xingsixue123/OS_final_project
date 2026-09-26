@@ -1,0 +1,14 @@
+{
+  "pdf": {
+    "status": "ok",
+    "source_url": "https://siqiangluo.com/docs/moose_corrected_version.pdf",
+    "version": "author-copy",
+    "notes": "ACM DL (https://dl.acm.org/doi/pdf/10.1145/3654978) returns 403 even with a browser User-Agent. Obtained the authors' copy from the lab page of Siqiang Luo (NTU); the exact URL was recovered from the site's JS bundle (the React SPA serves index.html for unknown /docs paths). The file is the ACM camera-ready layout: 'Proc. ACM Manag. Data 2, 3 (SIGMOD), Article 175 (June 2024), 27 pages, https://doi.org/10.1145/3654978' (a 'corrected version' posted by the authors). Verified: header bytes '%PDF-', PDF 1.5, 1.36 MB, title/authors/abstract match."
+  },
+  "repo": {
+    "status": "ok",
+    "url": "https://github.com/NTU-Siqiang-Group/MooseLSM",
+    "official": "yes",
+    "evidence": "Repository under the authors' own lab GitHub organization (NTU-Siqiang-Group, Siqiang Luo's group at NTU); same URL listed in the candidate list and in the paper/lab pages. Clone already present at repo/ (origin https://github.com/NTU-Siqiang-Group/MooseLSM.git, HEAD ede0e34 'update bibtex'). It is a RocksDB fork with Moose-specific additions (moose_bench.sh, front-end/). Not built or run."
+  }
+}

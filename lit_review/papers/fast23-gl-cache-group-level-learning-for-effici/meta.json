@@ -1,0 +1,11 @@
+{
+  "id": "fast23-gl-cache-group-level-learning-for-effici",
+  "title": "GL-Cache: Group-level learning for efficient and high-performance caching",
+  "venue": "fast",
+  "year": 2023,
+  "paper_url": "https://www.usenix.org/conference/fast23/presentation/yang-juncheng",
+  "pdf_url": "https://www.usenix.org/system/files/fast23-yang.pdf",
+  "repo_url": "https://github.com/Thesys-lab/fast23-glcache",
+  "topic": "ml-for-systems",
+  "note": "Excellent fit. A learned cache-eviction policy (group-level learning with XGBoost-style utility models) built on Segcache, evaluated by trace-driven simulation over 118 public block-I/O and CDN traces. Entirely user space, CPU only, no root. Traces (CloudPhysics, Twitter, Wiki/CDN) are public downloads; main cost is disk space for traces, which fits in the ~257 GB free. Strong improvement targets: group formation heuristics, feature set, learning cadence."
+}

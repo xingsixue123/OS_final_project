@@ -1,0 +1,115 @@
+{
+  "url": "https://github.com/msr-fiddle/blox",
+  "head_commit": "c8851b2b217e9203039ca354795f90c9f835e659",
+  "head_commit_date": "2024-04-04T01:22:25-05:00",
+  "file_count": 429,
+  "size_mb": 47.0,
+  "top_level": [
+    ".gitignore",
+    "LICENSE.txt",
+    "Readme.md",
+    "Readme_figure.md",
+    "admission_control/",
+    "applications/",
+    "blox/",
+    "blox_enumerator.py",
+    "blox_examples/",
+    "combined_plots/",
+    "command_launch_file.py",
+    "helpers/",
+    "jobs/",
+    "las_scheduler.py",
+    "las_scheduler_cluster.py",
+    "models/",
+    "node_manager.py",
+    "parse_jct.py",
+    "placement/",
+    "schedulers/",
+    "simulator_runner/",
+    "simulator_simple.py",
+    "srtf_scheduler.py",
+    "workload/",
+    "workload_synergy/"
+  ],
+  "build_files": [
+    "blox/deployment/Makefile"
+  ],
+  "lines_by_extension": {
+    ".py": 47856,
+    ".sh": 3627,
+    ".proto": 70
+  },
+  "red_flags": {
+    "sudo": {
+      "count": 3,
+      "examples": [
+        "workload_synergy/models/deepspeech.pytorch/README.md:12: sudo nvidia-docker build -t  deepspeech2.docker .",
+        "workload_synergy/models/deepspeech.pytorch/README.md:13: sudo nvidia-docker run -ti -v `pwd`/data:/workspace/data -p 8888:8888 --net=host --ipc=host deepspeech2.docker # Opens a Jupyter notebook, mounting the /data dr",
+        "workload_synergy/models/deepspeech.pytorch/README.md:19: sudo nvidia-docker run -ti -v `pwd`/data:/workspace/data --entrypoint=/bin/bash --net=host --ipc=host deepspeech2.docker"
+      ]
+    },
+    "docker": {
+      "count": 42,
+      "examples": [
+        "Readme.md:66: Make sure only one instance of each is running on a machine/docker container. We use fixed GRPC ports to communicate, if more than one are launched there could ",
+        "blox/deployment/grpc_server_nm.py:99: # TODO: Add launching from docker",
+        "workload_synergy/models/BERT/README.md:77: The repository also contains scripts to interactively launch data download, training, benchmarking and inference routines in a Docker container for both pre-tra",
+        "workload_synergy/models/BERT/README.md:199: -   [NVIDIA Docker](https://github.com/NVIDIA/nvidia-docker)",
+        "workload_synergy/models/BERT/README.md:233: `bash scripts/docker/build.sh`"
+      ]
+    },
+    "rdma_dpdk_spdk": {
+      "count": 3,
+      "examples": [
+        "workload_synergy/models/GNMT/launch.py:84: This will especially be benefitial for systems with multiple Infiniband",
+        "workload_synergy/models/audio_classification/launch.py:12: This will especially be benefitial for systems with multiple Infiniband",
+        "workload_synergy/models/deepspeech.pytorch/README.md:124: We suggest using the NCCL backend which defaults to TCP if Infiniband isn't available."
+      ]
+    },
+    "sysctl_hugepages": {
+      "count": 1,
+      "examples": [
+        "workload_synergy/models/deepspeech.pytorch/run.sh:16: #    nvidia-docker run --ipc=host --mount src=/,target=/datadrive/,type=bind --rm -it --network=host --cpus=\"$WORKERS\" --cpuset-cpus=0-$(($WORKERS-1)) -m \"$MEM\""
+      ]
+    },
+    "big_gpu": {
+      "count": 118,
+      "examples": [
+        "workload_synergy/models/BERT/README.md:46: * [Training performance: NVIDIA DGX-1 (8x V100 16G)](#training-performance-nvidia-dgx-1-8x-v100-16g)",
+        "workload_synergy/models/BERT/README.md:50: * [Training performance: NVIDIA DGX-1 (8x V100 32G)](#training-performance-nvidia-dgx-1-8x-v100-32g)",
+        "workload_synergy/models/BERT/README.md:53: * [Training performance: NVIDIA DGX-2 (16x V100 32G)](#training-performance-nvidia-dgx-2-16x-v100-32g)",
+        "workload_synergy/models/BERT/README.md:58: * [Inference performance: NVIDIA DGX-1 (1x V100 16G)](#inference-performance-nvidia-dgx-1-1x-v100-16g)",
+        "workload_synergy/models/BERT/README.md:61: * [Inference performance: NVIDIA DGX-1 (1x V100 32G)](#inference-performance-nvidia-dgx-1-1x-v100-32g)"
+      ]
+    },
+    "multi_gpu": {
+      "count": 263,
+      "examples": [
+        "Readme.md:192: world_size: total number of workers running this command",
+        "blox/deployment/grpc_client_rm.py:47: world_size = len(local_gpu_ids)",
+        "blox/deployment/grpc_client_rm.py:73: launch_params.append(world_size)",
+        "blox/deployment/grpc_client_rm.py:83: environment_variable_pairs[\"world_size\"] = str(world_size)",
+        "blox/deployment/grpc_server_nm.py:121: # TODO: Support Model Parallel/Pipeline Parallel job checkpoints"
+      ]
+    },
+    "multi_node": {
+      "count": 14,
+      "examples": [
+        "Readme.md:80: In certain cases you would want to specifically give the interface you want the node manager to bind. For ex- on AWS to bind to the local ip for communication y",
+        "workload_synergy/models/BERT/README.md:210: For multi-node, the sample provided in this repository requires [Enroot](https://github.com/NVIDIA/enroot) and [Pyxis](https://github.com/NVIDIA/pyxis) set up o",
+        "workload_synergy/models/BERT/README.md:405: Multi-node runs can be launched on a pyxis/enroot Slurm cluster (see [Requirements](#requirements)) with the `run.sub` script with the following command for a 4",
+        "workload_synergy/models/BERT/README.md:407: BATCHSIZE=2048 LR=6e-3 GRADIENT_STEPS=128 PHASE=1 sbatch -N4 --ntasks-per-node=8 run.sub",
+        "workload_synergy/models/BERT/README.md:408: BATCHSIZE=1024 LR=4e-3 GRADIENT_STEPS=256 PHASE=2 sbatch -N4 --ntasks-per-node=8 run.sub"
+      ]
+    }
+  },
+  "github": {
+    "stargazers_count": 47,
+    "forks_count": 13,
+    "archived": false,
+    "pushed_at": "2024-07-04T03:33:29Z",
+    "created_at": "2023-09-20T18:27:46Z",
+    "open_issues_count": 6,
+    "license": "MIT"
+  }
+}

@@ -1,0 +1,137 @@
+{
+  "title": "ADOC: Automatically Harmonizing Dataflow Between Components in Log-Structured Key-Value Stores for Improved Performance",
+  "one_line": "An online AIMD controller inside RocksDB that detects memory/L0/redundancy 'data overflow' every second and retunes the background thread count and memtable batch size to suppress write stalls.",
+  "topic": "storage",
+  "repo": {
+    "official": "yes",
+    "evidence": "Paper reference [3] (p.15) is literally https://github.com/supermt/FEAT_7.11, the audited repo; repo/README.md:3 states 'This is the implementation of the paper published on the conference FAST'23'. It contains the real tuner (utilities/DOTA/DOTA_tuner.cc, 474 lines), the engine instrumentation (db/flush_job.cc:1055-1061, include/rocksdb/compaction_job_stats.h:16), and the db_bench wiring (tools/db_bench_tool.cc:3856-3873).",
+    "last_commit": "2023-03-06",
+    "artifact_badges": [],
+    "badge_evidence": "none found - FAST '23 predates the USENIX FAST artifact evaluation program (AE begins with FAST '24, https://www.usenix.org/conference/fast24/call-for-artifacts); the USENIX FAST '23 presentation page lists no badges."
+  },
+  "hard_filters": {
+    "H1_open_repo": {
+      "result": "pass",
+      "evidence": "Official implementation (paper ref [3], p.15; README.md:3). Not a placeholder: utilities/DOTA/DOTA_tuner.cc implements TuneByTEA (:427) / TuneByFEA (:449) / ScoreTheSystem (:75) / FillUpChangeList (:286); utilities/DOTA/report_agent.cc:40-137 implements the 1 s tuning loop and online SetDBOptions/SetOptions; new options at include/rocksdb/options.h:1397-1403 and a new Env API at env/env_posix.cc:420. Caveat: the in-repo SILK baseline is a self-declared placeholder (README.md:83-88, utilities/DOTA/report_agent.cc:188-231), so the ADOC-vs-SILK comparison is not shipped."
+    },
+    "H2_no_root": {
+      "result": "pass",
+      "evidence": "ADOC is pure user-space RocksDB: it reacts by calling DBImpl::SetDBOptions/SetOptions (utilities/DOTA/report_agent.cc:72-92) and reads a new thread-pool idle counter (env/env_posix.cc:420). All repo_facts red flags are upstream RocksDB leftovers not on the ADOC path: sudo/docker hits are in .circleci/config.yml and INSTALL.md:56, 'custom_kernel' hits are doc comments about crash recovery (include/rocksdb/options.h:1723), hugepage hits are comments (include/rocksdb/advanced_options.h:445). Dockerfiles under build_tools/ and tools/ are upstream CI images and are replaceable by conda + gflags. The authors' external tracker uses perf/cgroup, but only for optional profiling examples; the target measurement comes from ADOC's own CSV reporter (utilities/DOTA/report_agent.cc:54-64)."
+    },
+    "H3_hardware_fit": {
+      "result": "pass",
+      "evidence": "Single node, CPU + local NVMe, no GPU. 16 cores cover the paper's useful thread range and --core_num (tools/db_bench_tool.cc:780) caps DOTA_Tuner::max_thread (include/rocksdb/utilities/DOTA_tuner.h:246-248); 125 GB RAM dwarfs the <=2 GB footprints of paper Figure 18. Binding constraint is disk: paper Figure 14 (p.11) shows the 3600 s runs ingest ~400-800 GB versus ~257 GB free here, so runs must be shortened (~1200 s) and the 64/128 GB pending-compaction thresholds read at utilities/DOTA/DOTA_tuner.cc:162-164 rescaled. Three of four device classes (PM, SATA SSD, HDD) do not exist here, so the device-transparency sweep can only be approximated with --rate_limiter_bytes_per_sec (tools/db_bench_tool.cc:1456), not reproduced. The headline mechanism (data-overflow control on NVMe, Figure 12 NVMe row) is fully exercisable."
+    },
+    "H4_obtainable_deps_data": {
+      "result": "pass",
+      "evidence": "Only gflags is required to build db_bench (INSTALL.md:41-44); it is a plain CMake library installable via conda or into $HOME. Compression libs are optional. Build is `make db_bench` (README.md:31; CMakeLists.txt contains no DOTA/ycsbcore references while src.mk:150-155,278 does); Makefile:501-502 exposes DISABLE_WARNING_AS_ERROR for gcc 12. No datasets needed: fillrandom is synthetic, YCSB-cpp is vendored at ycsbcore/ and the property files ship at ycsb_workload/workloada..workloadf. No proprietary traces anywhere."
+    }
+  },
+  "reproduce": {
+    "level": "M",
+    "target": "Paper Figure 12 (p.11), NVMe SSD row: fillrandom average throughput RocksDB-DF 40.9 / RocksDB-AT 47.2 / ADOC 117.4 kOps/s - i.e. the claim that ADOC is ~2.5x auto-tuned RocksDB on a modern NVMe device with no human tuning. Secondary, near-free target: Figure 21 (p.13), the per-second thread-count/batch-size trace, which is exactly the CSV ADOC already emits (utilities/DOTA/report_agent.cc:54-64).",
+    "scale_down": "NVMe only (the machine's sole device class); --core_num=16 instead of 20; fillrandom shortened from 3600 s to ~1200 s with --num capped so the DB stays under ~120 GB (paper Figure 14 shows 400-800 GB ingested at full scale vs ~257 GB free), deleting each DB between schemes; soft/hard_pending_compaction_bytes_limit scaled down proportionally from 64/128 GB so RDO/PS stalls remain reachable at the shorter run; --value_size=1000 and peak write pressure retained. Explicitly drop the ADOC-vs-SILK comparison (the repo's SILK is a placeholder, README.md:83-88) and compare ADOC against RocksDB-DF and RocksDB-AT (--rate_limiter_bytes_per_sec + --rate_limiter_auto_tuned). Report the ADOC/RocksDB-AT ratio rather than absolute kOps/s, since CPU and SSD differ from the paper's. ADOC-T and ADOC-B (Figure 20) come free as one flag each.",
+    "effort": "4-6 person-days + ~40-60 machine-hours wall clock (3 schemes x 3 runs x 1200 s plus re-runs and DB teardown); 0 GPU-hours",
+    "rationale": "Not H: the repo ships no experiment driver and no plotting scripts - they live in two further repos (supermt/ADOC-Rocks-tracker, supermt/FEAT_data_visual), and the tracker's own examples need perf (blocked here, perf_event_paranoid=3) and cgroup io (not delegated; only cpu/memory/pids). The CMake path is broken by the authors' own admission (README.md:31), the SILK baseline is a placeholder, the code is a Sept-2022 RocksDB 7.7.0 fork that must be coaxed through gcc 12.2, the paper says v7.5.3 while the repo is 7.7.0 (include/rocksdb/version.h:14-16), and disk capacity forces a documented deviation from the 3600 s scale. Not L: the mechanism is two command-line flags (tools/db_bench_tool.cc:784-785) on a make-able db_bench with gflags as the only hard dependency, the workload is synthetic, and ADOC's own per-second reporter emits precisely the series behind Figures 12 and 21, so no external harness is needed for the target result."
+  },
+  "addons": [
+    {
+      "name": "Split-aware thread tuning (flush vs compaction)",
+      "hypothesis": "We hypothesize that tuning the flush:compaction thread split (max_background_flushes / max_background_compactions) jointly with the total thread count improves fillrandom throughput and reduces MT-stall duration under peak write pressure on NVMe, compared with ADOC's fixed 'flush = 1/4 of total' rule.",
+      "mechanism": "SetThreadNum currently emits a single max_background_jobs ChangePoint and lets RocksDB derive the 1/4 split in DBImpl::GetBGJobLimits. Extend ChangePoint emission to set max_background_flushes and max_background_compactions explicitly - both are already mutable DB options (options/db_options.cc:68,128), so they flow through the existing SetDBOptions path in ApplyChangePointsInstantly with no new plumbing. Add a third AIMD vote: on MMO shift one thread from the compaction pool to the flush pool instead of halving the total; on L0O/RDO shift toward compaction; keep the total bounded by core_num. Also fix the hard-coded /4 and *3/4 normalisation of thread idle time at utilities/DOTA/DOTA_tuner.cc:181-185 so the detector stays consistent with the actual split.",
+      "code_locations": [
+        "utilities/DOTA/DOTA_tuner.cc:240",
+        "utilities/DOTA/DOTA_tuner.cc:286",
+        "include/rocksdb/utilities/DOTA_tuner.h:243",
+        "utilities/DOTA/report_agent.cc:106",
+        "options/db_options.cc:128",
+        "db/db_impl/db_impl_compaction_flush.cc:2540"
+      ],
+      "motivating_evidence": "Paper Section 5 (p.9): 'After the adjustment, the number of threads that are allocated for flush jobs will also be adjusted to a quarter of the total number, just as the default setting.' Section 4.2 (p.9): 'as the number of threads increases, more threads are forced to share the limited bandwidth, resulting in less bandwidth being allocated to the flush threads.' ADOC's MMO response is therefore an indirect way to buy flush bandwidth: it halves the total thread count and discards compaction parallelism as a side effect. Figure 20 (p.13) shows ADOC-T degrading exactly where this matters. Whether the flush share can be raised without sacrificing compaction parallelism is never tested.",
+      "feasibility": "H",
+      "feasibility_rationale": "Localized: <=~300 LOC in one file plus a flag. Both target options are already dynamically settable through the existing SetDBOptions path, so no new plumbing is needed. Measurable with the existing per-second reporter and RocksDB's built-in stall counters on the reproduction harness - no new workload generator, no extra compute beyond the baseline runs.",
+      "research_value": "M",
+      "research_value_rationale": "A reviewer would most likely read this as a well-motivated extra knob rather than a new insight, and a positive result is somewhat expected. It does directly test the paper's causal story ('fewer threads => more flush bandwidth'), which gives the negative outcome some value, but it does not open a new regime.",
+      "scoop_check": {
+        "result": "partial",
+        "details": "Queries: 'RocksDB dynamic flush compaction thread pool split ratio tuning research paper 2024 2025 background jobs write stall'; 'LSM-tree online tuning flush compaction thread allocation write stall 2025 RocksDB'. Closest work: ELMo-Tune-V2 (https://arxiv.org/abs/2502.17606) tunes 'compaction, flush, and cache sizes' over a broad parameter space with an LLM and does real-time adjustment - overlapping parameter space, entirely different method, and it does not isolate the flush/compaction split as a write-stall control lever. No paper found that revisits ADOC's 1/4 rule."
+      }
+    },
+    {
+      "name": "Decayed reference scores and phase-aware detection",
+      "hypothesis": "We hypothesize that replacing ADOC's monotonically-increasing max_scores reference with a windowed/decayed reference plus hysteresis improves throughput and reduces configuration oscillation under warm-DB and phase-changing workloads (YCSB load->run transitions, time-varying write pressure), compared with stock ADOC.",
+      "mechanism": "Every ADOC decision is a ratio against a running maximum: 'current_score_.flush_speed_avg < max_scores.flush_speed_avg * TEA_slow_flush' (DOTA_tuner.cc:435 and :452). UpdateMaxScore (DOTA_tuner.h:167-214) only ever increases these maxima and SystemScores::Reset() is never called on max_scores, so a fast early flush burst on an empty DB permanently biases the 'slow flush' test toward kHalf. Replace the running max with an EWMA or sliding-window high percentile over the scores deque that already exists (DOTA_tuner.h:107, window length score_array_len at :123); note that CalculateAvgScore (DOTA_tuner.cc:465) already computes an average the decision logic never consults. Add hysteresis: require k consecutive windows of the same verdict before firing an AIMD action.",
+      "code_locations": [
+        "include/rocksdb/utilities/DOTA_tuner.h:167",
+        "include/rocksdb/utilities/DOTA_tuner.h:107",
+        "utilities/DOTA/DOTA_tuner.cc:427",
+        "utilities/DOTA/DOTA_tuner.cc:449",
+        "utilities/DOTA/DOTA_tuner.cc:465",
+        "utilities/DOTA/report_agent.cc:40"
+      ],
+      "motivating_evidence": "Figure 21 (p.13) shows thread count and batch size oscillating across the whole hour even for full ADOC - the paper's own illustration of control instability, presented as a relative improvement over ADOC-T/ADOC-B rather than as stability. Every experiment in the paper starts from an empty DB (Sections 3.1 and 6.2) and YCSB reloads between phases (Section 6.3), so the monotonic-reference bias is never exercised. Section 5 justifies AIMD by 'agility', which is exactly the trade-off this add-on re-examines.",
+      "feasibility": "M",
+      "feasibility_rationale": "The controller change itself is small and local (~200 LOC, one file) and the oscillation metric is already logged per second. The cost is the evaluation harness: a warm-DB protocol means pre-building a ~100 GB database and restoring it identically before each scheme, which is tight against ~257 GB free and adds substantial wall-clock per run. db_bench's --use_existing_db plus chained benchmarks covers the phase-change workload without new code, but the run matrix is heavier than the baseline reproduction.",
+      "research_value": "H",
+      "research_value_rationale": "It names a concrete, code-level assumption (empty-DB start, monotonically growing reference) that the paper never tests, and probes a regime - a steady-state warm store with shifting phases - that is the normal case in production. Either outcome is informative: if ADOC's 2.5x gain survives warm start that strengthens the paper, and if it collapses that is a genuine finding about online AIMD tuners for LSM stores that a FAST reviewer would care about.",
+      "scoop_check": {
+        "result": "partial",
+        "details": "Queries: 'LSM auto-tuning controller oscillation AIMD phase change workload dynamic write stall adaptive 2025'; 'ADOC FAST 2023 write stall RocksDB follow-up data overflow tuning tail latency'. Closest work: ArceKV (https://arxiv.org/abs/2508.03565) targets workload-driven LSM compaction-policy transitions under dynamic workloads - same motivating regime, different mechanism, and it does not touch ADOC's controller. Nothing found that analyses or fixes ADOC's reference-score decay or its empty-DB start assumption."
+      }
+    },
+    {
+      "name": "Memory-budget-aware batch tuning",
+      "hypothesis": "We hypothesize that co-tuning batch (memtable) size against block-cache capacity under a fixed total DRAM budget lets ADOC match or exceed SILK-O on read-heavy YCSB (A/B/C/F) at equal memory, compared with ADOC's unconstrained batch growth.",
+      "mechanism": "SetBatchSize (DOTA_tuner.cc:251-284) grows the memtable, SST size and L1 size, bounded only by max_memtable_size (DOTA_tuner.h:249, flag at db_bench_tool.cc:781); the block cache is never considered. Introduce --adoc_memory_budget with total = max_write_buffer_number * write_buffer_size + block_cache_capacity. When FEA votes kLinearIncrease, shrink the block cache by the same delta via Cache::SetCapacity, and vice versa. This requires a small extension to ChangePoint / ApplyChangePointsInstantly (report_agent.cc:106-137), which today can only carry string-valued RocksDB options, so it can also carry a cache-capacity action.",
+      "code_locations": [
+        "utilities/DOTA/DOTA_tuner.cc:251",
+        "include/rocksdb/utilities/DOTA_tuner.h:249",
+        "utilities/DOTA/report_agent.cc:106",
+        "tools/db_bench_tool.cc:781",
+        "ycsbcore/core_workload.cc"
+      ],
+      "motivating_evidence": "Section 6.3 (p.12): 'SILK-O uses as much as 76.8% more memory than ADOC. Larger memory allows more requests to be serviced from the data buffered in memory' - the paper's own explanation for why it loses YCSB A/B/C/F in Figure 17 (p.12), quantified in Figure 18 (p.12). The paper frames ADOC's lower memory use as a win but never runs the controlled experiment of giving ADOC the same DRAM and letting it decide how to spend it. ADOC's batch growth is capped only by max_memtable_size and is blind to the block cache.",
+      "feasibility": "M",
+      "feasibility_rationale": "Cross-cutting: the ChangePoint mechanism must learn a non-string action, and the evaluation is the expensive one (YCSB load of 50 M x 1 KB is ~50 GB, then six 1-hour run phases per scheme). Fits the machine only after scaling to ~20 M entries and ~20-minute phases; the disk budget also forces reloading between phases.",
+      "research_value": "M",
+      "research_value_rationale": "The fairness question is real and the read-heavy regime is where ADOC is weakest, but the direction of the result is fairly predictable, and the 'compare at equal memory budget' framing has already been staked out by vLSM. Solid but expected.",
+      "scoop_check": {
+        "result": "partial",
+        "details": "Queries: 'ADOC LSM key-value store citing papers 2024 2025 extend tuner memory budget block cache memtable'; 'arXiv vLSM low tail latency LSM key-value store 2024 compare ADOC SILK write stall'. Closest work: vLSM (https://arxiv.org/abs/2407.15581) explicitly argues the same-memory-budget comparison, reports that ADOC 'reduces tail latency by sacrificing I/O amplification', and beats it - but by redesigning the LSM structure rather than making ADOC memory-budget-aware. The specific experiment proposed here (ADOC given SILK-O's DRAM and allocating it itself between memtable and block cache) was not found in the literature."
+      }
+    },
+    {
+      "name": "ADOC under an enforced CPU budget (multi-tenant regime)",
+      "hypothesis": "We hypothesize that making ADOC's thread-count controller aware of an enforced CPU budget (cgroup v2 cpu.max) preserves most of its throughput gain and avoids its CPU-cost blowup, under a co-located / CPU-limited regime, compared with stock ADOC which assumes it owns all cores.",
+      "mechanism": "max_thread is set once from core_number (DOTA_tuner.h:246-248, wired at db_bench_tool.cc:4649) and the idle-time signal is normalised by the configured thread count rather than by CPU actually available (DOTA_tuner.cc:181-185). Under a cpu.max quota, adding threads buys no work and the kIdle / kBandwidthCongestion classifiers mis-fire. Add a runtime CPU-budget estimator that reads the throttling counters from cpu.stat in the process's own delegated cgroup (readable unprivileged on this machine, where the cpu controller is delegated to the user slice) and clamp / re-normalise max_thread and the idle thresholds against it.",
+      "code_locations": [
+        "include/rocksdb/utilities/DOTA_tuner.h:246",
+        "utilities/DOTA/DOTA_tuner.cc:181",
+        "utilities/DOTA/DOTA_tuner.cc:240",
+        "tools/db_bench_tool.cc:780",
+        "utilities/DOTA/report_agent.cc:40"
+      ],
+      "motivating_evidence": "Figure 14 (p.11) and Section 6.2: ADOC spends up to 72.5% more CPU time than SILK-O, and Figure 15 (p.11) shows up to 143.6% more background operations. The paper treats CPU as effectively free ('write stalls are triggered even when the hardware resources are sufficient', Section 1) and evaluates only on a dedicated 40-core server. The paper's second design principle is device transparency; compute transparency is never claimed or tested, yet the tuner's only bound on thread growth is a static core count.",
+      "feasibility": "M",
+      "feasibility_rationale": "The controller change is small, but this needs a new experimental harness that exists neither in the paper nor in the authors' tracker repo: run db_bench inside a delegated cgroup v2 sub-tree with varying cpu.max, add a co-located CPU-hog tenant, and sweep budgets. That is scriptable without root on this machine (cpu, memory and pids controllers are delegated to the user slice), and compute cost is moderate (short runs, many points), but it is a genuine new workload generator.",
+      "research_value": "M",
+      "research_value_rationale": "A regime the paper ignores and that matters for real deployments, and a negative result would qualify the paper's central 'no human intervention' automation claim. But the finding that an auto-tuner assuming exclusive CPU misbehaves without it is plausible rather than surprising, so it falls short of H.",
+      "scoop_check": {
+        "result": "clear",
+        "details": "Queries: 'LSM-tree online tuning flush compaction thread allocation write stall 2025 RocksDB'; 'LSM auto-tuning controller oscillation AIMD phase change workload dynamic write stall adaptive 2025'; 'ADOC FAST 2023 write stall RocksDB follow-up data overflow tuning tail latency'. Nothing found that evaluates ADOC, or any LSM write-stall auto-tuner, under enforced CPU quotas or co-location. Adjacent but distinct: RESYSTANCE (arXiv 2603.05162) reshapes compaction via eBPF, which is both a different problem and unavailable on this machine."
+      }
+    }
+  ],
+  "risks": [
+    "Data race in the metrics path: db/flush_job.cc:1061 does flush_stats->push_back from flush threads with no lock while the tuner thread iterates the same std::vector (utilities/DOTA/DOTA_tuner.cc:98-109 and :125-136). A reallocation during iteration is undefined behaviour; expect sporadic crashes in hour-long runs and budget a small fix (mutex or fixed-capacity ring), reported as a deviation.",
+    "Metric vectors are never trimmed - the clear is commented out at utilities/DOTA/report_agent.cc:43 - so flush_stats/job_stats grow unbounded. Harmless at paper scale, but a concern for longer runs.",
+    "Version mismatch: paper Section 6.1 says RocksDB v7.5.3 while the repo is 7.7.0 (include/rocksdb/version.h:14-16). The paper itself shows (Figure 17, 'ADOC-5.7.1') that the base version materially shifts ADOC's numbers, so absolute values will not match.",
+    "The SILK baseline cannot be reproduced from this artifact: README.md:83-88 declares the in-repo SILK a placeholder and utilities/DOTA/report_agent.cc:188-231 is a ~40-line imitation. Real SILK needs theoanab/SILK-USENIXATC2019, a 2018 RocksDB 5.7.1 fork with high gcc-12 build risk; the authors' own port to newer RocksDB failed.",
+    "Disk capacity: ~257 GB free versus the ~400-800 GB ingested per 3600 s run in paper Figure 14. Every experiment must be shortened or have its pending-compaction thresholds rescaled, and each DB must be deleted before the next scheme runs.",
+    "The device sweep is not reproducible: only NVMe exists here while the paper's device-transparency claim spans PM / NVMe / SATA SSD / HDD. cgroup io is not delegated on this machine, so the authors' own bandwidth_influence approach is unavailable; RocksDB's internal rate limiter throttles background I/O only and is not equivalent to a slower device.",
+    "perf is blocked (perf_event_paranoid=3), so paper Figure 15 - the operation breakdown obtained by sampling the RocksDB call stack at 99 Hz (Section 6.2) - cannot be reproduced at all.",
+    "Shared machine with 125 GB RAM and other users: page-cache and CPU contention will add variance to throughput numbers that the paper reports with standard deviations under 10%.",
+    "Open question from desk review: LocateThreadStates / LocateBatchStates (utilities/DOTA/DOTA_tuner.cc:31-73) belong to the base DOTA_Tuner, but FEAT_Tuner overrides DetectTuningOperations and never calls them - the shipped ADOC path is TuneByTEA/TuneByFEA with its own simpler thresholds, and TuneByFEA unconditionally overwrites result.BatchOp (:414-417). Reading the code alone cannot settle whether the L0O > RDO > MMO priority ordering described in Section 5 is what was actually evaluated; this must be resolved empirically before building on the controller.",
+    "Build risk: a Sept-2022 RocksDB fork compiled with gcc 12.2. Makefile:501-502 exposes DISABLE_WARNING_AS_ERROR=1, but a handful of source-level warning fixes should still be expected, and CMake is not an option (CMakeLists.txt has no DOTA/ycsbcore targets)."
+  ]
+}

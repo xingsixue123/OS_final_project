@@ -1,0 +1,14 @@
+{
+  "pdf": {
+    "status": "ok",
+    "source_url": "https://arxiv.org/pdf/2603.09605",
+    "version": "from list",
+    "notes": ""
+  },
+  "repo": {
+    "status": "ok",
+    "url": "https://github.com/XMU-DISCLab/Cachelib-Nemo",
+    "official": "unclear",
+    "evidence": "link taken from the research list; not independently verified"
+  }
+}

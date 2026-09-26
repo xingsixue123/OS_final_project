@@ -1,0 +1,59 @@
+{
+  "url": "https://github.com/NEO-MLSys25/NEO",
+  "head_commit": "33e4a0f7632688e4122de4c3c140196cebea6a5a",
+  "head_commit_date": "2025-06-16T10:45:58-07:00",
+  "file_count": 63,
+  "size_mb": 0.4,
+  "top_level": [
+    ".gitignore",
+    "LICENSE",
+    "README.md",
+    "csrc/",
+    "docs/",
+    "evaluation/",
+    "examples/",
+    "pacpu/",
+    "requirements.txt",
+    "setup.py",
+    "swiftllm/"
+  ],
+  "build_files": [
+    "csrc/setup.py",
+    "pacpu/CMakeLists.txt",
+    "setup.py"
+  ],
+  "lines_by_extension": {
+    ".py": 5493,
+    ".cu": 776,
+    ".h": 488,
+    ".cpp": 245,
+    ".sh": 7
+  },
+  "red_flags": {
+    "sudo": {
+      "count": 1,
+      "examples": [
+        "README.md:17: Intel ISPC compiler == 1.23, which can be installed by `sudo snap install ispc --channel latest/edge`"
+      ]
+    },
+    "multi_gpu": {
+      "count": 32,
+      "examples": [
+        "README.md:33: bash build.sh <model-name> <tensor-parallel-degree>",
+        "evaluation/configs/config-a10-8b.json:9: \"tensor_parallel_size\": 1,",
+        "evaluation/configs/config-t4-7b.json:9: \"tensor_parallel_size\": 1,",
+        "evaluation/server.py:33: \"--tensor-parallel-size\", str(config[\"tensor_parallel_size\"]),",
+        "evaluation/server.py:36: \"--swap-space\", str(config[\"swap_space\"] / config[\"tensor_parallel_size\"]),"
+      ]
+    }
+  },
+  "github": {
+    "stargazers_count": 99,
+    "forks_count": 23,
+    "archived": false,
+    "pushed_at": "2025-06-16T17:45:58Z",
+    "created_at": "2025-02-14T10:45:09Z",
+    "open_issues_count": 2,
+    "license": "Apache-2.0"
+  }
+}

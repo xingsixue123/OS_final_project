@@ -1,0 +1,154 @@
+{
+  "title": "UniCache: Unifying Prefix Cache Eviction for Heterogeneous LLM Serving Workloads",
+  "one_line": "A task-aware multi-queue prefix-KV-cache eviction policy for vLLM that combines session-reuse (log-normal inter-turn horizon) and structural-reuse (prompt-offset) signals with a global hit-efficiency weighting, plus a CPU trace-driven prefix-cache simulator built on vLLM's control plane.",
+  "topic": "llm-inference",
+  "repo": {
+    "official": "yes",
+    "evidence": "Paper \u00a76 (p. 15) states 'The code is available at https://github.com/xsyslab/UniCache'; xsyslab is last author Jiarong Xing's lab org (Rice). The repo is a vLLM v0.8.5 fork containing the actual policy (vllm/core/evictor.py:1254 SimpleHYBRIDEvictor implementing Alg. 1, :1702 implementing Alg. 2) and the \u00a73 simulator (vllm/simulator/).",
+    "last_commit": "2026-06-04",
+    "artifact_badges": [],
+    "badge_evidence": "none found - no AE appendix or badge in the camera-ready PDF, none on the SIGMETRICS'26 abstract page (https://doi.org/10.1145/3801489.3806861)"
+  },
+  "hard_filters": {
+    "H1_open_repo": {
+      "result": "pass",
+      "evidence": "Official repo linked from the paper (\u00a76, p. 15). Contains the full system, not a stub: vllm/core/evictor.py:1254 (SimpleHYBRIDEvictor, two-stage eviction at :1429, queue assignment at :1302, local priority at :1214), :1702 (hit-efficiency alpha update), all 7 baselines (LRU:265, LFU:529, FIFO:605, WA:375, LeCaR:962, ARC:694, OPT:100) and the simulator (vllm/simulator/simulator.py, output_simulator.py)."
+    },
+    "H2_no_root": {
+      "result": "pass",
+      "evidence": "Headline path is 'python run_simulation.py' on CPU. vllm/engine/llm_engine.py:288-292 skips model_executor construction and :496-497 skips KV-cache allocation in simulation mode; run_simulation.py:188 uses load_format='dummy'; vllm/_custom_ops.py:17-21 tolerates a missing compiled vllm._C. The sudo / kernel-module / RDMA / multi-GPU grep hits in repo_facts.json are all inherited upstream vLLM CI and docs (.github/workflows/scripts/cuda-install.sh, .buildkite/*, docs/source/getting_started/installation/ai_accelerator/neuron.inc.md) and are not on the artifact's run path. docker/Dockerfile is upstream vLLM's and is replaced by the conda recipe in README.md:35-78. No perf counters, eBPF, KVM or /proc/sys writes."
+    },
+    "H3_hardware_fit": {
+      "result": "pass",
+      "evidence": "Paper \u00a76.1: 'We conducted latency experiments (Section 6.4) on real GPUs, while the remaining results were obtained from our simulator' - Fig. 10, Fig. 11 and Fig. 12 are CPU-only and need no GPU (A100/H200 labels only set the block budget). 16 cores / 125 GB RAM suffice (\u00a73.3 reports ~150 s per simulated trace). The single-GPU QTTFT result (Table 5, one A100, Llama-3.1-3B) scales down to the 24 GB A5000 because run_gpu.py:255 also uses load_format='dummy' and the block budget is a CLI knob (assertion at vllm/engine/llm_engine.py:452 only requires real blocks >= requested). tensor_parallel_size defaults to 1 (run_simulation.py:120); \u00a76.6 states the policy is TP-agnostic. No multi-node requirement."
+    },
+    "H4_obtainable_deps_data": {
+      "result": "pass",
+      "evidence": "Deps are pip/conda only (requirements/common.txt, requirements/cpu.txt, README.md:63-75; CPU torch 2.6.0, transformers 4.53.2). Datasets are public: ShareGPT via HF wget (TaskData/SharedGPT-multi-turn/readme.md:4), AgentBank via load_dataset('Solaris99/AgentBank') (TaskData/AgentBankData/prepare_agentbank_data.py:28), CodeParrot via datasets (TaskData/Codeparrot/prepare_data.py:8), MASH-QA via the authors' Google Drive (TaskData/mashqa_data/readme.md:2), ToolBench via the public Preble OneDrive share (TaskData/ToolBench/readme.md:1). The proprietary Qwen-Bailian production trace is not needed - it was only used to fit (mu, sigma), and the constants are hard-coded at vllm/core/evictor.py:1177-1183 and duplicated in the yaml configs. models/download.sh pulls UNGATED unsloth/Llama-3.2-1B-Instruct and unsloth/Llama-3.1-8B-Instruct mirrors with --exclude '*.safetensors' - only config + tokenizer are required since weights are dummy."
+    }
+  },
+  "reproduce": {
+    "level": "M",
+    "target": "Fig. 10(a), p. 18 - Trace #1 (multi-turn-dominant), Llama-3.2-1B: prefix-cache hit ratio vs KV-cache budget for LRU/LFU/FIFO/LeCaR/ARC/WA/OPT-Offline/UniCache. Claim: UniCache is the best online policy at every budget (92.32% vs LRU 91.64%, FIFO 91.19%, LFU 79.42% at 0.7A).",
+    "scale_down": "CPU simulator only, no GPU and no model weights (load_format='dummy'). Use TaskData/Hybrid/test1/tasks_config.yaml with max_record cut 1800 -> 600 for the four single-turn tasks and 500 -> 200 for ShareGPT/alfred, with --simulator-num-gpu-blocks scaled down proportionally so the working-set/cache ratio (and hence the cache-pressure regime) is preserved; sweep 3 budgets (50000/70000/100000 blocks at --block-size 8) x 8 policies = 24 runs instead of the paper's 9-panel grid. Report policy ordering and the UniCache-LRU gap rather than absolute hit ratios, since the paper's 0.5A/0.7A/0.9A axis has no documented mapping to block counts. Re-run at full trace size once the pipeline works.",
+    "effort": "~5 person-days + ~30 CPU-core-hours (0 GPU-hours); add ~2 person-days + ~8 GPU-hours if the optional Table 5 QTTFT check on the A5000 is attempted",
+    "rationale": "The exact result runs on CPU with no root, no gated data and no compilation (llm_engine.py:288-292 skips the executor, _custom_ops.py:17-21 tolerates the missing extension), and a 20-session smoke test ships in-repo (demo/run.sh + demo/ShareGPT_cleaned_valid_session_data_head20.jsonl) - that argues for H. Capped at M by real porting work: (i) no aggregation/plotting script exists for Fig. 10 (only per-run summary.json and a per-run histogram in vllm/simulator/utils.py); (ii) TaskData/Hybrid/test{2..9}/run.sh and test1/run_opt.sh pass --tag and --enable-hybrid-opt, which run_simulation.py's argparse (lines 16-139) does not define, so they abort as shipped; (iii) the paper's budget axis must be re-derived from per-token KV footprint; (iv) five external datasets (HF, Google Drive, a personal OneDrive) must be fetched and tokenized first; (v) model paths in the sweep scripts are absolute to the authors' machine and the conda path in README.md:41 is hard-coded; (vi) platform auto-detection (vllm/platforms/__init__.py:50-75) will pick the CUDA platform on our GPU host even for a CPU run, and the demo's VLLM_PLATFORM=cpu is not a variable this vLLM version reads."
+  },
+  "addons": [
+    {
+      "name": "Kill the task-label oracle",
+      "hypothesis": "We hypothesize that replacing UniCache's oracle task labels with an online, content-derived classifier (turn-index observation for session reuse plus radix-prefix template signatures for structural reuse) retains most of UniCache's hit-ratio gain over LRU on Traces #1-#3, and that the gain degrades gracefully rather than catastrophically as label error rises.",
+      "mechanism": "Today the task type is a hard-coded session-id string comparison ('alfred_' -> MULTI_TURN_AGENTIC, 'apps_'/'mind2web_' -> SINGLE_TURN_RANDOM i.e. straight into the evict-first queue) and the same mapping drives per-queue hit accounting. Replace it with a TaskClassifier that sees only admission-time signals: (a) a request whose longest prefix match lands inside a live session chain is multi-turn, and the observed inter-arrival gap separates chat from agentic; (b) single-turn requests are bucketed by the hash of their first k blocks (template signature), and buckets whose measured reuse rate stays below a threshold are demoted to the evict-first queue - exactly what SINGLE_TURN_RANDOM does by fiat today. Then sweep injected label noise p = 0..0.5 to produce a sensitivity curve.",
+      "code_locations": [
+        "vllm/core/block/prefix_caching_block.py:1005",
+        "vllm/simulator/output_simulator.py:94",
+        "vllm/core/evictor.py:1302",
+        "vllm/simulator/hybrid_utils.py"
+      ],
+      "motivating_evidence": "\u00a76.6 ('Task type classification') asserts categories 'can often be inferred from lightweight signals ... such as request metadata' but no experiment uses an inferred label; the artifact hard-codes ground truth at prefix_caching_block.py:1019-1034. Implication 3 and the evict-first queue (which contains ALL untemplated single-turn prefill blocks, \u00a75.2) depend entirely on that label, and Table 1 (p. 2) already shows a mis-targeted policy can be worse than LRU for a whole task class.",
+      "feasibility": "H",
+      "feasibility_rationale": "Entirely inside the simulator, ~500-1000 LOC, no new harness - the existing tasks_config.yaml traces and summary.json hit-ratio output are exactly the measurement needed, and label noise is a one-line perturbation. CPU only, fits 2-4 students in 10 weeks with room to spare.",
+      "research_value": "H",
+      "research_value_rationale": "This is the load-bearing assumption of the whole design and the first thing a SIGMETRICS reviewer would poke at. Both outcomes teach: 'UniCache survives realistic labelling' makes it deployable; 'it does not' reframes the paper's 17.32% as an oracle upper bound.",
+      "scoop_check": {
+        "result": "partial",
+        "details": "Searched 'UniCache prefix cache eviction heterogeneous LLM serving follow-up', 'KV cache prefix cache admission control never-reused blocks 2026', 'per-tenant fairness prefix KV cache eviction 2026'. Closest: SAECache, arXiv 2605.18825 (https://arxiv.org/abs/2605.18825), a concurrent May-2026 preprint with a near-identical multi-queue design that infers multi-turn session type with a ~1M-param MLP over the model's last-layer hidden state - but it needs model internals (unavailable in the CPU simulator), releases no code, and never cites or compares against UniCache. PEEK, arXiv 2607.02525 (https://arxiv.org/abs/2607.02525), builds radix-tree prefix clusters for admission/eviction, overlapping the template-signature half but not the label-sensitivity study."
+      }
+    },
+    {
+      "name": "Latency-aware value instead of hit-token value",
+      "hypothesis": "We hypothesize that replacing UniCache's hit-token-per-capacity efficiency with a recompute-cost-per-capacity value - cost estimated by the paper's own power-law prefill model, and charged for the suffix blocks an eviction strands - reduces mean and p90 QTTFT on single-turn-dominant and long-prompt-heavy traffic (Trace #3 / MASH-QA-heavy mixes) at equal or slightly lower hit ratio.",
+      "mechanism": "Two local changes. (1) In update_alpha_balance, replace H_q (a raw count of hit tokens) with the sum of modelled prefill time for those hits, using the same a*BS^b*L^c expression the simulator already evaluates: a 2000-token document hit is worth super-linearly more wall-clock than 2000 tokens spread over 40 chat turns, yet the current metric prices them identically. (2) In calculate_priority, charge an eviction for its dependent suffix: strict prefix matching means evicting an early block makes every cached descendant unreachable, so a block's value should include its still-resident descendant count, which the existing prefix trie in the block manager can supply cheaply.",
+      "code_locations": [
+        "vllm/core/evictor.py:1702",
+        "vllm/core/evictor.py:1214",
+        "vllm/core/block/prefix_caching_block.py",
+        "vllm/simulator/simulator.py:276"
+      ],
+      "motivating_evidence": "The paper optimizes hit ratio and reports QTTFT only once (Table 5, p. 19: one model, one budget, 0.9A). The two do not track each other - on Trace #3 UniCache is 0.10 s vs ARC 0.12 s (17% gap) while the average hit-ratio gap over ARC is quoted as 3.86%, and OPT-Offline reaches 0.08 s. \u00a75.2's tail-first ordering (Implication 5, Fig. 8a) is justified precisely by suffix invalidation, yet the \u00a75.3 value metric never accounts for it.",
+      "feasibility": "H",
+      "feasibility_rationale": "~300-600 LOC across two functions plus a descendant counter; the virtual clock already yields QTTFT in simulation and the hit-ratio harness is unchanged. CPU only.",
+      "research_value": "M",
+      "research_value_rationale": "Cost/size-aware caching (GDSF and descendants) is well-trodden, so some win is expected. The non-obvious parts are whether the stranded-suffix term dominates the cost term and whether hit ratio and latency diverge enough to reorder the policy ranking - interesting but incremental.",
+      "scoop_check": {
+        "result": "partial",
+        "details": "Searched 'cost-aware prefix cache eviction suffix invalidation trie LLM GDSF size-aware KV block' and 'hotness-aware KV cache scheduling prefix caching'. CacheWise (https://arxiv.org/pdf/2606.16824) and Hotness-Aware KV Cache Scheduling (https://dl.acm.org/doi/pdf/10.1145/3749168) use recompute-cost-weighted priorities, but neither does so inside a task-partitioned multi-queue policy and neither models the stranded-suffix term."
+      }
+    },
+    {
+      "name": "Distribution shift vs hard-coded reuse horizons",
+      "hypothesis": "We hypothesize that UniCache's advantage over LRU shrinks or inverts when the deployed inter-turn interval distribution differs from the offline-fitted (mu, sigma) baked into the policy, and that an online estimator refitted from observed reuse intervals recovers most of the loss without needing historical traces.",
+      "mechanism": "TASK_CONFIG hard-codes (4.77, 1.279) for chat and (1.81, 1.092) for agentic while the workload generator samples turn gaps from whatever mu/sigma the yaml specifies (test1 uses 4.15/0.971 for ShareGPT - already a mismatch). Step 1: sweep the generator's (mu, sigma) plus bimodal and heavy-tailed variants with the policy's constants fixed, and plot the hit-ratio gap vs LRU against the mismatch. Step 2: wire the policy to an online estimator - wa_helper.py already collects per-task reuse intervals (collect_hit_interval:69) and refits periodically (_fit_all:36) for the WA baseline; swap its exponential fit for a log-normal MLE and have calculate_priority query it. Step 3: an estimator-free variant that ranks multi-turn blocks by the empirical survival function, needing no parametric assumption.",
+      "code_locations": [
+        "vllm/core/evictor.py:1177",
+        "vllm/core/evictor.py:1214",
+        "vllm/simulator/wa_helper.py",
+        "TaskData/Hybrid/test1/tasks_config.yaml",
+        "vllm/simulator/simulator.py:369"
+      ],
+      "motivating_evidence": "\u00a75.2 states the distribution 'can be fitted using historical traces (e.g., data from prior days or from the same weekday in previous weeks)' - an explicit stationarity assumption the evaluation never stresses, since every \u00a76.1 trace is generated from the same log-normal family the policy assumes. Fig. 6 (p. 10) shows chat and agentic horizons differ ~30x in scale (P80 372 s vs 12 s), so the policy is demonstrably sensitive to getting them right.",
+      "feasibility": "H",
+      "feasibility_rationale": "Step 1 is a yaml sweep on the existing harness with essentially no new code; step 2 reuses an existing helper class (wa_helper.py) and a single call site in calculate_priority. All CPU.",
+      "research_value": "M",
+      "research_value_rationale": "The sensitivity characterization is new, cheap and would be a legitimate 'careful reproduction shows a more nuanced result' outcome, but the online-fitting remedy is the obvious fix and a reviewer would expect it to work; a concurrent preprint already reports that fixed-parameter variants degrade under mismatch.",
+      "scoop_check": {
+        "result": "partial",
+        "details": "Searched 'UniCache ... follow-up' and 'online log-normal reuse interval estimation prefix cache eviction'. SAECache (https://arxiv.org/abs/2605.18825) already proposes online MLE of per-task (mu, sigma) plus adaptive position decay and queue weights, and reports that 'fixed-parameter alternatives can degrade by up to 2.7x under workload mismatch' - essentially step 2 and part of step 1. It is an unrefereed preprint with no released code that does not cite or compare against UniCache, so a measured study on the UniCache artifact is still a contribution, but the team should lead with the shift characterization and the non-parametric variant rather than with adaptive fitting."
+      }
+    },
+    {
+      "name": "Per-task structural queues and a measured position profile",
+      "hypothesis": "We hypothesize that splitting UniCache's single structural-reuse queue into per-task queues, and replacing the fixed offset normalizer with each task's measured prompt-length distribution, improves hit ratio on single-turn-dominant traffic (Trace #3) by more than the Stage-2 weighting alone.",
+      "mechanism": "Implication 3 says different single-turn tasks should be managed independently, but the implementation puts ToolBench, CodeParrot and MASH-QA into one 'single' queue with one alpha_single. Worse, the positional score divides by a global constant max_offset = 2048 (self.max_num_first_offset) rather than 'the maximum offset among all blocks' as \u00a75.2 defines it, so for MASH-QA documents beyond 2048 tokens offset_factor saturates at 0 and the in-queue ordering degenerates. Add one queue per single-turn task (the alpha machinery is already dict-keyed), normalize the offset by a running quantile of that task's prompt length, and optionally replace the linear 1 - offset/max_offset with the empirically measured reuse-vs-depth curve (measurable today via --enable-block-hit-track / block_id_2_count).",
+      "code_locations": [
+        "vllm/core/evictor.py:1254",
+        "vllm/core/evictor.py:1236",
+        "vllm/core/evictor.py:1302",
+        "vllm/simulator/output_simulator.py:56"
+      ],
+      "motivating_evidence": "Fig. 7a (p. 10) shows single-turn reuse ratios spanning 0.21% (untemplated) to 61.13% (document QA) - a ~300x spread the implementation collapses into one queue with one weight - and Table 3 (p. 11) shows the four templates have different structures. The fixed 2048 normalizer is a plain implementation/paper mismatch against the \u00a75.2 definition.",
+      "feasibility": "H",
+      "feasibility_rationale": "Contained within SimpleHYBRIDEvictor, a few hundred LOC, evaluated with the existing Trace #2/#3 configs and summary.json output on CPU.",
+      "research_value": "M",
+      "research_value_rationale": "It directly tests the paper's own Implication 3 and repairs a real artifact/paper discrepancy, which is worth reporting, but 'more queues help when tasks differ' is close to what the paper already argues; the surprising outcome would be that it does not help, i.e. that Stage 2 already absorbs the difference.",
+      "scoop_check": {
+        "result": "partial",
+        "details": "Searched 'per-task queues single-turn structural prefix reuse eviction' and 'position-aware prefix cache eviction offset decay'. SAECache (https://arxiv.org/abs/2605.18825) learns a position-decay exponent and per-token-type weights, subsuming the positional half of the idea; no work found that separates the structural queue per single-turn task or that reports the max_offset saturation issue."
+      }
+    },
+    {
+      "name": "Demote instead of drop: task-aware GPU-to-CPU tiering",
+      "hypothesis": "We hypothesize that spilling UniCache's evicted blocks into a CPU-DRAM second tier, with the demotion decision driven by the same per-queue hit efficiency, reduces QTTFT relative to dropping them on multi-turn-dominant traffic, and that the benefit inverts once modelled PCIe transfer time exceeds the recompute time for short prefixes.",
+      "mechanism": "The evictor currently discards the victim block. Add a CPU tier of --simulator-num-cpu-blocks capacity (the flag already exists) holding evicted blocks; on a prefix match that lands in the CPU tier, advance the virtual clock by a modelled transfer (bytes / measured H2D bandwidth) instead of a full prefill, and run a second-level eviction in that tier. Use alpha_q to decide which queues are worth spilling - chat blocks with a 372 s P80 reuse horizon deserve CPU space, agentic blocks with a 12 s horizon may be cheaper to recompute.",
+      "code_locations": [
+        "vllm/core/evictor.py:1429",
+        "vllm/core/block/cpu_gpu_block_allocator.py",
+        "vllm/simulator/output_simulator.py:87",
+        "vllm/simulator/simulator.py:266",
+        "vllm/simulator/config.py:113"
+      ],
+      "motivating_evidence": "\u00a77 notes CachedAttention and Pensieve add hierarchical tiers but says nothing about which policy should govern demotion. The artifact already accounts for an LMCache CPU tier in its summary output (simulator.py:482-486, output_simulator.py:87) but the CPU simulation path never exercises it. Fig. 10 hit ratios saturate at large budgets, so the regime where a second tier pays is exactly the small-budget end where UniCache's margin is largest.",
+      "feasibility": "M",
+      "feasibility_rationale": "Cross-cutting: touches the allocator, the evictor and the timing model, and the transfer-cost model must be calibrated with a few GPU-hours of real H2D KV-block bandwidth measurement on the A5000. Still fits a 10-week 2-4 student budget, but it is not a localized change.",
+      "research_value": "M",
+      "research_value_rationale": "Tiered KV caching is crowded, so the placement mechanism itself is not novel; the contribution is coupling the demotion decision to the task-partitioned hit-efficiency signal and characterizing the recompute-vs-transfer crossover, which is of moderate interest.",
+      "scoop_check": {
+        "result": "partial",
+        "details": "Searched 'task-aware tiered KV cache demotion GPU to CPU prefix cache eviction policy 2026' and 'predictive multi-tier memory management KV cache'. Predictive Multi-Tier Memory Management for KV Cache (https://arxiv.org/html/2604.26968v2) and llm-d's tiered prefix cache do promotion/demotion by predicted access probability; CachedAttention (ATC'24) and Mooncake (FAST'25) cover the storage side. None couples demotion to a task-partitioned hit-efficiency weight, and none is evaluated against UniCache."
+      }
+    }
+  ],
+  "risks": [
+    "Task labels are an oracle: vllm/core/block/prefix_caching_block.py:1019-1034 keys the queue assignment (and the evict-first decision) on session-id string prefixes such as 'ShareGPT-multi-turn', 'alfred_', 'apps_'. Regenerated data with different ids silently falls through to SINGLE_TURN with no error - the biggest reproduction hazard.",
+    "Most shipped sweep scripts abort: TaskData/Hybrid/test{2..9}/run.sh and TaskData/Hybrid/test1/run_opt.sh pass --tag and --enable-hybrid-opt, which run_simulation.py's argparse (lines 16-139) does not define. Only TaskData/Hybrid/test1/run.sh matches the current CLI.",
+    "No aggregation or plotting pipeline for Fig. 10 / Fig. 11 / Table 5 - only per-run summary.json and a per-run histogram in vllm/simulator/utils.py - and the paper's 0.5A/0.7A/0.9A budget axis has no documented mapping to --simulator-num-gpu-blocks, so absolute hit ratios must be re-derived.",
+    "Platform detection: vllm/platforms/__init__.py:50-75 selects the CUDA platform whenever nvml sees a GPU and the installed vllm version string lacks 'cpu', which is our situation; demo/run.sh:3 relies on VLLM_PLATFORM=cpu, a variable this vLLM version does not read (vllm/envs.py:146). Whether the CPU simulator starts cleanly on a GPU host is unverified - this was a desk review, nothing was executed.",
+    "vllm/simulator/output_simulator.py:146 appends to tracked_hit_stats once per request forever and vllm/core/evictor.py:1723 sums the whole list every 10 requests; the 'recent time window' of Alg. 2 is implemented only as a 0.95 decay on the other queues. Both a growing O(N^2) cost on long traces and a semantic drift from the published algorithm.",
+    "Policy/generator parameter mismatch: the policy assumes chat (mu, sigma) = (4.77, 1.279) (vllm/core/evictor.py:1178) while the shipped trace configs generate ShareGPT turns with (4.15, 0.971) (TaskData/Hybrid/test1/tasks_config.yaml, matching paper \u00a76.1). Unclear from the repo whether the published numbers were produced with this mismatch.",
+    "ToolBench data is only reachable through a personal OneDrive share (TaskData/ToolBench/readme.md:1); if it rots the task must be substituted (StableToolBench on HF) or dropped, changing the trace composition.",
+    "The GPU-side result (Table 5) requires compiling the vLLM fork (VLLM_USE_PRECOMPILED=1 is the cheap route); demo/run_gpu.sh:1 hard-codes CUDA_VISIBLE_DEVICES=1 (we have device 0 only) and the --enable-lmcache path in run_gpu.py:239-258 calls run_simulation twice with an unbound llm - avoid that flag.",
+    "Tokenized *_session_data.jsonl files store full token-id lists as JSON and will run to tens of GB for ShareGPT-scale inputs; ~257 GB free is comfortable but should be watched.",
+    "No artifact badge or AE appendix found for this POMACS article, so all build/run judgements above are desk predictions, not verified executions.",
+    "Concurrent work SAECache (arXiv 2605.18825, May 2026) proposes a strikingly similar multi-queue plus hit-efficiency design with online parameter adaptation; it does not cite UniCache and has no code, but it narrows the novelty of add-ons that merely make UniCache's constants adaptive."
+  ]
+}

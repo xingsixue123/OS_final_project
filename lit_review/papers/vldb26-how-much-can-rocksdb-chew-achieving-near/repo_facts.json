@@ -1,0 +1,161 @@
+{
+  "url": "https://github.com/shinhojin/Sustainable-RocksDB",
+  "head_commit": "77e25ee8cb78b97293cb18e2e6759ff1cccff32d",
+  "head_commit_date": "2026-05-31T08:55:03+00:00",
+  "file_count": 2104,
+  "size_mb": 40.6,
+  "top_level": [
+    ".clang-format",
+    ".github/",
+    ".gitignore",
+    ".lgtm.yml",
+    "AUTHORS",
+    "BUCK",
+    "CMakeLists.txt",
+    "CODE_OF_CONDUCT.md",
+    "CONTRIBUTING.md",
+    "COPYING",
+    "DEFAULT_OPTIONS_HISTORY.md",
+    "DUMP_FORMAT.md",
+    "HISTORY.md",
+    "INSTALL.md",
+    "LANGUAGE-BINDINGS.md",
+    "LICENSE.Apache",
+    "LICENSE.leveldb",
+    "Makefile",
+    "PLUGINS.md",
+    "README.md",
+    "USERS.md",
+    "Vagrantfile",
+    "WINDOWS_PORT.md",
+    "__pycache__/",
+    "buckifier/",
+    "build_tools/",
+    "cache/",
+    "cmake/",
+    "common.mk",
+    "coverage/",
+    "crash_test.mk",
+    "db/",
+    "db_stress_tool/",
+    "docs/",
+    "env/",
+    "examples/",
+    "file/",
+    "fuzz/",
+    "include/",
+    "issue_template.md",
+    "java/",
+    "logging/",
+    "memory/",
+    "memtable/",
+    "microbench/",
+    "monitoring/",
+    "options/",
+    "plugin/",
+    "port/",
+    "rocksdb.pc.in",
+    "src.mk",
+    "srocksdb_options/",
+    "srocksdb_scripts/",
+    "srocksdb_src/",
+    "table/",
+    "test_util/",
+    "third-party/",
+    "thirdparty.inc",
+    "tools/",
+    "trace_replay/",
+    "unreleased_history/",
+    "util/",
+    "utilities/"
+  ],
+  "build_files": [
+    "CMakeLists.txt",
+    "Makefile",
+    "Vagrantfile",
+    "build_tools/ubuntu20_image/Dockerfile",
+    "db_stress_tool/CMakeLists.txt",
+    "examples/CMakeLists.txt",
+    "examples/Makefile",
+    "fuzz/Makefile",
+    "java/CMakeLists.txt",
+    "java/Makefile",
+    "java/crossbuild/Vagrantfile",
+    "java/jmh/pom.xml",
+    "microbench/CMakeLists.txt",
+    "tools/CMakeLists.txt",
+    "tools/Dockerfile"
+  ],
+  "lines_by_extension": {
+    ".cc": 547392,
+    ".h": 177417,
+    ".java": 72694,
+    ".py": 12689,
+    ".sh": 8138,
+    ".c": 4363,
+    ".proto": 28
+  },
+  "red_flags": {
+    "sudo": {
+      "count": 44,
+      "examples": [
+        ".github/actions/increase-max-open-files-on-macos/action.yml:7: sudo sysctl -w kern.maxfiles=1048576",
+        ".github/actions/increase-max-open-files-on-macos/action.yml:8: sudo sysctl -w kern.maxfilesperproc=1048576",
+        ".github/actions/increase-max-open-files-on-macos/action.yml:9: sudo launchctl limit maxfiles 1048576",
+        ".github/actions/install-gflags/action.yml:6: run: sudo apt-get update -y && sudo apt-get install -y libgflags-dev",
+        ".github/workflows/nightly.yml:89: - run: sudo apt-get update && sudo apt-get install -y build-essential libgflags-dev"
+      ]
+    },
+    "custom_kernel": {
+      "count": 9,
+      "examples": [
+        "include/rocksdb/options.h:2166: // crashes (i.e., the machine does not reboot), no writes will be",
+        "include/rocksdb/utilities/backup_engine.h:63: // restore even on a machine crash/reboot. Backup and restore processes are",
+        "java/src/main/java/org/rocksdb/BackupEngineOptions.java:144: *   backup even on a machine crash/reboot. Backup process is slower with sync",
+        "java/src/main/java/org/rocksdb/BackupEngineOptions.java:146: *   reboot. However, chances are some backups are consistent.",
+        "java/src/main/java/org/rocksdb/DBOptionsInterface.java:259: * filesystem like ext3 that can lose files after a reboot.</p>"
+      ]
+    },
+    "docker": {
+      "count": 9,
+      "examples": [
+        ".github/workflows/pr-jobs.yml:410: # The docker image is intentionally based on an OS that has an older GLIBC version.",
+        ".github/workflows/pr-jobs.yml:429: # NOTE: post-steps skipped because of compatibility issues with docker image",
+        ".github/workflows/pr-jobs.yml:438: # The docker image is intentionally based on an OS that has an older GLIBC version.",
+        ".github/workflows/pr-jobs.yml:457: # NOTE: post-steps skipped because of compatibility issues with docker image",
+        "build_tools/dockerbuild.sh:3: docker run -v $PWD:/rocks -w /rocks buildpack-deps make"
+      ]
+    },
+    "cxl_pmem": {
+      "count": 1,
+      "examples": [
+        "PLUGINS.md:7: * [PMEM](https://github.com/pmem/pmem-rocksdb-plugin): a collection of plugins to enable Persistent Memory on RocksDB."
+      ]
+    },
+    "sysctl_hugepages": {
+      "count": 69,
+      "examples": [
+        ".github/actions/increase-max-open-files-on-macos/action.yml:7: sudo sysctl -w kern.maxfiles=1048576",
+        ".github/actions/increase-max-open-files-on-macos/action.yml:8: sudo sysctl -w kern.maxfilesperproc=1048576",
+        "HISTORY.md:1397: * Fixed a bug that could lead to duplicate DB ID or DB session ID in POSIX environments without /proc/sys/kernel/random/uuid.",
+        "include/rocksdb/advanced_options.h:355: //      sysctl -w vm.nr_hugepages=20",
+        "include/rocksdb/memtablerep.h:454: //                          sysctl -w vm.nr_hugepages=20"
+      ]
+    },
+    "multi_node": {
+      "count": 1,
+      "examples": [
+        "USERS.md:101: [Netflix](http://techblog.netflix.com/2016/05/application-data-caching-using-ssds.html) Netflix uses RocksDB on AWS EC2 instances with local SSD drives to cache"
+      ]
+    }
+  },
+  "github": {
+    "stargazers_count": 2,
+    "forks_count": 0,
+    "archived": false,
+    "pushed_at": "2026-05-31T08:55:10Z",
+    "created_at": "2026-02-27T06:17:16Z",
+    "open_issues_count": 0,
+    "license": "GPL-2.0"
+  }
+}
