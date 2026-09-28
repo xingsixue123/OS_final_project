@@ -1,0 +1,7 @@
+# Third-party frozen clone (its own git repo) and large/runtime state.
+baleen_code/
+env/
+work/*
+!work/results/
+.cache/
+.home/

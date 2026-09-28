@@ -1,0 +1,11 @@
+threshold,wr,peak,result_file,wr_err_pct
+0.706574,36.486289772042774,42.20972545969441,runs/repro/20230325_Region6_s0_baleen-mlph_20230421_alltraces_pfalways/sim/ml-ap-0.706574_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma,2.492457012957604
+0.712307,36.180511866357904,42.20972545969441,runs/repro/20230325_Region6_s0_baleen-mlph_20230421_alltraces_pfalways/converge/th_0.712307/ml-ap-0.712307_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma,1.633506183763328
+0.717307,35.41272069551715,42.20972545969441,runs/repro/20230325_Region6_s0_baleen-mlph_20230421_alltraces_pfalways/converge/th_0.717307/ml-ap-0.717307_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma,-0.5232711718948426
+0.722307,35.17742647944637,42.20972545969441,runs/repro/20230325_Region6_s0_baleen-mlph_20230421_alltraces_pfalways/converge/th_0.722307/ml-ap-0.722307_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma,-1.1842285473008487
+0.726574,34.83295574711874,42.20972545969441,runs/repro/20230325_Region6_s0_baleen-mlph_20230421_alltraces_pfalways/converge/th_0.726574/ml-ap-0.726574_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma,-2.151870144895245
+0.746574,33.512380031322365,42.25424112920943,runs/repro/20230325_Region6_s0_baleen-mlph_20230421_alltraces_pfalways/converge/th_0.746574/ml-ap-0.746574_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma,-5.861456694507237
+0.766574,31.692980577455923,42.55965099711737,runs/repro/20230325_Region6_s0_baleen-mlph_20230421_alltraces_pfalways/converge/th_0.766574/ml-ap-0.766574_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma,-10.972272879979982
+0.786574,30.36194734094529,42.7841232840891,runs/repro/20230325_Region6_s0_baleen-mlph_20230421_alltraces_pfalways/converge/th_0.786574/ml-ap-0.786574_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma,-14.711235312943366
+0.806574,28.996404286077606,42.7841232840891,runs/repro/20230325_Region6_s0_baleen-mlph_20230421_alltraces_pfalways/converge/th_0.806574/ml-ap-0.806574_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma,-18.547138160966295
+0.826574,27.525031121581645,42.84141090387602,runs/repro/20230325_Region6_s0_baleen-mlph_20230421_alltraces_pfalways/converge/th_0.826574/ml-ap-0.826574_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma,-22.680324948505163

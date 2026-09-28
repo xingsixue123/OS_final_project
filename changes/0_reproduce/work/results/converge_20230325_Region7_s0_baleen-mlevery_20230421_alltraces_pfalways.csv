@@ -1,0 +1,14 @@
+threshold,wr,peak,result_file,wr_err_pct
+0.823752,76.42643207924436,43.46194314942514,runs/repro/20230325_Region7_s0_baleen-mlevery_20230421_alltraces_pfalways/converge/th_0.823752/ml-ap-0.823752_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma,114.68701952089769
+0.843752,70.39379564791808,43.271739834219034,runs/repro/20230325_Region7_s0_baleen-mlevery_20230421_alltraces_pfalways/converge/th_0.843752/ml-ap-0.843752_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma,97.74093555413941
+0.863752,63.77301742673326,43.309424371900434,runs/repro/20230325_Region7_s0_baleen-mlevery_20230421_alltraces_pfalways/converge/th_0.863752/ml-ap-0.863752_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma,79.14272149985469
+0.883752,56.99160873093559,42.740028490045376,runs/repro/20230325_Region7_s0_baleen-mlevery_20230421_alltraces_pfalways/converge/th_0.883752/ml-ap-0.883752_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma,60.09328557244752
+0.903752,50.2210760568565,42.96045389797125,runs/repro/20230325_Region7_s0_baleen-mlevery_20230421_alltraces_pfalways/converge/th_0.903752/ml-ap-0.903752_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma,41.07440112603304
+0.923752,41.34603318023241,43.20452926704218,runs/repro/20230325_Region7_s0_baleen-mlevery_20230421_alltraces_pfalways/converge/th_0.923752/ml-ap-0.923752_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma,16.143805107537894
+0.931146,37.45074417087067,43.021788396801924,runs/repro/20230325_Region7_s0_baleen-mlevery_20230421_alltraces_pfalways/converge/th_0.931146/ml-ap-0.931146_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma,5.20167468431887
+0.933739,36.26128387253303,42.90101333852665,runs/repro/20230325_Region7_s0_baleen-mlevery_20230421_alltraces_pfalways/converge/th_0.933739/ml-ap-0.933739_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma,1.8604002149864636
+0.934989,35.58278744070476,42.90506021757463,runs/repro/20230325_Region7_s0_baleen-mlevery_20230421_alltraces_pfalways/converge/th_0.934989/ml-ap-0.934989_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma,-0.04554217617133508
+0.936146,35.041287051677834,42.75064750066172,runs/repro/20230325_Region7_s0_baleen-mlevery_20230421_alltraces_pfalways/converge/th_0.936146/ml-ap-0.936146_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma,-1.5666534125176623
+0.936239,35.008031523730644,42.75064750066172,runs/repro/20230325_Region7_s0_baleen-mlevery_20230421_alltraces_pfalways/converge/th_0.936239/ml-ap-0.936239_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma,-1.6600704409375349
+0.941146,33.2818813844339,42.76405076406583,runs/repro/20230325_Region7_s0_baleen-mlevery_20230421_alltraces_pfalways/converge/th_0.941146/ml-ap-0.941146_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma,-6.5089429915618275
+0.943752,32.07192396824202,43.08033864285326,runs/repro/20230325_Region7_s0_baleen-mlevery_20230421_alltraces_pfalways/sim/ml-ap-0.943752_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma,-9.907795251995784

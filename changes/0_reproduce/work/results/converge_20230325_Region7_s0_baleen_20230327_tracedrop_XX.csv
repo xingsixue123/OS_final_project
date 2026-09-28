@@ -1,0 +1,8 @@
+threshold,wr,peak,result_file,wr_err_pct
+0.58094,38.57766734432648,40.06092981087392,runs/repro/20230325_Region7_s0_baleen_20230327_tracedrop_XX/sim/ml-ap-0.58094_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma,8.367278137943432
+0.60094,37.0822143580219,40.093936156383556,runs/repro/20230325_Region7_s0_baleen_20230327_tracedrop_XX/converge/th_0.600940/ml-ap-0.60094_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma,4.166449501452019
+0.62094,35.82226907277732,39.97936091680971,runs/repro/20230325_Region7_s0_baleen_20230327_tracedrop_XX/converge/th_0.620940/ml-ap-0.62094_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma,0.6271779341479264
+0.64094,34.41988973387212,39.95103276348025,runs/repro/20230325_Region7_s0_baleen_20230327_tracedrop_XX/converge/th_0.640940/ml-ap-0.64094_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma,-3.3122005284639418
+0.66094,32.93008391269064,40.04474229468626,runs/repro/20230325_Region7_s0_baleen_20230327_tracedrop_XX/converge/th_0.660940/ml-ap-0.66094_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma,-7.497165895978415
+0.68094,31.73204828953643,40.10202991447318,runs/repro/20230325_Region7_s0_baleen_20230327_tracedrop_XX/converge/th_0.680940/ml-ap-0.68094_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma,-10.862529033016568
+0.70094,28.747626099105656,40.16741129235395,runs/repro/20230325_Region7_s0_baleen_20230327_tracedrop_XX/converge/th_0.700940/ml-ap-0.70094_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma,-19.245972923099924

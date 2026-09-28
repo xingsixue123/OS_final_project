@@ -1,0 +1,11 @@
+threshold,wr,peak,result_file,wr_err_pct
+0.814626,89.28714845998365,45.13016381763969,runs/repro/20230325_Region6_s0_baleen-mlevery_20230421_alltraces_pfalways/converge/th_0.814626/ml-ap-0.814626_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma,150.8136421247329
+0.834626,79.69948431873853,45.00066368813838,runs/repro/20230325_Region6_s0_baleen-mlevery_20230421_alltraces_pfalways/converge/th_0.834626/ml-ap-0.834626_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma,123.88124475052257
+0.854626,70.10470906340771,44.42879111625988,runs/repro/20230325_Region6_s0_baleen-mlevery_20230421_alltraces_pfalways/converge/th_0.854626/ml-ap-0.854626_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma,96.92887177563335
+0.874626,61.24133280683202,43.9864186738869,runs/repro/20230325_Region6_s0_baleen-mlevery_20230421_alltraces_pfalways/converge/th_0.874626/ml-ap-0.874626_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma,72.03104808233947
+0.894626,51.43238752727321,43.71401515148439,runs/repro/20230325_Region6_s0_baleen-mlevery_20230421_alltraces_pfalways/converge/th_0.894626/ml-ap-0.894626_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma,44.47705701641397
+0.914626,42.25988695838409,43.82112794609662,runs/repro/20230325_Region6_s0_baleen-mlevery_20230421_alltraces_pfalways/converge/th_0.914626/ml-ap-0.914626_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma,18.710882211253377
+0.923757,38.323467011123455,43.64584952081797,runs/repro/20230325_Region6_s0_baleen-mlevery_20230421_alltraces_pfalways/converge/th_0.923757/ml-ap-0.923757_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma,7.653212200127697
+0.928757,35.860511732501635,43.38217106963729,runs/repro/20230325_Region6_s0_baleen-mlevery_20230421_alltraces_pfalways/converge/th_0.928757/ml-ap-0.928757_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma,0.7346041532111535
+0.933757,33.19635375533751,43.23989898986409,runs/repro/20230325_Region6_s0_baleen-mlevery_20230421_alltraces_pfalways/converge/th_0.933757/ml-ap-0.933757_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma,-6.749195889385896
+0.934626,32.832222884067086,43.23989898986409,runs/repro/20230325_Region6_s0_baleen-mlevery_20230421_alltraces_pfalways/sim/ml-ap-0.934626_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma,-7.772064147680864
