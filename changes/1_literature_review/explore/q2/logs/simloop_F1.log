@@ -1,0 +1,217 @@
+submitted ho_full_Region7_s0.1_F1_pt_eb1d04fc51_s2
+submitted ho_full_Region7_s0.1_F1_pt_eb1d04fc51_s1
+[ho_full_Region7_s0.1_F1_pt_eb1d04fc51_s2] round 0: best th=29.50000 WR=34.990 peak=27.496
+[ho_full_Region7_s0.1_F1_pt_eb1d04fc51_s2] round 1: best th=29.50000 WR=34.990 peak=27.496
+[ho_full_Region7_s0.1_F1_pt_eb1d04fc51_s2] round 2: best th=29.92528 WR=35.476 peak=27.496
+== ho_full_Region7_s0.1_F1_pt_eb1d04fc51_s2: P100=27.496 WR=35.476 th=29.9253 matched=True
+[ho_full_Region7_s0.1_F1_pt_eb1d04fc51_s1] round 0: best th=29.50000 WR=35.707 peak=27.795
+== ho_full_Region7_s0.1_F1_pt_eb1d04fc51_s1: P100=27.795 WR=35.707 th=29.5000 matched=True
+submitted ho_full_Region7_s0.1_F1_eim_fea13985a5_s2
+[ho_full_Region7_s0.1_F1_eim_fea13985a5_s2] round 0: best th=29.50000 WR=35.060 peak=27.595
+[ho_full_Region7_s0.1_F1_eim_fea13985a5_s2] round 1: best th=29.50000 WR=35.060 peak=27.595
+submitted ho_full_Region7_s0.1_F1_eim_fea13985a5_s1
+[ho_full_Region7_s0.1_F1_eim_fea13985a5_s2] round 2: best th=29.86198 WR=35.595 peak=27.595
+== ho_full_Region7_s0.1_F1_eim_fea13985a5_s2: P100=27.595 WR=35.595 th=29.8620 matched=True
+[ho_full_Region7_s0.1_F1_eim_fea13985a5_s1] round 0: best th=29.50000 WR=34.561 peak=27.264
+[ho_full_Region7_s0.1_F1_eim_fea13985a5_s1] round 1: best th=30.50000 WR=35.935 peak=27.264
+== ho_full_Region7_s0.1_F1_eim_fea13985a5_s1: P100=27.264 WR=35.935 th=30.5000 matched=True
+submitted ho_full_Region7_s0.1_F1_eim_fea13985a5_s0
+submitted ho_full_Region7_s0.1_F1_cpsat_cd6c30cd5f_s0
+submitted ho_full_Region7_s0.1_F1_cpsat_cd6c30cd5f_s2
+submitted ho_full_Region7_s0.1_F1_cpsat_cd6c30cd5f_s1
+[ho_full_Region7_s0.1_F1_eim_fea13985a5_s0] round 0: best th=29.50000 WR=35.683 peak=27.167
+== ho_full_Region7_s0.1_F1_eim_fea13985a5_s0: P100=27.167 WR=35.683 th=29.5000 matched=True
+[ho_full_Region7_s0.1_F1_cpsat_cd6c30cd5f_s0] round 0: best th=29.50000 WR=34.736 peak=27.421
+submitted ho_full_Region7_s0.1_F1_pt_eb1d04fc51_s0
+[ho_full_Region7_s0.1_F1_cpsat_cd6c30cd5f_s2] round 0: best th=29.50000 WR=34.882 peak=27.407
+[ho_full_Region7_s0.1_F1_cpsat_cd6c30cd5f_s1] round 0: best th=29.50000 WR=35.023 peak=27.314
+[ho_full_Region7_s0.1_F1_cpsat_cd6c30cd5f_s0] round 1: best th=30.50000 WR=35.974 peak=27.421
+[ho_full_Region7_s0.1_F1_cpsat_cd6c30cd5f_s2] round 1: best th=29.50000 WR=34.882 peak=27.407
+[ho_full_Region7_s0.1_F1_pt_eb1d04fc51_s0] round 0: best th=29.50000 WR=36.112 peak=27.527
+[ho_full_Region7_s0.1_F1_cpsat_cd6c30cd5f_s1] round 1: best th=29.50000 WR=35.023 peak=27.314
+[ho_full_Region7_s0.1_F1_cpsat_cd6c30cd5f_s0] round 2: best th=30.19701 WR=35.627 peak=27.421
+== ho_full_Region7_s0.1_F1_cpsat_cd6c30cd5f_s0: P100=27.421 WR=35.627 th=30.1970 matched=True
+[ho_full_Region7_s0.1_F1_cpsat_cd6c30cd5f_s2] round 2: best th=29.96634 WR=35.596 peak=27.407
+== ho_full_Region7_s0.1_F1_cpsat_cd6c30cd5f_s2: P100=27.407 WR=35.596 th=29.9663 matched=True
+[ho_full_Region7_s0.1_F1_pt_eb1d04fc51_s0] round 1: best th=29.06126 WR=35.567 peak=27.527
+== ho_full_Region7_s0.1_F1_pt_eb1d04fc51_s0: P100=27.527 WR=35.567 th=29.0613 matched=True
+[ho_full_Region7_s0.1_F1_cpsat_cd6c30cd5f_s1] round 2: best th=29.95383 WR=35.612 peak=27.314
+== ho_full_Region7_s0.1_F1_cpsat_cd6c30cd5f_s1: P100=27.314 WR=35.612 th=29.9538 matched=True
+submitted ho_full_Region7_s0.2_F1_pt_eb1d04fc51_s2
+[ho_full_Region7_s0.2_F1_pt_eb1d04fc51_s2] round 0: best th=29.50000 WR=32.974 peak=28.539
+[ho_full_Region7_s0.2_F1_pt_eb1d04fc51_s2] round 1: best th=31.52397 WR=35.730 peak=28.526
+== ho_full_Region7_s0.2_F1_pt_eb1d04fc51_s2: P100=28.526 WR=35.730 th=31.5240 matched=True
+submitted ho_full_Region7_s0.2_F1_pt_eb1d04fc51_s0
+[ho_full_Region7_s0.2_F1_pt_eb1d04fc51_s0] round 0: best th=29.50000 WR=33.053 peak=27.948
+[ho_full_Region7_s0.2_F1_pt_eb1d04fc51_s0] round 1: best th=31.53046 WR=35.708 peak=27.592
+== ho_full_Region7_s0.2_F1_pt_eb1d04fc51_s0: P100=27.592 WR=35.708 th=31.5305 matched=True
+submitted ho_full_Region7_s0.2_F1_eim_fea13985a5_s1
+[ho_full_Region7_s0.2_F1_eim_fea13985a5_s1] round 0: best th=29.50000 WR=34.462 peak=27.616
+[ho_full_Region7_s0.2_F1_eim_fea13985a5_s1] round 1: best th=30.50000 WR=36.111 peak=27.990
+[ho_full_Region7_s0.2_F1_eim_fea13985a5_s1] round 2: best th=30.18941 WR=35.521 peak=27.990
+== ho_full_Region7_s0.2_F1_eim_fea13985a5_s1: P100=27.990 WR=35.521 th=30.1894 matched=True
+submitted ho_full_Region7_s0.2_F1_eim_fea13985a5_s0
+[ho_full_Region7_s0.2_F1_eim_fea13985a5_s0] round 0: best th=29.50000 WR=34.754 peak=27.860
+[ho_full_Region7_s0.2_F1_eim_fea13985a5_s0] round 1: best th=30.50000 WR=36.021 peak=27.628
+[ho_full_Region7_s0.2_F1_eim_fea13985a5_s0] round 2: best th=30.16721 WR=35.552 peak=27.860
+== ho_full_Region7_s0.2_F1_eim_fea13985a5_s0: P100=27.860 WR=35.552 th=30.1672 matched=True
+submitted ho_full_Region7_s0.2_F1_eim_fea13985a5_s2
+submitted ho_full_Region7_s0.2_F1_milp_7609bc1c44_s0
+[ho_full_Region7_s0.2_F1_eim_fea13985a5_s2] round 0: best th=29.50000 WR=33.356 peak=28.209
+[ho_full_Region7_s0.2_F1_milp_7609bc1c44_s0] round 0: best th=29.50000 WR=33.544 peak=28.207
+[ho_full_Region7_s0.2_F1_eim_fea13985a5_s2] round 1: best th=31.50000 WR=35.932 peak=28.209
+== ho_full_Region7_s0.2_F1_eim_fea13985a5_s2: P100=28.209 WR=35.932 th=31.5000 matched=True
+submitted ho_full_Region7_s0.2_F1_pt_eb1d04fc51_s1
+[ho_full_Region7_s0.2_F1_milp_7609bc1c44_s0] round 1: best th=30.50000 WR=34.938 peak=28.207
+[ho_full_Region7_s0.2_F1_milp_7609bc1c44_s0] round 2: best th=30.90599 WR=35.550 peak=28.207
+== ho_full_Region7_s0.2_F1_milp_7609bc1c44_s0: P100=28.207 WR=35.550 th=30.9060 matched=True
+[ho_full_Region7_s0.2_F1_pt_eb1d04fc51_s1] round 0: best th=29.50000 WR=32.973 peak=27.634
+[ho_full_Region7_s0.2_F1_pt_eb1d04fc51_s1] round 1: best th=31.59944 WR=35.820 peak=27.572
+== ho_full_Region7_s0.2_F1_pt_eb1d04fc51_s1: P100=27.572 WR=35.820 th=31.5994 matched=True
+submitted ho_full_Region7_s0.3_F1_pt_eb1d04fc51_s1
+submitted ho_full_Region7_s0.3_F1_pt_eb1d04fc51_s2
+[ho_full_Region7_s0.3_F1_pt_eb1d04fc51_s1] round 0: best th=28.50000 WR=35.294 peak=26.940
+== ho_full_Region7_s0.3_F1_pt_eb1d04fc51_s1: P100=26.940 WR=35.294 th=28.5000 matched=True
+[ho_full_Region7_s0.3_F1_pt_eb1d04fc51_s2] round 0: best th=28.50000 WR=35.331 peak=26.806
+== ho_full_Region7_s0.3_F1_pt_eb1d04fc51_s2: P100=26.806 WR=35.331 th=28.5000 matched=True
+submitted ho_full_Region7_s0.3_F1_eim_fea13985a5_s2
+[ho_full_Region7_s0.3_F1_eim_fea13985a5_s2] round 0: best th=29.50000 WR=35.664 peak=26.216
+== ho_full_Region7_s0.3_F1_eim_fea13985a5_s2: P100=26.216 WR=35.664 th=29.5000 matched=True
+submitted ho_full_Region7_s0.3_F1_eim_fea13985a5_s0
+[ho_full_Region7_s0.3_F1_eim_fea13985a5_s0] round 0: best th=29.50000 WR=35.408 peak=26.426
+== ho_full_Region7_s0.3_F1_eim_fea13985a5_s0: P100=26.426 WR=35.408 th=29.5000 matched=True
+submitted ho_full_Region7_s0.3_F1_pt_eb1d04fc51_s0
+[ho_full_Region7_s0.3_F1_pt_eb1d04fc51_s0] round 0: best th=28.50000 WR=35.255 peak=26.532
+== ho_full_Region7_s0.3_F1_pt_eb1d04fc51_s0: P100=26.532 WR=35.255 th=28.5000 matched=True
+submitted ho_full_Region7_s0.3_F1_eim_fea13985a5_s1
+[ho_full_Region7_s0.3_F1_eim_fea13985a5_s1] round 0: best th=29.50000 WR=35.263 peak=26.821
+== ho_full_Region7_s0.3_F1_eim_fea13985a5_s1: P100=26.821 WR=35.263 th=29.5000 matched=True
+submitted ho_full_Region7_s0.3_F1_cpsat_cd6c30cd5f_s1
+submitted ho_full_Region7_s0.3_F1_cpsat_cd6c30cd5f_s2
+submitted ho_full_Region7_s0.3_F1_cpsat_cd6c30cd5f_s0
+[ho_full_Region7_s0.3_F1_cpsat_cd6c30cd5f_s2] round 0: best th=28.50000 WR=34.986 peak=26.617
+[ho_full_Region7_s0.3_F1_cpsat_cd6c30cd5f_s1] round 0: best th=28.50000 WR=34.996 peak=26.622
+[ho_full_Region7_s0.3_F1_cpsat_cd6c30cd5f_s2] round 1: best th=28.93952 WR=35.687 peak=26.617
+== ho_full_Region7_s0.3_F1_cpsat_cd6c30cd5f_s2: P100=26.617 WR=35.687 th=28.9395 matched=True
+[ho_full_Region7_s0.3_F1_cpsat_cd6c30cd5f_s0] round 0: best th=28.50000 WR=35.042 peak=26.676
+[ho_full_Region7_s0.3_F1_cpsat_cd6c30cd5f_s1] round 1: best th=28.91003 WR=35.624 peak=26.622
+== ho_full_Region7_s0.3_F1_cpsat_cd6c30cd5f_s1: P100=26.622 WR=35.624 th=28.9100 matched=True
+[ho_full_Region7_s0.3_F1_cpsat_cd6c30cd5f_s0] round 1: best th=28.88596 WR=35.644 peak=26.676
+== ho_full_Region7_s0.3_F1_cpsat_cd6c30cd5f_s0: P100=26.676 WR=35.644 th=28.8860 matched=True
+submitted ho_full_Region6_s0.1_F1_eim_fea13985a5_s0
+submitted ho_full_Region6_s0.1_F1_pt_eb1d04fc51_s2
+[ho_full_Region6_s0.1_F1_eim_fea13985a5_s0] round 0: best th=27.50000 WR=35.126 peak=26.392
+[ho_full_Region6_s0.1_F1_eim_fea13985a5_s0] round 1: best th=27.79127 WR=35.544 peak=26.392
+== ho_full_Region6_s0.1_F1_eim_fea13985a5_s0: P100=26.392 WR=35.544 th=27.7913 matched=True
+submitted ho_full_Region6_s0.1_F1_eim_fea13985a5_s2
+[ho_full_Region6_s0.1_F1_pt_eb1d04fc51_s2] round 0: best th=27.50000 WR=36.386 peak=26.504
+[ho_full_Region6_s0.1_F1_pt_eb1d04fc51_s2] round 1: best th=27.50000 WR=36.386 peak=26.504
+[ho_full_Region6_s0.1_F1_pt_eb1d04fc51_s2] round 2: best th=27.10264 WR=35.758 peak=26.504
+== ho_full_Region6_s0.1_F1_pt_eb1d04fc51_s2: P100=26.504 WR=35.758 th=27.1026 matched=True
+[ho_full_Region6_s0.1_F1_eim_fea13985a5_s2] round 0: best th=27.50000 WR=35.052 peak=25.702
+[ho_full_Region6_s0.1_F1_eim_fea13985a5_s2] round 1: best th=27.87336 WR=35.561 peak=25.702
+== ho_full_Region6_s0.1_F1_eim_fea13985a5_s2: P100=25.702 WR=35.561 th=27.8734 matched=True
+submitted ho_full_Region6_s0.1_F1_pt_eb1d04fc51_s1
+submitted ho_full_Region6_s0.1_F1_eim_fea13985a5_s1
+[ho_full_Region6_s0.1_F1_pt_eb1d04fc51_s1] round 0: best th=27.50000 WR=35.945 peak=26.537
+== ho_full_Region6_s0.1_F1_pt_eb1d04fc51_s1: P100=26.537 WR=35.945 th=27.5000 matched=True
+submitted ho_full_Region6_s0.1_F1_pt_eb1d04fc51_s0
+[ho_full_Region6_s0.1_F1_eim_fea13985a5_s1] round 0: best th=27.50000 WR=35.068 peak=25.737
+[ho_full_Region6_s0.1_F1_pt_eb1d04fc51_s0] round 0: best th=27.50000 WR=36.526 peak=26.179
+[ho_full_Region6_s0.1_F1_eim_fea13985a5_s1] round 1: best th=27.81819 WR=35.626 peak=25.737
+== ho_full_Region6_s0.1_F1_eim_fea13985a5_s1: P100=25.737 WR=35.626 th=27.8182 matched=True
+[ho_full_Region6_s0.1_F1_pt_eb1d04fc51_s0] round 1: best th=26.50000 WR=34.791 peak=26.179
+submitted ho_full_Region6_s0.1_F1_cpsat_cd6c30cd5f_s2
+submitted ho_full_Region6_s0.1_F1_cpsat_cd6c30cd5f_s0
+submitted ho_full_Region6_s0.1_F1_cpsat_cd6c30cd5f_s1
+[ho_full_Region6_s0.1_F1_pt_eb1d04fc51_s0] round 2: best th=26.96569 WR=35.581 peak=26.179
+== ho_full_Region6_s0.1_F1_pt_eb1d04fc51_s0: P100=26.179 WR=35.581 th=26.9657 matched=True
+[ho_full_Region6_s0.1_F1_cpsat_cd6c30cd5f_s2] round 0: best th=27.50000 WR=36.272 peak=26.189
+[ho_full_Region6_s0.1_F1_cpsat_cd6c30cd5f_s2] round 1: best th=27.50000 WR=36.272 peak=26.189
+[ho_full_Region6_s0.1_F1_cpsat_cd6c30cd5f_s2] round 2: best th=27.15717 WR=35.604 peak=26.189
+== ho_full_Region6_s0.1_F1_cpsat_cd6c30cd5f_s2: P100=26.189 WR=35.604 th=27.1572 matched=True
+[ho_full_Region6_s0.1_F1_cpsat_cd6c30cd5f_s1] round 0: best th=27.50000 WR=36.155 peak=26.115
+[ho_full_Region6_s0.1_F1_cpsat_cd6c30cd5f_s1] round 1: best th=27.50000 WR=36.155 peak=26.115
+[ho_full_Region6_s0.1_F1_cpsat_cd6c30cd5f_s1] round 2: best th=27.22054 WR=35.621 peak=26.115
+== ho_full_Region6_s0.1_F1_cpsat_cd6c30cd5f_s1: P100=26.115 WR=35.621 th=27.2205 matched=True
+[ho_full_Region6_s0.1_F1_cpsat_cd6c30cd5f_s0] round 0: best th=27.50000 WR=36.485 peak=26.093
+[ho_full_Region6_s0.1_F1_cpsat_cd6c30cd5f_s0] round 1: best th=27.50000 WR=36.485 peak=26.093
+submitted ho_full_Region6_s0.2_F1_eim_fea13985a5_s1
+[ho_full_Region6_s0.1_F1_cpsat_cd6c30cd5f_s0] round 2: best th=27.04120 WR=35.642 peak=26.033
+== ho_full_Region6_s0.1_F1_cpsat_cd6c30cd5f_s0: P100=26.033 WR=35.642 th=27.0412 matched=True
+[ho_full_Region6_s0.2_F1_eim_fea13985a5_s1] round 0: best th=27.50000 WR=36.008 peak=26.287
+[ho_full_Region6_s0.2_F1_eim_fea13985a5_s1] round 1: best th=27.50000 WR=36.008 peak=26.287
+submitted ho_full_Region6_s0.2_F1_pt_eb1d04fc51_s2
+[ho_full_Region6_s0.2_F1_eim_fea13985a5_s1] round 2: best th=27.30380 WR=35.661 peak=26.287
+== ho_full_Region6_s0.2_F1_eim_fea13985a5_s1: P100=26.287 WR=35.661 th=27.3038 matched=True
+[ho_full_Region6_s0.2_F1_pt_eb1d04fc51_s2] round 0: best th=27.50000 WR=36.466 peak=26.274
+[ho_full_Region6_s0.2_F1_pt_eb1d04fc51_s2] round 1: best th=27.50000 WR=36.466 peak=26.274
+[ho_full_Region6_s0.2_F1_pt_eb1d04fc51_s2] round 2: best th=27.09002 WR=35.732 peak=26.274
+== ho_full_Region6_s0.2_F1_pt_eb1d04fc51_s2: P100=26.274 WR=35.732 th=27.0900 matched=True
+submitted ho_full_Region6_s0.2_F1_eim_fea13985a5_s2
+[ho_full_Region6_s0.2_F1_eim_fea13985a5_s2] round 0: best th=27.50000 WR=35.855 peak=26.766
+== ho_full_Region6_s0.2_F1_eim_fea13985a5_s2: P100=26.766 WR=35.855 th=27.5000 matched=True
+submitted ho_full_Region6_s0.2_F1_pt_eb1d04fc51_s1
+[ho_full_Region6_s0.2_F1_pt_eb1d04fc51_s1] round 0: best th=27.50000 WR=36.150 peak=26.387
+[ho_full_Region6_s0.2_F1_pt_eb1d04fc51_s1] round 1: best th=27.50000 WR=36.150 peak=26.387
+submitted ho_full_Region6_s0.2_F1_pt_eb1d04fc51_s0
+[ho_full_Region6_s0.2_F1_pt_eb1d04fc51_s1] round 2: best th=27.21723 WR=35.559 peak=26.387
+== ho_full_Region6_s0.2_F1_pt_eb1d04fc51_s1: P100=26.387 WR=35.559 th=27.2172 matched=True
+[ho_full_Region6_s0.2_F1_pt_eb1d04fc51_s0] round 0: best th=27.50000 WR=36.529 peak=26.486
+[ho_full_Region6_s0.2_F1_pt_eb1d04fc51_s0] round 1: best th=27.50000 WR=36.529 peak=26.486
+[ho_full_Region6_s0.2_F1_pt_eb1d04fc51_s0] round 2: best th=27.07839 WR=35.576 peak=26.486
+== ho_full_Region6_s0.2_F1_pt_eb1d04fc51_s0: P100=26.486 WR=35.576 th=27.0784 matched=True
+submitted ho_full_Region6_s0.2_F1_cpsat_cd6c30cd5f_s1
+submitted ho_full_Region6_s0.2_F1_cpsat_cd6c30cd5f_s0
+submitted ho_full_Region6_s0.2_F1_cpsat_cd6c30cd5f_s2
+[ho_full_Region6_s0.2_F1_cpsat_cd6c30cd5f_s0] round 0: best th=27.50000 WR=36.888 peak=26.089
+[ho_full_Region6_s0.2_F1_cpsat_cd6c30cd5f_s2] round 0: best th=27.50000 WR=36.891 peak=26.286
+[ho_full_Region6_s0.2_F1_cpsat_cd6c30cd5f_s1] round 0: best th=27.50000 WR=36.794 peak=26.253
+submitted ho_full_Region6_s0.2_F1_eim_fea13985a5_s0
+[ho_full_Region6_s0.2_F1_cpsat_cd6c30cd5f_s0] round 1: best th=26.50000 WR=34.727 peak=26.089
+[ho_full_Region6_s0.2_F1_cpsat_cd6c30cd5f_s2] round 1: best th=26.50000 WR=34.812 peak=26.170
+[ho_full_Region6_s0.2_F1_cpsat_cd6c30cd5f_s1] round 1: best th=26.50000 WR=34.718 peak=26.113
+[ho_full_Region6_s0.2_F1_cpsat_cd6c30cd5f_s0] round 2: best th=26.90358 WR=35.629 peak=26.146
+== ho_full_Region6_s0.2_F1_cpsat_cd6c30cd5f_s0: P100=26.146 WR=35.629 th=26.9036 matched=True
+[ho_full_Region6_s0.2_F1_eim_fea13985a5_s0] round 0: best th=27.50000 WR=35.857 peak=26.556
+== ho_full_Region6_s0.2_F1_eim_fea13985a5_s0: P100=26.556 WR=35.857 th=27.5000 matched=True
+[ho_full_Region6_s0.2_F1_cpsat_cd6c30cd5f_s2] round 2: best th=26.87851 WR=35.429 peak=26.286
+== ho_full_Region6_s0.2_F1_cpsat_cd6c30cd5f_s2: P100=26.286 WR=35.429 th=26.8785 matched=True
+[ho_full_Region6_s0.2_F1_cpsat_cd6c30cd5f_s1] round 2: best th=26.92432 WR=35.626 peak=26.253
+== ho_full_Region6_s0.2_F1_cpsat_cd6c30cd5f_s1: P100=26.253 WR=35.626 th=26.9243 matched=True
+submitted ho_full_Region6_s0.3_F1_pt_eb1d04fc51_s2
+[ho_full_Region6_s0.3_F1_pt_eb1d04fc51_s2] round 0: best th=27.50000 WR=35.722 peak=27.466
+== ho_full_Region6_s0.3_F1_pt_eb1d04fc51_s2: P100=27.466 WR=35.722 th=27.5000 matched=True
+submitted ho_full_Region6_s0.3_F1_pt_eb1d04fc51_s0
+[ho_full_Region6_s0.3_F1_pt_eb1d04fc51_s0] round 0: best th=27.50000 WR=35.623 peak=27.136
+== ho_full_Region6_s0.3_F1_pt_eb1d04fc51_s0: P100=27.136 WR=35.623 th=27.5000 matched=True
+submitted ho_full_Region6_s0.3_F1_eim_fea13985a5_s2
+[ho_full_Region6_s0.3_F1_eim_fea13985a5_s2] round 0: best th=27.50000 WR=35.006 peak=27.462
+[ho_full_Region6_s0.3_F1_eim_fea13985a5_s2] round 1: best th=27.86384 WR=35.629 peak=27.462
+== ho_full_Region6_s0.3_F1_eim_fea13985a5_s2: P100=27.462 WR=35.629 th=27.8638 matched=True
+submitted ho_full_Region6_s0.3_F1_eim_fea13985a5_s1
+[ho_full_Region6_s0.3_F1_eim_fea13985a5_s1] round 0: best th=27.50000 WR=35.099 peak=27.315
+[ho_full_Region6_s0.3_F1_eim_fea13985a5_s1] round 1: best th=27.81827 WR=35.546 peak=27.315
+== ho_full_Region6_s0.3_F1_eim_fea13985a5_s1: P100=27.315 WR=35.546 th=27.8183 matched=True
+submitted ho_full_Region6_s0.3_F1_pt_eb1d04fc51_s1
+[ho_full_Region6_s0.3_F1_pt_eb1d04fc51_s1] round 0: best th=27.50000 WR=35.489 peak=27.372
+== ho_full_Region6_s0.3_F1_pt_eb1d04fc51_s1: P100=27.372 WR=35.489 th=27.5000 matched=True
+submitted ho_full_Region6_s0.3_F1_eim_fea13985a5_s0
+[ho_full_Region6_s0.3_F1_eim_fea13985a5_s0] round 0: best th=27.50000 WR=34.905 peak=27.196
+[ho_full_Region6_s0.3_F1_eim_fea13985a5_s0] round 1: best th=27.85563 WR=35.489 peak=27.358
+== ho_full_Region6_s0.3_F1_eim_fea13985a5_s0: P100=27.358 WR=35.489 th=27.8556 matched=True
+submitted ho_full_Region6_s0.3_F1_cpsat_cd6c30cd5f_s0
+submitted ho_full_Region6_s0.3_F1_cpsat_cd6c30cd5f_s1
+submitted ho_full_Region6_s0.3_F1_cpsat_cd6c30cd5f_s2
+[ho_full_Region6_s0.3_F1_cpsat_cd6c30cd5f_s0] round 0: best th=27.50000 WR=36.016 peak=27.124
+[ho_full_Region6_s0.3_F1_cpsat_cd6c30cd5f_s1] round 0: best th=27.50000 WR=36.131 peak=27.150
+[ho_full_Region6_s0.3_F1_cpsat_cd6c30cd5f_s2] round 0: best th=27.50000 WR=36.120 peak=27.191
+[ho_full_Region6_s0.3_F1_cpsat_cd6c30cd5f_s0] round 1: best th=27.50000 WR=36.016 peak=27.124
+[ho_full_Region6_s0.3_F1_cpsat_cd6c30cd5f_s1] round 1: best th=27.50000 WR=36.131 peak=27.150
+[ho_full_Region6_s0.3_F1_cpsat_cd6c30cd5f_s2] round 1: best th=27.50000 WR=36.120 peak=27.191
+[ho_full_Region6_s0.3_F1_cpsat_cd6c30cd5f_s0] round 2: best th=27.25853 WR=35.638 peak=27.124
+== ho_full_Region6_s0.3_F1_cpsat_cd6c30cd5f_s0: P100=27.124 WR=35.638 th=27.2585 matched=True
+[ho_full_Region6_s0.3_F1_cpsat_cd6c30cd5f_s1] round 2: best th=27.19988 WR=35.545 peak=27.150
+== ho_full_Region6_s0.3_F1_cpsat_cd6c30cd5f_s1: P100=27.150 WR=35.545 th=27.1999 matched=True
+[ho_full_Region6_s0.3_F1_cpsat_cd6c30cd5f_s2] round 2: best th=27.20683 WR=35.636 peak=27.191
+== ho_full_Region6_s0.3_F1_cpsat_cd6c30cd5f_s2: P100=27.191 WR=35.636 th=27.2068 matched=True

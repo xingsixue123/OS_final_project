@@ -1,0 +1,12 @@
+- `bash 0_reproduce/check_frozen.sh` (2026-09-29T02:21:43-04:00):
+  ```
+  frozen OK (94 files)
+  ```
+- Leak check (the prescribed command, marker `q3/.leak_marker` touched 2026-09-28 15:57:13):
+  ```
+  (empty: no file outside explore/ newer than the marker)
+  ```
+- Nothing under 0_reproduce/, harness_eval/ or ising_followup/ is newer than the marker:
+  ```
+  (empty)
+  ```

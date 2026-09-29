@@ -1,0 +1,24 @@
+[train] a0_rejectx_static_Region7_s0.1: 17s (waited 0s for the lock)
+[train] a0_rejectx_static_Region7_s0.2: 29s (waited 20s for the lock)
+== Region7_s0.1 RejectX/20230410_static_pf rep0: P100=38.663 WR=35.677 ap-probability=0.101083 matched=True P99=34.34 top5=37.53 meanDT=22.43 n=1
+== Region7_s0.2 RejectX/20230410_static_pf rep0: P100=38.005 WR=35.895 ap-probability=0.115193 matched=True P99=35.16 top5=36.92 meanDT=22.61 n=1
+[train] a0_rejectx_static_Region7_s0.3: 51s (waited 57s for the lock)
+== Region7_s0.3 RejectX/20230410_static_pf rep0: P100=38.893 WR=35.591 ap-probability=0.103759 matched=True P99=32.04 top5=37.05 meanDT=22.12 n=1
+[train] a0_rejectx_static_Region6_s0.1: 31s (waited 82s for the lock)
+[train] a0_rejectx_static_Region6_s0.2: 35s (waited 48s for the lock)
+== Region6_s0.1 RejectX/20230410_static_pf rep0: P100=42.251 WR=35.805 ap-probability=0.056487 matched=True P99=33.03 top5=38.43 meanDT=21.01 n=1
+[train] a0_rejectx_static_Region6_s0.3: 48s (waited 71s for the lock)
+== Region6_s0.3 RejectX/20230410_static_pf rep0: P100=39.191 WR=35.590 ap-probability=0.04461 matched=True P99=34.69 top5=36.67 meanDT=21.85 n=1
+[train] a0_coinflip_static_Region7_s0.1: 60s (waited 59s for the lock)
+== Region6_s0.2 RejectX/20230410_static_pf rep0: P100=37.293 WR=35.619 ap-probability=0.035515 matched=True P99=34.13 top5=36.32 meanDT=23.19 n=1
+[train] a0_coinflip_static_Region7_s0.2: 75s (waited 0s for the lock)
+== Region7_s0.1 CoinFlip/20230410_static_pf rep0: P100=45.997 WR=35.581 ap-probability=0.052855 matched=True P99=37.79 top5=41.13 meanDT=24.10 n=1
+== Region7_s0.2 CoinFlip/20230410_static_pf rep0: P100=41.966 WR=35.610 ap-probability=0.053757 matched=True P99=38.83 top5=41.01 meanDT=24.37 n=1
+[train] a0_coinflip_static_Region7_s0.3: 108s (waited 700s for the lock)
+== Region7_s0.3 CoinFlip/20230410_static_pf rep0: P100=45.191 WR=35.610 ap-probability=0.052247 matched=True P99=36.12 top5=40.32 meanDT=23.88 n=1
+[train] a0_coinflip_static_Region6_s0.1: 58s (waited 1153s for the lock)
+== Region6_s0.1 CoinFlip/20230410_static_pf rep0: P100=50.017 WR=35.590 ap-probability=0.050622 matched=True P99=36.09 top5=44.88 meanDT=22.79 n=1
+[train] a0_coinflip_static_Region6_s0.2: 40s (waited 587s for the lock)
+[train] a0_coinflip_static_Region6_s0.3: 43s (waited 488s for the lock)
+== Region6_s0.3 CoinFlip/20230410_static_pf rep0: P100=41.094 WR=35.617 ap-probability=0.049281 matched=True P99=38.11 top5=39.79 meanDT=23.53 n=1
+== Region6_s0.2 CoinFlip/20230410_static_pf rep0: P100=43.850 WR=35.617 ap-probability=0.047122 matched=True P99=38.10 top5=41.10 meanDT=24.60 n=1

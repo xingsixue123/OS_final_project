@@ -1,0 +1,4 @@
+threshold,wr,peak,result_file,secs
+0.620691,35.53926284598537,36.78833203833973,/home/sxing/project/OS_final_project/changes/1_literature_review/explore/common/work/runs/a0/a0_baleen_Region7_s0.2_rep1/converge/th_0.620691/ml-ap-0.620691_6_lru_366.475GB/full_0.2_0.1_cache_perf.txt.lzma,543.0395233631134
+0.640691,33.83767486451712,36.78833203833973,/home/sxing/project/OS_final_project/changes/1_literature_review/explore/common/work/runs/a0/a0_baleen_Region7_s0.2_rep1/converge/th_0.640691/ml-ap-0.640691_6_lru_366.475GB/full_0.2_0.1_cache_perf.txt.lzma,544.3081901073456
+0.660691,32.557510160170125,36.792378917387694,/home/sxing/project/OS_final_project/changes/1_literature_review/explore/common/work/runs/a0/a0_baleen_Region7_s0.2_rep1/converge/th_0.660691/ml-ap-0.660691_6_lru_366.475GB/full_0.2_0.1_cache_perf.txt.lzma,535.6699304580688

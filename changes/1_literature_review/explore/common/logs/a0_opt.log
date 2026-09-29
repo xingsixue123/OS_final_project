@@ -1,0 +1,18 @@
+[a0_full_Region7_s0.3] round 0: best --ap-threshold=30.0055 WR=34.851 peak=31.228
+[a0_full_Region7_s0.1] round 0: best --ap-threshold=30.5875 WR=36.362 peak=33.408
+[a0_full_Region7_s0.2] round 0: best --ap-threshold=30.269 WR=34.709 peak=35.277
+[a0_full_Region6_s0.1] round 0: best --ap-threshold=27.0761 WR=34.653 peak=30.901
+[a0_full_Region6_s0.3] round 0: best --ap-threshold=28.4785 WR=36.500 peak=31.643
+[a0_full_Region6_s0.2] round 0: best --ap-threshold=28.4071 WR=36.282 peak=30.616
+[a0_full_Region7_s0.3] round 1: best --ap-threshold=30.3854 WR=35.629 peak=31.228
+== Region7_s0.3 OPT/peak-blind (Baleen order, OPT-Range on OPT-Ep-Start) rep0: P100=31.228 WR=35.629 ap-threshold(MB/s)=30.3854 matched=True P99=27.42 top5=29.86 meanDT=19.27 n=6
+[a0_full_Region7_s0.1] round 1: best --ap-threshold=30.0891 WR=35.529 peak=33.676
+== Region7_s0.1 OPT/peak-blind (Baleen order, OPT-Range on OPT-Ep-Start) rep0: P100=33.676 WR=35.529 ap-threshold(MB/s)=30.0891 matched=True P99=28.72 top5=31.71 meanDT=19.45 n=6
+[a0_full_Region7_s0.2] round 1: best --ap-threshold=30.7655 WR=35.651 peak=35.277
+== Region7_s0.2 OPT/peak-blind (Baleen order, OPT-Range on OPT-Ep-Start) rep0: P100=35.277 WR=35.651 ap-threshold(MB/s)=30.7655 matched=True P99=29.84 top5=32.19 meanDT=19.61 n=6
+[a0_full_Region6_s0.1] round 1: best --ap-threshold=27.4979 WR=35.676 peak=30.901
+== Region6_s0.1 OPT/peak-blind (Baleen order, OPT-Range on OPT-Ep-Start) rep0: P100=30.901 WR=35.676 ap-threshold(MB/s)=27.4979 matched=True P99=27.41 top5=29.02 meanDT=17.94 n=6
+[a0_full_Region6_s0.3] round 1: best --ap-threshold=28.0192 WR=35.572 peak=31.964
+== Region6_s0.3 OPT/peak-blind (Baleen order, OPT-Range on OPT-Ep-Start) rep0: P100=31.964 WR=35.572 ap-threshold(MB/s)=28.0192 matched=True P99=28.56 top5=30.68 meanDT=18.63 n=6
+[a0_full_Region6_s0.2] round 1: best --ap-threshold=28.0967 WR=35.619 peak=30.616
+== Region6_s0.2 OPT/peak-blind (Baleen order, OPT-Range on OPT-Ep-Start) rep0: P100=30.616 WR=35.619 ap-threshold(MB/s)=28.0967 matched=True P99=27.72 top5=29.72 meanDT=19.65 n=6

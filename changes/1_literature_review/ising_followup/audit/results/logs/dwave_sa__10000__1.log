@@ -1,0 +1,2 @@
+it=0 mu=6.77e-07 use_raw=0.048 peak_rep=0.91385 best=0.91385 greedy=0.98610 tau=0.98314 calls=8 t=889.9
+it=1 mu=6.77e-07 use_raw=0.839 peak_rep=0.90534 best=0.90534 greedy=0.98610 tau=0.91090 calls=9 t=983.1

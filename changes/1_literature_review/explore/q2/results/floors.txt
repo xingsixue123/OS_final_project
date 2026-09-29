@@ -1,0 +1,8 @@
+dev_Region7            floor= 24.0875  argmax_w=647  Baleen-greedy peak@W= 31.7923
+dev_Region6            floor= 20.8818  argmax_w=806  Baleen-greedy peak@W= 31.8037
+full_Region7_s0.1      floor= 23.1166  argmax_w=299  Baleen-greedy peak@W= 32.6989
+full_Region7_s0.2      floor= 25.4120  argmax_w=657  Baleen-greedy peak@W= 32.9084
+full_Region7_s0.3      floor= 21.4530  argmax_w=185  Baleen-greedy peak@W= 29.3935
+full_Region6_s0.1      floor= 20.0556  argmax_w=817  Baleen-greedy peak@W= 30.2288
+full_Region6_s0.2      floor= 21.0860  argmax_w=728  Baleen-greedy peak@W= 29.6789
+full_Region6_s0.3      floor= 20.3554  argmax_w=808  Baleen-greedy peak@W= 30.9636

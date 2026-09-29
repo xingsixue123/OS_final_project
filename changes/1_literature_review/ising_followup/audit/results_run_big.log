@@ -1,0 +1,163 @@
+96 jobs
+[02:31:02] start milp n=200000 s=0 (free cores 23, mem 94GB, queued 95)
+[02:31:02] start milp n=200000 s=1 (free cores 22, mem 88GB, queued 94)
+[02:31:02] start milp n=200000 s=2 (free cores 21, mem 82GB, queued 93)
+[02:31:02] start lp n=200000 s=0 (free cores 20, mem 79GB, queued 92)
+[02:31:02] start lp n=200000 s=1 (free cores 19, mem 76GB, queued 91)
+[02:31:02] start lp n=200000 s=2 (free cores 18, mem 73GB, queued 90)
+[02:31:02] start ls_greedy n=200000 s=0 (free cores 17, mem 70GB, queued 89)
+[02:31:02] start ls_greedy n=200000 s=1 (free cores 16, mem 67GB, queued 88)
+[02:31:02] start ls_greedy n=200000 s=2 (free cores 15, mem 64GB, queued 87)
+[02:31:02] start ls_lp n=200000 s=0 (free cores 14, mem 61GB, queued 86)
+[02:31:02] start ls_lp n=200000 s=1 (free cores 13, mem 58GB, queued 85)
+[02:31:02] start ls_lp n=200000 s=2 (free cores 12, mem 55GB, queued 84)
+[02:31:02] start mq_bsb_mf n=200000 s=0 (free cores 11, mem 52GB, queued 83)
+[02:31:02] start mq_cac_mf n=200000 s=0 (free cores 10, mem 50GB, queued 82)
+[02:31:02] start mq_dsb_mf n=200000 s=0 (free cores 9, mem 47GB, queued 81)
+[02:31:02] start mfsb n=200000 s=0 (free cores 5, mem 45GB, queued 80)
+[02:31:02] start mfsb n=200000 s=1 (free cores 1, mem 43GB, queued 79)
+[02:31:02] start greedy n=200000 s=0 (free cores 0, mem 41GB, queued 78)
+[02:31:06] done  greedy n=200000 s=0 rc=0 4s
+[02:31:06] start greedy n=200000 s=1 (free cores 0, mem 41GB, queued 77)
+[02:31:14] done  greedy n=200000 s=1 rc=0 8s
+[02:31:14] start greedy n=200000 s=2 (free cores 0, mem 41GB, queued 76)
+[02:31:22] done  greedy n=200000 s=2 rc=0 8s
+[02:31:23] start dwave_sa n=50000 s=0 (free cores 0, mem 16GB, queued 75)
+[02:31:29] done  lp n=200000 s=2 rc=0 26s
+[02:31:29] start milp n=50000 s=0 (free cores 0, mem 13GB, queued 74)
+[02:31:35] done  lp n=200000 s=0 rc=0 32s
+[02:31:35] start milp n=50000 s=1 (free cores 0, mem 10GB, queued 73)
+[02:31:41] done  lp n=200000 s=1 rc=0 38s
+[02:31:41] start milp n=50000 s=2 (free cores 0, mem 7GB, queued 72)
+[02:32:39] done  ls_greedy n=200000 s=0 rc=0 96s
+[02:32:39] done  ls_greedy n=200000 s=1 rc=0 96s
+[02:32:39] start lp n=50000 s=0 (free cores 1, mem 10GB, queued 71)
+[02:32:39] start lp n=50000 s=1 (free cores 0, mem 7GB, queued 70)
+[02:32:41] done  ls_greedy n=200000 s=2 rc=0 98s
+[02:32:41] start lp n=50000 s=2 (free cores 0, mem 7GB, queued 69)
+[02:32:43] done  ls_lp n=200000 s=1 rc=0 100s
+[02:32:43] start ls_greedy n=50000 s=0 (free cores 0, mem 7GB, queued 68)
+[02:32:45] done  lp n=50000 s=1 rc=0 6s
+[02:32:45] start ls_greedy n=50000 s=1 (free cores 0, mem 7GB, queued 67)
+[02:32:47] done  ls_lp n=200000 s=0 rc=0 104s
+[02:32:47] done  ls_lp n=200000 s=2 rc=0 104s
+[02:32:47] start ls_greedy n=50000 s=2 (free cores 1, mem 10GB, queued 66)
+[02:32:47] start ls_lp n=50000 s=0 (free cores 0, mem 7GB, queued 65)
+[02:32:49] done  lp n=50000 s=0 rc=0 10s
+[02:32:49] done  lp n=50000 s=2 rc=0 8s
+[02:32:49] start ls_lp n=50000 s=1 (free cores 1, mem 10GB, queued 64)
+[02:32:49] start ls_lp n=50000 s=2 (free cores 0, mem 7GB, queued 63)
+[02:33:21] done  ls_greedy n=50000 s=0 rc=0 38s
+[02:33:21] start mq_bsb_mf n=50000 s=0 (free cores 0, mem 8GB, queued 62)
+[02:33:23] done  ls_greedy n=50000 s=1 rc=0 38s
+[02:33:23] start mq_cac_mf n=50000 s=0 (free cores 0, mem 8GB, queued 61)
+[02:33:27] done  ls_lp n=50000 s=1 rc=0 38s
+[02:33:27] start mq_dsb_mf n=50000 s=0 (free cores 0, mem 9GB, queued 60)
+[02:33:29] done  ls_greedy n=50000 s=2 rc=0 42s
+[02:33:29] start greedy n=50000 s=0 (free cores 0, mem 10GB, queued 59)
+[02:33:33] done  ls_lp n=50000 s=0 rc=0 46s
+[02:33:33] done  ls_lp n=50000 s=2 rc=0 44s
+[02:33:33] start greedy n=50000 s=1 (free cores 1, mem 14GB, queued 58)
+[02:33:33] start greedy n=50000 s=2 (free cores 0, mem 12GB, queued 57)
+[02:33:35] done  greedy n=50000 s=0 rc=0 6s
+[02:33:35] start milp n=10000 s=0 (free cores 0, mem 8GB, queued 56)
+[02:33:39] done  greedy n=50000 s=1 rc=0 6s
+[02:33:39] done  greedy n=50000 s=2 rc=0 6s
+[02:33:39] start milp n=10000 s=1 (free cores 1, mem 6GB, queued 55)
+[02:33:39] start milp n=10000 s=2 (free cores 0, mem 0GB, queued 54)
+[02:34:43] done  milp n=10000 s=0 rc=0 68s
+[02:34:43] done  milp n=10000 s=1 rc=0 64s
+[02:34:43] start cim_extahc n=10000 s=0 (free cores 0, mem 8GB, queued 53)
+[02:34:47] done  milp n=10000 s=2 rc=0 68s
+[02:34:47] start mq_bsb n=10000 s=0 (free cores 0, mem 10GB, queued 52)
+[02:36:09] done  milp n=200000 s=1 rc=0 306s
+[02:36:09] start mq_bsb n=10000 s=1 (free cores 0, mem 12GB, queued 51)
+[02:36:11] done  milp n=200000 s=0 rc=0 308s
+[02:36:11] start mq_bsb n=10000 s=2 (free cores 0, mem 14GB, queued 50)
+[02:36:35] done  milp n=50000 s=0 rc=0 306s
+[02:36:35] start mq_cac n=10000 s=0 (free cores 0, mem 16GB, queued 49)
+[02:36:39] done  milp n=50000 s=1 rc=0 304s
+[02:36:39] start mq_cac n=10000 s=1 (free cores 0, mem 18GB, queued 48)
+[02:36:47] done  milp n=50000 s=2 rc=0 306s
+[02:36:47] start mq_cac n=10000 s=2 (free cores 0, mem 20GB, queued 47)
+[02:37:41] done  milp n=200000 s=2 rc=0 398s
+[02:37:41] start mq_dsb n=10000 s=0 (free cores 0, mem 22GB, queued 46)
+[02:41:53] done  mq_dsb_mf n=50000 s=0 rc=-15 506s
+[02:41:53] start mq_dsb n=10000 s=1 (free cores 0, mem 20GB, queued 45)
+[02:41:55] done  mq_bsb_mf n=200000 s=0 rc=-15 652s
+[02:41:55] done  mq_cac_mf n=200000 s=0 rc=-15 652s
+[02:41:55] done  mq_dsb_mf n=200000 s=0 rc=-15 652s
+[02:41:55] start openjij_sa n=50000 s=0 (free cores 2, mem 1GB, queued 44)
+[02:51:27] done  mq_bsb n=10000 s=0 rc=0 1000s
+[02:51:27] done  mq_bsb n=10000 s=2 rc=0 916s
+[02:51:27] start mfsb n=200000 s=2 (free cores 0, mem 6GB, queued 43)
+[02:52:37] done  mq_cac n=10000 s=1 rc=0 958s
+[02:52:37] start mq_dsb n=10000 s=2 (free cores 0, mem 6GB, queued 42)
+[02:52:39] done  mq_bsb n=10000 s=1 rc=0 990s
+[02:52:39] start dwave_tabu n=10000 s=0 (free cores 0, mem 7GB, queued 41)
+[02:52:59] done  mfsb n=200000 s=0 rc=-15 1317s
+[02:52:59] done  mfsb n=200000 s=1 rc=-15 1317s
+[02:52:59] done  mfsb n=200000 s=2 rc=-15 92s
+[02:52:59] start mfsb n=50000 s=0 (free cores 8, mem 12GB, queued 40)
+[02:52:59] start mfsb n=50000 s=1 (free cores 4, mem 10GB, queued 39)
+[02:52:59] start mfsb n=50000 s=2 (free cores 0, mem 8GB, queued 38)
+[02:53:01] done  mq_dsb n=10000 s=0 rc=0 920s
+[02:53:01] start lp n=10000 s=0 (free cores 0, mem 9GB, queued 37)
+[02:53:03] done  cim_extahc n=10000 s=0 rc=0 1100s
+[02:53:03] start lp n=10000 s=1 (free cores 1, mem 10GB, queued 36)
+[02:53:03] start lp n=10000 s=2 (free cores 0, mem 7GB, queued 35)
+[02:53:07] done  lp n=10000 s=0 rc=0 6s
+[02:53:07] start ls_greedy n=10000 s=0 (free cores 0, mem 7GB, queued 34)
+[02:53:09] done  lp n=10000 s=1 rc=0 6s
+[02:53:09] done  lp n=10000 s=2 rc=0 6s
+[02:53:09] start ls_greedy n=10000 s=1 (free cores 1, mem 10GB, queued 33)
+[02:53:09] start ls_greedy n=10000 s=2 (free cores 0, mem 7GB, queued 32)
+[02:53:27] done  ls_greedy n=10000 s=1 rc=0 18s
+[02:53:27] start ls_lp n=10000 s=0 (free cores 0, mem 7GB, queued 31)
+[02:53:29] done  ls_greedy n=10000 s=0 rc=0 22s
+[02:53:29] start ls_lp n=10000 s=1 (free cores 0, mem 7GB, queued 30)
+[02:53:33] done  ls_greedy n=10000 s=2 rc=0 24s
+[02:53:33] start ls_lp n=10000 s=2 (free cores 0, mem 7GB, queued 29)
+[02:53:51] done  ls_lp n=10000 s=1 rc=0 22s
+[02:53:51] start mq_bsb_mf n=10000 s=0 (free cores 0, mem 8GB, queued 28)
+[02:53:55] done  ls_lp n=10000 s=0 rc=0 28s
+[02:53:55] done  ls_lp n=10000 s=2 rc=0 22s
+[02:53:55] start mq_bsb_mf n=10000 s=1 (free cores 1, mem 12GB, queued 27)
+[02:53:55] start mq_bsb_mf n=10000 s=2 (free cores 0, mem 10GB, queued 26)
+[02:54:07] done  mq_cac n=10000 s=0 rc=0 1053s
+[02:54:07] start mq_cac_mf n=10000 s=0 (free cores 0, mem 12GB, queued 25)
+[02:55:45] done  mq_cac n=10000 s=2 rc=0 1139s
+[02:55:45] start mq_cac_mf n=10000 s=1 (free cores 0, mem 14GB, queued 24)
+[02:58:34] done  mq_dsb n=10000 s=1 rc=0 1001s
+[02:58:34] start mq_cac_mf n=10000 s=2 (free cores 0, mem 16GB, queued 23)
+[03:08:26] done  dwave_tabu n=10000 s=0 rc=0 947s
+[03:08:26] start mq_dsb_mf n=10000 s=0 (free cores 0, mem 17GB, queued 22)
+[03:08:52] done  mq_dsb n=10000 s=2 rc=0 975s
+[03:08:52] start mq_dsb_mf n=10000 s=1 (free cores 0, mem 19GB, queued 21)
+[03:09:24] done  mq_bsb_mf n=10000 s=1 rc=0 929s
+[03:09:24] start mq_dsb_mf n=10000 s=2 (free cores 0, mem 19GB, queued 20)
+[03:09:32] done  mq_bsb_mf n=10000 s=0 rc=0 941s
+[03:09:32] done  mq_cac_mf n=10000 s=0 rc=0 925s
+[03:09:32] start dwave_sa n=10000 s=0 (free cores 1, mem 21GB, queued 19)
+[03:09:32] start dwave_sa n=10000 s=1 (free cores 0, mem 19GB, queued 18)
+[03:09:40] done  mq_bsb_mf n=10000 s=2 rc=0 945s
+[03:09:41] start dwave_sa n=10000 s=2 (free cores 0, mem 19GB, queued 17)
+[03:11:17] done  mq_cac_mf n=10000 s=1 rc=0 931s
+[03:11:17] start greedy n=10000 s=0 (free cores 0, mem 19GB, queued 16)
+[03:11:25] done  greedy n=10000 s=0 rc=0 8s
+[03:11:25] start greedy n=10000 s=1 (free cores 0, mem 19GB, queued 15)
+[03:11:31] done  greedy n=10000 s=1 rc=0 6s
+[03:11:31] start greedy n=10000 s=2 (free cores 0, mem 19GB, queued 14)
+[03:11:37] done  greedy n=10000 s=2 rc=0 6s
+[03:11:37] start openjij_sa n=10000 s=0 (free cores 0, mem 19GB, queued 13)
+[03:14:21] done  mq_cac_mf n=10000 s=2 rc=0 947s
+[03:14:21] start openjij_sa n=10000 s=1 (free cores 0, mem 19GB, queued 12)
+[03:16:05] done  mq_bsb_mf n=50000 s=0 rc=-15 2564s
+[03:16:05] done  mq_cac_mf n=50000 s=0 rc=-15 2562s
+[03:16:05] done  mfsb n=50000 s=0 rc=-15 1386s
+[03:16:05] done  mfsb n=50000 s=1 rc=-15 1386s
+[03:16:05] done  mfsb n=50000 s=2 rc=-15 1386s
+[03:16:05] start sb_ballistic n=10000 s=0 (free cores 10, mem 26GB, queued 11)
+[03:16:05] start sb_ballistic n=10000 s=1 (free cores 6, mem 23GB, queued 10)
+[03:16:05] start sb_ballistic n=10000 s=2 (free cores 2, mem 19GB, queued 9)
+[03:16:05] start openjij_sa n=10000 s=2 (free cores 1, mem 17GB, queued 8)

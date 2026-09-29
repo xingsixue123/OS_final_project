@@ -1,0 +1,7 @@
+threshold,wr,peak,result_file
+0.5,37.122107031469604,42.80372636619252,/home/sxing/project/OS_final_project/changes/1_literature_review/harness_eval/work/runs/dep/dep_Region6_R2_rep5/converge/th_0.500000/ml-ap-0.5_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma
+0.510131,36.01089088037265,42.80372636619252,/home/sxing/project/OS_final_project/changes/1_literature_review/harness_eval/work/runs/dep/dep_Region6_R2_rep5/converge/th_0.510131/ml-ap-0.510131_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma
+0.515131,35.569165205402435,42.94662975909584,/home/sxing/project/OS_final_project/changes/1_literature_review/harness_eval/work/runs/dep/dep_Region6_R2_rep5/converge/th_0.515131/ml-ap-0.515131_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma
+0.52,35.10882514356084,42.94662975909584,/home/sxing/project/OS_final_project/changes/1_literature_review/harness_eval/work/runs/dep/dep_Region6_R2_rep5/converge/th_0.520000/ml-ap-0.52_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma
+0.520131,35.104014684032286,42.94662975909584,/home/sxing/project/OS_final_project/changes/1_literature_review/harness_eval/work/runs/dep/dep_Region6_R2_rep5/converge/th_0.520131/ml-ap-0.520131_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma
+0.54,32.47290247232522,43.00391737888276,/home/sxing/project/OS_final_project/changes/1_literature_review/harness_eval/work/runs/dep/dep_Region6_R2_rep5/converge/th_0.540000/ml-ap-0.54_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma

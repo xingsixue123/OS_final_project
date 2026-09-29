@@ -1,0 +1,42 @@
+14 jobs already running elsewhere (23 cores, 83 GB)
+20 jobs
+[03:16:22] start mq_bsb_mf n=200000 s=0 (free cores 0, mem 15GB, queued 19)
+[03:18:41] start mq_cac_mf n=200000 s=0 (free cores 0, mem 39GB, queued 18)
+[03:21:01] start mq_dsb_mf n=200000 s=0 (free cores 1, mem 41GB, queued 17)
+[03:21:01] start mq_bsb_mf n=50000 s=0 (free cores 0, mem 39GB, queued 16)
+[03:21:35] start mq_cac_mf n=50000 s=0 (free cores 0, mem 38GB, queued 15)
+[03:23:09] start mq_dsb_mf n=50000 s=0 (free cores 0, mem 38GB, queued 14)
+[03:26:02] start mfsb n=200000 s=0 (free cores 0, mem 44GB, queued 13)
+[03:32:03] start mfsb n=200000 s=1 (free cores 2, mem 74GB, queued 12)
+[03:35:05] start mfsb n=200000 s=2 (free cores 2, mem 75GB, queued 11)
+[03:35:24] start sb_ballistic n=50000 s=0 (free cores 2, mem 37GB, queued 10)
+[04:01:18] done  mq_bsb_mf n=200000 s=0 rc=0 2696s
+[04:01:26] done  mfsb n=200000 s=0 rc=0 2124s
+[04:01:26] start mfsb n=50000 s=0 (free cores 3, mem 40GB, queued 9)
+[04:02:08] done  mq_cac_mf n=50000 s=0 rc=0 2433s
+[04:02:08] start mfsb n=50000 s=1 (free cores 0, mem 40GB, queued 8)
+[04:03:08] done  mq_bsb_mf n=50000 s=0 rc=0 2527s
+[04:03:30] done  mq_dsb_mf n=50000 s=0 rc=0 2421s
+[04:05:18] done  mfsb n=200000 s=1 rc=0 1995s
+[04:05:18] start sb_discrete n=50000 s=0 (free cores 2, mem 4GB, queued 7)
+[04:09:14] done  mq_dsb_mf n=200000 s=0 rc=0 2893s
+[04:09:42] done  mfsb n=200000 s=2 rc=0 2077s
+[04:09:42] start mfsb n=50000 s=2 (free cores 3, mem 7GB, queued 6)
+[04:12:38] done  sb_discrete n=50000 s=0 rc=-15 440s
+[04:12:38] start sb_discrete n=10000 s=0 (free cores 3, mem 46GB, queued 5)
+[04:15:38] done  mq_cac_mf n=200000 s=0 rc=0 3417s
+[04:15:38] start sb_discrete n=10000 s=1 (free cores 0, mem 44GB, queued 4)
+[04:27:05] done  mfsb n=50000 s=0 rc=0 1538s
+[04:27:05] start sb_discrete n=10000 s=2 (free cores 0, mem 43GB, queued 3)
+[04:28:53] done  mfsb n=50000 s=1 rc=0 1604s
+[04:28:53] start mfsb n=10000 s=0 (free cores 0, mem 43GB, queued 2)
+[04:30:35] done  mfsb n=10000 s=0 rc=0 102s
+[04:30:35] start mfsb n=10000 s=1 (free cores 0, mem 43GB, queued 1)
+[04:31:37] done  mfsb n=50000 s=2 rc=0 1314s
+[04:31:37] start mfsb n=10000 s=2 (free cores 0, mem 43GB, queued 0)
+[04:31:47] done  sb_discrete n=10000 s=0 rc=0 1148s
+[04:32:01] done  mfsb n=10000 s=1 rc=0 86s
+[04:32:19] done  mfsb n=10000 s=2 rc=0 42s
+[04:32:49] done  sb_discrete n=10000 s=1 rc=0 1030s
+[04:43:13] done  sb_discrete n=10000 s=2 rc=0 968s
+[04:48:09] done  sb_ballistic n=50000 s=0 rc=0 4365s

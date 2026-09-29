@@ -1,0 +1,24 @@
+[train] a0_day1_Region7_s0.1: 4s (waited 0s for the lock)
+[dump] /home/sxing/project/OS_final_project/changes/1_literature_review/explore/common/inst/day1_Region7_s0.1.npz 0.7 MB
+[train] a0_full_Region7_s0.1: 30s (waited 0s for the lock)
+[dump] /home/sxing/project/OS_final_project/changes/1_literature_review/explore/common/inst/full_Region7_s0.1.npz 4.6 MB
+[train] a0_day1_Region7_s0.2: 5s (waited 0s for the lock)
+[dump] /home/sxing/project/OS_final_project/changes/1_literature_review/explore/common/inst/day1_Region7_s0.2.npz 0.7 MB
+[train] a0_full_Region7_s0.2: 32s (waited 0s for the lock)
+[dump] /home/sxing/project/OS_final_project/changes/1_literature_review/explore/common/inst/full_Region7_s0.2.npz 4.7 MB
+[train] a0_day1_Region7_s0.3: 4s (waited 0s for the lock)
+[dump] /home/sxing/project/OS_final_project/changes/1_literature_review/explore/common/inst/day1_Region7_s0.3.npz 0.7 MB
+[train] a0_full_Region7_s0.3: 30s (waited 0s for the lock)
+[dump] /home/sxing/project/OS_final_project/changes/1_literature_review/explore/common/inst/full_Region7_s0.3.npz 4.6 MB
+[train] a0_day1_Region6_s0.1: 4s (waited 0s for the lock)
+[dump] /home/sxing/project/OS_final_project/changes/1_literature_review/explore/common/inst/day1_Region6_s0.1.npz 0.6 MB
+[train] a0_full_Region6_s0.1: 29s (waited 0s for the lock)
+[dump] /home/sxing/project/OS_final_project/changes/1_literature_review/explore/common/inst/full_Region6_s0.1.npz 3.9 MB
+[train] a0_day1_Region6_s0.2: 4s (waited 0s for the lock)
+[dump] /home/sxing/project/OS_final_project/changes/1_literature_review/explore/common/inst/day1_Region6_s0.2.npz 0.6 MB
+[train] a0_full_Region6_s0.2: 30s (waited 0s for the lock)
+[dump] /home/sxing/project/OS_final_project/changes/1_literature_review/explore/common/inst/full_Region6_s0.2.npz 4.2 MB
+[train] a0_day1_Region6_s0.3: 4s (waited 0s for the lock)
+[dump] /home/sxing/project/OS_final_project/changes/1_literature_review/explore/common/inst/day1_Region6_s0.3.npz 0.6 MB
+[train] a0_full_Region6_s0.3: 29s (waited 0s for the lock)
+[dump] /home/sxing/project/OS_final_project/changes/1_literature_review/explore/common/inst/full_Region6_s0.3.npz 4.0 MB

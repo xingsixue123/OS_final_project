@@ -1,0 +1,17 @@
+# Runtime state and large artifacts (regenerable; not versioned)
+env/
+.cache/
+.home/
+work/
+raw/
+data/
+inst/
+sols/
+survey_scratch/
+__pycache__/
+*.pyc
+.leak_marker
+.train.lock
+.sim_queue.d/
+.sim_slots.d/
+*_READY

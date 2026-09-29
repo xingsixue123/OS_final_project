@@ -1,0 +1,10 @@
+[dump] /home/sxing/project/OS_final_project/changes/1_literature_review/explore/common/inst/day1_Region7_s0.npz 0.7 MB
+[dump] /home/sxing/project/OS_final_project/changes/1_literature_review/explore/common/inst/full_Region7_s0.npz 4.7 MB
+[train] a0_fullml_Region7_s0: 30s (waited 0s for the lock)
+[dump] /home/sxing/project/OS_final_project/changes/1_literature_review/explore/common/inst/fullml_Region7_s0.npz 4.6 MB
+[train] a0_day1_Region6_s0: 4s (waited 0s for the lock)
+[dump] /home/sxing/project/OS_final_project/changes/1_literature_review/explore/common/inst/day1_Region6_s0.npz 0.6 MB
+[train] a0_full_Region6_s0: 28s (waited 0s for the lock)
+[dump] /home/sxing/project/OS_final_project/changes/1_literature_review/explore/common/inst/full_Region6_s0.npz 4.1 MB
+[train] a0_fullml_Region6_s0: 28s (waited 0s for the lock)
+[dump] /home/sxing/project/OS_final_project/changes/1_literature_review/explore/common/inst/fullml_Region6_s0.npz 4.1 MB

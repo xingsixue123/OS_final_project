@@ -1,0 +1,8 @@
+[dev_R7_F2b_ls_t6] round 0: best th=28.90000 WR=35.621 peak=28.470
+== dev_R7_F2b_ls_t6: P100=28.470 WR=35.621 th=28.9000 matched=True
+[dev_R6_F2b_ls_t6] round 0: best th=25.50000 WR=35.661 peak=28.284
+== dev_R6_F2b_ls_t6: P100=28.284 WR=35.661 th=25.5000 matched=True
+[dev_R7_F2b_pt_t8] round 0: best th=28.90000 WR=35.507 peak=28.528
+== dev_R7_F2b_pt_t8: P100=28.528 WR=35.507 th=28.9000 matched=True
+[dev_R6_F2b_pt_t8] round 0: best th=25.50000 WR=35.636 peak=28.243
+== dev_R6_F2b_pt_t8: P100=28.243 WR=35.636 th=25.5000 matched=True

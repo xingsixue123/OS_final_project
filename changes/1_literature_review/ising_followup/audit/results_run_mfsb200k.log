@@ -1,0 +1,7 @@
+3 jobs
+[02:53:03] start mfsb n=200000 s=0 (free cores 20, mem 98GB, queued 2)
+[02:53:03] start mfsb n=200000 s=1 (free cores 16, mem 95GB, queued 1)
+[02:53:03] start mfsb n=200000 s=2 (free cores 12, mem 93GB, queued 0)
+[03:16:05] done  mfsb n=200000 s=0 rc=-15 1383s
+[03:16:05] done  mfsb n=200000 s=1 rc=-15 1383s
+[03:16:05] done  mfsb n=200000 s=2 rc=-15 1383s

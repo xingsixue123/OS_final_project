@@ -1,0 +1,17 @@
+[ho_full_Region7_s0.1_R0] round 0: best th=30.00000 WR=35.436 peak=33.676
+== ho_full_Region7_s0.1_R0: P100=33.676 WR=35.436 th=30.0000 matched=True
+[ho_full_Region7_s0.2_R0] round 0: best th=31.00000 WR=36.083 peak=35.277
+[ho_full_Region7_s0.2_R0] round 1: best th=30.74421 WR=35.594 peak=35.277
+== ho_full_Region7_s0.2_R0: P100=35.277 WR=35.594 th=30.7442 matched=True
+[ho_full_Region6_s0.1_R0] round 0: best th=27.80000 WR=36.316 peak=30.959
+[ho_full_Region6_s0.3_R0] round 0: best th=27.80000 WR=35.190 peak=31.964
+[ho_full_Region7_s0.3_R0] round 0: best th=30.00000 WR=34.818 peak=31.228
+[ho_full_Region6_s0.2_R0] round 0: best th=27.80000 WR=34.884 peak=30.616
+[ho_full_Region6_s0.1_R0] round 1: best th=27.50337 WR=35.623 peak=30.901
+== ho_full_Region6_s0.1_R0: P100=30.901 WR=35.623 th=27.5034 matched=True
+[ho_full_Region6_s0.3_R0] round 1: best th=28.00994 WR=35.588 peak=31.964
+== ho_full_Region6_s0.3_R0: P100=31.964 WR=35.588 th=28.0099 matched=True
+[ho_full_Region7_s0.3_R0] round 1: best th=30.40077 WR=35.638 peak=31.228
+== ho_full_Region7_s0.3_R0: P100=31.228 WR=35.638 th=30.4008 matched=True
+[ho_full_Region6_s0.2_R0] round 1: best th=28.13779 WR=35.715 peak=30.616
+== ho_full_Region6_s0.2_R0: P100=30.616 WR=35.715 th=28.1378 matched=True

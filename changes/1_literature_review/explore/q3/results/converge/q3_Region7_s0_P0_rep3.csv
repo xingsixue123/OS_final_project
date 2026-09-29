@@ -1,0 +1,4 @@
+threshold,wr,peak,result_file,secs
+0.364428,41.97182273757833,38.93173724418165,/home/sxing/project/OS_final_project/changes/1_literature_review/explore/q3/work/runs/q3/q3_Region7_s0_P0_rep3/converge/th_0.364428/ml-ap-0.364428_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma,1596.3845391273499
+0.376428,39.10975579148157,39.129403004351474,/home/sxing/project/OS_final_project/changes/1_literature_review/explore/q3/work/runs/q3/q3_Region7_s0_P0_rep3/converge/th_0.376428/ml-ap-0.376428_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma,1637.6219320297241
+0.388428,35.36547616059701,39.31373025123035,/home/sxing/project/OS_final_project/changes/1_literature_review/explore/q3/work/runs/q3/q3_Region7_s0_P0_rep3/converge/th_0.388428/ml-ap-0.388428_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma,1702.2659015655518

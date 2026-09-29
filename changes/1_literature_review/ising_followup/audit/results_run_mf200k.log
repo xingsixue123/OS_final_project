@@ -1,0 +1,7 @@
+3 jobs
+[02:42:01] start mq_bsb_mf n=200000 s=0 (free cores 23, mem 97GB, queued 2)
+[02:42:01] start mq_cac_mf n=200000 s=0 (free cores 22, mem 95GB, queued 1)
+[02:42:01] start mq_dsb_mf n=200000 s=0 (free cores 21, mem 92GB, queued 0)
+[03:16:06] done  mq_bsb_mf n=200000 s=0 rc=-15 2044s
+[03:16:06] done  mq_cac_mf n=200000 s=0 rc=-15 2044s
+[03:16:06] done  mq_dsb_mf n=200000 s=0 rc=-15 2044s

@@ -1,0 +1,69 @@
+[train] a0_baleen_Region7_s0.1_rep1: 20s (waited 17s for the lock)
+[train] a0_baleen_Region7_s0.2_rep1: 57s (waited 29s for the lock)
+[train] a0_baleen_Region7_s0.3_rep1: 82s (waited 51s for the lock)
+[train] a0_baleen_Region6_s0.1_rep1: 48s (waited 31s for the lock)
+[train] a0_baleen_Region6_s0.2_rep1: 71s (waited 35s for the lock)
+[a0_baleen_Region7_s0.1_rep1] round 0: best --ap-threshold=0.544254 WR=36.173 peak=36.354
+[train] a0_baleen_Region6_s0.3_rep1: 59s (waited 48s for the lock)
+[a0_baleen_Region7_s0.2_rep1] round 0: best --ap-threshold=0.620691 WR=35.539 peak=36.788
+== Region7_s0.2 Baleen/ML-Range on ML-When rep1: P100=36.788 WR=35.539 ap-threshold(prob)=0.620691 matched=True P99=33.02 top5=35.06 meanDT=21.41 n=3
+[train] a0_baleen_Region7_s0.1_rep2: 123s (waited 136s for the lock)
+[a0_baleen_Region7_s0.3_rep1] round 0: best --ap-threshold=0.563887 WR=35.756 peak=37.530
+== Region7_s0.3 Baleen/ML-Range on ML-When rep1: P100=37.530 WR=35.756 ap-threshold(prob)=0.563887 matched=True P99=30.68 top5=36.09 meanDT=20.93 n=3
+[a0_baleen_Region6_s0.1_rep1] round 0: best --ap-threshold=0.784678 WR=34.723 peak=40.895
+[a0_baleen_Region6_s0.2_rep1] round 0: best --ap-threshold=0.783651 WR=34.285 peak=36.313
+[a0_baleen_Region7_s0.1_rep1] round 1: best --ap-threshold=0.554348 WR=35.476 peak=36.293
+== Region7_s0.1 Baleen/ML-Range on ML-When rep1: P100=36.293 WR=35.476 ap-threshold(prob)=0.554348 matched=True P99=32.08 top5=34.84 meanDT=21.07 n=6
+[train] a0_baleen_Region7_s0.2_rep2: 104s (waited 685s for the lock)
+[train] a0_baleen_Region7_s0.3_rep2: 97s (waited 0s for the lock)
+[a0_baleen_Region6_s0.3_rep1] round 0: best --ap-threshold=0.790714 WR=35.232 peak=37.166
+[a0_baleen_Region7_s0.1_rep2] round 0: best --ap-threshold=0.544254 WR=36.181 peak=36.609
+[a0_baleen_Region6_s0.1_rep1] round 1: best --ap-threshold=0.774678 WR=35.473 peak=40.895
+== Region6_s0.1 Baleen/All on Partial Hit rep1: P100=40.895 WR=35.473 ap-threshold(prob)=0.774678 matched=True P99=32.25 top5=37.94 meanDT=20.39 n=6
+[a0_baleen_Region6_s0.2_rep1] round 1: best --ap-threshold=0.773651 WR=35.280 peak=36.313
+== Region6_s0.2 Baleen/All on Partial Hit rep1: P100=36.313 WR=35.280 ap-threshold(prob)=0.773651 matched=True P99=32.23 top5=35.31 meanDT=22.34 n=6
+[a0_baleen_Region7_s0.2_rep2] round 0: best --ap-threshold=0.640691 WR=35.015 peak=36.796
+[train] a0_baleen_Region6_s0.1_rep2: 80s (waited 1010s for the lock)
+[a0_baleen_Region7_s0.3_rep2] round 0: best --ap-threshold=0.583887 WR=34.829 peak=38.260
+[a0_baleen_Region7_s0.1_rep2] round 1: best --ap-threshold=0.551461 WR=35.426 peak=36.641
+== Region7_s0.1 Baleen/ML-Range on ML-When rep2: P100=36.641 WR=35.426 ap-threshold(prob)=0.551461 matched=True P99=32.36 top5=35.06 meanDT=21.00 n=6
+[train] a0_baleen_Region6_s0.2_rep2: 71s (waited 547s for the lock)
+[a0_baleen_Region7_s0.2_rep2] round 1: best --ap-threshold=0.633215 WR=35.673 peak=36.788
+== Region7_s0.2 Baleen/ML-Range on ML-When rep2: P100=36.788 WR=35.673 ap-threshold(prob)=0.633215 matched=True P99=33.14 top5=35.11 meanDT=21.47 n=6
+[a0_baleen_Region6_s0.1_rep2] round 0: best --ap-threshold=0.784678 WR=34.272 peak=41.300
+[train] a0_baleen_Region6_s0.3_rep2: 51s (waited 460s for the lock)
+[a0_baleen_Region7_s0.3_rep2] round 1: best --ap-threshold=0.57453 WR=35.674 peak=38.009
+== Region7_s0.3 Baleen/ML-Range on ML-When rep2: P100=38.009 WR=35.674 ap-threshold(prob)=0.57453 matched=True P99=30.70 top5=36.05 meanDT=20.89 n=6
+[a0_baleen_Region6_s0.1_rep2] round 1: best --ap-threshold=0.764678 WR=36.031 peak=40.895
+[train] a0_baleen_Region7_s0.1_rep3: 133s (waited 570s for the lock)
+[a0_baleen_Region6_s0.3_rep1] round 1: best --ap-threshold=0.790714 WR=35.232 peak=37.166
+[a0_baleen_Region6_s0.3_rep2] round 0: best --ap-threshold=0.790714 WR=35.917 peak=36.678
+== Region6_s0.3 Baleen/All on Partial Hit rep2: P100=36.678 WR=35.917 ap-threshold(prob)=0.790714 matched=True P99=33.42 top5=35.69 meanDT=21.05 n=3
+[train] a0_baleen_Region7_s0.2_rep3: 76s (waited 391s for the lock)
+[train] a0_baleen_Region7_s0.3_rep3: 78s (waited 168s for the lock)
+[train] a0_baleen_Region6_s0.1_rep3: 61s (waited 193s for the lock)
+[train] a0_baleen_Region6_s0.2_rep3: 63s (waited 0s for the lock)
+[train] a0_baleen_Region6_s0.3_rep3: 78s (waited 0s for the lock)
+[a0_baleen_Region7_s0.1_rep3] round 0: best --ap-threshold=0.564254 WR=35.839 peak=36.776
+== Region7_s0.1 Baleen/ML-Range on ML-When rep3: P100=36.776 WR=35.839 ap-threshold(prob)=0.564254 matched=True P99=32.07 top5=34.93 meanDT=21.04 n=3
+[a0_baleen_Region6_s0.3_rep1] round 2: best --ap-threshold=0.786539 WR=35.619 peak=37.178
+== Region6_s0.3 Baleen/All on Partial Hit rep1: P100=37.178 WR=35.619 ap-threshold(prob)=0.786539 matched=True P99=33.18 top5=35.98 meanDT=21.06 n=9
+[a0_baleen_Region6_s0.2_rep2] round 0: best --ap-threshold=0.783651 WR=33.969 peak=36.143
+[a0_baleen_Region7_s0.2_rep3] round 0: best --ap-threshold=0.640691 WR=34.928 peak=36.784
+[a0_baleen_Region7_s0.3_rep3] round 0: best --ap-threshold=0.563887 WR=35.574 peak=37.894
+== Region7_s0.3 Baleen/ML-Range on ML-When rep3: P100=37.894 WR=35.574 ap-threshold(prob)=0.563887 matched=True P99=30.71 top5=35.85 meanDT=20.92 n=3
+[a0_baleen_Region6_s0.1_rep3] round 0: best --ap-threshold=0.784678 WR=34.055 peak=40.895
+[a0_baleen_Region6_s0.2_rep3] round 0: best --ap-threshold=0.783651 WR=34.335 peak=36.143
+[a0_baleen_Region6_s0.3_rep3] round 0: best --ap-threshold=0.790714 WR=35.737 peak=37.038
+== Region6_s0.3 Baleen/All on Partial Hit rep3: P100=37.038 WR=35.737 ap-threshold(prob)=0.790714 matched=True P99=33.35 top5=35.81 meanDT=21.09 n=3
+[a0_baleen_Region6_s0.1_rep2] round 2: best --ap-threshold=0.769124 WR=35.559 peak=41.011
+== Region6_s0.1 Baleen/All on Partial Hit rep2: P100=41.011 WR=35.559 ap-threshold(prob)=0.769124 matched=True P99=32.30 top5=38.24 meanDT=20.41 n=9
+[a0_baleen_Region6_s0.2_rep2] round 1: best --ap-threshold=0.76181 WR=35.905 peak=36.313
+== Region6_s0.2 Baleen/All on Partial Hit rep2: P100=36.313 WR=35.905 ap-threshold(prob)=0.76181 matched=True P99=32.37 top5=35.15 meanDT=22.31 n=6
+[a0_baleen_Region7_s0.2_rep3] round 1: best --ap-threshold=0.631138 WR=35.706 peak=36.784
+== Region7_s0.2 Baleen/ML-Range on ML-When rep3: P100=36.784 WR=35.706 ap-threshold(prob)=0.631138 matched=True P99=33.02 top5=35.01 meanDT=21.38 n=6
+[a0_baleen_Region6_s0.1_rep3] round 1: best --ap-threshold=0.764678 WR=35.850 peak=40.895
+== Region6_s0.1 Baleen/All on Partial Hit rep3: P100=40.895 WR=35.850 ap-threshold(prob)=0.764678 matched=True P99=32.35 top5=37.77 meanDT=20.39 n=6
+[a0_baleen_Region6_s0.2_rep3] round 1: best --ap-threshold=0.763651 WR=35.981 peak=36.313
+[a0_baleen_Region6_s0.2_rep3] round 2: best --ap-threshold=0.767961 WR=35.543 peak=36.143
+== Region6_s0.2 Baleen/All on Partial Hit rep3: P100=36.143 WR=35.543 ap-threshold(prob)=0.767961 matched=True P99=32.42 top5=35.26 meanDT=22.31 n=9

@@ -1,0 +1,13 @@
+package	result	seconds
+conda python=3.11	rc=0	10
+torch	rc=0	10
+numpy-scipy-numba	rc=0	5
+highspy	rc=0	1
+pyscipopt	rc=0	0
+ortools	rc=0	3
+optuna	rc=0	2
+simulated-bifurcation	rc=0	1
+dwave-samplers-dimod	rc=0	1
+openjij	rc=0	1
+mindquantum	rc=0	5
+pandas	rc=0	1

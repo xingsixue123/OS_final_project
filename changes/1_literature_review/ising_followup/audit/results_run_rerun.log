@@ -1,0 +1,80 @@
+2 jobs already running elsewhere (8 cores, 66 GB)
+39 jobs
+[04:33:05] start lp n=200000 s=0 (free cores 15, mem 31GB, queued 38)
+[04:33:05] start lp n=200000 s=1 (free cores 14, mem 28GB, queued 37)
+[04:33:05] start lp n=200000 s=2 (free cores 13, mem 25GB, queued 36)
+[04:33:05] start greedy n=200000 s=0 (free cores 12, mem 23GB, queued 35)
+[04:33:05] start greedy n=200000 s=1 (free cores 11, mem 21GB, queued 34)
+[04:33:05] start greedy n=200000 s=2 (free cores 10, mem 19GB, queued 33)
+[04:33:05] start lp n=10000 s=0 (free cores 9, mem 16GB, queued 32)
+[04:33:05] start lp n=10000 s=1 (free cores 8, mem 13GB, queued 31)
+[04:33:05] start lp n=10000 s=2 (free cores 7, mem 10GB, queued 30)
+[04:33:05] start greedy n=10000 s=0 (free cores 6, mem 8GB, queued 29)
+[04:33:05] start greedy n=10000 s=1 (free cores 5, mem 6GB, queued 28)
+[04:33:05] start greedy n=10000 s=2 (free cores 4, mem 4GB, queued 27)
+[04:33:05] start lp n=1000 s=0 (free cores 3, mem 1GB, queued 26)
+[04:33:07] done  lp n=10000 s=0 rc=0 2s
+[04:33:07] done  lp n=10000 s=1 rc=0 2s
+[04:33:07] done  lp n=10000 s=2 rc=0 2s
+[04:33:07] done  greedy n=10000 s=0 rc=0 2s
+[04:33:07] done  greedy n=10000 s=1 rc=0 2s
+[04:33:07] done  greedy n=10000 s=2 rc=0 2s
+[04:33:07] done  lp n=1000 s=0 rc=0 2s
+[04:33:07] start lp n=1000 s=1 (free cores 9, mem 16GB, queued 25)
+[04:33:07] start lp n=1000 s=2 (free cores 8, mem 13GB, queued 24)
+[04:33:07] start mq_bsb_mf n=1000 s=0 (free cores 7, mem 11GB, queued 23)
+[04:33:07] start mq_bsb_mf n=1000 s=1 (free cores 6, mem 9GB, queued 22)
+[04:33:07] start mq_bsb_mf n=1000 s=2 (free cores 5, mem 7GB, queued 21)
+[04:33:07] start mq_cac_mf n=1000 s=0 (free cores 4, mem 5GB, queued 20)
+[04:33:07] start mq_cac_mf n=1000 s=1 (free cores 3, mem 3GB, queued 19)
+[04:33:07] start mq_cac_mf n=1000 s=2 (free cores 2, mem 1GB, queued 18)
+[04:33:09] done  greedy n=200000 s=0 rc=0 4s
+[04:33:09] done  greedy n=200000 s=1 rc=0 4s
+[04:33:09] done  greedy n=200000 s=2 rc=0 4s
+[04:33:09] done  lp n=1000 s=1 rc=0 2s
+[04:33:09] done  lp n=1000 s=2 rc=0 2s
+[04:33:09] start mq_dsb_mf n=1000 s=0 (free cores 6, mem 11GB, queued 17)
+[04:33:09] start mq_dsb_mf n=1000 s=1 (free cores 5, mem 9GB, queued 16)
+[04:33:09] start mq_dsb_mf n=1000 s=2 (free cores 4, mem 7GB, queued 15)
+[04:33:09] start mfsb n=1000 s=0 (free cores 0, mem 5GB, queued 14)
+[04:33:11] done  lp n=200000 s=0 rc=0 6s
+[04:33:11] done  lp n=200000 s=1 rc=0 6s
+[04:33:11] done  lp n=200000 s=2 rc=0 6s
+[04:33:11] start greedy n=1000 s=0 (free cores 2, mem 12GB, queued 13)
+[04:33:11] start greedy n=1000 s=1 (free cores 1, mem 10GB, queued 12)
+[04:33:11] start greedy n=1000 s=2 (free cores 0, mem 8GB, queued 11)
+[04:33:13] done  greedy n=1000 s=0 rc=0 2s
+[04:33:13] done  greedy n=1000 s=1 rc=0 2s
+[04:33:13] done  greedy n=1000 s=2 rc=0 2s
+[04:33:17] done  mq_bsb_mf n=1000 s=0 rc=0 10s
+[04:33:17] done  mq_bsb_mf n=1000 s=1 rc=0 10s
+[04:33:17] done  mq_bsb_mf n=1000 s=2 rc=0 10s
+[04:33:17] start mfsb n=1000 s=1 (free cores 2, mem 18GB, queued 10)
+[04:33:19] done  mq_dsb_mf n=1000 s=0 rc=0 10s
+[04:33:19] done  mq_dsb_mf n=1000 s=1 rc=0 10s
+[04:33:19] done  mfsb n=1000 s=0 rc=0 10s
+[04:33:19] start mfsb n=1000 s=2 (free cores 4, mem 22GB, queued 9)
+[04:33:19] start mfsb_penalty_k0.1 n=1000 s=0 (free cores 0, mem 20GB, queued 8)
+[04:33:21] done  mq_dsb_mf n=1000 s=2 rc=0 12s
+[04:33:25] done  mfsb_penalty_k0.1 n=1000 s=0 rc=0 6s
+[04:33:25] start mfsb_penalty_k0.1 n=1000 s=1 (free cores 1, mem 22GB, queued 7)
+[04:33:27] done  mfsb n=1000 s=1 rc=0 10s
+[04:33:27] start mfsb_penalty_k0.1 n=1000 s=2 (free cores 1, mem 22GB, queued 6)
+[04:33:31] done  mfsb_penalty_k0.1 n=1000 s=1 rc=0 6s
+[04:33:31] start mfsb_penalty_k1.0 n=1000 s=0 (free cores 1, mem 22GB, queued 5)
+[04:33:33] done  mfsb n=1000 s=2 rc=0 14s
+[04:33:33] done  mfsb_penalty_k0.1 n=1000 s=2 rc=0 6s
+[04:33:33] start mfsb_penalty_k1.0 n=1000 s=1 (free cores 5, mem 24GB, queued 4)
+[04:33:33] start mfsb_penalty_k1.0 n=1000 s=2 (free cores 1, mem 22GB, queued 3)
+[04:33:35] done  mfsb_penalty_k1.0 n=1000 s=0 rc=0 4s
+[04:33:35] start mfsb_penalty_k10.0 n=1000 s=0 (free cores 1, mem 22GB, queued 2)
+[04:33:37] done  mfsb_penalty_k1.0 n=1000 s=1 rc=0 4s
+[04:33:37] done  mfsb_penalty_k1.0 n=1000 s=2 rc=0 4s
+[04:33:37] start mfsb_penalty_k10.0 n=1000 s=1 (free cores 5, mem 24GB, queued 1)
+[04:33:37] start mfsb_penalty_k10.0 n=1000 s=2 (free cores 1, mem 22GB, queued 0)
+[04:33:39] done  mfsb_penalty_k10.0 n=1000 s=0 rc=0 4s
+[04:33:41] done  mfsb_penalty_k10.0 n=1000 s=1 rc=0 4s
+[04:33:41] done  mfsb_penalty_k10.0 n=1000 s=2 rc=0 4s
+[04:34:41] done  mq_cac_mf n=1000 s=1 rc=0 94s
+[04:34:43] done  mq_cac_mf n=1000 s=2 rc=0 96s
+[04:34:45] done  mq_cac_mf n=1000 s=0 rc=0 98s

@@ -1,0 +1,32 @@
+{
+ "region": "Region7",
+ "start": 0.0,
+ "ea": 5653.153,
+ "n_rows": 31105,
+ "n_rows_dump": 31105,
+ "n_unmapped": 0,
+ "rows_all_equal": 31105,
+ "max_abs_diff_per_col": {
+  "feat_metadata|op": 0.0,
+  "feat_metadata|ns": 0.0,
+  "feat_metadata|user": 0.0,
+  "feat_metadata_size|start": 0.0,
+  "feat_metadata_size|end": 0.0,
+  "feat_metadata_size|size": 0.0,
+  "feat_dynamic_b|0": 0.0,
+  "feat_dynamic_b|1": 0.0,
+  "feat_dynamic_b|2": 0.0,
+  "feat_dynamic_b|3": 0.0,
+  "feat_dynamic_b|4": 0.0,
+  "feat_dynamic_b|5": 0.0,
+  "feat_dynamic_c_combined|0": 0.0,
+  "feat_dynamic_c_combined|1": 0.0,
+  "feat_dynamic_c_combined|2": 0.0,
+  "feat_dynamic_c_combined|3": 0.0,
+  "feat_dynamic_c_combined|4": 0.0,
+  "feat_dynamic_c_combined|5": 0.0
+ },
+ "label_equal": 31105,
+ "n_pos_trainer": 10819,
+ "n_pos_dump_rows": 10819
+}

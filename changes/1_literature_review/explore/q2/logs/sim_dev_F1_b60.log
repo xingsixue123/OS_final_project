@@ -1,0 +1,13 @@
+[dev_R7_F1_cpsat_b60] round 0: best th=30.00000 WR=35.387 peak=27.854
+== dev_R7_F1_cpsat_b60: P100=27.854 WR=35.387 th=30.0000 matched=True
+[dev_R6_F1_cpsat_b60] round 0: best th=26.30000 WR=36.475 peak=27.997
+[dev_R6_F1_cpsat_b60] round 1: best th=25.85820 WR=35.753 peak=27.912
+== dev_R6_F1_cpsat_b60: P100=27.912 WR=35.753 th=25.8582 matched=True
+[dev_R7_F1_ls_b60] round 0: best th=31.00000 WR=35.703 peak=27.948
+== dev_R7_F1_ls_b60: P100=27.948 WR=35.703 th=31.0000 matched=True
+[dev_R6_F1_ls_b60] round 0: best th=26.30000 WR=35.637 peak=27.587
+== dev_R6_F1_ls_b60: P100=27.587 WR=35.637 th=26.3000 matched=True
+[dev_R7_F1_pt_b60] round 0: best th=30.00000 WR=35.371 peak=27.883
+== dev_R7_F1_pt_b60: P100=27.883 WR=35.371 th=30.0000 matched=True
+[dev_R6_F1_pt_b60] round 0: best th=26.30000 WR=35.912 peak=27.858
+== dev_R6_F1_pt_b60: P100=27.858 WR=35.912 th=26.3000 matched=True

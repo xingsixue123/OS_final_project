@@ -1,0 +1,10 @@
+it=0 mu=4.337e-06 use_raw=0.158 peak_rep=0.97161 best=0.97161 greedy=0.99328 tau=0.99030 calls=8 t=3.3
+it=1 mu=4.337e-06 use_raw=0.869 peak_rep=0.96792 best=0.96792 greedy=0.99328 tau=0.96863 calls=12 t=4.9
+it=2 mu=4.337e-06 use_raw=0.918 peak_rep=0.96449 best=0.96449 greedy=0.99328 tau=0.96494 calls=16 t=6.6
+it=3 mu=1.227e-05 use_raw=0.897 peak_rep=0.96200 best=0.96200 greedy=0.99328 tau=0.96151 calls=20 t=8.2
+it=4 mu=1.227e-05 use_raw=0.908 peak_rep=0.96105 best=0.96105 greedy=0.99328 tau=0.95902 calls=24 t=9.8
+it=5 mu=1.227e-05 use_raw=0.955 peak_rep=0.96119 best=0.96105 greedy=0.99328 tau=0.95807 calls=25 t=10.2
+it=6 mu=1.227e-05 use_raw=0.916 peak_rep=0.96126 best=0.96105 greedy=0.99328 tau=0.95807 calls=27 t=11.1
+it=7 mu=1.227e-05 use_raw=0.950 peak_rep=0.96123 best=0.96105 greedy=0.99328 tau=0.95807 calls=28 t=11.5
+it=8 mu=1.227e-05 use_raw=0.999 peak_rep=0.96334 best=0.96105 greedy=0.99328 tau=0.95807 calls=29 t=11.9
+it=9 mu=1.227e-05 use_raw=0.994 peak_rep=0.96326 best=0.96105 greedy=0.99328 tau=0.95807 calls=30 t=12.2

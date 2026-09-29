@@ -1,0 +1,5 @@
+run,n,identical_thresholds,max_abs_th_diff,label_diff,n_pos,scores_identical,diff_all_in_score_ties
+A1,12320,12320,0.0,0,2361,True,
+A2,12320,1442,171.0758556035231,0,2361,True,True
+B1,12320,1437,168.791449173042,0,2361,True,True
+C1,12320,1490,168.85076561613874,0,2361,True,True

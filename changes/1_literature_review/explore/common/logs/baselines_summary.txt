@@ -1,0 +1,33 @@
+    instance   method  n  p100_mean  p100_sd  wr_min  wr_max  all_matched
+  Region6_s0   Baleen  9     43.248    0.041  35.273  35.675         True
+  Region6_s0 CoinFlip  1     43.445      NaN  35.569  35.569         True
+  Region6_s0      OPT  1     35.556      NaN  35.681  35.681         True
+  Region6_s0  RejectX  1     42.321      NaN  35.673  35.673         True
+Region6_s0.1   Baleen  3     40.934    0.067  35.473  35.850         True
+Region6_s0.1 CoinFlip  1     50.017      NaN  35.590  35.590         True
+Region6_s0.1      OPT  1     30.901      NaN  35.676  35.676         True
+Region6_s0.1  RejectX  1     42.251      NaN  35.805  35.805         True
+Region6_s0.2   Baleen  3     36.256    0.098  35.280  35.905         True
+Region6_s0.2 CoinFlip  1     43.850      NaN  35.617  35.617         True
+Region6_s0.2      OPT  1     30.616      NaN  35.619  35.619         True
+Region6_s0.2  RejectX  1     37.293      NaN  35.619  35.619         True
+Region6_s0.3   Baleen  3     36.965    0.258  35.619  35.917         True
+Region6_s0.3 CoinFlip  1     41.094      NaN  35.617  35.617         True
+Region6_s0.3      OPT  1     31.964      NaN  35.572  35.572         True
+Region6_s0.3  RejectX  1     39.191      NaN  35.590  35.590         True
+  Region7_s0   Baleen  9     40.097    0.176  35.296  35.822         True
+  Region7_s0 CoinFlip  1     48.961      NaN  35.686  35.686         True
+  Region7_s0      OPT  1     34.522      NaN  35.549  35.549         True
+  Region7_s0  RejectX  1     42.455      NaN  36.000  36.000         True
+Region7_s0.1   Baleen  3     36.570    0.249  35.426  35.839         True
+Region7_s0.1 CoinFlip  1     45.997      NaN  35.581  35.581         True
+Region7_s0.1      OPT  1     33.676      NaN  35.529  35.529         True
+Region7_s0.1  RejectX  1     38.663      NaN  35.677  35.677         True
+Region7_s0.2   Baleen  3     36.787    0.002  35.539  35.706         True
+Region7_s0.2 CoinFlip  1     41.966      NaN  35.610  35.610         True
+Region7_s0.2      OPT  1     35.277      NaN  35.651  35.651         True
+Region7_s0.2  RejectX  1     38.005      NaN  35.895  35.895         True
+Region7_s0.3   Baleen  3     37.811    0.250  35.574  35.756         True
+Region7_s0.3 CoinFlip  1     45.191      NaN  35.610  35.610         True
+Region7_s0.3      OPT  1     31.228      NaN  35.629  35.629         True
+Region7_s0.3  RejectX  1     38.893      NaN  35.591  35.591         True

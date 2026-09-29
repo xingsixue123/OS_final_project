@@ -1,0 +1,5 @@
+[dev_R7_F2b_pgreedy] round 0: best th=28.50000 WR=34.961 peak=28.528
+[dev_R7_F2b_pgreedy] round 1: best th=28.86781 WR=35.471 peak=28.528
+== dev_R7_F2b_pgreedy: P100=28.528 WR=35.471 th=28.8678 matched=True
+[dev_R6_F2b_pgreedy] round 0: best th=25.50000 WR=35.581 peak=28.259
+== dev_R6_F2b_pgreedy: P100=28.259 WR=35.581 th=25.5000 matched=True

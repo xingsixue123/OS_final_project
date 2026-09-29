@@ -1,0 +1,22 @@
+[I 2026-09-28 17:06:00,730] A new study created in RDB with name: F2b_tau_rel0.6__lp__b10
+[F2b_tau_rel0.6__lp__b10] trial 0: +0.00603 [0.006003137340540032, 0.006058631525951652] {"J": 12, "lexi": false}
+[I 2026-09-28 17:06:06,656] Trial 0 finished with value: 0.006030884433245842 and parameters: {'start': 'pgreedy', 'lexi': False, 'J': 12}. Best is trial 0 with value: 0.006030884433245842.
+[F2b_tau_rel0.6__lp__b10] trial 1: -0.00013 [-8.001174674199252e-05, -0.00017300936327413474] {"J": 24, "lexi": true}
+[I 2026-09-28 17:06:25,416] Trial 1 finished with value: -0.00012651055500806363 and parameters: {'start': 'lp', 'lexi': True, 'J': 24}. Best is trial 1 with value: -0.00012651055500806363.
+[F2b_tau_rel0.6__lp__b10] trial 2: +0.18210 [0.12526030651994424, 0.23893984726571138] {"J": 6, "lexi": true}
+[I 2026-09-28 17:06:42,725] Trial 2 finished with value: 0.1821000768928278 and parameters: {'start': 'pgreedy', 'lexi': True, 'J': 6}. Best is trial 1 with value: -0.00012651055500806363.
+[F2b_tau_rel0.6__lp__b10] trial 3: +0.17408 [0.13032786291166487, 0.21783739894116483] {"J": 6, "lexi": true}
+[I 2026-09-28 17:06:59,906] Trial 3 finished with value: 0.17408263092641485 and parameters: {'start': 'pgreedy', 'lexi': True, 'J': 6}. Best is trial 1 with value: -0.00012651055500806363.
+[F2b_tau_rel0.6__lp__b10] trial 4: -0.00020 [-8.001174674199252e-05, -0.0003108418850037431] {"J": 24, "lexi": true}
+[I 2026-09-28 17:07:18,777] Trial 4 finished with value: -0.0001954268158728678 and parameters: {'start': 'lp', 'lexi': True, 'J': 24}. Best is trial 4 with value: -0.0001954268158728678.
+[F2b_tau_rel0.6__lp__b10] trial 5: -0.00012 [-8.001174674199252e-05, -0.00015811517339892056] {"J": 24, "lexi": false}
+[I 2026-09-28 17:07:24,278] Trial 5 finished with value: -0.00011906346007045654 and parameters: {'start': 'lp', 'lexi': False, 'J': 24}. Best is trial 4 with value: -0.0001954268158728678.
+[F2b_tau_rel0.6__lp__b10] trial 6: +0.00601 [0.005963806750098888, 0.0060627256457845835] {"J": 12, "lexi": true}
+[I 2026-09-28 17:07:42,171] Trial 6 finished with value: 0.006013266197941736 and parameters: {'start': 'lp', 'lexi': True, 'J': 12}. Best is trial 4 with value: -0.0001954268158728678.
+[F2b_tau_rel0.6__lp__b10] trial 7: +0.18154 [0.1306119464209583, 0.23245808764246556] {"J": 6, "lexi": false}
+[I 2026-09-28 17:07:45,367] Trial 7 finished with value: 0.18153501703171193 and parameters: {'start': 'lp', 'lexi': False, 'J': 6}. Best is trial 4 with value: -0.0001954268158728678.
+[F2b_tau_rel0.6__lp__b10] trial 8: -0.00020 [-8.001174674199252e-05, -0.00031834661229745986] {"J": 24, "lexi": true}
+[I 2026-09-28 17:08:04,296] Trial 8 finished with value: -0.0001991791795197262 and parameters: {'start': 'pgreedy', 'lexi': True, 'J': 24}. Best is trial 8 with value: -0.0001991791795197262.
+[F2b_tau_rel0.6__lp__b10] trial 9: -0.00013 [-7.926826872317605e-05, -0.00017300936327413474] {"J": 24, "lexi": true}
+[I 2026-09-28 17:08:23,414] Trial 9 finished with value: -0.0001261388159986554 and parameters: {'start': 'pgreedy', 'lexi': True, 'J': 24}. Best is trial 8 with value: -0.0001991791795197262.
+[F2b_tau_rel0.6__lp__b10] BEST -0.00020 cfg={"J": 24, "lexi": true}
