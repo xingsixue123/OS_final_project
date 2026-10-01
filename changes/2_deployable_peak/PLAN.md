@@ -17,8 +17,12 @@
 
 ## 2. Hypotheses (pre-registered in `PROTOCOL_v2.md` before any test-set run)
 - **H1′ (breadth):** peak-aware offline selection beats Baleen's peak-blind oracle on at least 80% of instances across 4 traces (Region4–7) × 10 samples, with a mean reduction of 10% or more.
-- **H3′ (deployability):** peak-aware labels plus the `load` feature beat **both** Baleen (original features) **and** Baleen plus `load` (the control) on the test set. This is judged at matched write rate with at least 3 retrains, using the same pass rule as phase-1 Q3: ≥4/6 instances, mean improvement > 2 SE, and below RejectX/CoinFlip.
-- **H2′ (optional; only if the motivation holds):** at tight time budgets (≤10 s per solve, e.g. labels re-solved periodically), Ising solvers beat the best classical solver. Tested on fresh samples only.
+- **H3′ (deployability):** peak-aware labels **produced by an Ising-family solver** (parallel tempering or the Extended Ising Machine, the phase-1 finalists), plus the `load` feature, beat **both** Baleen (original features) **and** Baleen plus `load` (the control) on the test set. This is judged at matched write rate with at least 3 retrains, using the same pass rule as phase-1 Q3: ≥4/6 instances, mean improvement > 2 SE, and below RejectX/CoinFlip. The same labels solved by CP-SAT are run as a comparison arm, so we can tell whether the Ising solver matters.
+- **H2′ (required): Ising at tight re-solve budgets.**
+  - **Motivation:** labels are re-solved periodically on a sliding window, so each solve has a hard latency budget of about 10 s or less. Phase 1 found Ising best on 5/6 held-out instances at 10 s.
+  - **Claim:** at budgets of 1, 3 and 10 s, on the same pinned cores with equal tuning trials, the tuned Ising solver is at least as good as the best classical solver on ≥5/6 test instances at ≥2 of the 3 budgets, and strictly better on average.
+  - **Data:** tuning on dev samples 0–0.3; the test is samples 0.4–0.6, with the criteria pre-registered.
+- **Ising scaling (reported as a contribution, no pass/fail):** the matrix-free simulated-bifurcation solver runs on full-day real instances, where dense Ising packages run out of memory. We report time and memory against instance size.
 
 ## 3. Instances
 - **Dev (tuning allowed):** Region7 and Region6, samples 0, 0.1, 0.2, 0.3. Phase 1 used 0.1–0.3 only to evaluate the old hypotheses, so they are fair to use as dev for the new ones.
@@ -49,10 +53,11 @@ Arms, each at matched write rate with at least 3 retrains, on 8 dev instances:
 |---|---|---|---|
 | A | Baleen | original features | reference (reproduces phase 1) |
 | B | Baleen | + `load` | control: effect of the signal alone |
-| C | peak-aware (best of LP/CP-SAT/PT, F1) | original features | phase-1 result (expected ≈ A) |
-| D | peak-aware | + `load` | **the hypothesis** |
-| D2 | peak-aware | + `load` + hour-of-day | ablation |
-| E | peak-aware | + `load` + adaptive threshold / load-aware ML-When | ablation |
+| C | peak-aware, **Ising** (PT/EIM, F1) | original features | phase-1 result (expected ≈ A) |
+| D | peak-aware, **Ising** | + `load` | **the hypothesis** |
+| Dc | peak-aware, CP-SAT | + `load` | does the Ising solver matter? |
+| D2 | peak-aware, Ising | + `load` + hour-of-day | ablation |
+| E | peak-aware, Ising | + `load` + adaptive threshold / load-aware ML-When | ablation |
 
 Also run the phase-1 label variants (P0/T2/C2) inside arm D, and a label-purity check (can the GBM, given `load`, fit the peak-aware labels on day 1?) before spending simulation time.
 
@@ -71,8 +76,13 @@ Also run the phase-1 label variants (P0/T2/C2) inside arm D, and a label-purity 
 - Per-window attribution of the peak window: late admissions, scan events, prefetch-ineffective windows.
 - Peak migration from the planned window to the simulated one; how train/serve feature values are distributed.
 
-### WP5 (optional): H2′ tight-budget solver study (JF), Oct 14 – Oct 25
-Only if we write down a concrete re-solve latency requirement first. Then pre-register it and test on samples 0.7–0.9 with the phase-1 harness in `explore/q2`.
+### WP5 (required): Ising track (JF), Oct 1 – Oct 20, runs alongside WP1/WP2
+1. **Tuning on dev (samples 0–0.3).** Tune at 1, 3 and 10 s budgets on cores 0–7: PT, EIM, matrix-free SB and MindQuantum CAC/bSB on the Ising side; LP + repair, CP-SAT, HiGHS MILP and local search on the classical side. Both sides get equal Optuna trials. Add warm starts from greedy or LP for both sides.
+2. **A rolling re-solve variant.** The trace is cut into sliding windows (e.g. 6 h) solved in sequence under the budget, which models the periodic re-labeling motivation.
+3. **Pre-register** the H2′ criteria and finalists in `PROTOCOL_v2.md`, then test on samples 0.4–0.6.
+4. **Scaling report:** matrix-free SB on full-day real instances; time and memory vs n; dense packages as the reference point.
+
+Finalist Ising solvers from WP5 also produce the labels for WP2 arms C/D/D2/E.
 
 ### WP6: mid-term report and talk (all), prepared by the mid-term date (TBC, after mid-term break)
 - **Talk (10–15 min):** the reproduction and its nuances (bit-exact baselines; the Figure 9 metric version), the offline −16% (with the WP1 breadth if ready), the solver comparison, the deployment gap and its mechanism, and the phase-2 design with early WP2 results.
@@ -105,7 +115,11 @@ If H3′ passes: extend the deployed evaluation to Regions 4/5 and the reserve s
 - **Compute contention.** Keep the phase-1 rules: pinned cores, one training at a time (flock), OMP caps, and time budgets measured on quiet cores.
 - **Over-tuning on dev.** Test and reserve samples stay untouched until the pre-registration is committed. Log every trial.
 
-## 7. Process rules (carried over from phase 1)
+## 7. Checkpoints with the coordinator
+- **CP1, after WP0:** `PATCH.diff`, the bit-exact equivalence check and the parity test are reviewed and committed before any v2 deployed run.
+- **CP2, after the WP2 and WP5 dev phases:** `PROTOCOL_v2.md` (H2′, H3′, finalists) is committed to git before any run on the test samples.
+
+## 8. Process rules (carried over from phase 1)
 - **Sandbox and integrity:** sandboxed envs; every Baleen process runs under `bwrap` with a private `/tmp`; leak check and `check_frozen.sh` at every milestone.
 - **What gets committed:** code, reports and small result CSVs. Envs, traces, runs and instance/solution files stay out of git (`.gitignore`).
 - **Progress reporting:** `PROGRESS.md` is updated at each milestone. Each WP ends with a `RESULTS.md` that reports every outcome, including negative ones.
