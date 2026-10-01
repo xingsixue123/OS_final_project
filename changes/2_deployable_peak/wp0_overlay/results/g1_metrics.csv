@@ -1,0 +1,13 @@
+trace,run,a,b,p100_a,p100_b,wr_a,wr_b,metrics_bit_identical,all_results_and_series_identical,phase1_published_p100
+Region7,Rejectx (authors 20230410_static_pf args),frozen sim,overlay sim,42.455387205313436,42.455387205313436,36.000468505550955,36.000468505550955,True,True,42.455387205313436
+Region7,Coinflip (authors 20230410_static_pf args),frozen sim,overlay sim,48.96095571100894,48.96095571100894,35.68631880129508,35.68631880129508,True,True,48.96095571100894
+Region7,"Baleen, frozen-trained models (unpinned training), th=0_reproduce rep0",frozen sim,overlay sim,40.09330484324925,40.09330484324925,35.37488810246886,35.37488810246886,True,True,
+Region7,"Baleen, overlay-trained models (unpinned training), th=0_reproduce rep0",frozen sim,overlay sim,40.125679875624584,40.125679875624584,35.6442787942675,35.6442787942675,True,True,
+Region7,Baleen G1-det end-to-end (pinned training),frozen train+sim,overlay train+sim,40.130989380934864,40.130989380934864,35.176819014632436,35.176819014632436,True,True,
+Region7,"Baleen frozen-trained models, overlay with --ap-load-adapt-alpha 0",frozen sim,overlay sim alpha=0,40.09330484324925,40.09330484324925,35.37488810246886,35.37488810246886,True,True,
+Region6,Rejectx (authors 20230410_static_pf args),frozen sim,overlay sim,42.32107938357459,42.32107938357459,35.67332211171644,35.67332211171644,True,True,42.32107938357459
+Region6,Coinflip (authors 20230410_static_pf args),frozen sim,overlay sim,43.445334757789325,43.445334757789325,35.56937435581672,35.56937435581672,True,True,43.445334757789325
+Region6,"Baleen, frozen-trained models (unpinned training), th=0_reproduce rep0",frozen sim,overlay sim,43.26696451693124,43.26696451693124,35.99143989184413,35.99143989184413,True,True,
+Region6,"Baleen, overlay-trained models (unpinned training), th=0_reproduce rep0",frozen sim,overlay sim,43.336392773859956,43.336392773859956,35.06657675987524,35.06657675987524,True,True,
+Region6,Baleen G1-det end-to-end (pinned training),frozen train+sim,overlay train+sim,43.26696451693124,43.26696451693124,34.91828911614708,34.91828911614708,True,True,
+Region6,"Baleen frozen-trained models, overlay with --ap-load-adapt-alpha 0",frozen sim,overlay sim alpha=0,43.26696451693124,43.26696451693124,35.99143989184413,35.99143989184413,True,True,

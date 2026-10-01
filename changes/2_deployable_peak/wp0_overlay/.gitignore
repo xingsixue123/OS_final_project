@@ -1,0 +1,13 @@
+# runtime state (sandbox HOME/caches, run dirs, logs, large dumps) stays out of git
+.home/
+.cache/
+.sim_slots.d/
+.leak_marker
+work/
+work_frozen/
+logs/
+results/g1/dumps/
+results/parity/dumps/
+results/parity/*.pkl
+__pycache__/
+*.pyc

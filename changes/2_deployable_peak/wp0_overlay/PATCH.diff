@@ -1,0 +1,475 @@
+diff -ruN '--exclude=.git' '--exclude=__pycache__' ../../0_reproduce/baleen_code/BCacheSim/cachesim/admission_policies.py overlay/BCacheSim/cachesim/admission_policies.py
+--- ../../0_reproduce/baleen_code/BCacheSim/cachesim/admission_policies.py	2026-09-26 15:03:23.871230684 -0400
++++ overlay/BCacheSim/cachesim/admission_policies.py	2026-10-01 14:42:18.077117432 -0400
+@@ -20,6 +20,7 @@
+ import spookyhash
+ 
+ from .sim_features import count_feat
++from . import load_features
+ from .utils import LOG_REQ
+ from .utils import ods
+ from . import utils
+@@ -345,11 +346,29 @@
+ 
+ 
+ class NewMLAP(LearnedAP):
+-    def __init__(self, *args, feat_subset='meta+block+chunk', **kwargs):
++    def __init__(self, *args, feat_subset='meta+block+chunk', load_adapt=None, **kwargs):
+         super().__init__(*args, **kwargs)
+         self.features = feat_subset
+         self.num_features = count_feat(feat_subset)
+         assert len(self.gbm.feature_name()) == self.num_features, (self.gbm.feature_name(), self.num_features)
++        # PeakBaleen overlay (SCOPE_v2 1.1/1.2): column-order guard for load/tod models; optional load-adaptive
++        # threshold theta_t = theta * g(load_t) (None = off = original behaviour).
++        if load_features.extra_groups(feat_subset):
++            load_features.check_admission_feature_names(self.gbm.feature_name(), feat_subset)
++        self.load_adapt = load_adapt
++
++    def batchAccept(self, batch, ts, *, metadata=None, check_only=False):
++        if self.load_adapt is None:
++            return super().batchAccept(batch, ts, metadata=metadata, check_only=check_only)
++        predictions = self._predict(batch, ts)
++        ts_items = (metadata or {}).get('ts', {})
++        decisions = {}
++        for k, pred in zip(batch.keys(), predictions):
++            t = ts_items.get(k, ts)  # the item's own access time
++            decisions[k] = pred > self.threshold * self.load_adapt.g(t.physical)
++        if not check_only:
++            self.count_decisions(decisions)
++        return decisions
+ 
+     def __predict(self, batch, ts):
+         Xs = list(batch.values())
+@@ -365,6 +384,8 @@
+             raise
+ 
+     def __repr__(self):
++        if self.load_adapt is not None:
++            return f"{self.name}(th={self.threshold}, fs={self.features}, {self.load_adapt})"
+         return f"{self.name}(th={self.threshold}, fs={self.features})"
+ 
+ 
+@@ -971,6 +992,11 @@
+         kwargs_ = {}
+         if options.ap_feat_subset:
+             kwargs_['feat_subset'] = options.ap_feat_subset
++        if getattr(options, 'ap_load_adapt_alpha', None) is not None:
++            # PeakBaleen overlay: load-adaptive threshold (off by default)
++            kwargs_['load_adapt'] = load_features.LoadAdaptiveThreshold(
++                kwargs['demand_load'], options.ap_load_adapt_alpha,
++                ref=options.ap_load_adapt_ref, window_min=options.ap_load_adapt_window)
+         ap = NewMLAP(threshold, model_path=options.learned_ap_model_path, **kwargs_)
+         print(f"{ap.name} with model: {options.learned_ap_model_path} threshold: {threshold}")
+     elif ap_id == "mlonline":
+diff -ruN '--exclude=.git' '--exclude=__pycache__' ../../0_reproduce/baleen_code/BCacheSim/cachesim/load_features.py overlay/BCacheSim/cachesim/load_features.py
+--- ../../0_reproduce/baleen_code/BCacheSim/cachesim/load_features.py	1969-12-31 19:00:00.000000000 -0500
++++ overlay/BCacheSim/cachesim/load_features.py	2026-10-01 14:41:07.471895775 -0400
+@@ -0,0 +1,147 @@
++"""PeakBaleen phase-2 overlay (changes/SCOPE_v2.md section 1): causal demand-side load features.
++
++Feature groups (enabled through the existing '+'-joined feature-subset strings; the defaults never use them):
++  load  trailing demand-side disk-head time over the last 10, 30 and 60 minutes before an access: the no-cache
++        service time service_time(1, #chunks) (the artifact's own DT model, i.e. exactly what the simulator
++        accumulates as `service_time_nocache`) of every GET request of the trace with timestamp STRICTLY EARLIER
++        than the access, normalised to utilisation % with the artifact's own st_to_util (sampling ratio, 36 disks,
++        window length) -- the same units as PeakServiceTimeUtil1. It depends only on the request stream (never on
++        admission decisions), so training and serving see identical values.
++  tod   hour of day (UTC, from the trace's physical timestamp) as [sin, cos].
++
++Training (episodic_analysis/train_ap.py, train_prefetcher.py) and serving (cachesim/sim_features.py,
++sim_cache.py, admission_policies.py) both build the series with DemandLoad.from_trace() from the same trace file
++(the artifact's own reader, legacy_utils.read_processed_file) and look it up with the same functions below, keyed
++by the access's physical timestamp.
++"""
++import math
++import os
++
++import numpy as np
++
++from . import legacy_utils
++from ..episodic_analysis.episodes import service_time
++from ..episodic_analysis.episodes import st_to_util
++
++LOAD_WINDOWS_S = (600, 1800, 3600)
++EXTRA_GROUP_SIZES = {'load': len(LOAD_WINDOWS_S), 'tod': 2}
++# Feature names used by the prefetch models (train_prefetcher.feat_names) for the extra groups.
++PF_FEAT_NAMES = {'load': [f'load_{w // 60}m' for w in LOAD_WINDOWS_S], 'tod': ['tod_sin', 'tod_cos']}
++# Load-adaptive admission threshold: g(load) = clip((load / ref) ** alpha, *LOAD_ADAPT_CLIP).
++LOAD_ADAPT_CLIP = (0.25, 4.0)
++
++
++def extra_groups(feat_subset):
++    """Ordered list of overlay feature groups ('load', 'tod') named in a '+'-joined feature-subset string."""
++    if not feat_subset:
++        return []
++    return [g for g in feat_subset.split('+') if g in EXTRA_GROUP_SIZES]
++
++
++class DemandLoad(object):
++    """Cumulative GET demand of a trace, looked up by physical timestamp (strictly causal: ts < t)."""
++
++    def __init__(self, ts, nchunks, sample_ratio):
++        order = np.argsort(np.asarray(ts, dtype=float), kind='stable')
++        self.ts = np.asarray(ts, dtype=float)[order]
++        nchunks = np.asarray(nchunks, dtype=np.int64)[order]
++        self.cum_chunks = np.concatenate([[0], np.cumsum(nchunks, dtype=np.int64)])
++        self.sample_ratio = sample_ratio
++        self._last = (None, None)
++
++    @classmethod
++    def from_trace(cls, tracefile, sample_ratio):
++        k_accesses, _, _ = legacy_utils.read_processed_file(tracefile, get_features=True, only_gets=True)
++        ts, nchunks = [], []
++        for kacc in k_accesses.values():
++            for acc in kacc.accesses:
++                ts.append(acc.ts)
++                nchunks.append(acc.num_chunks())
++        print(f"DemandLoad: {len(ts)} GET requests from {tracefile} (sample_ratio={sample_ratio})")
++        return cls(ts, nchunks, sample_ratio)
++
++    def window_st(self, t, window_s):
++        """No-cache GET service time (s) of the requests with t - window_s <= ts < t."""
++        hi = int(np.searchsorted(self.ts, t, side='left'))
++        lo = int(np.searchsorted(self.ts, t - window_s, side='left'))
++        return service_time(hi - lo, int(self.cum_chunks[hi] - self.cum_chunks[lo]))
++
++    def load(self, t):
++        """[load_10m, load_30m, load_60m] in utilisation % at physical time t (requests with ts < t only)."""
++        if self._last[0] != t:
++            self._last = (t, [st_to_util(self.window_st(t, w), sample_ratio=self.sample_ratio, duration_s=w) * 100
++                              for w in LOAD_WINDOWS_S])
++        return list(self._last[1])
++
++
++def tod(t):
++    """Hour of day (UTC) of physical timestamp t as [sin, cos]."""
++    a = 2 * math.pi * (t % 86400.0) / 86400.0
++    return [math.sin(a), math.cos(a)]
++
++
++def group_features(demand, group, t):
++    if group == 'load':
++        return demand.load(t)
++    if group == 'tod':
++        return tod(t)
++    raise NotImplementedError(group)
++
++
++def extra_features(demand, groups, t):
++    out = []
++    for g in groups:
++        out.extend(group_features(demand, g, t))
++    return out
++
++
++_DEMAND_CACHE = {}
++
++
++def demand_for_trace(tracefile, sample_ratio):
++    key = (os.path.realpath(tracefile), float(sample_ratio))
++    if key not in _DEMAND_CACHE:
++        _DEMAND_CACHE[key] = DemandLoad.from_trace(tracefile, sample_ratio)
++    return _DEMAND_CACHE[key]
++
++
++def demand_for_trace_kwargs(trace_kwargs):
++    """Training side: the same trace file the trainer reads (local_cluster.tracefilename, as trace_utils)."""
++    from ..episodic_analysis import local_cluster
++    f = local_cluster.tracefilename(sample_ratio=trace_kwargs['sample_ratio'], region=trace_kwargs['region'],
++                                    start=trace_kwargs.get('start', 0), trace_group=trace_kwargs.get('trace_group'))
++    return demand_for_trace(f, trace_kwargs['sample_ratio'])
++
++
++def check_admission_feature_names(names, feat_subset):
++    """Serving-side guard: the model's columns for each overlay group sit exactly where collect_features puts them."""
++    from .sim_features import count_feat
++    pos = 0
++    for g in feat_subset.split('+'):
++        n = count_feat(g)
++        if g in EXTRA_GROUP_SIZES:
++            want = [f'feat_{g}|{i}' for i in range(n)]
++            assert list(names[pos:pos + n]) == want, (feat_subset, pos, list(names), want)
++        pos += n
++    assert pos == len(names), (feat_subset, list(names))
++
++
++class LoadAdaptiveThreshold(object):
++    """theta_t = theta * g(load_t), g(x) = clip((max(x, 1e-6) / ref) ** alpha, 0.25, 4); load_t = trailing demand
++    load (window_min minutes) at the access time. alpha is the fixed shape parameter (alpha < 0: lower threshold,
++    i.e. admit more, when demand is high)."""
++
++    def __init__(self, demand, alpha, ref=20.0, window_min=10):
++        assert window_min * 60 in LOAD_WINDOWS_S, window_min
++        self.demand = demand
++        self.alpha = float(alpha)
++        self.ref = float(ref)
++        self.idx = LOAD_WINDOWS_S.index(window_min * 60)
++        self.window_min = window_min
++
++    def g(self, t):
++        x = max(self.demand.load(t)[self.idx], 1e-6)
++        return min(max((x / self.ref) ** self.alpha, LOAD_ADAPT_CLIP[0]), LOAD_ADAPT_CLIP[1])
++
++    def __repr__(self):
++        return f"LoadAdaptiveThreshold(alpha={self.alpha}, ref={self.ref}, window={self.window_min}m, clip={LOAD_ADAPT_CLIP})"
+diff -ruN '--exclude=.git' '--exclude=__pycache__' ../../0_reproduce/baleen_code/BCacheSim/cachesim/prefetchers.py overlay/BCacheSim/cachesim/prefetchers.py
+--- ../../0_reproduce/baleen_code/BCacheSim/cachesim/prefetchers.py	2026-09-26 15:03:23.871230684 -0400
++++ overlay/BCacheSim/cachesim/prefetchers.py	2026-10-01 14:42:18.077117432 -0400
+@@ -7,6 +7,7 @@
+     print("Unable to import lightgbm")
+ 
+ from . import utils
++from . import load_features
+ from .utils import ods
+ from ..episodic_analysis.episodes import offset_to_chunks
+ from .ep_helpers import _get_chunks_for_episode
+@@ -35,6 +36,13 @@
+                 self.model = LearnedRangePrefetcherModel(
+                     options.prefetcher_model_path)
+                 print(f"LearnedRangePrefetcherModel({options.prefetcher_model_path})")
++        # PeakBaleen overlay: column guard for prefetch models trained with --pf-feat-subset meta+load[+tod]
++        pf_groups = load_features.extra_groups(getattr(options, 'pf_feat_subset', None))
++        if pf_groups:
++            assert self.model is not None, "--pf-feat-subset needs ML prefetch models"
++            want = [n for g in pf_groups for n in load_features.PF_FEAT_NAMES[g]]
++            for k, m in self.model.models.items():
++                assert m.feature_name()[6:6 + len(want)] == want, (k, m.feature_name(), want)
+ 
+     def __repr__(self):
+         desc = ""
+diff -ruN '--exclude=.git' '--exclude=__pycache__' ../../0_reproduce/baleen_code/BCacheSim/cachesim/sim_cache.py overlay/BCacheSim/cachesim/sim_cache.py
+--- ../../0_reproduce/baleen_code/BCacheSim/cachesim/sim_cache.py	2026-09-26 15:03:23.872230700 -0400
++++ overlay/BCacheSim/cachesim/sim_cache.py	2026-10-01 14:42:18.077117432 -0400
+@@ -19,6 +19,7 @@
+ from . import dynamic_features as dyn_features
+ from . import prefetchers
+ from . import utils
++from . import load_features
+ from .utils import LOG_IOPS, ods, fmt_dur
+ 
+ from ..episodic_analysis.episodes import service_time
+@@ -657,6 +658,9 @@
+         if hasattr(cache.ap, "hooks"):
+             for k, v in cache.ap.hooks.items():
+                 self.hooks[k] += v
++        # PeakBaleen overlay: optional load / time-of-day features for the prefetch models (default: none)
++        self.pf_extra_groups = load_features.extra_groups(getattr(options, 'pf_feat_subset', None))
++        self.demand_load = getattr(cache, 'demand_load', None)
+ 
+     def _init_logs(self):
+         # TODO: Make this configurable.
+@@ -1027,8 +1031,12 @@
+             self._checkpoint(acc_ts, print_log=self.last_print['i'] is None or time.time() - self.last_print['time'] > self.print_every_n_mins * 60)
+ 
+     def _prefetch_batch(self, batch_pf, batch):
+-        features = np.array([acc_.features.toList(with_size=True)
+-                             for acc_ in batch_pf])
++        rows = [acc_.features.toList(with_size=True) for acc_ in batch_pf]
++        if self.pf_extra_groups:
++            # PeakBaleen overlay: same series/function as train_prefetcher.prep_data, at this access's time
++            rows = [r + load_features.extra_features(self.demand_load, self.pf_extra_groups, acc_.ts.physical)
++                    for r, acc_ in zip(rows, batch_pf)]
++        features = np.array(rows)
+         if len(features) > 0:
+             predictions = self.cache.prefetcher.predict_batch(features)
+             for acc_, pred in zip(batch_pf, predictions):
+@@ -1479,9 +1487,17 @@
+                     utils.rm_missing_ok(options.offline_ap_decisions)
+                 raise
+ 
++    # PeakBaleen overlay: causal demand-load series, built only when a load/tod feature or the load-adaptive
++    # threshold is requested (same trace file and code as the trainers; see load_features.py).
++    demand_load = None
++    if (load_features.extra_groups(options.ap_feat_subset) or load_features.extra_groups(options.pf_feat_subset)
++            or options.ap_load_adapt_alpha is not None):
++        demand_load = load_features.demand_for_trace(tracefile, sample_ratio)
++
+     ap = aps.construct(
+         options.ap, options,
+-        sample_ratio=sample_ratio, num_cache_elems=num_cache_elems, episodes=episodes)
++        sample_ratio=sample_ratio, num_cache_elems=num_cache_elems, episodes=episodes,
++        demand_load=demand_load)
+ 
+     logjson["AdmissionPolicy"] = ap.name
+ 
+@@ -1509,6 +1525,8 @@
+             prefetcher=prefetcher.model,
+         )
+ 
++    cache.demand_load = demand_load
++
+     ram_cache = None
+     if options.ram_cache:
+         if options.ram_cache_elems:
+@@ -1527,6 +1545,7 @@
+             keep_metadata=True,
+             on_evict=cache.handle_miss,
+             namespace="ramcache")
++        ram_cache.demand_load = demand_load
+ 
+     prefetcher.set_cache(cache=cache, ram_cache=ram_cache, insert_cache=ram_cache, ap=ap)
+ 
+diff -ruN '--exclude=.git' '--exclude=__pycache__' ../../0_reproduce/baleen_code/BCacheSim/cachesim/sim_features.py overlay/BCacheSim/cachesim/sim_features.py
+--- ../../0_reproduce/baleen_code/BCacheSim/cachesim/sim_features.py	2026-09-26 15:03:23.872230700 -0400
++++ overlay/BCacheSim/cachesim/sim_features.py	2026-10-01 14:41:23.306169844 -0400
+@@ -1,5 +1,7 @@
+ import numpy as np
+ 
++from . import load_features
++
+ 
+ def count_feat(feat_subset):
+     cnt = 0
+@@ -11,6 +13,9 @@
+             cnt += 1
+         elif fx == 'meta_nosize':
+             cnt += 3
++        elif fx in load_features.EXTRA_GROUP_SIZES:
++            # PeakBaleen overlay: causal demand load / time of day (load_features.py)
++            cnt += load_features.EXTRA_GROUP_SIZES[fx]
+         elif fx == '':
+             continue
+         else:
+@@ -43,6 +48,11 @@
+             featvec.extend(cfeat.tolist())
+         elif feat_idx == 'shard':
+             featvec.append(key[0][1])
++        elif feat_idx in load_features.EXTRA_GROUP_SIZES:
++            # PeakBaleen overlay: same function and series as train_ap.generate_data, keyed by the access time
++            demand = getattr(cache, 'demand_load', None)
++            assert demand is not None, "load/tod features need the demand series (set by sim_cache driver)"
++            featvec.extend(load_features.group_features(demand, feat_idx, acc.ts.physical))
+         elif feat_idx == 'chunk_ind':
+             raise NotImplementedError('chunk_ind')
+             # for chunk_id_ in range(1, 65):
+diff -ruN '--exclude=.git' '--exclude=__pycache__' ../../0_reproduce/baleen_code/BCacheSim/cachesim/simulate_ap.py overlay/BCacheSim/cachesim/simulate_ap.py
+--- ../../0_reproduce/baleen_code/BCacheSim/cachesim/simulate_ap.py	2026-09-26 15:03:23.872230700 -0400
++++ overlay/BCacheSim/cachesim/simulate_ap.py	2026-10-01 14:42:18.076117415 -0400
+@@ -48,6 +48,15 @@
+                         type=float)
+     parser.add_argument("--ap-feat-subset",
+                         help="Subset of features for admission plicy")
++    # PeakBaleen overlay (SCOPE_v2 1.2/1.3); every option below is off by default.
++    parser.add_argument("--pf-feat-subset",
++                        help="Prefetch-model (ML-Range/ML-When) features: meta (original, default), meta+load, meta+load+tod")
++    parser.add_argument("--ap-load-adapt-alpha", type=float,
++                        help="Load-adaptive mlnew threshold theta_t = theta * clip((load_t/ref)^alpha, 0.25, 4); off if unset")
++    parser.add_argument("--ap-load-adapt-ref", type=float, default=20.0,
++                        help="Reference demand load (utilisation %%) of the load-adaptive threshold")
++    parser.add_argument("--ap-load-adapt-window", type=int, default=10,
++                        help="Trailing window (minutes: 10, 30 or 60) of load_t for the load-adaptive threshold")
+     parser.add_argument("--ap-chunk-threshold",
+                         help="Set the admission policy's threshold",
+                         type=int)
+diff -ruN '--exclude=.git' '--exclude=__pycache__' ../../0_reproduce/baleen_code/BCacheSim/episodic_analysis/train_ap.py overlay/BCacheSim/episodic_analysis/train_ap.py
+--- ../../0_reproduce/baleen_code/BCacheSim/episodic_analysis/train_ap.py	2026-09-26 15:03:23.873230717 -0400
++++ overlay/BCacheSim/episodic_analysis/train_ap.py	2026-10-01 14:41:32.263324856 -0400
+@@ -1,5 +1,6 @@
+ from .episodes import service_time
+ from ..cachesim import dynamic_features
++from ..cachesim import load_features
+ 
+ import lightgbm as lgb
+ import numpy as np
+@@ -122,6 +123,10 @@
+         filter_ = self.rl.filter
+         rows = []
+         label_rows = []
++        # PeakBaleen overlay (SCOPE_v2 1.1): optional causal demand-load / time-of-day groups, computed with the same
++        # series and function as the simulator's collect_features (cachesim/load_features.py). Default: none.
++        extra_groups = load_features.extra_groups(self.feat_subset)
++        demand = load_features.demand_for_trace_kwargs(self.rl.th.trace_kwargs) if extra_groups else None
+         # pol.rl.th.start_ts
+         hr_unit = self.HR_L if self.ts_use_logical else self.HR
+         for i, (block_id, epses) in enumerate(self.eps_by_block.items()):
+@@ -177,6 +182,8 @@
+                         rowd[f'feat_dynamic_c|{chunk_id}'] = cfeat
+                         comb += np.asarray(cfeat)
+                     rowd['feat_dynamic_c_combined'] = comb.tolist()
++                    for grp in extra_groups:
++                        rowd[f'feat_{grp}'] = load_features.group_features(demand, grp, ac.ts)
+ 
+                     rows.append(rowd)
+                     labelr = dict(eps_labels)
+@@ -444,6 +451,11 @@
+ 
+     subsets['opt'] = opt_feat
+ 
++    # PeakBaleen overlay: '+load' / '+tod' / '+load+tod' variants of the simulator-supported subsets.
++    for k in ['meta', 'meta_nosize', 'meta+block', 'meta+block+chunk', 'meta_nosize+block', 'meta_nosize+block+chunk']:
++        for grps in (['load'], ['tod'], ['load', 'tod']):
++            subsets[k + ''.join('+' + g for g in grps)] = subsets[k] + [f'feat_{g}' for g in grps]
++
+     subsets_cols = {}
+     for k, v in subsets.items():
+         subsets_cols[k] = [col for col in df_X if col.split("|")[0] in v]
+diff -ruN '--exclude=.git' '--exclude=__pycache__' ../../0_reproduce/baleen_code/BCacheSim/episodic_analysis/train_prefetcher.py overlay/BCacheSim/episodic_analysis/train_prefetcher.py
+--- ../../0_reproduce/baleen_code/BCacheSim/episodic_analysis/train_prefetcher.py	2026-09-26 15:03:23.873230717 -0400
++++ overlay/BCacheSim/episodic_analysis/train_prefetcher.py	2026-10-01 14:41:48.823611399 -0400
+@@ -6,10 +6,18 @@
+ 
+ from .episodes import service_time
+ from . import train_utils
++from ..cachesim import load_features
+ 
+ 
+ def add_args(parser):
+     parser.add_argument("--train-target-wr", type=float)
++    # PeakBaleen overlay (SCOPE_v2 1.3): optional causal load / time-of-day features for ML-Range and ML-When.
++    parser.add_argument("--pf-feat-subset", default="meta",
++                        help="Prefetch-model features: meta (original, default), meta+load, meta+load+tod")
++
++
++def opts_to_args(args):
++    return dict(feat_subset=args.pf_feat_subset)
+ 
+ 
+ def proc_episode(episode):
+@@ -39,7 +47,11 @@
+ class PrefetcherTrainer(object):
+     def __init__(self, *,
+                  targets=["offset_start", "size", "offset_end"],
+-                 trace_kwargs=None, e_age_s=None, wr_threshold=None):
++                 trace_kwargs=None, e_age_s=None, wr_threshold=None, feat_subset="meta"):
++        # PeakBaleen overlay: extra feature groups appended after the 6 metadata features (default: none)
++        assert feat_subset.split('+')[0] == 'meta', feat_subset
++        self.extra_groups = load_features.extra_groups(feat_subset)
++        assert ['meta'] + self.extra_groups == feat_subset.split('+'), feat_subset
+         self.rl = None
+         self.policy = None
+         self.clfs = {}
+@@ -74,6 +86,8 @@
+         # Create training and validation datasets
+         self.feat_names = ["op", "namespace", "user",
+                            "acc_start", "acc_end", "acc_size"]
++        for grp in self.extra_groups:
++            self.feat_names += load_features.PF_FEAT_NAMES[grp]
+         self.label_names = ["admitted_opt", "rank", "accesses", "size", "offset_start", "offset_end",
+                             "timespan_logical", "timespan_physical",
+                             "log_timespan_logical", "log_timespan_physical",
+@@ -91,8 +105,12 @@
+         # TODO: Nicer way of printing this?
+         # ex = self.rl.residencies[0]
+         # print(self.eps_processor(ex), ex, ex.s)
++        demand = load_features.demand_for_trace_kwargs(self.trace_kwargs) if self.extra_groups else None
+         for i, episode in enumerate(self.rl.residencies):
+             f_, l_, m_ = self.eps_processor(episode)
++            if self.extra_groups:
++                # same series/function as the simulator (sim_cache._prefetch_batch), at the episode's first access
++                f_ = f_ + load_features.extra_features(demand, self.extra_groups, episode.accesses[0].ts)
+             wr += self.rl.th.bytes_to_wr_mbps(episode.size)
+             l_ = [int(wr <= threshold), i] + l_
+             if wr > threshold:
+diff -ruN '--exclude=.git' '--exclude=__pycache__' ../../0_reproduce/baleen_code/BCacheSim/episodic_analysis/train.py overlay/BCacheSim/episodic_analysis/train.py
+--- ../../0_reproduce/baleen_code/BCacheSim/episodic_analysis/train.py	2026-09-26 15:03:23.873230717 -0400
++++ overlay/BCacheSim/episodic_analysis/train.py	2026-10-01 14:41:48.823611399 -0400
+@@ -80,7 +80,8 @@
+         pt = tpf.PrefetcherConfTrainer(
+             trace_kwargs=trace_kwargs,
+             e_age_s=args.eviction_age,
+-            wr_threshold=args.train_target_wr)
++            wr_threshold=args.train_target_wr,
++            **tpf.opts_to_args(args))  # PeakBaleen overlay: --pf-feat-subset (default meta = original)
+         assert trace_kwargs['get_features']
+     res_fn_kwargs = {}
+     if args.residency_fn is not None and args.residency_fn in episodes.__dict__ and args.residency_fn.startswith('process_'):

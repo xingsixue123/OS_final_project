@@ -30,6 +30,18 @@ The patch may only do the following:
 - **Data and operating point:** traces, sampling, 366.475 GB cache, 35.599 MB/s write rate.
 - **Evaluation:** `PeakServiceTimeUtil1`, and matched write rate within ±1%.
 
+## 1a. Clarifications recorded at checkpoint CP1 (2026-10-01, coordinator review of `wp0_overlay/PATCH.diff`, 9 files, +217/−6)
+- **`load` uses GET demand only.** That is exactly the simulator's no-cache counterpart of `PeakServiceTimeUtil1`; PUTs are excluded.
+- **Item 1.3 needs one plumbing line in `episodic_analysis/train.py`,** which passes `--pf-feat-subset` to the prefetch trainer. Accepted as part of 1.3; the default is unchanged.
+- **Known skew, arm E only.** The prefetch-model `load` is taken at an episode's first access in training, but at the triggering access in serving. The admission-model `load` has no such skew; the parity test found exact equality on 26,499 accesses.
+- **Retrain variance** keeps the artifact's own nondeterminism (`imap_unordered`), with ≥3 retrains per configuration, the same as every baseline.
+- **Feature subsets** must be written in canonical order, e.g. `meta+block+chunk+load+tod`.
+- **G1 and parity passed** (`wp0_overlay/CP1.md`).
+- **Review status:**
+  - G3: coordinator review done; teammate review still required before any test-set (WP3) run.
+  - Rebuilding the overlay: `wp0_overlay/rebuild_overlay.sh` (verified identical).
+- **CPU topology.** Logical CPUs k and k+12 are the two hyperthreads of one physical core. While timing runs hold cores 0–7, other work must avoid 12–19 and use `8-11,20-23` only.
+
 ## 3. Fairness gates (must pass before any v2 result counts)
 - **G1: default equivalence.** With the default feature subset and no adaptive threshold, the overlay reproduces the frozen artifact **bit-exactly** on the dev instances. That means RejectX, CoinFlip and Baleen at a fixed seed, and each Baleen retrain's labels and model file.
 - **G2: same pipeline for every method.** Every method in a comparison runs through the overlay, including "Baleen + load features" as its own baseline.

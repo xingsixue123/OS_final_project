@@ -1,0 +1,325 @@
+{
+ "S1": {
+  "train": {
+   "tag": "smoke_R7_load",
+   "out": {
+    "analysis": [
+     "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp0_overlay/work/runs/parity/smoke_R7_load/train/smoke_R7_load/20230325_Region7_0_0.1/ws.20230325_Region7_0_0.1/fs_meta+block+chunk+load/accs_15/offline_analysis_ea_5653.15.csv",
+     "0.00554848M"
+    ],
+    "thresholds": [
+     "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp0_overlay/work/tmp/smoke_R7_load/20230325_Region7_0_0.1/ws.20230325_Region7_0_0.1/fs_meta+block+chunk+load/accs_15/decisions_utility_service_time_size_fixed_ea_5653.15.pkl.bz",
+     "1.26904M"
+    ],
+    "model_prefetch_offset_start": [
+     "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp0_overlay/work/tmp/smoke_R7_load/20230325_Region7_0_0.1/ws.20230325_Region7_0_0.1/fs_meta+block+chunk+load/accs_15/ea_5653.15_wr_35.599_prefetch_offset_start.model",
+     "1.56238M"
+    ],
+    "model_prefetch_size": [
+     "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp0_overlay/work/tmp/smoke_R7_load/20230325_Region7_0_0.1/ws.20230325_Region7_0_0.1/fs_meta+block+chunk+load/accs_15/ea_5653.15_wr_35.599_prefetch_size.model",
+     "0.905631M"
+    ],
+    "model_prefetch_offset_end": [
+     "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp0_overlay/work/tmp/smoke_R7_load/20230325_Region7_0_0.1/ws.20230325_Region7_0_0.1/fs_meta+block+chunk+load/accs_15/ea_5653.15_wr_35.599_prefetch_offset_end.model",
+     "1.83523M"
+    ],
+    "model_prefetch_pred_net_pf_st_binary": [
+     "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp0_overlay/work/tmp/smoke_R7_load/20230325_Region7_0_0.1/ws.20230325_Region7_0_0.1/fs_meta+block+chunk+load/accs_15/ea_5653.15_wr_35.599_prefetch_pred_net_pf_st_binary.model",
+     "0.498785M"
+    ],
+    "model_admit_threshold_binary": [
+     "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp0_overlay/work/tmp/smoke_R7_load/20230325_Region7_0_0.1/ws.20230325_Region7_0_0.1/fs_meta+block+chunk+load/accs_15/ea_5653.15_wr_35.599_admit_threshold_binary.model",
+     "7.05759M"
+    ]
+   },
+   "secs": 69.77768445014954,
+   "ap_subset": "meta+block+chunk+load",
+   "pf_subset": null
+  },
+  "result_file": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp0_overlay/work/runs/parity/smoke_R7_load/sim/ml-ap-0.62094_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma",
+  "sim_P100": 39.6213416212824,
+  "sim_WR": 34.73654928929381,
+  "parity_load": {
+   "groups": [
+    "load"
+   ],
+   "cols": [
+    "feat_load|0",
+    "feat_load|1",
+    "feat_load|2"
+   ],
+   "n_train_rows": 31105,
+   "n_rows_matched": 26499,
+   "n_sim_accesses_recorded": 23217,
+   "sim_collect_features_calls": 451899,
+   "sim_same_access_load_mismatches": 0,
+   "meta_equal_frac": 0.8333899392429903,
+   "all": {
+    "n_values": 79497,
+    "n_exact": 79497,
+    "max_abs_diff": 0.0,
+    "max_rel_diff": 0.0
+   },
+   "sample10k": {
+    "n_values": 30000,
+    "n_exact": 30000,
+    "max_abs_diff": 0.0,
+    "max_rel_diff": 0.0
+   },
+   "col_feat_load|0": {
+    "n_values": 26499,
+    "n_exact": 26499,
+    "max_abs_diff": 0.0,
+    "max_rel_diff": 0.0
+   },
+   "col_feat_load|1": {
+    "n_values": 26499,
+    "n_exact": 26499,
+    "max_abs_diff": 0.0,
+    "max_rel_diff": 0.0
+   },
+   "col_feat_load|2": {
+    "n_values": 26499,
+    "n_exact": 26499,
+    "max_abs_diff": 0.0,
+    "max_rel_diff": 0.0
+   },
+   "nonzero_frac": 0.9999245254537907,
+   "train_value_range": [
+    0.0,
+    50.481335793835804
+   ],
+   "pass": true,
+   "exact": true
+  }
+ },
+ "S2": {
+  "train": {
+   "tag": "smoke_R7_loadtod_pf",
+   "out": {
+    "analysis": [
+     "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp0_overlay/work/runs/parity/smoke_R7_loadtod_pf/train/smoke_R7_loadtod_pf/20230325_Region7_0_0.1/ws.20230325_Region7_0_0.1/fs_meta+block+chunk+load+tod/accs_15/offline_analysis_ea_5653.15.csv",
+     "0.00555801M"
+    ],
+    "thresholds": [
+     "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp0_overlay/work/tmp/smoke_R7_loadtod_pf/20230325_Region7_0_0.1/ws.20230325_Region7_0_0.1/fs_meta+block+chunk+load+tod/accs_15/decisions_utility_service_time_size_fixed_ea_5653.15.pkl.bz",
+     "1.26201M"
+    ],
+    "model_prefetch_offset_start": [
+     "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp0_overlay/work/tmp/smoke_R7_loadtod_pf/20230325_Region7_0_0.1/ws.20230325_Region7_0_0.1/fs_meta+block+chunk+load+tod/accs_15/ea_5653.15_wr_35.599_prefetch_offset_start.model",
+     "1.98823M"
+    ],
+    "model_prefetch_size": [
+     "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp0_overlay/work/tmp/smoke_R7_loadtod_pf/20230325_Region7_0_0.1/ws.20230325_Region7_0_0.1/fs_meta+block+chunk+load+tod/accs_15/ea_5653.15_wr_35.599_prefetch_size.model",
+     "1.31954M"
+    ],
+    "model_prefetch_offset_end": [
+     "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp0_overlay/work/tmp/smoke_R7_loadtod_pf/20230325_Region7_0_0.1/ws.20230325_Region7_0_0.1/fs_meta+block+chunk+load+tod/accs_15/ea_5653.15_wr_35.599_prefetch_offset_end.model",
+     "1.67173M"
+    ],
+    "model_prefetch_pred_net_pf_st_binary": [
+     "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp0_overlay/work/tmp/smoke_R7_loadtod_pf/20230325_Region7_0_0.1/ws.20230325_Region7_0_0.1/fs_meta+block+chunk+load+tod/accs_15/ea_5653.15_wr_35.599_prefetch_pred_net_pf_st_binary.model",
+     "0.295254M"
+    ],
+    "model_admit_threshold_binary": [
+     "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp0_overlay/work/tmp/smoke_R7_loadtod_pf/20230325_Region7_0_0.1/ws.20230325_Region7_0_0.1/fs_meta+block+chunk+load+tod/accs_15/ea_5653.15_wr_35.599_admit_threshold_binary.model",
+     "7.00141M"
+    ]
+   },
+   "secs": 85.71218538284302,
+   "ap_subset": "meta+block+chunk+load+tod",
+   "pf_subset": "meta+load+tod"
+  },
+  "result_file": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp0_overlay/work/runs/parity/smoke_R7_loadtod_pf_adapt/sim/ml-ap-0.62094_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma",
+  "sim_P100": 39.55532893027785,
+  "sim_WR": 43.03474470630558,
+  "parity_admit_load_tod": {
+   "groups": [
+    "load",
+    "tod"
+   ],
+   "cols": [
+    "feat_load|0",
+    "feat_load|1",
+    "feat_load|2",
+    "feat_tod|0",
+    "feat_tod|1"
+   ],
+   "n_train_rows": 31105,
+   "n_rows_matched": 26083,
+   "n_sim_accesses_recorded": 22863,
+   "sim_collect_features_calls": 448075,
+   "sim_same_access_load_mismatches": 0,
+   "meta_equal_frac": 0.8311927308975194,
+   "all": {
+    "n_values": 130415,
+    "n_exact": 130415,
+    "max_abs_diff": 0.0,
+    "max_rel_diff": 0.0
+   },
+   "sample10k": {
+    "n_values": 50000,
+    "n_exact": 50000,
+    "max_abs_diff": 0.0,
+    "max_rel_diff": 0.0
+   },
+   "col_feat_load|0": {
+    "n_values": 26083,
+    "n_exact": 26083,
+    "max_abs_diff": 0.0,
+    "max_rel_diff": 0.0
+   },
+   "col_feat_load|1": {
+    "n_values": 26083,
+    "n_exact": 26083,
+    "max_abs_diff": 0.0,
+    "max_rel_diff": 0.0
+   },
+   "col_feat_load|2": {
+    "n_values": 26083,
+    "n_exact": 26083,
+    "max_abs_diff": 0.0,
+    "max_rel_diff": 0.0
+   },
+   "col_feat_tod|0": {
+    "n_values": 26083,
+    "n_exact": 26083,
+    "max_abs_diff": 0.0,
+    "max_rel_diff": 0.0
+   },
+   "col_feat_tod|1": {
+    "n_values": 26083,
+    "n_exact": 26083,
+    "max_abs_diff": 0.0,
+    "max_rel_diff": 0.0
+   },
+   "nonzero_frac": 0.9999463251926543,
+   "train_value_range": [
+    -1.0,
+    50.481335793835804
+   ],
+   "pass": true,
+   "exact": true
+  },
+  "parity_prefetch_load_tod": {
+   "prefetch_prep_0_PrefetcherConfTrainer": {
+    "n_train_rows": 2318,
+    "n_rows_matched": 2318,
+    "n_sim_rows_recorded": 30709,
+    "sim_prefetch_feature_rows": 37269,
+    "feat_names": [
+     "op",
+     "namespace",
+     "user",
+     "acc_start",
+     "acc_end",
+     "acc_size",
+     "load_10m",
+     "load_30m",
+     "load_60m",
+     "tod_sin",
+     "tod_cos",
+     "pred_eps_start",
+     "pre_eps_end"
+    ],
+    "all": {
+     "n_values": 11590,
+     "n_exact": 11590,
+     "max_abs_diff": 0.0,
+     "max_rel_diff": 0.0
+    },
+    "exact": true
+   },
+   "prefetch_prep_1_PrefetcherTrainer": {
+    "n_train_rows": 2318,
+    "n_rows_matched": 2318,
+    "n_sim_rows_recorded": 30709,
+    "sim_prefetch_feature_rows": 37269,
+    "feat_names": [
+     "op",
+     "namespace",
+     "user",
+     "acc_start",
+     "acc_end",
+     "acc_size",
+     "load_10m",
+     "load_30m",
+     "load_60m",
+     "tod_sin",
+     "tod_cos"
+    ],
+    "all": {
+     "n_values": 11590,
+     "n_exact": 11590,
+     "max_abs_diff": 0.0,
+     "max_rel_diff": 0.0
+    },
+    "exact": true
+   }
+  }
+ },
+ "S3": {
+  "Region7": {
+   "a": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp0_overlay/work_frozen/runs/g1/g1_Region7_modelF_simF/sim/ml-ap-0.62094_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma",
+   "b": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp0_overlay/work/runs/parity/s3_Region7_modelF_alpha0/sim/ml-ap-0.62094_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma",
+   "p100_a": 40.09330484324925,
+   "p100_b": 40.09330484324925,
+   "wr_a": 35.37488810246886,
+   "wr_b": 35.37488810246886,
+   "p100_equal": true,
+   "wr_equal": true,
+   "n_result_keys": 425,
+   "result_keys_differing": [],
+   "toplevel_differing": [],
+   "counters_differing": [],
+   "n_batches": 401,
+   "batches_differing": [],
+   "n_freq": 13,
+   "freq_differing": [],
+   "options_only_in_b": [
+    "ap_load_adapt_alpha",
+    "ap_load_adapt_ref",
+    "ap_load_adapt_window",
+    "pf_feat_subset"
+   ],
+   "options_only_in_a": [],
+   "options_differing": [
+    "job_id",
+    "output_dir"
+   ],
+   "metrics_bit_identical": true,
+   "all_results_and_series_identical": true
+  },
+  "Region6": {
+   "a": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp0_overlay/work_frozen/runs/g1/g1_Region6_modelF_simF/sim/ml-ap-0.806378_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma",
+   "b": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp0_overlay/work/runs/parity/s3_Region6_modelF_alpha0/sim/ml-ap-0.806378_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma",
+   "p100_a": 43.26696451693124,
+   "p100_b": 43.26696451693124,
+   "wr_a": 35.99143989184413,
+   "wr_b": 35.99143989184413,
+   "p100_equal": true,
+   "wr_equal": true,
+   "n_result_keys": 425,
+   "result_keys_differing": [],
+   "toplevel_differing": [],
+   "counters_differing": [],
+   "n_batches": 403,
+   "batches_differing": [],
+   "n_freq": 13,
+   "freq_differing": [],
+   "options_only_in_b": [
+    "ap_load_adapt_alpha",
+    "ap_load_adapt_ref",
+    "ap_load_adapt_window",
+    "pf_feat_subset"
+   ],
+   "options_only_in_a": [],
+   "options_differing": [
+    "job_id",
+    "output_dir"
+   ],
+   "metrics_bit_identical": true,
+   "all_results_and_series_identical": true
+  }
+ }
+}

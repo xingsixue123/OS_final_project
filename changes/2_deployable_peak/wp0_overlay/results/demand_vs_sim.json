@@ -1,0 +1,20 @@
+{
+ "Region7": {
+  "n_windows": 996,
+  "max_abs_diff_s": 4.6124881691866904e-11,
+  "max_rel_diff": 6.0552558499074424e-12,
+  "total_ours": 6187.465251748252,
+  "total_sim": 6187.465251741452,
+  "peak_window_ours": 282,
+  "peak_window_sim": 282
+ },
+ "Region6": {
+  "n_windows": 996,
+  "max_abs_diff_s": 5.970868244276062e-11,
+  "max_rel_diff": 6.701625062798633e-12,
+  "total_ours": 6729.057986013986,
+  "total_sim": 6729.057986009991,
+  "peak_window_ours": 334,
+  "peak_window_sim": 334
+ }
+}

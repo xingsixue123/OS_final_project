@@ -1,0 +1,94 @@
+{
+ "Region7": {
+  "n_models": 8,
+  "identical_to_frozen1": {
+   "Region7_frozen1": {
+    "admit_threshold_binary.model": true,
+    "prefetch_offset_end.model": true,
+    "prefetch_offset_start.model": true,
+    "prefetch_pf_benefit.model": true,
+    "prefetch_pred_net_pf_st.model": true,
+    "prefetch_pred_net_pf_st_binary.model": true,
+    "prefetch_pred_pf_benefit.model": true,
+    "prefetch_size.model": true
+   },
+   "Region7_overlay1": {
+    "admit_threshold_binary.model": true,
+    "prefetch_offset_end.model": true,
+    "prefetch_offset_start.model": true,
+    "prefetch_pf_benefit.model": true,
+    "prefetch_pred_net_pf_st.model": true,
+    "prefetch_pred_net_pf_st_binary.model": true,
+    "prefetch_pred_pf_benefit.model": true,
+    "prefetch_size.model": true
+   },
+   "Region7_frozen2": {
+    "admit_threshold_binary.model": true,
+    "prefetch_offset_end.model": true,
+    "prefetch_offset_start.model": true,
+    "prefetch_pf_benefit.model": true,
+    "prefetch_pred_net_pf_st.model": true,
+    "prefetch_pred_net_pf_st_binary.model": true,
+    "prefetch_pred_pf_benefit.model": true,
+    "prefetch_size.model": true
+   },
+   "Region7_overlay2": {
+    "admit_threshold_binary.model": true,
+    "prefetch_offset_end.model": true,
+    "prefetch_offset_start.model": true,
+    "prefetch_pf_benefit.model": true,
+    "prefetch_pred_net_pf_st.model": true,
+    "prefetch_pred_net_pf_st_binary.model": true,
+    "prefetch_pred_pf_benefit.model": true,
+    "prefetch_size.model": true
+   }
+  },
+  "all_identical": true
+ },
+ "Region6": {
+  "n_models": 8,
+  "identical_to_frozen1": {
+   "Region6_frozen1": {
+    "admit_threshold_binary.model": true,
+    "prefetch_offset_end.model": true,
+    "prefetch_offset_start.model": true,
+    "prefetch_pf_benefit.model": true,
+    "prefetch_pred_net_pf_st.model": true,
+    "prefetch_pred_net_pf_st_binary.model": true,
+    "prefetch_pred_pf_benefit.model": true,
+    "prefetch_size.model": true
+   },
+   "Region6_overlay1": {
+    "admit_threshold_binary.model": true,
+    "prefetch_offset_end.model": true,
+    "prefetch_offset_start.model": true,
+    "prefetch_pf_benefit.model": true,
+    "prefetch_pred_net_pf_st.model": true,
+    "prefetch_pred_net_pf_st_binary.model": true,
+    "prefetch_pred_pf_benefit.model": true,
+    "prefetch_size.model": true
+   },
+   "Region6_frozen2": {
+    "admit_threshold_binary.model": true,
+    "prefetch_offset_end.model": true,
+    "prefetch_offset_start.model": true,
+    "prefetch_pf_benefit.model": true,
+    "prefetch_pred_net_pf_st.model": true,
+    "prefetch_pred_net_pf_st_binary.model": true,
+    "prefetch_pred_pf_benefit.model": true,
+    "prefetch_size.model": true
+   },
+   "Region6_overlay2": {
+    "admit_threshold_binary.model": true,
+    "prefetch_offset_end.model": true,
+    "prefetch_offset_start.model": true,
+    "prefetch_pf_benefit.model": true,
+    "prefetch_pred_net_pf_st.model": true,
+    "prefetch_pred_net_pf_st_binary.model": true,
+    "prefetch_pred_pf_benefit.model": true,
+    "prefetch_size.model": true
+   }
+  },
+  "all_identical": true
+ }
+}

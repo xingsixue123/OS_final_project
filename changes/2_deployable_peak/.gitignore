@@ -1,0 +1,20 @@
+# Runtime state and large artifacts (regenerable; not versioned)
+env/
+.cache/
+.home/
+work/
+work_frozen/
+systmp/
+raw/
+data/
+inst/
+sols/
+__pycache__/
+*.pyc
+.leak_marker
+.train.lock
+*_READY
+# Overlay package = frozen BCacheSim + PATCH.diff (rebuild with wp0_overlay/rebuild_overlay.sh)
+wp0_overlay/overlay/
+# Training dumps (GBs)
+wp0_overlay/results/*/

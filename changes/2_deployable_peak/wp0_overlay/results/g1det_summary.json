@@ -1,0 +1,575 @@
+{
+ "verdict": {
+  "Region7": {
+   "frozen1_vs_frozen2": {
+    "rows_same_order": true,
+    "df_X_identical": true,
+    "df_Y_identical": true,
+    "labels_identical": true,
+    "split_identical": true,
+    "prefetch_XY_identical": true,
+    "model_files_identical": true
+   },
+   "frozen1_vs_overlay1": {
+    "rows_same_order": true,
+    "df_X_identical": true,
+    "df_Y_identical": true,
+    "labels_identical": true,
+    "split_identical": true,
+    "prefetch_XY_identical": true,
+    "model_files_identical": true
+   },
+   "frozen1_vs_overlay2": {
+    "rows_same_order": true,
+    "df_X_identical": true,
+    "df_Y_identical": true,
+    "labels_identical": true,
+    "split_identical": true,
+    "prefetch_XY_identical": true,
+    "model_files_identical": true
+   },
+   "pipeline_metrics_bit_identical": true,
+   "pipeline_all_results_and_series_identical": true,
+   "p100": 40.130989380934864,
+   "wr": 35.176819014632436
+  },
+  "Region6": {
+   "frozen1_vs_frozen2": {
+    "rows_same_order": true,
+    "df_X_identical": true,
+    "df_Y_identical": true,
+    "labels_identical": true,
+    "split_identical": true,
+    "prefetch_XY_identical": true,
+    "model_files_identical": true
+   },
+   "frozen1_vs_overlay1": {
+    "rows_same_order": true,
+    "df_X_identical": true,
+    "df_Y_identical": true,
+    "labels_identical": true,
+    "split_identical": true,
+    "prefetch_XY_identical": true,
+    "model_files_identical": true
+   },
+   "frozen1_vs_overlay2": {
+    "rows_same_order": true,
+    "df_X_identical": true,
+    "df_Y_identical": true,
+    "labels_identical": true,
+    "split_identical": true,
+    "prefetch_XY_identical": true,
+    "model_files_identical": true
+   },
+   "pipeline_metrics_bit_identical": true,
+   "pipeline_all_results_and_series_identical": true,
+   "p100": 43.26696451693124,
+   "wr": 34.91828911614708
+  }
+ },
+ "summary": {
+  "Region7": {
+   "frozen1_vs_frozen2": {
+    "admit": {
+     "n_rows_a": 31105,
+     "n_rows_b": 31105,
+     "same_key_set": true,
+     "same_row_order": true,
+     "feat_subset": "meta+block+chunk",
+     "feat_cols_equal": true,
+     "df_X_columns_same_order": true,
+     "df_X_same_column_set": true,
+     "df_X_used_features_identical": true,
+     "df_X_used_features_differing_cols": [],
+     "df_X_all_columns_identical": true,
+     "df_X_differing_cols": [],
+     "df_Y_identical": true,
+     "df_Y_differing_cols": [],
+     "labels_threshold_binary_identical": true,
+     "n_pos": 10819,
+     "train_split_same_rows": true
+    },
+    "prefetch": {
+     "PrefetcherConfTrainer": {
+      "n_a": 2318,
+      "n_b": 2318,
+      "feat_names_equal": true,
+      "same_row_order": true,
+      "same_key_set": true,
+      "X_identical_in_order": true,
+      "X_identical_as_multiset": true,
+      "Y_identical_in_order": true,
+      "XY_identical_as_multiset_excl_rank": true
+     },
+     "PrefetcherTrainer": {
+      "n_a": 2318,
+      "n_b": 2318,
+      "feat_names_equal": true,
+      "same_row_order": true,
+      "same_key_set": true,
+      "X_identical_in_order": true,
+      "X_identical_as_multiset": true,
+      "Y_identical_in_order": true,
+      "XY_identical_as_multiset_excl_rank": true
+     }
+    },
+    "models": {
+     "model_prefetch_offset_start": {
+      "identical": true,
+      "size_a": 1507000,
+      "size_b": 1507000
+     },
+     "model_prefetch_size": {
+      "identical": true,
+      "size_a": 943742,
+      "size_b": 943742
+     },
+     "model_prefetch_offset_end": {
+      "identical": true,
+      "size_a": 1889867,
+      "size_b": 1889867
+     },
+     "model_prefetch_pred_net_pf_st_binary": {
+      "identical": true,
+      "size_a": 473373,
+      "size_b": 473373
+     },
+     "model_admit_threshold_binary": {
+      "identical": true,
+      "size_a": 6572904,
+      "size_b": 6572904
+     }
+    }
+   },
+   "frozen1_vs_overlay1": {
+    "admit": {
+     "n_rows_a": 31105,
+     "n_rows_b": 31105,
+     "same_key_set": true,
+     "same_row_order": true,
+     "feat_subset": "meta+block+chunk",
+     "feat_cols_equal": true,
+     "df_X_columns_same_order": true,
+     "df_X_same_column_set": true,
+     "df_X_used_features_identical": true,
+     "df_X_used_features_differing_cols": [],
+     "df_X_all_columns_identical": true,
+     "df_X_differing_cols": [],
+     "df_Y_identical": true,
+     "df_Y_differing_cols": [],
+     "labels_threshold_binary_identical": true,
+     "n_pos": 10819,
+     "train_split_same_rows": true
+    },
+    "prefetch": {
+     "PrefetcherConfTrainer": {
+      "n_a": 2318,
+      "n_b": 2318,
+      "feat_names_equal": true,
+      "same_row_order": true,
+      "same_key_set": true,
+      "X_identical_in_order": true,
+      "X_identical_as_multiset": true,
+      "Y_identical_in_order": true,
+      "XY_identical_as_multiset_excl_rank": true
+     },
+     "PrefetcherTrainer": {
+      "n_a": 2318,
+      "n_b": 2318,
+      "feat_names_equal": true,
+      "same_row_order": true,
+      "same_key_set": true,
+      "X_identical_in_order": true,
+      "X_identical_as_multiset": true,
+      "Y_identical_in_order": true,
+      "XY_identical_as_multiset_excl_rank": true
+     }
+    },
+    "models": {
+     "model_prefetch_offset_start": {
+      "identical": true,
+      "size_a": 1507000,
+      "size_b": 1507000
+     },
+     "model_prefetch_size": {
+      "identical": true,
+      "size_a": 943742,
+      "size_b": 943742
+     },
+     "model_prefetch_offset_end": {
+      "identical": true,
+      "size_a": 1889867,
+      "size_b": 1889867
+     },
+     "model_prefetch_pred_net_pf_st_binary": {
+      "identical": true,
+      "size_a": 473373,
+      "size_b": 473373
+     },
+     "model_admit_threshold_binary": {
+      "identical": true,
+      "size_a": 6572904,
+      "size_b": 6572904
+     }
+    }
+   },
+   "frozen1_vs_overlay2": {
+    "admit": {
+     "n_rows_a": 31105,
+     "n_rows_b": 31105,
+     "same_key_set": true,
+     "same_row_order": true,
+     "feat_subset": "meta+block+chunk",
+     "feat_cols_equal": true,
+     "df_X_columns_same_order": true,
+     "df_X_same_column_set": true,
+     "df_X_used_features_identical": true,
+     "df_X_used_features_differing_cols": [],
+     "df_X_all_columns_identical": true,
+     "df_X_differing_cols": [],
+     "df_Y_identical": true,
+     "df_Y_differing_cols": [],
+     "labels_threshold_binary_identical": true,
+     "n_pos": 10819,
+     "train_split_same_rows": true
+    },
+    "prefetch": {
+     "PrefetcherConfTrainer": {
+      "n_a": 2318,
+      "n_b": 2318,
+      "feat_names_equal": true,
+      "same_row_order": true,
+      "same_key_set": true,
+      "X_identical_in_order": true,
+      "X_identical_as_multiset": true,
+      "Y_identical_in_order": true,
+      "XY_identical_as_multiset_excl_rank": true
+     },
+     "PrefetcherTrainer": {
+      "n_a": 2318,
+      "n_b": 2318,
+      "feat_names_equal": true,
+      "same_row_order": true,
+      "same_key_set": true,
+      "X_identical_in_order": true,
+      "X_identical_as_multiset": true,
+      "Y_identical_in_order": true,
+      "XY_identical_as_multiset_excl_rank": true
+     }
+    },
+    "models": {
+     "model_prefetch_offset_start": {
+      "identical": true,
+      "size_a": 1507000,
+      "size_b": 1507000
+     },
+     "model_prefetch_size": {
+      "identical": true,
+      "size_a": 943742,
+      "size_b": 943742
+     },
+     "model_prefetch_offset_end": {
+      "identical": true,
+      "size_a": 1889867,
+      "size_b": 1889867
+     },
+     "model_prefetch_pred_net_pf_st_binary": {
+      "identical": true,
+      "size_a": 473373,
+      "size_b": 473373
+     },
+     "model_admit_threshold_binary": {
+      "identical": true,
+      "size_a": 6572904,
+      "size_b": 6572904
+     }
+    }
+   },
+   "pipeline_frozen_vs_overlay": {
+    "a": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp0_overlay/work_frozen/runs/g1det/g1det_Region7_frozen1_simF/sim/ml-ap-0.62094_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma",
+    "b": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp0_overlay/work/runs/g1det/g1det_Region7_overlay1_simO/sim/ml-ap-0.62094_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma",
+    "p100_a": 40.130989380934864,
+    "p100_b": 40.130989380934864,
+    "wr_a": 35.176819014632436,
+    "wr_b": 35.176819014632436,
+    "p100_equal": true,
+    "wr_equal": true,
+    "n_result_keys": 425,
+    "result_keys_differing": [],
+    "toplevel_differing": [],
+    "counters_differing": [],
+    "n_batches": 401,
+    "batches_differing": [],
+    "n_freq": 13,
+    "freq_differing": [],
+    "options_only_in_b": [
+     "ap_load_adapt_alpha",
+     "ap_load_adapt_ref",
+     "ap_load_adapt_window",
+     "pf_feat_subset"
+    ],
+    "options_only_in_a": [],
+    "options_differing": [
+     "ep_analysis",
+     "job_id",
+     "learned_ap_model_path",
+     "output_dir",
+     "prefetcher_model_path"
+    ],
+    "metrics_bit_identical": true,
+    "all_results_and_series_identical": true
+   }
+  },
+  "Region6": {
+   "frozen1_vs_frozen2": {
+    "admit": {
+     "n_rows_a": 24858,
+     "n_rows_b": 24858,
+     "same_key_set": true,
+     "same_row_order": true,
+     "feat_subset": "meta+block+chunk",
+     "feat_cols_equal": true,
+     "df_X_columns_same_order": true,
+     "df_X_same_column_set": true,
+     "df_X_used_features_identical": true,
+     "df_X_used_features_differing_cols": [],
+     "df_X_all_columns_identical": true,
+     "df_X_differing_cols": [],
+     "df_Y_identical": true,
+     "df_Y_differing_cols": [],
+     "labels_threshold_binary_identical": true,
+     "n_pos": 8251,
+     "train_split_same_rows": true
+    },
+    "prefetch": {
+     "PrefetcherConfTrainer": {
+      "n_a": 1236,
+      "n_b": 1236,
+      "feat_names_equal": true,
+      "same_row_order": true,
+      "same_key_set": true,
+      "X_identical_in_order": true,
+      "X_identical_as_multiset": true,
+      "Y_identical_in_order": true,
+      "XY_identical_as_multiset_excl_rank": true
+     },
+     "PrefetcherTrainer": {
+      "n_a": 1236,
+      "n_b": 1236,
+      "feat_names_equal": true,
+      "same_row_order": true,
+      "same_key_set": true,
+      "X_identical_in_order": true,
+      "X_identical_as_multiset": true,
+      "Y_identical_in_order": true,
+      "XY_identical_as_multiset_excl_rank": true
+     }
+    },
+    "models": {
+     "model_prefetch_offset_start": {
+      "identical": true,
+      "size_a": 1062140,
+      "size_b": 1062140
+     },
+     "model_prefetch_size": {
+      "identical": true,
+      "size_a": 1011746,
+      "size_b": 1011746
+     },
+     "model_prefetch_offset_end": {
+      "identical": true,
+      "size_a": 1013319,
+      "size_b": 1013319
+     },
+     "model_prefetch_pred_net_pf_st_binary": {
+      "identical": true,
+      "size_a": 318622,
+      "size_b": 318622
+     },
+     "model_admit_threshold_binary": {
+      "identical": true,
+      "size_a": 5839262,
+      "size_b": 5839262
+     }
+    }
+   },
+   "frozen1_vs_overlay1": {
+    "admit": {
+     "n_rows_a": 24858,
+     "n_rows_b": 24858,
+     "same_key_set": true,
+     "same_row_order": true,
+     "feat_subset": "meta+block+chunk",
+     "feat_cols_equal": true,
+     "df_X_columns_same_order": true,
+     "df_X_same_column_set": true,
+     "df_X_used_features_identical": true,
+     "df_X_used_features_differing_cols": [],
+     "df_X_all_columns_identical": true,
+     "df_X_differing_cols": [],
+     "df_Y_identical": true,
+     "df_Y_differing_cols": [],
+     "labels_threshold_binary_identical": true,
+     "n_pos": 8251,
+     "train_split_same_rows": true
+    },
+    "prefetch": {
+     "PrefetcherConfTrainer": {
+      "n_a": 1236,
+      "n_b": 1236,
+      "feat_names_equal": true,
+      "same_row_order": true,
+      "same_key_set": true,
+      "X_identical_in_order": true,
+      "X_identical_as_multiset": true,
+      "Y_identical_in_order": true,
+      "XY_identical_as_multiset_excl_rank": true
+     },
+     "PrefetcherTrainer": {
+      "n_a": 1236,
+      "n_b": 1236,
+      "feat_names_equal": true,
+      "same_row_order": true,
+      "same_key_set": true,
+      "X_identical_in_order": true,
+      "X_identical_as_multiset": true,
+      "Y_identical_in_order": true,
+      "XY_identical_as_multiset_excl_rank": true
+     }
+    },
+    "models": {
+     "model_prefetch_offset_start": {
+      "identical": true,
+      "size_a": 1062140,
+      "size_b": 1062140
+     },
+     "model_prefetch_size": {
+      "identical": true,
+      "size_a": 1011746,
+      "size_b": 1011746
+     },
+     "model_prefetch_offset_end": {
+      "identical": true,
+      "size_a": 1013319,
+      "size_b": 1013319
+     },
+     "model_prefetch_pred_net_pf_st_binary": {
+      "identical": true,
+      "size_a": 318622,
+      "size_b": 318622
+     },
+     "model_admit_threshold_binary": {
+      "identical": true,
+      "size_a": 5839262,
+      "size_b": 5839262
+     }
+    }
+   },
+   "frozen1_vs_overlay2": {
+    "admit": {
+     "n_rows_a": 24858,
+     "n_rows_b": 24858,
+     "same_key_set": true,
+     "same_row_order": true,
+     "feat_subset": "meta+block+chunk",
+     "feat_cols_equal": true,
+     "df_X_columns_same_order": true,
+     "df_X_same_column_set": true,
+     "df_X_used_features_identical": true,
+     "df_X_used_features_differing_cols": [],
+     "df_X_all_columns_identical": true,
+     "df_X_differing_cols": [],
+     "df_Y_identical": true,
+     "df_Y_differing_cols": [],
+     "labels_threshold_binary_identical": true,
+     "n_pos": 8251,
+     "train_split_same_rows": true
+    },
+    "prefetch": {
+     "PrefetcherConfTrainer": {
+      "n_a": 1236,
+      "n_b": 1236,
+      "feat_names_equal": true,
+      "same_row_order": true,
+      "same_key_set": true,
+      "X_identical_in_order": true,
+      "X_identical_as_multiset": true,
+      "Y_identical_in_order": true,
+      "XY_identical_as_multiset_excl_rank": true
+     },
+     "PrefetcherTrainer": {
+      "n_a": 1236,
+      "n_b": 1236,
+      "feat_names_equal": true,
+      "same_row_order": true,
+      "same_key_set": true,
+      "X_identical_in_order": true,
+      "X_identical_as_multiset": true,
+      "Y_identical_in_order": true,
+      "XY_identical_as_multiset_excl_rank": true
+     }
+    },
+    "models": {
+     "model_prefetch_offset_start": {
+      "identical": true,
+      "size_a": 1062140,
+      "size_b": 1062140
+     },
+     "model_prefetch_size": {
+      "identical": true,
+      "size_a": 1011746,
+      "size_b": 1011746
+     },
+     "model_prefetch_offset_end": {
+      "identical": true,
+      "size_a": 1013319,
+      "size_b": 1013319
+     },
+     "model_prefetch_pred_net_pf_st_binary": {
+      "identical": true,
+      "size_a": 318622,
+      "size_b": 318622
+     },
+     "model_admit_threshold_binary": {
+      "identical": true,
+      "size_a": 5839262,
+      "size_b": 5839262
+     }
+    }
+   },
+   "pipeline_frozen_vs_overlay": {
+    "a": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp0_overlay/work_frozen/runs/g1det/g1det_Region6_frozen1_simF/sim/ml-ap-0.806378_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma",
+    "b": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp0_overlay/work/runs/g1det/g1det_Region6_overlay1_simO/sim/ml-ap-0.806378_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma",
+    "p100_a": 43.26696451693124,
+    "p100_b": 43.26696451693124,
+    "wr_a": 34.91828911614708,
+    "wr_b": 34.91828911614708,
+    "p100_equal": true,
+    "wr_equal": true,
+    "n_result_keys": 425,
+    "result_keys_differing": [],
+    "toplevel_differing": [],
+    "counters_differing": [],
+    "n_batches": 403,
+    "batches_differing": [],
+    "n_freq": 13,
+    "freq_differing": [],
+    "options_only_in_b": [
+     "ap_load_adapt_alpha",
+     "ap_load_adapt_ref",
+     "ap_load_adapt_window",
+     "pf_feat_subset"
+    ],
+    "options_only_in_a": [],
+    "options_differing": [
+     "ep_analysis",
+     "job_id",
+     "learned_ap_model_path",
+     "output_dir"
+    ],
+    "metrics_bit_identical": true,
+    "all_results_and_series_identical": true
+   }
+  }
+ }
+}
