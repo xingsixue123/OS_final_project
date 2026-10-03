@@ -1,0 +1,575 @@
+submitted wp1_Region7_s0.1_cpsat_cd6c30cd5f_s0
+submitted wp1_Region7_s0.1_lp_e62ade0088_s0
+submitted wp1_Region7_s0.1_pt_eb1d04fc51_s0
+submitted wp1_Region4_s0_lp_e62ade0088_s0
+submitted wp1_Region4_s0_cpsat_cd6c30cd5f_s0
+submitted wp1_Region4_s0_pt_eb1d04fc51_s0
+submitted wp1_Region5_s0_lp_e62ade0088_s0
+submitted wp1_Region5_s0_cpsat_cd6c30cd5f_s0
+[train] wp1_Region7_s0.1_cpsat_cd6c30cd5f_s0: 40s (waited 84s)
+submitted wp1_Region6_s0.1_cpsat_cd6c30cd5f_s0
+submitted wp1_Region6_s0.1_lp_e62ade0088_s0
+submitted wp1_Region6_s0.1_pt_eb1d04fc51_s0
+[train] wp1_Region7_s0.1_lp_e62ade0088_s0: 44s (waited 131s)
+submitted wp1_Region5_s0_pt_eb1d04fc51_s0
+[wp1_Region7_s0.1_cpsat_cd6c30cd5f_s0] round 0: best th=30.08200 WR=35.485 peak=27.421
+== wp1_Region7_s0.1_cpsat_cd6c30cd5f_s0: P100=27.421 WR=35.485 th=30.0820 matched=True n_sims=3
+submitted wp1_Region7_s0.2_cpsat_cd6c30cd5f_s0
+submitted wp1_Region7_s0.2_pt_eb1d04fc51_s0
+submitted wp1_Region7_s0.2_lp_e62ade0088_s0
+[train] wp1_Region7_s0.1_pt_eb1d04fc51_s0: 35s (waited 139s)
+[wp1_Region7_s0.1_lp_e62ade0088_s0] round 0: best th=30.08200 WR=36.079 peak=27.627
+submitted wp1_Region6_s0.2_cpsat_cd6c30cd5f_s0
+submitted wp1_Region6_s0.2_lp_e62ade0088_s0
+submitted wp1_Region6_s0.2_pt_eb1d04fc51_s0
+submitted wp1_Region7_s0.1_lp_e62ade0088_s0
+submitted wp1_Region7_s0.1_pt_eb1d04fc51_s0
+submitted wp1_Region7_s0.2_cpsat_cd6c30cd5f_s0
+submitted wp1_Region7_s0.2_pt_eb1d04fc51_s0
+submitted wp1_Region7_s0.2_lp_e62ade0088_s0
+submitted wp1_Region6_s0.1_cpsat_cd6c30cd5f_s0
+submitted wp1_Region6_s0.1_lp_e62ade0088_s0
+submitted wp1_Region6_s0.1_pt_eb1d04fc51_s0
+submitted wp1_Region6_s0.2_cpsat_cd6c30cd5f_s0
+submitted wp1_Region6_s0.2_lp_e62ade0088_s0
+submitted wp1_Region6_s0.2_pt_eb1d04fc51_s0
+submitted wp1_Region5_s0_lp_e62ade0088_s0
+submitted wp1_Region5_s0_cpsat_cd6c30cd5f_s0
+submitted wp1_Region5_s0_pt_eb1d04fc51_s0
+[wp1_Region7_s0.1_pt_eb1d04fc51_s0] round 0: best th=29.08200 WR=35.592 peak=27.527
+[wp1_Region7_s0.1_lp_e62ade0088_s0] round 0: best th=30.08200 WR=36.079 peak=27.627
+== wp1_Region7_s0.1_pt_eb1d04fc51_s0: P100=27.527 WR=35.592 th=29.0820 matched=True n_sims=3
+[wp1_Region7_s0.1_lp_e62ade0088_s0] round 1: best th=29.68453 WR=35.522 peak=27.627
+== wp1_Region7_s0.1_lp_e62ade0088_s0: P100=27.627 WR=35.522 th=29.6845 matched=True n_sims=6
+[train] wp1_Region7_s0.2_cpsat_cd6c30cd5f_s0: 33s (waited 77s)
+[wp1_Region7_s0.2_cpsat_cd6c30cd5f_s0] round 0: best th=30.76200 WR=36.022 peak=27.976
+[wp1_Region7_s0.2_cpsat_cd6c30cd5f_s0] round 1: best th=30.49026 WR=35.601 peak=27.976
+== wp1_Region7_s0.2_cpsat_cd6c30cd5f_s0: P100=27.976 WR=35.601 th=30.4903 matched=True n_sims=6
+[train] wp1_Region7_s0.2_pt_eb1d04fc51_s0: 40s (waited 167s)
+[train] wp1_Region7_s0.2_lp_e62ade0088_s0: 40s (waited 0s)
+submitted wp1_Region7_s0.3_pt_eb1d04fc51_s0
+submitted wp1_Region7_s0.3_lp_e62ade0088_s0
+submitted wp1_Region7_s0.3_cpsat_cd6c30cd5f_s0
+[wp1_Region7_s0.2_pt_eb1d04fc51_s0] round 0: best th=31.76200 WR=36.001 peak=27.592
+[wp1_Region7_s0.2_lp_e62ade0088_s0] round 0: best th=30.76200 WR=35.808 peak=28.407
+== wp1_Region7_s0.2_lp_e62ade0088_s0: P100=28.407 WR=35.808 th=30.7620 matched=True n_sims=3
+[train] wp1_Region6_s0.1_cpsat_cd6c30cd5f_s0: 36s (waited 98s)
+[wp1_Region7_s0.2_pt_eb1d04fc51_s0] round 1: best th=31.45414 WR=35.616 peak=27.592
+== wp1_Region7_s0.2_pt_eb1d04fc51_s0: P100=27.592 WR=35.616 th=31.4541 matched=True n_sims=6
+[wp1_Region6_s0.1_cpsat_cd6c30cd5f_s0] round 0: best th=27.47800 WR=36.459 peak=26.093
+[train] wp1_Region6_s0.1_lp_e62ade0088_s0: 32s (waited 93s)
+[train] wp1_Region6_s0.1_pt_eb1d04fc51_s0: 32s (waited 122s)
+[wp1_Region6_s0.1_lp_e62ade0088_s0] round 0: best th=28.47800 WR=36.302 peak=26.536
+[wp1_Region6_s0.1_cpsat_cd6c30cd5f_s0] round 1: best th=27.04074 WR=35.642 peak=26.033
+== wp1_Region6_s0.1_cpsat_cd6c30cd5f_s0: P100=26.033 WR=35.642 th=27.0407 matched=True n_sims=6
+[train] wp1_Region6_s0.2_cpsat_cd6c30cd5f_s0: 42s (waited 70s)
+[wp1_Region6_s0.1_pt_eb1d04fc51_s0] round 0: best th=26.47800 WR=34.749 peak=26.179
+[wp1_Region6_s0.1_lp_e62ade0088_s0] round 1: best th=28.06311 WR=35.636 peak=26.536
+== wp1_Region6_s0.1_lp_e62ade0088_s0: P100=26.536 WR=35.636 th=28.0631 matched=True n_sims=6
+[train] wp1_Region6_s0.2_lp_e62ade0088_s0: 42s (waited 76s)
+submitted wp1_Region6_s0.3_pt_eb1d04fc51_s0
+submitted wp1_Region6_s0.3_cpsat_cd6c30cd5f_s0
+submitted wp1_Region6_s0.3_lp_e62ade0088_s0
+submitted wp1_Region4_s0_lp_e62ade0088_s0_rerun
+[train] wp1_Region6_s0.2_pt_eb1d04fc51_s0: 35s (waited 67s)
+submitted wp1_Region4_s0_cpsat_cd6c30cd5f_s0_rerun
+[train] wp1_Region5_s0_lp_e62ade0088_s0: 43s (waited 74s)
+[train] wp1_Region5_s0_cpsat_cd6c30cd5f_s0: 34s (waited 39s)
+[wp1_Region6_s0.2_pt_eb1d04fc51_s0] round 0: best th=27.07700 WR=35.576 peak=26.486
+== wp1_Region6_s0.2_pt_eb1d04fc51_s0: P100=26.486 WR=35.576 th=27.0770 matched=True n_sims=3
+[train] wp1_Region5_s0_pt_eb1d04fc51_s0: 36s (waited 33s)
+[wp1_Region5_s0_lp_e62ade0088_s0] round 0: best th=29.27000 WR=34.944 peak=25.833
+submitted wp1_Region4_s0_pt_eb1d04fc51_s0_rerun
+[wp1_Region5_s0_cpsat_cd6c30cd5f_s0] round 0: best th=30.27000 WR=36.231 peak=25.683
+submitted wp1_Region7_s0_lp_e62ade0088_s0
+[wp1_Region5_s0_pt_eb1d04fc51_s0] round 0: best th=29.27000 WR=35.032 peak=25.557
+submitted wp1_Region7_s0_cpsat_cd6c30cd5f_s0
+[wp1_Region5_s0_lp_e62ade0088_s0] round 1: best th=29.69026 WR=35.635 peak=25.833
+== wp1_Region5_s0_lp_e62ade0088_s0: P100=25.833 WR=35.635 th=29.6903 matched=True n_sims=6
+[train] wp1_Region7_s0.3_pt_eb1d04fc51_s0: 48s (waited 0s)
+[wp1_Region5_s0_cpsat_cd6c30cd5f_s0] round 1: best th=29.83012 WR=35.661 peak=25.683
+== wp1_Region5_s0_cpsat_cd6c30cd5f_s0: P100=25.683 WR=35.661 th=29.8301 matched=True n_sims=6
+[train] wp1_Region7_s0.3_lp_e62ade0088_s0: 41s (waited 0s)
+submitted wp1_Region7_s0_pt_eb1d04fc51_s0
+submitted wp1_Region6_s0_lp_e62ade0088_s0
+[wp1_Region5_s0_pt_eb1d04fc51_s0] round 1: best th=29.63583 WR=35.594 peak=25.557
+== wp1_Region5_s0_pt_eb1d04fc51_s0: P100=25.557 WR=35.594 th=29.6358 matched=True n_sims=6
+[train] wp1_Region7_s0.3_cpsat_cd6c30cd5f_s0: 54s (waited 0s)
+[wp1_Region7_s0.3_pt_eb1d04fc51_s0] round 0: best th=29.38500 WR=36.523 peak=26.540
+submitted wp1_Region6_s0_cpsat_cd6c30cd5f_s0
+[wp1_Region7_s0.3_lp_e62ade0088_s0] round 0: best th=30.38500 WR=35.764 peak=26.875
+== wp1_Region7_s0.3_lp_e62ade0088_s0: P100=26.875 WR=35.764 th=30.3850 matched=True n_sims=3
+[train] wp1_Region6_s0.3_pt_eb1d04fc51_s0: 42s (waited 0s)
+[wp1_Region7_s0.3_cpsat_cd6c30cd5f_s0] round 0: best th=29.38500 WR=36.346 peak=26.676
+[wp1_Region7_s0.3_pt_eb1d04fc51_s0] round 1: best th=28.38500 WR=34.905 peak=26.524
+submitted wp1_Region6_s0_pt_eb1d04fc51_s0
+submitted wp1_Region5_s0.1_lp_e62ade0088_s0
+[wp1_Region6_s0.3_pt_eb1d04fc51_s0] round 0: best th=28.04900 WR=36.426 peak=27.244
+submitted wp1_Region5_s0.1_cpsat_cd6c30cd5f_s0
+[wp1_Region7_s0.3_cpsat_cd6c30cd5f_s0] round 1: best th=29.38500 WR=36.346 peak=26.676
+submitted wp1_Region5_s0.1_pt_eb1d04fc51_s0
+submitted wp1_Region4_s0.2_lp_e62ade0088_s0
+[wp1_Region6_s0.3_pt_eb1d04fc51_s0] round 1: best th=27.56792 WR=35.723 peak=27.136
+== wp1_Region6_s0.3_pt_eb1d04fc51_s0: P100=27.136 WR=35.723 th=27.5679 matched=True n_sims=6
+submitted wp1_Region4_s0.2_cpsat_cd6c30cd5f_s0
+[train] wp1_Region6_s0.3_cpsat_cd6c30cd5f_s0: 42s (waited 0s)
+[wp1_Region7_s0.3_cpsat_cd6c30cd5f_s0] round 2: best th=28.95195 WR=35.767 peak=26.676
+== wp1_Region7_s0.3_cpsat_cd6c30cd5f_s0: P100=26.676 WR=35.767 th=28.9520 matched=True n_sims=9
+[train] wp1_Region6_s0.3_lp_e62ade0088_s0: 37s (waited 0s)
+[wp1_Region6_s0.3_cpsat_cd6c30cd5f_s0] round 0: best th=27.04900 WR=35.258 peak=27.124
+== wp1_Region6_s0.3_cpsat_cd6c30cd5f_s0: P100=27.124 WR=35.258 th=27.0490 matched=True n_sims=3
+[wp1_Region6_s0.2_cpsat_cd6c30cd5f_s0] round 0: best th=27.07700 WR=36.027 peak=26.146
+[train] wp1_Region4_s0_lp_e62ade0088_s0_rerun: 46s (waited 0s)
+[wp1_Region6_s0.2_lp_e62ade0088_s0] round 0: best th=28.07700 WR=34.833 peak=26.416
+submitted wp1_Region4_s0.2_pt_eb1d04fc51_s0
+submitted wp1_Region5_s0.2_lp_e62ade0088_s0
+submitted wp1_Region5_s0.2_cpsat_cd6c30cd5f_s0
+[wp1_Region6_s0.3_lp_e62ade0088_s0] round 0: best th=29.04900 WR=36.108 peak=26.916
+[wp1_Region6_s0.2_cpsat_cd6c30cd5f_s0] round 1: best th=27.07700 WR=36.027 peak=26.146
+[wp1_Region6_s0.1_pt_eb1d04fc51_s0] round 1: best th=26.96785 WR=35.581 peak=26.179
+== wp1_Region6_s0.1_pt_eb1d04fc51_s0: P100=26.179 WR=35.581 th=26.9679 matched=True n_sims=6
+[train] wp1_Region4_s0_cpsat_cd6c30cd5f_s0_rerun: 45s (waited 0s)
+[wp1_Region6_s0.2_lp_e62ade0088_s0] round 1: best th=28.53753 WR=35.665 peak=26.616
+== wp1_Region6_s0.2_lp_e62ade0088_s0: P100=26.616 WR=35.665 th=28.5375 matched=True n_sims=6
+[wp1_Region4_s0_lp_e62ade0088_s0_rerun] round 0: best th=10.46400 WR=35.936 peak=26.796
+== wp1_Region4_s0_lp_e62ade0088_s0_rerun: P100=26.796 WR=35.936 th=10.4640 matched=True n_sims=3
+[train] wp1_Region4_s0_pt_eb1d04fc51_s0_rerun: 43s (waited 0s)
+[wp1_Region6_s0.3_lp_e62ade0088_s0] round 1: best th=28.69213 WR=35.622 peak=26.916
+== wp1_Region6_s0.3_lp_e62ade0088_s0: P100=26.916 WR=35.622 th=28.6921 matched=True n_sims=6
+[train] wp1_Region7_s0_lp_e62ade0088_s0: 48s (waited 0s)
+[train] wp1_Region7_s0_cpsat_cd6c30cd5f_s0: 39s (waited 0s)
+submitted wp1_Region5_s0.2_pt_eb1d04fc51_s0
+[wp1_Region6_s0.2_cpsat_cd6c30cd5f_s0] round 2: best th=26.86758 WR=35.552 peak=26.146
+== wp1_Region6_s0.2_cpsat_cd6c30cd5f_s0: P100=26.146 WR=35.552 th=26.8676 matched=True n_sims=9
+[train] wp1_Region7_s0_pt_eb1d04fc51_s0: 38s (waited 0s)
+submitted wp1_Region4_s0.3_lp_e62ade0088_s0
+[wp1_Region4_s0_cpsat_cd6c30cd5f_s0_rerun] round 0: best th=10.46400 WR=35.936 peak=26.796
+== wp1_Region4_s0_cpsat_cd6c30cd5f_s0_rerun: P100=26.796 WR=35.936 th=10.4640 matched=True n_sims=3
+[train] wp1_Region6_s0_lp_e62ade0088_s0: 51s (waited 0s)
+[wp1_Region7_s0_lp_e62ade0088_s0] round 0: best th=30.37800 WR=35.844 peak=28.142
+== wp1_Region7_s0_lp_e62ade0088_s0: P100=28.142 WR=35.844 th=30.3780 matched=True n_sims=3
+[wp1_Region4_s0_pt_eb1d04fc51_s0_rerun] round 0: best th=10.46400 WR=34.794 peak=27.037
+[wp1_Region7_s0.3_pt_eb1d04fc51_s0] round 2: best th=28.81388 WR=35.733 peak=26.532
+== wp1_Region7_s0.3_pt_eb1d04fc51_s0: P100=26.532 WR=35.733 th=28.8139 matched=True n_sims=9
+[train] wp1_Region6_s0_cpsat_cd6c30cd5f_s0: 53s (waited 0s)
+[train] wp1_Region6_s0_pt_eb1d04fc51_s0: 47s (waited 0s)
+[wp1_Region7_s0_cpsat_cd6c30cd5f_s0] round 0: best th=30.37800 WR=35.512 peak=27.854
+== wp1_Region7_s0_cpsat_cd6c30cd5f_s0: P100=27.854 WR=35.512 th=30.3780 matched=True n_sims=3
+submitted wp1_Region4_s0.3_cpsat_cd6c30cd5f_s0
+[wp1_Region7_s0_pt_eb1d04fc51_s0] round 0: best th=30.37800 WR=35.325 peak=28.271
+== wp1_Region7_s0_pt_eb1d04fc51_s0: P100=28.271 WR=35.325 th=30.3780 matched=True n_sims=3
+[train] wp1_Region5_s0.1_lp_e62ade0088_s0: 39s (waited 0s)
+[train] wp1_Region5_s0.1_cpsat_cd6c30cd5f_s0: 35s (waited 0s)
+[wp1_Region6_s0_lp_e62ade0088_s0] round 0: best th=26.78000 WR=35.329 peak=27.974
+== wp1_Region6_s0_lp_e62ade0088_s0: P100=27.974 WR=35.329 th=26.7800 matched=True n_sims=3
+[train] wp1_Region5_s0.1_pt_eb1d04fc51_s0: 39s (waited 0s)
+[wp1_Region6_s0_cpsat_cd6c30cd5f_s0] round 0: best th=26.78000 WR=37.482 peak=27.535
+[wp1_Region4_s0_pt_eb1d04fc51_s0_rerun] round 1: best th=10.70900 WR=35.207 peak=26.371
+[wp1_Region6_s0_pt_eb1d04fc51_s0] round 0: best th=26.78000 WR=37.120 peak=27.773
+[wp1_Region5_s0.1_lp_e62ade0088_s0] round 0: best th=29.23000 WR=35.758 peak=25.436
+== wp1_Region5_s0.1_lp_e62ade0088_s0: P100=25.436 WR=35.758 th=29.2300 matched=True n_sims=3
+[wp1_Region5_s0.1_cpsat_cd6c30cd5f_s0] round 0: best th=29.23000 WR=35.951 peak=25.304
+== wp1_Region5_s0.1_cpsat_cd6c30cd5f_s0: P100=25.304 WR=35.951 th=29.2300 matched=True n_sims=3
+[train] wp1_Region4_s0.2_lp_e62ade0088_s0: 54s (waited 0s)
+[wp1_Region5_s0.1_pt_eb1d04fc51_s0] round 0: best th=29.23000 WR=35.899 peak=25.481
+== wp1_Region5_s0.1_pt_eb1d04fc51_s0: P100=25.481 WR=35.899 th=29.2300 matched=True n_sims=3
+submitted wp1_Region4_s0.3_pt_eb1d04fc51_s0
+[train] wp1_Region4_s0.2_cpsat_cd6c30cd5f_s0: 45s (waited 0s)
+submitted wp1_Region5_s0.3_lp_e62ade0088_s0
+submitted wp1_Region5_s0.3_cpsat_cd6c30cd5f_s0
+[train] wp1_Region4_s0.2_pt_eb1d04fc51_s0: 49s (waited 0s)
+[wp1_Region6_s0_cpsat_cd6c30cd5f_s0] round 1: best th=25.78000 WR=35.666 peak=27.758
+== wp1_Region6_s0_cpsat_cd6c30cd5f_s0: P100=27.758 WR=35.666 th=25.7800 matched=True n_sims=6
+[train] wp1_Region5_s0.2_lp_e62ade0088_s0: 35s (waited 0s)
+[wp1_Region6_s0_pt_eb1d04fc51_s0] round 1: best th=25.78000 WR=35.217 peak=27.773
+[wp1_Region4_s0_pt_eb1d04fc51_s0_rerun] round 2: best th=10.81131 WR=35.639 peak=26.371
+== wp1_Region4_s0_pt_eb1d04fc51_s0_rerun: P100=26.371 WR=35.639 th=10.8113 matched=True n_sims=9
+[train] wp1_Region5_s0.2_cpsat_cd6c30cd5f_s0: 34s (waited 0s)
+[wp1_Region4_s0.2_lp_e62ade0088_s0] round 0: best th=11.39800 WR=35.700 peak=41.437
+== wp1_Region4_s0.2_lp_e62ade0088_s0: P100=41.437 WR=35.700 th=11.3980 matched=True n_sims=3
+submitted wp1_Region5_s0.3_pt_eb1d04fc51_s0
+[train] wp1_Region5_s0.2_pt_eb1d04fc51_s0: 39s (waited 0s)
+[wp1_Region4_s0.2_cpsat_cd6c30cd5f_s0] round 0: best th=11.39800 WR=35.247 peak=41.336
+== wp1_Region4_s0.2_cpsat_cd6c30cd5f_s0: P100=41.336 WR=35.247 th=11.3980 matched=True n_sims=3
+[train] wp1_Region4_s0.3_lp_e62ade0088_s0: 45s (waited 0s)
+submitted wp1_Region4_s0.4_lp_e62ade0088_s0
+submitted wp1_Region4_s0.4_cpsat_cd6c30cd5f_s0
+[wp1_Region5_s0.2_lp_e62ade0088_s0] round 0: best th=28.83100 WR=35.705 peak=27.099
+== wp1_Region5_s0.2_lp_e62ade0088_s0: P100=27.099 WR=35.705 th=28.8310 matched=True n_sims=3
+[wp1_Region4_s0.2_pt_eb1d04fc51_s0] round 0: best th=11.39800 WR=34.933 peak=41.437
+[train] wp1_Region4_s0.3_cpsat_cd6c30cd5f_s0: 45s (waited 0s)
+[wp1_Region6_s0_pt_eb1d04fc51_s0] round 2: best th=25.98089 WR=35.601 peak=27.773
+== wp1_Region6_s0_pt_eb1d04fc51_s0: P100=27.773 WR=35.601 th=25.9809 matched=True n_sims=9
+[wp1_Region5_s0.2_cpsat_cd6c30cd5f_s0] round 0: best th=28.83100 WR=35.551 peak=27.756
+== wp1_Region5_s0.2_cpsat_cd6c30cd5f_s0: P100=27.756 WR=35.551 th=28.8310 matched=True n_sims=3
+[train] wp1_Region4_s0.3_pt_eb1d04fc51_s0: 39s (waited 0s)
+[train] wp1_Region5_s0.3_lp_e62ade0088_s0: 41s (waited 0s)
+[wp1_Region5_s0.2_pt_eb1d04fc51_s0] round 0: best th=28.83100 WR=35.592 peak=27.566
+== wp1_Region5_s0.2_pt_eb1d04fc51_s0: P100=27.566 WR=35.592 th=28.8310 matched=True n_sims=3
+[train] wp1_Region5_s0.3_cpsat_cd6c30cd5f_s0: 35s (waited 0s)
+[wp1_Region4_s0.3_lp_e62ade0088_s0] round 0: best th=24.79200 WR=36.378 peak=39.241
+[wp1_Region4_s0.3_cpsat_cd6c30cd5f_s0] round 0: best th=23.79200 WR=35.385 peak=39.307
+== wp1_Region4_s0.3_cpsat_cd6c30cd5f_s0: P100=39.307 WR=35.385 th=23.7920 matched=True n_sims=3
+submitted wp1_Region4_s0.4_pt_eb1d04fc51_s0
+[train] wp1_Region5_s0.3_pt_eb1d04fc51_s0: 53s (waited 0s)
+submitted wp1_Region5_s0.4_lp_e62ade0088_s0
+[wp1_Region4_s0.2_pt_eb1d04fc51_s0] round 1: best th=11.59788 WR=35.494 peak=41.437
+== wp1_Region4_s0.2_pt_eb1d04fc51_s0: P100=41.437 WR=35.494 th=11.5979 matched=True n_sims=6
+[wp1_Region4_s0.3_pt_eb1d04fc51_s0] round 0: best th=23.79200 WR=35.015 peak=39.503
+submitted wp1_Region5_s0.4_cpsat_cd6c30cd5f_s0
+[train] wp1_Region4_s0.4_lp_e62ade0088_s0: 58s (waited 0s)
+[wp1_Region5_s0.3_lp_e62ade0088_s0] round 0: best th=28.60200 WR=34.826 peak=26.974
+[wp1_Region5_s0.3_cpsat_cd6c30cd5f_s0] round 0: best th=28.60200 WR=36.154 peak=27.065
+[wp1_Region4_s0.3_lp_e62ade0088_s0] round 1: best th=24.30295 WR=35.652 peak=39.241
+== wp1_Region4_s0.3_lp_e62ade0088_s0: P100=39.241 WR=35.652 th=24.3029 matched=True n_sims=6
+[wp1_Region5_s0.3_pt_eb1d04fc51_s0] round 0: best th=28.60200 WR=35.838 peak=27.766
+== wp1_Region5_s0.3_pt_eb1d04fc51_s0: P100=27.766 WR=35.838 th=28.6020 matched=True n_sims=3
+submitted wp1_Region5_s0.4_pt_eb1d04fc51_s0
+[train] wp1_Region4_s0.4_cpsat_cd6c30cd5f_s0: 127s (waited 27s)
+submitted wp1_Region7_s0.4_lp_e62ade0088_s0
+[wp1_Region4_s0.3_pt_eb1d04fc51_s0] round 1: best th=24.11740 WR=35.729 peak=39.405
+== wp1_Region4_s0.3_pt_eb1d04fc51_s0: P100=39.405 WR=35.729 th=24.1174 matched=True n_sims=6
+[train] wp1_Region4_s0.4_pt_eb1d04fc51_s0: 141s (waited 0s)
+submitted wp1_Region7_s0.4_cpsat_cd6c30cd5f_s0
+[wp1_Region4_s0.4_lp_e62ade0088_s0] round 0: best th=23.45500 WR=35.032 peak=43.930
+[train] wp1_Region5_s0.4_lp_e62ade0088_s0: 103s (waited 0s)
+[wp1_Region5_s0.3_lp_e62ade0088_s0] round 1: best th=29.05571 WR=35.624 peak=26.974
+== wp1_Region5_s0.3_lp_e62ade0088_s0: P100=26.974 WR=35.624 th=29.0557 matched=True n_sims=6
+[wp1_Region5_s0.3_cpsat_cd6c30cd5f_s0] round 1: best th=28.60200 WR=36.154 peak=27.065
+submitted wp1_Region7_s0.4_pt_eb1d04fc51_s0
+submitted wp1_Region6_s0.4_lp_e62ade0088_s0
+[train] wp1_Region5_s0.4_cpsat_cd6c30cd5f_s0: 78s (waited 104s)
+[wp1_Region4_s0.4_cpsat_cd6c30cd5f_s0] round 0: best th=24.45500 WR=36.561 peak=43.735
+[wp1_Region4_s0.4_pt_eb1d04fc51_s0] round 0: best th=23.45500 WR=35.241 peak=43.686
+submitted wp1_Region6_s0.4_cpsat_cd6c30cd5f_s0
+[wp1_Region4_s0.4_lp_e62ade0088_s0] round 1: best th=23.77034 WR=35.609 peak=43.930
+== wp1_Region4_s0.4_lp_e62ade0088_s0: P100=43.930 WR=35.609 th=23.7703 matched=True n_sims=6
+[wp1_Region5_s0.4_lp_e62ade0088_s0] round 0: best th=28.24100 WR=35.246 peak=20.010
+== wp1_Region5_s0.4_lp_e62ade0088_s0: P100=20.010 WR=35.246 th=28.2410 matched=True n_sims=3
+[wp1_Region5_s0.3_cpsat_cd6c30cd5f_s0] round 2: best th=28.21246 WR=35.529 peak=27.126
+== wp1_Region5_s0.3_cpsat_cd6c30cd5f_s0: P100=27.126 WR=35.529 th=28.2125 matched=True n_sims=9
+[wp1_Region5_s0.4_cpsat_cd6c30cd5f_s0] round 0: best th=28.24100 WR=35.437 peak=19.948
+== wp1_Region5_s0.4_cpsat_cd6c30cd5f_s0: P100=19.948 WR=35.437 th=28.2410 matched=True n_sims=3
+[train] wp1_Region5_s0.4_pt_eb1d04fc51_s0: 86s (waited 140s)
+submitted wp1_Region6_s0.4_pt_eb1d04fc51_s0
+[wp1_Region4_s0.4_cpsat_cd6c30cd5f_s0] round 1: best th=23.97075 WR=35.710 peak=43.735
+== wp1_Region4_s0.4_cpsat_cd6c30cd5f_s0: P100=43.735 WR=35.710 th=23.9707 matched=True n_sims=6
+submitted wp1_Region4_s0.5_lp_e62ade0088_s0
+[wp1_Region4_s0.4_pt_eb1d04fc51_s0] round 1: best th=23.69128 WR=35.572 peak=43.686
+== wp1_Region4_s0.4_pt_eb1d04fc51_s0: P100=43.686 WR=35.572 th=23.6913 matched=True n_sims=6
+submitted wp1_Region4_s0.5_cpsat_cd6c30cd5f_s0
+[wp1_Region5_s0.4_pt_eb1d04fc51_s0] round 0: best th=29.24100 WR=33.233 peak=20.200
+[train] wp1_Region7_s0.4_lp_e62ade0088_s0: 60s (waited 199s)
+[train] wp1_Region7_s0.4_cpsat_cd6c30cd5f_s0: 105s (waited 0s)
+[wp1_Region5_s0.4_pt_eb1d04fc51_s0] round 1: best th=31.24100 WR=36.405 peak=20.370
+[train] wp1_Region7_s0.4_pt_eb1d04fc51_s0: 107s (waited 0s)
+[wp1_Region7_s0.4_lp_e62ade0088_s0] round 0: best th=30.31500 WR=36.013 peak=27.227
+submitted wp1_Region4_s0.5_pt_eb1d04fc51_s0
+submitted wp1_Region5_s0.5_lp_e62ade0088_s0
+submitted wp1_Region5_s0.5_cpsat_cd6c30cd5f_s0
+[train] wp1_Region6_s0.4_lp_e62ade0088_s0: 97s (waited 60s)
+[wp1_Region7_s0.4_cpsat_cd6c30cd5f_s0] round 0: best th=30.31500 WR=35.819 peak=27.512
+== wp1_Region7_s0.4_cpsat_cd6c30cd5f_s0: P100=27.512 WR=35.819 th=30.3150 matched=True n_sims=3
+[wp1_Region5_s0.4_pt_eb1d04fc51_s0] round 2: best th=30.76571 WR=35.712 peak=20.370
+== wp1_Region5_s0.4_pt_eb1d04fc51_s0: P100=20.370 WR=35.712 th=30.7657 matched=True n_sims=9
+[train] wp1_Region6_s0.4_cpsat_cd6c30cd5f_s0: 104s (waited 64s)
+[wp1_Region7_s0.4_pt_eb1d04fc51_s0] round 0: best th=30.31500 WR=35.733 peak=27.180
+== wp1_Region7_s0.4_pt_eb1d04fc51_s0: P100=27.180 WR=35.733 th=30.3150 matched=True n_sims=3
+submitted wp1_Region5_s0.5_pt_eb1d04fc51_s0
+submitted wp1_Region7_s0.5_lp_e62ade0088_s0
+[wp1_Region7_s0.4_lp_e62ade0088_s0] round 1: best th=30.12289 WR=35.206 peak=27.227
+[train] wp1_Region6_s0.4_pt_eb1d04fc51_s0: 100s (waited 62s)
+submitted wp1_Region7_s0.5_cpsat_cd6c30cd5f_s0
+[wp1_Region6_s0.4_lp_e62ade0088_s0] round 0: best th=28.51200 WR=35.887 peak=28.120
+== wp1_Region6_s0.4_lp_e62ade0088_s0: P100=28.120 WR=35.887 th=28.5120 matched=True n_sims=3
+[train] wp1_Region4_s0.5_lp_e62ade0088_s0: 77s (waited 59s)
+[wp1_Region6_s0.4_cpsat_cd6c30cd5f_s0] round 0: best th=27.51200 WR=36.496 peak=28.090
+[wp1_Region7_s0.4_lp_e62ade0088_s0] round 2: best th=30.21637 WR=35.380 peak=27.227
+== wp1_Region7_s0.4_lp_e62ade0088_s0: P100=27.227 WR=35.380 th=30.2164 matched=True n_sims=9
+[wp1_Region6_s0.4_pt_eb1d04fc51_s0] round 0: best th=27.51200 WR=35.987 peak=27.716
+[train] wp1_Region4_s0.5_cpsat_cd6c30cd5f_s0: 66s (waited 140s)
+submitted wp1_Region7_s0.5_pt_eb1d04fc51_s0
+[train] wp1_Region4_s0.5_pt_eb1d04fc51_s0: 63s (waited 0s)
+submitted wp1_Region6_s0.5_lp_e62ade0088_s0
+[wp1_Region4_s0.5_lp_e62ade0088_s0] round 0: best th=20.74400 WR=35.703 peak=30.789
+== wp1_Region4_s0.5_lp_e62ade0088_s0: P100=30.789 WR=35.703 th=20.7440 matched=True n_sims=3
+[train] wp1_Region5_s0.5_lp_e62ade0088_s0: 76s (waited 0s)
+[wp1_Region6_s0.4_cpsat_cd6c30cd5f_s0] round 1: best th=27.51200 WR=36.496 peak=28.090
+submitted wp1_Region6_s0.5_cpsat_cd6c30cd5f_s0
+[train] wp1_Region5_s0.5_cpsat_cd6c30cd5f_s0: 68s (waited 0s)
+[wp1_Region6_s0.4_pt_eb1d04fc51_s0] round 1: best th=27.51200 WR=35.987 peak=27.716
+[wp1_Region4_s0.5_cpsat_cd6c30cd5f_s0] round 0: best th=21.74400 WR=35.697 peak=26.486
+== wp1_Region4_s0.5_cpsat_cd6c30cd5f_s0: P100=26.486 WR=35.697 th=21.7440 matched=True n_sims=3
+[train] wp1_Region5_s0.5_pt_eb1d04fc51_s0: 127s (waited 0s)
+[wp1_Region4_s0.5_pt_eb1d04fc51_s0] round 0: best th=21.74400 WR=33.471 peak=26.696
+submitted wp1_Region6_s0.5_pt_eb1d04fc51_s0
+[wp1_Region5_s0.5_lp_e62ade0088_s0] round 0: best th=29.06900 WR=35.422 peak=26.712
+== wp1_Region5_s0.5_lp_e62ade0088_s0: P100=26.712 WR=35.422 th=29.0690 matched=True n_sims=3
+submitted wp1_Region4_s0.6_lp_e62ade0088_s0
+submitted wp1_Region4_s0.6_cpsat_cd6c30cd5f_s0
+[train] wp1_Region7_s0.5_lp_e62ade0088_s0: 136s (waited 0s)
+[wp1_Region6_s0.4_cpsat_cd6c30cd5f_s0] round 2: best th=27.05937 WR=35.486 peak=28.090
+== wp1_Region6_s0.4_cpsat_cd6c30cd5f_s0: P100=28.090 WR=35.486 th=27.0594 matched=True n_sims=9
+[wp1_Region5_s0.5_cpsat_cd6c30cd5f_s0] round 0: best th=29.06900 WR=36.272 peak=26.504
+[train] wp1_Region7_s0.5_cpsat_cd6c30cd5f_s0: 104s (waited 40s)
+[wp1_Region6_s0.4_pt_eb1d04fc51_s0] round 2: best th=27.29805 WR=35.664 peak=27.716
+== wp1_Region6_s0.4_pt_eb1d04fc51_s0: P100=27.716 WR=35.664 th=27.2980 matched=True n_sims=9
+[wp1_Region5_s0.5_pt_eb1d04fc51_s0] round 0: best th=29.06900 WR=36.522 peak=26.540
+submitted wp1_Region4_s0.6_pt_eb1d04fc51_s0
+submitted wp1_Region5_s0.6_lp_e62ade0088_s0
+submitted wp1_Region5_s0.6_cpsat_cd6c30cd5f_s0
+[train] wp1_Region7_s0.5_pt_eb1d04fc51_s0: 98s (waited 42s)
+[wp1_Region4_s0.5_pt_eb1d04fc51_s0] round 1: best th=22.74400 WR=35.008 peak=26.696
+[wp1_Region7_s0.5_lp_e62ade0088_s0] round 0: best th=30.48600 WR=36.126 peak=26.795
+[wp1_Region5_s0.5_cpsat_cd6c30cd5f_s0] round 1: best th=28.06900 WR=35.046 peak=26.504
+[wp1_Region7_s0.5_cpsat_cd6c30cd5f_s0] round 0: best th=30.48600 WR=35.866 peak=26.437
+== wp1_Region7_s0.5_cpsat_cd6c30cd5f_s0: P100=26.437 WR=35.866 th=30.4860 matched=True n_sims=3
+submitted wp1_Region5_s0.6_pt_eb1d04fc51_s0
+[train] wp1_Region6_s0.5_lp_e62ade0088_s0: 93s (waited 29s)
+[wp1_Region5_s0.5_pt_eb1d04fc51_s0] round 1: best th=28.06900 WR=35.112 peak=26.540
+submitted wp1_Region7_s0.6_lp_e62ade0088_s0
+[wp1_Region7_s0.5_pt_eb1d04fc51_s0] round 0: best th=30.48600 WR=36.055 peak=26.397
+[wp1_Region4_s0.5_pt_eb1d04fc51_s0] round 2: best th=22.93819 WR=35.303 peak=26.919
+== wp1_Region4_s0.5_pt_eb1d04fc51_s0: P100=26.919 WR=35.303 th=22.9382 matched=True n_sims=9
+submitted wp1_Region7_s0.6_cpsat_cd6c30cd5f_s0
+[wp1_Region7_s0.5_lp_e62ade0088_s0] round 1: best th=30.14590 WR=35.613 peak=26.795
+== wp1_Region7_s0.5_lp_e62ade0088_s0: P100=26.795 WR=35.613 th=30.1459 matched=True n_sims=6
+[train] wp1_Region6_s0.5_cpsat_cd6c30cd5f_s0: 76s (waited 0s)
+[train] wp1_Region6_s0.5_pt_eb1d04fc51_s0: 75s (waited 0s)
+[wp1_Region5_s0.5_cpsat_cd6c30cd5f_s0] round 2: best th=28.52010 WR=35.569 peak=26.504
+== wp1_Region5_s0.5_cpsat_cd6c30cd5f_s0: P100=26.504 WR=35.569 th=28.5201 matched=True n_sims=9
+[wp1_Region6_s0.5_lp_e62ade0088_s0] round 0: best th=27.34900 WR=35.336 peak=29.309
+== wp1_Region6_s0.5_lp_e62ade0088_s0: P100=29.309 WR=35.336 th=27.3490 matched=True n_sims=3
+[train] wp1_Region4_s0.6_lp_e62ade0088_s0: 84s (waited 0s)
+[train] wp1_Region4_s0.6_cpsat_cd6c30cd5f_s0: 68s (waited 0s)
+[wp1_Region5_s0.5_pt_eb1d04fc51_s0] round 2: best th=28.41457 WR=35.520 peak=26.540
+== wp1_Region5_s0.5_pt_eb1d04fc51_s0: P100=26.540 WR=35.520 th=28.4146 matched=True n_sims=9
+submitted wp1_Region7_s0.6_pt_eb1d04fc51_s0
+submitted wp1_Region6_s0.6_lp_e62ade0088_s0
+[wp1_Region7_s0.5_pt_eb1d04fc51_s0] round 1: best th=30.12868 WR=35.665 peak=26.397
+== wp1_Region7_s0.5_pt_eb1d04fc51_s0: P100=26.397 WR=35.665 th=30.1287 matched=True n_sims=6
+[train] wp1_Region4_s0.6_pt_eb1d04fc51_s0: 75s (waited 0s)
+[train] wp1_Region5_s0.6_lp_e62ade0088_s0: 93s (waited 0s)
+[wp1_Region6_s0.5_cpsat_cd6c30cd5f_s0] round 0: best th=28.34900 WR=36.030 peak=29.722
+submitted wp1_Region6_s0.6_cpsat_cd6c30cd5f_s0
+[wp1_Region6_s0.5_pt_eb1d04fc51_s0] round 0: best th=28.34900 WR=35.688 peak=29.206
+== wp1_Region6_s0.5_pt_eb1d04fc51_s0: P100=29.206 WR=35.688 th=28.3490 matched=True n_sims=3
+[train] wp1_Region5_s0.6_cpsat_cd6c30cd5f_s0: 72s (waited 0s)
+[wp1_Region4_s0.6_lp_e62ade0088_s0] round 0: best th=25.38700 WR=36.190 peak=26.396
+[wp1_Region4_s0.6_cpsat_cd6c30cd5f_s0] round 0: best th=25.38700 WR=35.853 peak=27.176
+== wp1_Region4_s0.6_cpsat_cd6c30cd5f_s0: P100=27.176 WR=35.853 th=25.3870 matched=True n_sims=3
+[train] wp1_Region5_s0.6_pt_eb1d04fc51_s0: 75s (waited 0s)
+[wp1_Region4_s0.6_pt_eb1d04fc51_s0] round 0: best th=25.38700 WR=35.987 peak=27.334
+[wp1_Region5_s0.6_lp_e62ade0088_s0] round 0: best th=29.53800 WR=35.909 peak=26.044
+== wp1_Region5_s0.6_lp_e62ade0088_s0: P100=26.044 WR=35.909 th=29.5380 matched=True n_sims=3
+submitted wp1_Region6_s0.6_pt_eb1d04fc51_s0
+submitted wp1_Region4_s0.7_lp_e62ade0088_s0
+submitted wp1_Region4_s0.7_cpsat_cd6c30cd5f_s0
+[train] wp1_Region7_s0.6_lp_e62ade0088_s0: 84s (waited 0s)
+[wp1_Region6_s0.5_cpsat_cd6c30cd5f_s0] round 1: best th=28.05347 WR=35.615 peak=29.722
+== wp1_Region6_s0.5_cpsat_cd6c30cd5f_s0: P100=29.722 WR=35.615 th=28.0535 matched=True n_sims=6
+[wp1_Region5_s0.6_cpsat_cd6c30cd5f_s0] round 0: best th=28.53800 WR=35.005 peak=26.723
+[train] wp1_Region7_s0.6_cpsat_cd6c30cd5f_s0: 91s (waited 24s)
+[wp1_Region4_s0.6_lp_e62ade0088_s0] round 1: best th=25.05747 WR=35.638 peak=26.396
+== wp1_Region4_s0.6_lp_e62ade0088_s0: P100=26.396 WR=35.638 th=25.0575 matched=True n_sims=6
+[wp1_Region5_s0.6_pt_eb1d04fc51_s0] round 0: best th=28.53800 WR=35.142 peak=27.724
+[train] wp1_Region7_s0.6_pt_eb1d04fc51_s0: 87s (waited 0s)
+submitted wp1_Region4_s0.7_pt_eb1d04fc51_s0
+submitted wp1_Region5_s0.7_lp_e62ade0088_s0
+submitted wp1_Region5_s0.7_cpsat_cd6c30cd5f_s0
+[wp1_Region4_s0.6_pt_eb1d04fc51_s0] round 1: best th=25.13219 WR=35.603 peak=27.334
+== wp1_Region4_s0.6_pt_eb1d04fc51_s0: P100=27.334 WR=35.603 th=25.1322 matched=True n_sims=6
+[wp1_Region7_s0.6_lp_e62ade0088_s0] round 0: best th=29.81000 WR=35.316 peak=26.732
+== wp1_Region7_s0.6_lp_e62ade0088_s0: P100=26.732 WR=35.316 th=29.8100 matched=True n_sims=3
+[train] wp1_Region6_s0.6_lp_e62ade0088_s0: 65s (waited 27s)
+[wp1_Region5_s0.6_cpsat_cd6c30cd5f_s0] round 1: best th=28.96577 WR=35.570 peak=26.723
+== wp1_Region5_s0.6_cpsat_cd6c30cd5f_s0: P100=26.723 WR=35.570 th=28.9658 matched=True n_sims=6
+[train] wp1_Region6_s0.6_cpsat_cd6c30cd5f_s0: 76s (waited 0s)
+[train] wp1_Region6_s0.6_pt_eb1d04fc51_s0: 68s (waited 0s)
+[wp1_Region7_s0.6_cpsat_cd6c30cd5f_s0] round 0: best th=29.81000 WR=35.138 peak=26.658
+[wp1_Region5_s0.6_pt_eb1d04fc51_s0] round 1: best th=28.87863 WR=35.560 peak=27.724
+== wp1_Region5_s0.6_pt_eb1d04fc51_s0: P100=27.724 WR=35.560 th=28.8786 matched=True n_sims=6
+submitted wp1_Region5_s0.7_pt_eb1d04fc51_s0
+submitted wp1_Region7_s0.7_lp_e62ade0088_s0
+submitted wp1_Region7_s0.7_cpsat_cd6c30cd5f_s0
+[wp1_Region7_s0.6_pt_eb1d04fc51_s0] round 0: best th=29.81000 WR=36.941 peak=26.720
+[train] wp1_Region4_s0.7_lp_e62ade0088_s0: 94s (waited 41s)
+[wp1_Region6_s0.6_lp_e62ade0088_s0] round 0: best th=27.06900 WR=34.880 peak=26.563
+[wp1_Region6_s0.6_cpsat_cd6c30cd5f_s0] round 0: best th=26.06900 WR=35.345 peak=27.301
+== wp1_Region6_s0.6_cpsat_cd6c30cd5f_s0: P100=27.301 WR=35.345 th=26.0690 matched=True n_sims=3
+[wp1_Region6_s0.6_pt_eb1d04fc51_s0] round 0: best th=26.06900 WR=34.917 peak=26.706
+[train] wp1_Region4_s0.7_cpsat_cd6c30cd5f_s0: 81s (waited 0s)
+submitted wp1_Region7_s0.7_pt_eb1d04fc51_s0
+[wp1_Region7_s0.6_cpsat_cd6c30cd5f_s0] round 1: best th=30.18910 WR=35.569 peak=26.658
+== wp1_Region7_s0.6_cpsat_cd6c30cd5f_s0: P100=26.658 WR=35.569 th=30.1891 matched=True n_sims=6
+submitted wp1_Region6_s0.7_lp_e62ade0088_s0
+[wp1_Region7_s0.6_pt_eb1d04fc51_s0] round 1: best th=28.81000 WR=35.514 peak=26.720
+== wp1_Region7_s0.6_pt_eb1d04fc51_s0: P100=26.720 WR=35.514 th=28.8100 matched=True n_sims=6
+[train] wp1_Region4_s0.7_pt_eb1d04fc51_s0: 95s (waited 0s)
+[train] wp1_Region5_s0.7_lp_e62ade0088_s0: 81s (waited 0s)
+[wp1_Region4_s0.7_lp_e62ade0088_s0] round 0: best th=23.47600 WR=36.253 peak=43.005
+[wp1_Region6_s0.6_lp_e62ade0088_s0] round 1: best th=27.49251 WR=35.508 peak=26.656
+== wp1_Region6_s0.6_lp_e62ade0088_s0: P100=26.656 WR=35.508 th=27.4925 matched=True n_sims=6
+submitted wp1_Region6_s0.7_cpsat_cd6c30cd5f_s0
+[wp1_Region6_s0.6_pt_eb1d04fc51_s0] round 1: best th=26.43909 WR=35.423 peak=26.787
+== wp1_Region6_s0.6_pt_eb1d04fc51_s0: P100=26.787 WR=35.423 th=26.4391 matched=True n_sims=6
+[train] wp1_Region5_s0.7_cpsat_cd6c30cd5f_s0: 72s (waited 73s)
+[wp1_Region4_s0.7_cpsat_cd6c30cd5f_s0] round 0: best th=23.47600 WR=34.687 peak=45.362
+[wp1_Region4_s0.7_pt_eb1d04fc51_s0] round 0: best th=23.47600 WR=34.181 peak=43.588
+[train] wp1_Region5_s0.7_pt_eb1d04fc51_s0: 72s (waited 113s)
+[wp1_Region5_s0.7_lp_e62ade0088_s0] round 0: best th=19.89800 WR=35.406 peak=24.576
+== wp1_Region5_s0.7_lp_e62ade0088_s0: P100=24.576 WR=35.406 th=19.8980 matched=True n_sims=3
+submitted wp1_Region6_s0.7_pt_eb1d04fc51_s0
+submitted wp1_Region4_s0.8_lp_e62ade0088_s0
+[wp1_Region4_s0.7_lp_e62ade0088_s0] round 1: best th=23.18066 WR=35.468 peak=43.005
+== wp1_Region4_s0.7_lp_e62ade0088_s0: P100=43.005 WR=35.468 th=23.1807 matched=True n_sims=6
+submitted wp1_Region4_s0.8_cpsat_cd6c30cd5f_s0
+[train] wp1_Region7_s0.7_lp_e62ade0088_s0: 93s (waited 0s)
+[train] wp1_Region7_s0.7_cpsat_cd6c30cd5f_s0: 85s (waited 0s)
+[wp1_Region5_s0.7_cpsat_cd6c30cd5f_s0] round 0: best th=19.89800 WR=35.197 peak=21.557
+[wp1_Region4_s0.7_cpsat_cd6c30cd5f_s0] round 1: best th=23.47600 WR=34.687 peak=45.362
+[wp1_Region4_s0.7_pt_eb1d04fc51_s0] round 1: best th=24.47600 WR=35.826 peak=43.473
+== wp1_Region4_s0.7_pt_eb1d04fc51_s0: P100=43.473 WR=35.826 th=24.4760 matched=True n_sims=6
+submitted wp1_Region4_s0.8_pt_eb1d04fc51_s0
+[wp1_Region5_s0.7_pt_eb1d04fc51_s0] round 0: best th=20.89800 WR=33.841 peak=20.937
+submitted wp1_Region5_s0.8_lp_e62ade0088_s0
+submitted wp1_Region5_s0.8_cpsat_cd6c30cd5f_s0
+[train] wp1_Region7_s0.7_pt_eb1d04fc51_s0: 83s (waited 45s)
+[wp1_Region7_s0.7_lp_e62ade0088_s0] round 0: best th=29.52300 WR=35.209 peak=24.023
+[wp1_Region7_s0.7_cpsat_cd6c30cd5f_s0] round 0: best th=29.52300 WR=35.271 peak=24.861
+== wp1_Region7_s0.7_cpsat_cd6c30cd5f_s0: P100=24.861 WR=35.271 th=29.5230 matched=True n_sims=3
+[train] wp1_Region6_s0.7_lp_e62ade0088_s0: 97s (waited 0s)
+[wp1_Region5_s0.7_cpsat_cd6c30cd5f_s0] round 1: best th=20.13172 WR=35.631 peak=21.771
+== wp1_Region5_s0.7_cpsat_cd6c30cd5f_s0: P100=21.771 WR=35.631 th=20.1317 matched=True n_sims=6
+[train] wp1_Region6_s0.7_cpsat_cd6c30cd5f_s0: 65s (waited 0s)
+[wp1_Region4_s0.7_cpsat_cd6c30cd5f_s0] round 2: best th=23.87113 WR=35.451 peak=45.362
+== wp1_Region4_s0.7_cpsat_cd6c30cd5f_s0: P100=45.362 WR=35.451 th=23.8711 matched=True n_sims=9
+submitted wp1_Region5_s0.8_pt_eb1d04fc51_s0
+submitted wp1_Region7_s0.8_lp_e62ade0088_s0
+submitted wp1_Region7_s0.8_cpsat_cd6c30cd5f_s0
+[train] wp1_Region6_s0.7_pt_eb1d04fc51_s0: 79s (waited 0s)
+[wp1_Region5_s0.7_pt_eb1d04fc51_s0] round 1: best th=21.89800 WR=35.370 peak=20.937
+== wp1_Region5_s0.7_pt_eb1d04fc51_s0: P100=20.937 WR=35.370 th=21.8980 matched=True n_sims=6
+[wp1_Region7_s0.7_pt_eb1d04fc51_s0] round 0: best th=30.52300 WR=35.807 peak=24.960
+== wp1_Region7_s0.7_pt_eb1d04fc51_s0: P100=24.960 WR=35.807 th=30.5230 matched=True n_sims=3
+[train] wp1_Region4_s0.8_lp_e62ade0088_s0: 92s (waited 0s)
+[train] wp1_Region4_s0.8_cpsat_cd6c30cd5f_s0: 94s (waited 0s)
+[wp1_Region7_s0.7_lp_e62ade0088_s0] round 1: best th=29.77297 WR=35.516 peak=24.023
+== wp1_Region7_s0.7_lp_e62ade0088_s0: P100=24.023 WR=35.516 th=29.7730 matched=True n_sims=6
+[wp1_Region6_s0.7_lp_e62ade0088_s0] round 0: best th=27.92200 WR=35.899 peak=27.900
+== wp1_Region6_s0.7_lp_e62ade0088_s0: P100=27.900 WR=35.899 th=27.9220 matched=True n_sims=3
+submitted wp1_Region7_s0.8_pt_eb1d04fc51_s0
+submitted wp1_Region6_s0.8_lp_e62ade0088_s0
+[wp1_Region6_s0.7_cpsat_cd6c30cd5f_s0] round 0: best th=25.92200 WR=36.503 peak=27.899
+submitted wp1_Region6_s0.8_cpsat_cd6c30cd5f_s0
+[train] wp1_Region4_s0.8_pt_eb1d04fc51_s0: 81s (waited 100s)
+[wp1_Region6_s0.7_pt_eb1d04fc51_s0] round 0: best th=25.92200 WR=35.637 peak=27.889
+== wp1_Region6_s0.7_pt_eb1d04fc51_s0: P100=27.889 WR=35.637 th=25.9220 matched=True n_sims=3
+[train] wp1_Region5_s0.8_lp_e62ade0088_s0: 60s (waited 0s)
+[wp1_Region4_s0.8_lp_e62ade0088_s0] round 0: best th=24.61100 WR=36.017 peak=38.910
+[train] wp1_Region5_s0.8_cpsat_cd6c30cd5f_s0: 50s (waited 99s)
+[wp1_Region4_s0.8_cpsat_cd6c30cd5f_s0] round 0: best th=24.61100 WR=34.458 peak=40.153
+[wp1_Region6_s0.7_cpsat_cd6c30cd5f_s0] round 1: best th=25.92200 WR=36.503 peak=27.899
+submitted wp1_Region6_s0.8_pt_eb1d04fc51_s0
+[wp1_Region4_s0.8_pt_eb1d04fc51_s0] round 0: best th=24.61100 WR=33.710 peak=39.967
+[wp1_Region5_s0.8_lp_e62ade0088_s0] round 0: best th=20.87300 WR=35.884 peak=20.314
+== wp1_Region5_s0.8_lp_e62ade0088_s0: P100=20.314 WR=35.884 th=20.8730 matched=True n_sims=3
+submitted wp1_Region4_s0.9_lp_e62ade0088_s0
+submitted wp1_Region4_s0.9_cpsat_cd6c30cd5f_s0
+[wp1_Region4_s0.8_lp_e62ade0088_s0] round 1: best th=24.44441 WR=35.711 peak=38.910
+== wp1_Region4_s0.8_lp_e62ade0088_s0: P100=38.910 WR=35.711 th=24.4444 matched=True n_sims=6
+[train] wp1_Region5_s0.8_pt_eb1d04fc51_s0: 64s (waited 28s)
+[wp1_Region5_s0.8_cpsat_cd6c30cd5f_s0] round 0: best th=20.87300 WR=35.132 peak=19.050
+[train] wp1_Region7_s0.8_lp_e62ade0088_s0: 96s (waited 0s)
+[wp1_Region4_s0.8_cpsat_cd6c30cd5f_s0] round 1: best th=25.61100 WR=36.079 peak=40.153
+[wp1_Region6_s0.7_cpsat_cd6c30cd5f_s0] round 2: best th=25.52673 WR=35.555 peak=27.899
+== wp1_Region6_s0.7_cpsat_cd6c30cd5f_s0: P100=27.899 WR=35.555 th=25.5267 matched=True n_sims=9
+[train] wp1_Region7_s0.8_cpsat_cd6c30cd5f_s0: 80s (waited 0s)
+[wp1_Region4_s0.8_pt_eb1d04fc51_s0] round 1: best th=25.61100 WR=35.647 peak=39.852
+== wp1_Region4_s0.8_pt_eb1d04fc51_s0: P100=39.852 WR=35.647 th=25.6110 matched=True n_sims=6
+submitted wp1_Region4_s0.9_pt_eb1d04fc51_s0
+[wp1_Region5_s0.8_pt_eb1d04fc51_s0] round 0: best th=21.87300 WR=32.152 peak=17.945
+[train] wp1_Region7_s0.8_pt_eb1d04fc51_s0: 86s (waited 0s)
+submitted wp1_Region5_s0.9_lp_e62ade0088_s0
+submitted wp1_Region5_s0.9_cpsat_cd6c30cd5f_s0
+[wp1_Region5_s0.8_cpsat_cd6c30cd5f_s0] round 1: best th=21.19521 WR=35.679 peak=19.060
+== wp1_Region5_s0.8_cpsat_cd6c30cd5f_s0: P100=19.060 WR=35.679 th=21.1952 matched=True n_sims=6
+[wp1_Region7_s0.8_lp_e62ade0088_s0] round 0: best th=30.31400 WR=35.495 peak=26.610
+== wp1_Region7_s0.8_lp_e62ade0088_s0: P100=26.610 WR=35.495 th=30.3140 matched=True n_sims=3
+[train] wp1_Region6_s0.8_lp_e62ade0088_s0: 89s (waited 0s)
+[train] wp1_Region6_s0.8_cpsat_cd6c30cd5f_s0: 66s (waited 0s)
+[wp1_Region4_s0.8_cpsat_cd6c30cd5f_s0] round 2: best th=25.31482 WR=35.560 peak=40.153
+== wp1_Region4_s0.8_cpsat_cd6c30cd5f_s0: P100=40.153 WR=35.560 th=25.3148 matched=True n_sims=9
+[train] wp1_Region6_s0.8_pt_eb1d04fc51_s0: 84s (waited 0s)
+[wp1_Region7_s0.8_cpsat_cd6c30cd5f_s0] round 0: best th=30.31400 WR=35.501 peak=26.124
+== wp1_Region7_s0.8_cpsat_cd6c30cd5f_s0: P100=26.124 WR=35.501 th=30.3140 matched=True n_sims=3
+submitted wp1_Region5_s0.9_pt_eb1d04fc51_s0
+[train] wp1_Region4_s0.9_lp_e62ade0088_s0: 79s (waited 0s)
+[wp1_Region5_s0.8_pt_eb1d04fc51_s0] round 1: best th=23.15691 WR=34.422 peak=17.834
+[wp1_Region7_s0.8_pt_eb1d04fc51_s0] round 0: best th=30.31400 WR=35.055 peak=26.254
+submitted wp1_Region7_s0.9_lp_e62ade0088_s0
+[wp1_Region6_s0.8_lp_e62ade0088_s0] round 0: best th=27.50900 WR=35.118 peak=28.419
+[wp1_Region6_s0.8_cpsat_cd6c30cd5f_s0] round 0: best th=28.50900 WR=35.716 peak=28.413
+== wp1_Region6_s0.8_cpsat_cd6c30cd5f_s0: P100=28.413 WR=35.716 th=28.5090 matched=True n_sims=3
+[train] wp1_Region4_s0.9_cpsat_cd6c30cd5f_s0: 83s (waited 0s)
+[wp1_Region6_s0.8_pt_eb1d04fc51_s0] round 0: best th=28.50900 WR=34.154 peak=28.307
+[wp1_Region4_s0.9_lp_e62ade0088_s0] round 0: best th=24.16900 WR=36.098 peak=31.118
+[wp1_Region5_s0.8_pt_eb1d04fc51_s0] round 2: best th=23.57791 WR=35.877 peak=17.712
+== wp1_Region5_s0.8_pt_eb1d04fc51_s0: P100=17.712 WR=35.877 th=23.5779 matched=True n_sims=9
+submitted wp1_Region7_s0.9_cpsat_cd6c30cd5f_s0
+[wp1_Region7_s0.8_pt_eb1d04fc51_s0] round 1: best th=30.63768 WR=35.479 peak=26.254
+== wp1_Region7_s0.8_pt_eb1d04fc51_s0: P100=26.254 WR=35.479 th=30.6377 matched=True n_sims=6
+[wp1_Region6_s0.8_lp_e62ade0088_s0] round 1: best th=27.74282 WR=35.744 peak=28.419
+== wp1_Region6_s0.8_lp_e62ade0088_s0: P100=28.419 WR=35.744 th=27.7428 matched=True n_sims=6
+[train] wp1_Region4_s0.9_pt_eb1d04fc51_s0: 78s (waited 107s)
+[wp1_Region4_s0.9_cpsat_cd6c30cd5f_s0] round 0: best th=24.16900 WR=34.514 peak=37.258
+[train] wp1_Region5_s0.9_lp_e62ade0088_s0: 80s (waited 0s)
+[wp1_Region6_s0.8_pt_eb1d04fc51_s0] round 1: best th=29.50900 WR=35.841 peak=28.307
+== wp1_Region6_s0.8_pt_eb1d04fc51_s0: P100=28.307 WR=35.841 th=29.5090 matched=True n_sims=6
+[train] wp1_Region5_s0.9_cpsat_cd6c30cd5f_s0: 90s (waited 0s)
+[wp1_Region4_s0.9_lp_e62ade0088_s0] round 1: best th=23.92102 WR=35.363 peak=31.118
+== wp1_Region4_s0.9_lp_e62ade0088_s0: P100=31.118 WR=35.363 th=23.9210 matched=True n_sims=6
+[wp1_Region4_s0.9_pt_eb1d04fc51_s0] round 0: best th=24.16900 WR=32.922 peak=31.372
+submitted wp1_Region7_s0.9_pt_eb1d04fc51_s0
+[wp1_Region4_s0.9_cpsat_cd6c30cd5f_s0] round 1: best th=25.16900 WR=35.968 peak=37.258
+submitted wp1_Region6_s0.9_lp_e62ade0088_s0
+[wp1_Region5_s0.9_lp_e62ade0088_s0] round 0: best th=28.19000 WR=35.010 peak=26.318
+[train] wp1_Region5_s0.9_pt_eb1d04fc51_s0: 101s (waited 189s)
+[wp1_Region5_s0.9_cpsat_cd6c30cd5f_s0] round 0: best th=28.19000 WR=36.514 peak=26.071
+submitted wp1_Region6_s0.9_cpsat_cd6c30cd5f_s0
+[wp1_Region4_s0.9_pt_eb1d04fc51_s0] round 1: best th=25.16900 WR=34.949 peak=31.372
+[train] wp1_Region7_s0.9_lp_e62ade0088_s0: 113s (waited 0s)
+[wp1_Region4_s0.9_cpsat_cd6c30cd5f_s0] round 2: best th=24.91522 WR=35.683 peak=37.258
+== wp1_Region4_s0.9_cpsat_cd6c30cd5f_s0: P100=37.258 WR=35.683 th=24.9152 matched=True n_sims=9
+[wp1_Region5_s0.9_lp_e62ade0088_s0] round 1: best th=28.58695 WR=35.710 peak=26.318
+== wp1_Region5_s0.9_lp_e62ade0088_s0: P100=26.318 WR=35.710 th=28.5870 matched=True n_sims=6
+[train] wp1_Region7_s0.9_cpsat_cd6c30cd5f_s0: 111s (waited 9s)
+[wp1_Region5_s0.9_pt_eb1d04fc51_s0] round 0: best th=28.19000 WR=36.243 peak=26.365
+[train] wp1_Region7_s0.9_pt_eb1d04fc51_s0: 111s (waited 0s)
+[wp1_Region5_s0.9_cpsat_cd6c30cd5f_s0] round 1: best th=27.19000 WR=35.069 peak=26.490
+submitted wp1_Region6_s0.9_pt_eb1d04fc51_s0
+[wp1_Region4_s0.9_pt_eb1d04fc51_s0] round 2: best th=25.53748 WR=35.578 peak=31.372
+== wp1_Region4_s0.9_pt_eb1d04fc51_s0: P100=31.372 WR=35.578 th=25.5375 matched=True n_sims=9
+[wp1_Region7_s0.9_lp_e62ade0088_s0] round 0: best th=29.59300 WR=35.392 peak=29.529
+== wp1_Region7_s0.9_lp_e62ade0088_s0: P100=29.529 WR=35.392 th=29.5930 matched=True n_sims=3
+[train] wp1_Region6_s0.9_lp_e62ade0088_s0: 71s (waited 0s)
+[train] wp1_Region6_s0.9_cpsat_cd6c30cd5f_s0: 74s (waited 0s)
+[wp1_Region7_s0.9_cpsat_cd6c30cd5f_s0] round 0: best th=29.59300 WR=35.923 peak=29.406
+== wp1_Region7_s0.9_cpsat_cd6c30cd5f_s0: P100=29.406 WR=35.923 th=29.5930 matched=True n_sims=3
+[wp1_Region5_s0.9_pt_eb1d04fc51_s0] round 1: best th=28.19000 WR=36.243 peak=26.365
+[train] wp1_Region6_s0.9_pt_eb1d04fc51_s0: 97s (waited 0s)
+[wp1_Region7_s0.9_pt_eb1d04fc51_s0] round 0: best th=29.59300 WR=37.364 peak=30.243
+[wp1_Region5_s0.9_cpsat_cd6c30cd5f_s0] round 2: best th=27.55672 WR=35.593 peak=26.071
+== wp1_Region5_s0.9_cpsat_cd6c30cd5f_s0: P100=26.071 WR=35.593 th=27.5567 matched=True n_sims=9
+[wp1_Region6_s0.9_lp_e62ade0088_s0] round 0: best th=27.59300 WR=35.729 peak=29.671
+== wp1_Region6_s0.9_lp_e62ade0088_s0: P100=29.671 WR=35.729 th=27.5930 matched=True n_sims=3
+[wp1_Region6_s0.9_cpsat_cd6c30cd5f_s0] round 0: best th=25.59300 WR=34.784 peak=29.128
+[wp1_Region5_s0.9_pt_eb1d04fc51_s0] round 2: best th=27.72940 WR=35.617 peak=26.365
+== wp1_Region5_s0.9_pt_eb1d04fc51_s0: P100=26.365 WR=35.617 th=27.7294 matched=True n_sims=9
+[wp1_Region6_s0.9_pt_eb1d04fc51_s0] round 0: best th=26.59300 WR=35.691 peak=29.643
+== wp1_Region6_s0.9_pt_eb1d04fc51_s0: P100=29.643 WR=35.691 th=26.5930 matched=True n_sims=3
+[wp1_Region7_s0.9_pt_eb1d04fc51_s0] round 1: best th=28.59300 WR=36.299 peak=30.644
+[wp1_Region6_s0.9_cpsat_cd6c30cd5f_s0] round 1: best th=26.03827 WR=35.764 peak=29.270
+== wp1_Region6_s0.9_cpsat_cd6c30cd5f_s0: P100=29.270 WR=35.764 th=26.0383 matched=True n_sims=6
+[wp1_Region7_s0.9_pt_eb1d04fc51_s0] round 2: best th=28.14472 WR=35.485 peak=30.644
+== wp1_Region7_s0.9_pt_eb1d04fc51_s0: P100=30.644 WR=35.485 th=28.1447 matched=True n_sims=9

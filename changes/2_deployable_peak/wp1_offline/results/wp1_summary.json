@@ -1,0 +1,74 @@
+{
+ "summary": [
+  {
+   "method": "lp",
+   "n": 39,
+   "wins": 36,
+   "win_rate": 0.9230769230769231,
+   "mean_red_pct": 13.033214055506004,
+   "sd_red": 6.6042200652889065,
+   "min_red": -1.5969047555948275,
+   "max_red": 23.42843365006834,
+   "mean_R0": 33.001555661820724,
+   "mean_M": 28.744093216840454,
+   "moved": 30,
+   "plan_hit": 6,
+   "pass_win": true,
+   "pass_mean": true,
+   "H1prime": true,
+   "per_region": [
+    "Region4: 6/9 wins, mean red 4.6%",
+    "Region5: 10/10 wins, mean red 13.0%",
+    "Region6: 10/10 wins, mean red 16.3%",
+    "Region7: 10/10 wins, mean red 17.4%"
+   ]
+  },
+  {
+   "method": "cpsat",
+   "n": 39,
+   "wins": 36,
+   "win_rate": 0.9230769230769231,
+   "mean_red_pct": 13.152295043962836,
+   "sd_red": 7.205545804254587,
+   "min_red": -6.876791230381879,
+   "max_red": 23.639638887746912,
+   "mean_R0": 33.001555661820724,
+   "mean_M": 28.775240903445273,
+   "moved": 34,
+   "plan_hit": 9,
+   "pass_win": true,
+   "pass_mean": true,
+   "H1prime": true,
+   "per_region": [
+    "Region4: 6/9 wins, mean red 3.0%",
+    "Region5: 10/10 wins, mean red 14.5%",
+    "Region6: 10/10 wins, mean red 16.4%",
+    "Region7: 10/10 wins, mean red 17.7%"
+   ]
+  },
+  {
+   "method": "pt",
+   "n": 39,
+   "wins": 37,
+   "win_rate": 0.9487179487179487,
+   "mean_red_pct": 13.68870657807283,
+   "sd_red": 6.427642786878752,
+   "min_red": -4.05566131548442,
+   "max_red": 23.461401141618598,
+   "mean_R0": 33.001555661820724,
+   "mean_M": 28.591428336615547,
+   "moved": 33,
+   "plan_hit": 6,
+   "pass_win": true,
+   "pass_mean": true,
+   "H1prime": true,
+   "per_region": [
+    "Region4: 7/9 wins, mean red 5.4%",
+    "Region5: 10/10 wins, mean red 14.6%",
+    "Region6: 10/10 wins, mean red 16.6%",
+    "Region7: 10/10 wins, mean red 17.3%"
+   ]
+  }
+ ],
+ "n_instances": 39
+}

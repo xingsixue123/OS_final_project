@@ -1,0 +1,4 @@
+[train] wp1_Region7_s0.1_R0: 27s (waited 0s)
+[wp1_Region7_s0.1_R0] round 0: best th=29.58750 WR=34.854 peak=33.676
+[wp1_Region7_s0.1_R0] round 1: best th=30.08163 WR=35.527 peak=33.676
+== wp1_Region7_s0.1_R0: P100=33.676 WR=35.527 th=30.0816 matched=True n_sims=6
