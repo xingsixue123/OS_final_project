@@ -90,3 +90,19 @@
   (server_fix project, coordinator git objects / SCOPE_v2.md, HF cache of the server_fix job, desktop session files).
 - 01:20 RESULTS_dev.md and PROTOCOL_v2_H2.md written (finalists PT + EIM; dev predicts H2' FAIL; label solver EIM
   10-s config at 10 s). STOP at CP2: no WP5 run on samples 0.4-0.6.
+
+## Oct 3 01:15 H2' TEST (PROTOCOL_v2_H2.md committed fd54e76; coordinator deleted TIMING_IDLE at 01:13:42)
+- Before: check_frozen "frozen OK (94 files)" (results/check_frozen_before_h2test.txt); leak check 595 hits, same
+  non-Track-B categories as at CP2 plus the coordinator's new git objects (results/leak_check_before_h2test.txt).
+- 01:15:47 core_audit.py restarted (logs/core_audit_h2test.log). 01:24 verified: no foreign thread on 0-7/12-19 since
+  01:16:37 (Track A's sims drained; every running Track-A sim pinned to 8-11,20-23).
+- Drivers: src/p2h2test.py (exact protocol order; sha256 of the 6 instances verified; 324 runs), then
+  src/p2h2roll.py (pre-declared secondary rolling at 1 s), analysis src/p2h2analyze.py. No config / seed / instance /
+  criterion is read from anywhere but results/plan_H2test.json (committed).
+- 01:24-01:45 test driver: 324/324 runs logged; 01:45 secondary rolling started (src/p2h2roll.py).
+- 02:08:5x all test timing finished (324 test runs + 48 rolling-secondary runs) -> P2/TIMING_IDLE re-created; core_audit stopped.
+- 02:10 RESULTS_test.md written. **H2' NOT supported for either finalist**: PT <= best classical 1/6 (1 s), 6/6 (3 s),
+  4/6 (10 s), mean 22.7336 vs 22.7166 -> (i) FAIL, (ii) FAIL; EIM 0/6, 5/6, 3/6, 22.8413 vs 22.7166 -> FAIL, FAIL.
+  324 runs ok, 0 over budget, 0 failed; zero foreign load during the test; check_frozen OK before/after; leak lists
+  identical before/after. Secondary rolling at 1 s: CP-SAT/MILP best (26.44/26.45), PT 26.90, EIM 26.86 (0/6).
+  STOP. No commits.

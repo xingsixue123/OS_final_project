@@ -1,0 +1,44 @@
+{
+ "verdict": {
+  "pt": {
+   "counts": {
+    "1": 1,
+    "3": 6,
+    "10": 4
+   },
+   "strict_counts": {
+    "1": 0,
+    "3": 5,
+    "10": 2
+   },
+   "budgets_meeting": 1,
+   "criterion_i": false,
+   "mean_finalist": 22.733624266465675,
+   "mean_best_classical": 22.716603130665604,
+   "criterion_ii": false,
+   "H2prime": false
+  },
+  "eim": {
+   "counts": {
+    "1": 0,
+    "3": 5,
+    "10": 3
+   },
+   "strict_counts": {
+    "1": 0,
+    "3": 4,
+    "10": 1
+   },
+   "budgets_meeting": 1,
+   "criterion_i": false,
+   "mean_finalist": 22.84126858866439,
+   "mean_best_classical": 22.716603130665604,
+   "criterion_ii": false,
+   "H2prime": false
+  }
+ },
+ "n_runs": 324,
+ "n_ok": 324,
+ "n_over": 0,
+ "n_failed": 0
+}

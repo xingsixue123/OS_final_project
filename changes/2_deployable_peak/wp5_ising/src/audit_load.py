@@ -45,7 +45,8 @@ def load_for(A, start, end):
 
 
 def main():
-    A = parse(os.path.join(AREA, "logs", "core_audit.log"))
+    A = parse(os.environ.get("AUDIT_LOG", os.path.join(AREA, "logs", "core_audit.log")),
+              day=os.environ.get("AUDIT_DAY", "2026-10-01"))
     paths = sys.argv[1:] or [os.path.join(AREA, "trials.csv")]
     for p in paths:
         T = pd.read_csv(p)
@@ -58,7 +59,7 @@ def main():
             sl.append(b / max(w, 1e-9))
         T["direct_load"] = dl
         T["sibling_load"] = sl
-        T = T[pd.to_datetime(T.ts) >= pd.Timestamp("2026-10-01 15:00:00")]
+        T = T[pd.to_datetime(T.ts) >= pd.Timestamp(os.environ.get("AUDIT_FROM", "2026-10-01 15:00:00"))]
         g = T.groupby(["phase", "family"]).agg(n=("wall", "size"), direct=("direct_load", "mean"),
                                                sibling=("sibling_load", "mean"),
                                                sib_p90=("sibling_load", lambda x: np.percentile(x, 90)),
@@ -66,7 +67,7 @@ def main():
         print(p)
         print(g.round(3).to_string())
         T[["key", "phase", "instance", "solver", "family", "budget", "seed", "wall", "direct_load",
-           "sibling_load"]].to_csv(p.replace(".csv", "_audit_load.csv"), index=False)
+           "sibling_load"]].to_csv(p.replace(".csv", os.environ.get("AUDIT_SUFFIX", "_audit_load.csv")), index=False)
 
 
 if __name__ == "__main__":
