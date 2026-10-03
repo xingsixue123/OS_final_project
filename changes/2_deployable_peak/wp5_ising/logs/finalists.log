@@ -1,0 +1,74 @@
+{
+ "rule": "lowest V = mean over budgets x dev instances x seeds of (obj/pgreedy - 1) in deval; tie -> lower V@1s",
+ "V": {
+  "pt": {
+   "V": -14.580832626149338,
+   "V1": -13.208450907835065,
+   "complete": true,
+   "n": 72,
+   "n_over": 0,
+   "V_overbudget_as_fail": -14.580832626149338,
+   "V_per_budget": {
+    "1": -13.208450907835065,
+    "3": -15.189200935692782,
+    "10": -15.344846034920172
+   }
+  },
+  "eim": {
+   "V": -14.13941219728877,
+   "V1": -12.121129436460492,
+   "complete": true,
+   "n": 72,
+   "n_over": 0,
+   "V_overbudget_as_fail": -14.13941219728877,
+   "V_per_budget": {
+    "1": -12.121129436460492,
+    "3": -15.012965263720607,
+    "10": -15.284141891685215
+   }
+  },
+  "sb": {
+   "V": -11.636706832461304,
+   "V1": -7.651208319306875,
+   "complete": true,
+   "n": 72,
+   "n_over": 0,
+   "V_overbudget_as_fail": -11.636706832461304,
+   "V_per_budget": {
+    "1": -7.651208319306875,
+    "3": -13.442987207188063,
+    "10": -13.815924970888972
+   }
+  },
+  "mq": {
+   "V": -12.497473046540387,
+   "V1": -7.869219658262883,
+   "complete": true,
+   "n": 72,
+   "n_over": 0,
+   "V_overbudget_as_fail": -12.497473046540387,
+   "V_per_budget": {
+    "1": -7.869219658262883,
+    "3": -14.639409314283048,
+    "10": -14.983790167075233
+   }
+  }
+ },
+ "ranking": [
+  "pt",
+  "eim",
+  "mq",
+  "sb"
+ ],
+ "finalists": [
+  "pt",
+  "eim"
+ ],
+ "ranking_if_overbudget_counted_as_fail": [
+  "pt",
+  "eim",
+  "mq",
+  "sb"
+ ],
+ "ranking_changes_if_overbudget_fail": false
+}

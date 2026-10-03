@@ -18,3 +18,4 @@ __pycache__/
 wp0_overlay/overlay/
 # Training dumps (GBs)
 wp0_overlay/results/*/
+*.lock

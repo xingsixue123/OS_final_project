@@ -1,0 +1,680 @@
+[
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region4_s0.npz",
+  "part": "day1",
+  "solver": "mfsb",
+  "agents": 32,
+  "steps": 500
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region4_s0.npz",
+  "part": "day1",
+  "solver": "pt",
+  "agents": 16,
+  "moves": 20000,
+  "pt_secs": 5.0
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region4_s0.npz",
+  "part": "full",
+  "solver": "mfsb",
+  "agents": 32,
+  "steps": 500
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region4_s0.npz",
+  "part": "full",
+  "solver": "pt",
+  "agents": 16,
+  "moves": 20000,
+  "pt_secs": 5.0
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region4_s0.npz",
+  "part": "day1",
+  "solver": "dense",
+  "agents": 32,
+  "steps": 100,
+  "mem_cap_gb": 64
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region4_s0.2.npz",
+  "part": "day1",
+  "solver": "mfsb",
+  "agents": 32,
+  "steps": 500
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region4_s0.2.npz",
+  "part": "day1",
+  "solver": "pt",
+  "agents": 16,
+  "moves": 20000,
+  "pt_secs": 5.0
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region4_s0.2.npz",
+  "part": "full",
+  "solver": "mfsb",
+  "agents": 32,
+  "steps": 500
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region4_s0.2.npz",
+  "part": "full",
+  "solver": "pt",
+  "agents": 16,
+  "moves": 20000,
+  "pt_secs": 5.0
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region4_s0.2.npz",
+  "part": "day1",
+  "solver": "dense",
+  "agents": 32,
+  "steps": 100,
+  "mem_cap_gb": 64
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region4_s0.3.npz",
+  "part": "day1",
+  "solver": "mfsb",
+  "agents": 32,
+  "steps": 500
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region4_s0.3.npz",
+  "part": "day1",
+  "solver": "pt",
+  "agents": 16,
+  "moves": 20000,
+  "pt_secs": 5.0
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region4_s0.3.npz",
+  "part": "full",
+  "solver": "mfsb",
+  "agents": 32,
+  "steps": 500
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region4_s0.3.npz",
+  "part": "full",
+  "solver": "pt",
+  "agents": 16,
+  "moves": 20000,
+  "pt_secs": 5.0
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region4_s0.3.npz",
+  "part": "day1",
+  "solver": "dense",
+  "agents": 32,
+  "steps": 100,
+  "mem_cap_gb": 64
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region5_s0.npz",
+  "part": "day1",
+  "solver": "mfsb",
+  "agents": 32,
+  "steps": 500
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region5_s0.npz",
+  "part": "day1",
+  "solver": "pt",
+  "agents": 16,
+  "moves": 20000,
+  "pt_secs": 5.0
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region5_s0.npz",
+  "part": "full",
+  "solver": "mfsb",
+  "agents": 32,
+  "steps": 500
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region5_s0.npz",
+  "part": "full",
+  "solver": "pt",
+  "agents": 16,
+  "moves": 20000,
+  "pt_secs": 5.0
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region5_s0.npz",
+  "part": "day1",
+  "solver": "dense",
+  "agents": 32,
+  "steps": 100,
+  "mem_cap_gb": 64
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region5_s0.1.npz",
+  "part": "day1",
+  "solver": "mfsb",
+  "agents": 32,
+  "steps": 500
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region5_s0.1.npz",
+  "part": "day1",
+  "solver": "pt",
+  "agents": 16,
+  "moves": 20000,
+  "pt_secs": 5.0
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region5_s0.1.npz",
+  "part": "full",
+  "solver": "mfsb",
+  "agents": 32,
+  "steps": 500
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region5_s0.1.npz",
+  "part": "full",
+  "solver": "pt",
+  "agents": 16,
+  "moves": 20000,
+  "pt_secs": 5.0
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region5_s0.1.npz",
+  "part": "day1",
+  "solver": "dense",
+  "agents": 32,
+  "steps": 100,
+  "mem_cap_gb": 64
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region5_s0.2.npz",
+  "part": "day1",
+  "solver": "mfsb",
+  "agents": 32,
+  "steps": 500
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region5_s0.2.npz",
+  "part": "day1",
+  "solver": "pt",
+  "agents": 16,
+  "moves": 20000,
+  "pt_secs": 5.0
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region5_s0.2.npz",
+  "part": "full",
+  "solver": "mfsb",
+  "agents": 32,
+  "steps": 500
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region5_s0.2.npz",
+  "part": "full",
+  "solver": "pt",
+  "agents": 16,
+  "moves": 20000,
+  "pt_secs": 5.0
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region5_s0.2.npz",
+  "part": "day1",
+  "solver": "dense",
+  "agents": 32,
+  "steps": 100,
+  "mem_cap_gb": 64
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region5_s0.3.npz",
+  "part": "day1",
+  "solver": "mfsb",
+  "agents": 32,
+  "steps": 500
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region5_s0.3.npz",
+  "part": "day1",
+  "solver": "pt",
+  "agents": 16,
+  "moves": 20000,
+  "pt_secs": 5.0
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region5_s0.3.npz",
+  "part": "full",
+  "solver": "mfsb",
+  "agents": 32,
+  "steps": 500
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region5_s0.3.npz",
+  "part": "full",
+  "solver": "pt",
+  "agents": 16,
+  "moves": 20000,
+  "pt_secs": 5.0
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region5_s0.3.npz",
+  "part": "day1",
+  "solver": "dense",
+  "agents": 32,
+  "steps": 100,
+  "mem_cap_gb": 64
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region6_s0.npz",
+  "part": "day1",
+  "solver": "mfsb",
+  "agents": 32,
+  "steps": 500
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region6_s0.npz",
+  "part": "day1",
+  "solver": "pt",
+  "agents": 16,
+  "moves": 20000,
+  "pt_secs": 5.0
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region6_s0.npz",
+  "part": "full",
+  "solver": "mfsb",
+  "agents": 32,
+  "steps": 500
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region6_s0.npz",
+  "part": "full",
+  "solver": "pt",
+  "agents": 16,
+  "moves": 20000,
+  "pt_secs": 5.0
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region6_s0.npz",
+  "part": "day1",
+  "solver": "dense",
+  "agents": 32,
+  "steps": 100,
+  "mem_cap_gb": 64
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region6_s0.1.npz",
+  "part": "day1",
+  "solver": "mfsb",
+  "agents": 32,
+  "steps": 500
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region6_s0.1.npz",
+  "part": "day1",
+  "solver": "pt",
+  "agents": 16,
+  "moves": 20000,
+  "pt_secs": 5.0
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region6_s0.1.npz",
+  "part": "full",
+  "solver": "mfsb",
+  "agents": 32,
+  "steps": 500
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region6_s0.1.npz",
+  "part": "full",
+  "solver": "pt",
+  "agents": 16,
+  "moves": 20000,
+  "pt_secs": 5.0
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region6_s0.1.npz",
+  "part": "day1",
+  "solver": "dense",
+  "agents": 32,
+  "steps": 100,
+  "mem_cap_gb": 64
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region6_s0.2.npz",
+  "part": "day1",
+  "solver": "mfsb",
+  "agents": 32,
+  "steps": 500
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region6_s0.2.npz",
+  "part": "day1",
+  "solver": "pt",
+  "agents": 16,
+  "moves": 20000,
+  "pt_secs": 5.0
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region6_s0.2.npz",
+  "part": "full",
+  "solver": "mfsb",
+  "agents": 32,
+  "steps": 500
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region6_s0.2.npz",
+  "part": "full",
+  "solver": "pt",
+  "agents": 16,
+  "moves": 20000,
+  "pt_secs": 5.0
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region6_s0.2.npz",
+  "part": "day1",
+  "solver": "dense",
+  "agents": 32,
+  "steps": 100,
+  "mem_cap_gb": 64
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region6_s0.3.npz",
+  "part": "day1",
+  "solver": "mfsb",
+  "agents": 32,
+  "steps": 500
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region6_s0.3.npz",
+  "part": "day1",
+  "solver": "pt",
+  "agents": 16,
+  "moves": 20000,
+  "pt_secs": 5.0
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region6_s0.3.npz",
+  "part": "full",
+  "solver": "mfsb",
+  "agents": 32,
+  "steps": 500
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region6_s0.3.npz",
+  "part": "full",
+  "solver": "pt",
+  "agents": 16,
+  "moves": 20000,
+  "pt_secs": 5.0
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region6_s0.3.npz",
+  "part": "day1",
+  "solver": "dense",
+  "agents": 32,
+  "steps": 100,
+  "mem_cap_gb": 64
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region7_s0.npz",
+  "part": "day1",
+  "solver": "mfsb",
+  "agents": 32,
+  "steps": 500
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region7_s0.npz",
+  "part": "day1",
+  "solver": "pt",
+  "agents": 16,
+  "moves": 20000,
+  "pt_secs": 5.0
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region7_s0.npz",
+  "part": "full",
+  "solver": "mfsb",
+  "agents": 32,
+  "steps": 500
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region7_s0.npz",
+  "part": "full",
+  "solver": "pt",
+  "agents": 16,
+  "moves": 20000,
+  "pt_secs": 5.0
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region7_s0.npz",
+  "part": "day1",
+  "solver": "dense",
+  "agents": 32,
+  "steps": 100,
+  "mem_cap_gb": 64
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region7_s0.1.npz",
+  "part": "day1",
+  "solver": "mfsb",
+  "agents": 32,
+  "steps": 500
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region7_s0.1.npz",
+  "part": "day1",
+  "solver": "pt",
+  "agents": 16,
+  "moves": 20000,
+  "pt_secs": 5.0
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region7_s0.1.npz",
+  "part": "full",
+  "solver": "mfsb",
+  "agents": 32,
+  "steps": 500
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region7_s0.1.npz",
+  "part": "full",
+  "solver": "pt",
+  "agents": 16,
+  "moves": 20000,
+  "pt_secs": 5.0
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region7_s0.1.npz",
+  "part": "day1",
+  "solver": "dense",
+  "agents": 32,
+  "steps": 100,
+  "mem_cap_gb": 64
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region7_s0.2.npz",
+  "part": "day1",
+  "solver": "mfsb",
+  "agents": 32,
+  "steps": 500
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region7_s0.2.npz",
+  "part": "day1",
+  "solver": "pt",
+  "agents": 16,
+  "moves": 20000,
+  "pt_secs": 5.0
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region7_s0.2.npz",
+  "part": "full",
+  "solver": "mfsb",
+  "agents": 32,
+  "steps": 500
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region7_s0.2.npz",
+  "part": "full",
+  "solver": "pt",
+  "agents": 16,
+  "moves": 20000,
+  "pt_secs": 5.0
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region7_s0.2.npz",
+  "part": "day1",
+  "solver": "dense",
+  "agents": 32,
+  "steps": 100,
+  "mem_cap_gb": 64
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region7_s0.3.npz",
+  "part": "day1",
+  "solver": "mfsb",
+  "agents": 32,
+  "steps": 500
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region7_s0.3.npz",
+  "part": "day1",
+  "solver": "pt",
+  "agents": 16,
+  "moves": 20000,
+  "pt_secs": 5.0
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region7_s0.3.npz",
+  "part": "full",
+  "solver": "mfsb",
+  "agents": 32,
+  "steps": 500
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region7_s0.3.npz",
+  "part": "full",
+  "solver": "pt",
+  "agents": 16,
+  "moves": 20000,
+  "pt_secs": 5.0
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region7_s0.3.npz",
+  "part": "day1",
+  "solver": "dense",
+  "agents": 32,
+  "steps": 100,
+  "mem_cap_gb": 64
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region4_s0.3.npz",
+  "part": "full",
+  "solver": "dense",
+  "agents": 32,
+  "steps": 50,
+  "mem_cap_gb": 64,
+  "timeout": 3000
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region5_s0.npz",
+  "part": "full",
+  "solver": "dense",
+  "agents": 32,
+  "steps": 50,
+  "mem_cap_gb": 64,
+  "timeout": 3000
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region6_s0.npz",
+  "part": "full",
+  "solver": "dense",
+  "agents": 32,
+  "steps": 50,
+  "mem_cap_gb": 64,
+  "timeout": 3000
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region7_s0.npz",
+  "part": "full",
+  "solver": "dense",
+  "agents": 32,
+  "steps": 50,
+  "mem_cap_gb": 64,
+  "timeout": 3000
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region7_s0.npz,/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region7_s0.1.npz",
+  "part": "union",
+  "solver": "mfsb",
+  "agents": 32,
+  "steps": 500
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region7_s0.npz,/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region7_s0.1.npz",
+  "part": "union",
+  "solver": "pt",
+  "agents": 16,
+  "moves": 20000,
+  "pt_secs": 5.0
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region7_s0.npz,/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region7_s0.1.npz",
+  "part": "union",
+  "solver": "dense",
+  "agents": 32,
+  "steps": 50,
+  "mem_cap_gb": 64,
+  "timeout": 3000
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region7_s0.npz,/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region7_s0.1.npz,/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region7_s0.2.npz,/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region7_s0.3.npz",
+  "part": "union",
+  "solver": "mfsb",
+  "agents": 32,
+  "steps": 500
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region7_s0.npz,/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region7_s0.1.npz,/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region7_s0.2.npz,/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region7_s0.3.npz",
+  "part": "union",
+  "solver": "pt",
+  "agents": 16,
+  "moves": 20000,
+  "pt_secs": 5.0
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region7_s0.npz,/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region7_s0.1.npz,/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region7_s0.2.npz,/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region7_s0.3.npz",
+  "part": "union",
+  "solver": "dense",
+  "agents": 32,
+  "steps": 50,
+  "mem_cap_gb": 64,
+  "timeout": 3000
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region5_s0.npz,/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region5_s0.1.npz,/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region5_s0.2.npz,/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region5_s0.3.npz",
+  "part": "union",
+  "solver": "mfsb",
+  "agents": 32,
+  "steps": 500
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region5_s0.npz,/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region5_s0.1.npz,/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region5_s0.2.npz,/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region5_s0.3.npz",
+  "part": "union",
+  "solver": "pt",
+  "agents": 16,
+  "moves": 20000,
+  "pt_secs": 5.0
+ },
+ {
+  "inst": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region5_s0.npz,/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region5_s0.1.npz,/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region5_s0.2.npz,/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp1_offline/inst/full_Region5_s0.3.npz",
+  "part": "union",
+  "solver": "dense",
+  "agents": 32,
+  "steps": 50,
+  "mem_cap_gb": 64,
+  "timeout": 3000
+ }
+]

@@ -1,0 +1,3 @@
+RESULT {"instance": "full_Region7_s0", "solver": "pgreedy", "budget": 0.3, "full_peak_util": 31.821694509194437, "n_over_budget": 0, "max_block_wall": 0.028, "status": "ok"}
+RESULT {"instance": "full_Region7_s0", "solver": "pt", "budget": 0.3, "full_peak_util": 37.80528036778015, "n_over_budget": 0, "max_block_wall": 0.31, "status": "ok"}
+RESULT {"instance": "full_Region7_s0", "solver": "cpsat", "budget": 0.3, "full_peak_util": 28.749433436933437, "n_over_budget": 0, "max_block_wall": 0.075, "status": "ok"}

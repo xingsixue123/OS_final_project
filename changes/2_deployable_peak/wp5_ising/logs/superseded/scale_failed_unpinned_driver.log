@@ -1,0 +1,12 @@
+88 runs
+Traceback (most recent call last):
+  File "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp5_ising/src/p2scale.py", line 346, in <module>
+    main()
+  File "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp5_ising/src/p2scale.py", line 342, in main
+    run_all(o)
+  File "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp5_ising/src/p2scale.py", line 308, in run_all
+    with CoresLock():
+  File "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp5_ising/src/p2run.py", line 71, in __enter__
+    assert aff == list(range(8)), f"timing run must be pinned to cores 0-7 (taskset -c 0-7), got {aff}"
+           ^^^^^^^^^^^^^^^^^^^^^
+AssertionError: timing run must be pinned to cores 0-7 (taskset -c 0-7), got [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
