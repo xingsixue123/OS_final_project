@@ -102,8 +102,9 @@ def main():
             txt = open(f"{PROJECT}/{f}", encoding="utf-8").read()
         except (UnicodeDecodeError, FileNotFoundError, IsADirectoryError):
             continue
-        outside = any(category(m.group(1)) for m in PATH_RE.finditer(txt))
-        if SENSITIVE.search(txt) or outside:
+        # A file needs scrubbing iff the scrub would change it (project paths, functional /tmp in docs and
+        # system daemons such as /snap/snapd are left alone).
+        if scrub_text(txt) != txt:
             hits.append(f)
             if a.apply:
                 open(f"{PROJECT}/{f}", "w", encoding="utf-8").write(scrub_text(txt))
