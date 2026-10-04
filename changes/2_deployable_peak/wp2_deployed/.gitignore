@@ -1,0 +1,16 @@
+# runtime state stays out of git (code, reports, trials.csv and small result CSVs are committed)
+.home/
+.cache/
+.sim_slots.d/
+.leak_marker
+work/
+logs/
+labels/*.npz
+results/train/
+results/cfg/
+results/converge/
+results/wrmap_pairs.jsonl
+STOP
+__pycache__/
+*.pyc
+*.lock

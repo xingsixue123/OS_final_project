@@ -1,0 +1,47 @@
+{
+ "inst": "Region7_s0",
+ "design": "F1CPSAT",
+ "seed": 1,
+ "n": 12320,
+ "B": 24606.0,
+ "n_core": 1432,
+ "n_label": 1432,
+ "n_baleen": 2361,
+ "jaccard_vs_baleen": 0.45996920708237105,
+ "use_frac": 1.0,
+ "dt_ratio": 0.8524434264494611,
+ "label_peak_util": 22.108602046102092,
+ "baleen_peak_util": 28.904849779849823,
+ "label_top5": 22.106387593887618,
+ "baleen_top5": 27.338377363377422,
+ "zero_value_labels": 0,
+ "zero_value_labels_baleen": 0,
+ "secs": 9.916382789611816,
+ "info": {
+  "solver": "cpsat",
+  "cfg": {
+   "cp_model_presolve": false,
+   "linearization_level": 1,
+   "repair_hint": false,
+   "start": "lp"
+  },
+  "budget": 10.0,
+  "wall": 9.11119556427002,
+  "per_level": [
+   {
+    "cp_status": "FEASIBLE",
+    "cp_time": 9.039364576339722,
+    "cp_build": null,
+    "cp_improved": 1,
+    "rep_n_drop": 0,
+    "rep_n_add": 0,
+    "rep_n_fill": 0,
+    "level": 1.0,
+    "secs": 9.089773654937744,
+    "obj": 22.108602046102092,
+    "n_sel": 1432
+   }
+  ],
+  "n_fill": 0
+ }
+}

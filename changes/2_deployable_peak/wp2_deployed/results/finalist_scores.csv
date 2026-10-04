@@ -1,0 +1,17 @@
+config,n_inst,min_matched_retrains,S,S_full8,wins_both,ising_family,eligible
+Ea-1.0:F1PT,8,3,1.0273737643412053,True,5,True,True
+Ea-0.5:F1PT,8,3,0.386118800174466,True,5,True,True
+Aa-1.0:baleen,8,3,0.3496658626895375,True,4,False,False
+Ea-1.0:F1EIM,8,1,0.20611901601837257,True,4,True,False
+Ba-0.5:baleen,8,3,0.172207518557844,True,5,False,False
+D:F1PT,8,3,-0.1415928785796181,True,4,True,True
+Ba-1.0:baleen,8,3,-0.200282741963961,True,4,False,False
+Ea-1.0:F1CPSAT,8,3,-0.2357941056076367,True,4,False,False
+D:F1EIM,8,3,-0.23818041526154943,True,3,True,True
+Dc:F1CPSAT,8,3,-0.5110567480514288,True,5,False,False
+C:F1PT,8,3,-0.5833758255664954,True,1,True,False
+C:F1EIM,8,3,-0.8677270838718183,True,2,True,False
+D:P0,8,1,-1.1985263964584032,True,4,True,False
+D:T2,8,1,-1.421062251811752,True,4,True,False
+Epf:F1PT,4,1,-1.6217624967786541,False,0,True,False
+D2:F1PT,8,1,-2.0353279051326236,True,1,True,False
