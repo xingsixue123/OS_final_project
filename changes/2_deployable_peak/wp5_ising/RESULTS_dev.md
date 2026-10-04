@@ -411,7 +411,7 @@ instance. Memory = peak RSS of the run minus the RSS after instance load (~355-4
   for the Ising but not the classical runs -> all 192 rows superseded (`superseded_sibling_load`) and the 1-s dev
   evaluation re-run at 16:47-17:41 with 12-19 idle (conclusions unchanged: LS 23.03 vs PT 23.25).
 - **Incident 3 (foreign processes on 0-7, not Track A/B):** editor helpers (VS Code / extension node processes) caused
-  short DIRECT bursts, and an unrelated user job (`python3 match_background.py`, Oct 1 18:33-20:34, ~1,190 CPU-s in
+  short DIRECT bursts, and an unrelated user job (`python3 <foreign process>`, Oct 1 18:33-20:34, ~1,190 CPU-s in
   total, mostly on 12-19, 1 min at ~3 cores on 0-7 at 20:33) overlapped tuning. 63 timing runs had a mean DIRECT
   foreign load > 0.2 logical CPUs (`results/flagged_foreign_direct_load.csv`: 55 tuning instance-runs -- SB 1 s
   trials 8-11 (26), LP 1 s trials 2-3 (10), SB 10 s trials 7-8 (8), EIM 3 s trial 11 (5), MILP 10 s trials 8/10 (4),
@@ -431,14 +431,14 @@ instance. Memory = peak RSS of the run minus the RSS after instance load (~355-4
   all runs).
 - Leak check (prescribed command, marker `wp5_ising/.leak_marker` touched Oct 1 14:33 before anything else; run Oct 3
   01:12; full output `results/leak_check_output.txt`): **378 files, none written by a Track-B process** -- 224 under
-  `~/project/server_fix/diagnose/` (an unrelated concurrent user project: scholar/OpenAlex matching scripts and CSVs,
-  incl. the `match_background.py` job seen by the core audit), 101 under `OS_final_project/.git/objects` (the
-  coordinator's commits; Track B made none), 33 under `~/.cache/huggingface/` (Oct 1 18:11, the
-  sentence-transformers model used by that same server_fix job), `changes/SCOPE_v2.md` (edited by the coordinator,
-  Oct 1 16:20), and desktop/session files (`~/snap/snapd-desktop-integration`, `~/.config/dconf/user`,
-  `/tmp/krb5cc_*`, `~/.conda/aau_token_host`, `~/.cache/update-manager-core`, all at login times; `~/.wget-hsts`
+  `<another project>` (an unrelated concurrent user project: scholar/OpenAlex matching scripts and CSVs,
+  incl. the `<foreign process>` job seen by the core audit), 101 under `OS_final_project/.git/objects` (the
+  coordinator's commits; Track B made none), 33 under `<home cache>` (Oct 1 18:11, the
+  sentence-transformers model used by that same <another project> job), `changes/SCOPE_v2.md` (edited by the coordinator,
+  Oct 1 16:20), and desktop/session files (`<home desktop/config>`, `<home desktop/config>`,
+  `<tmp file>`, `<home file>`, `<home cache>`, all at login times; `<home file>`
   Oct 1 15:11 -- Track B never ran wget). Every Track-B process ran with HOME/XDG/TMPDIR/caches inside its area and
-  every Baleen process inside bwrap with a private /tmp; `~/.conda/environments.txt` is unchanged.
+  every Baleen process inside bwrap with a private /tmp; `<home file>` is unchanged.
 
 ## 10. Files (all under `P2/wp5_ising/`)
 | path | content |

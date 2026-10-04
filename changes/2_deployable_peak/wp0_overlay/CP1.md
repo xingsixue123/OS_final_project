@@ -147,8 +147,8 @@ S1 above.
   - At most 12 concurrent sims (flock slot pool), with `OMP_NUM_THREADS=2` and `OMP_WAIT_POLICY=PASSIVE`.
   - Envs were used read-only. Data is the read-only symlink to `explore/common/data`. No git commits.
 - **Out-of-area files.** None under `0_reproduce/` or `1_literature_review/` is newer than the marker, and there is no `__pycache__` in the overlay or the frozen tree. The leak check (marker `wp0_overlay/.leak_marker`, 2026-10-01 14:36:46) lists only files not written by this work:
-  - `~/.wget-hsts` (15:11) and `~/.conda/aau_token_host` (15:12): this work never runs wget or conda, and all its processes have HOME=`wp0_overlay/.home`.
-  - 83 files under `~/project/server_fix/diagnose/`: an unrelated project.
+  - `<home file>` (15:11) and `<home file>` (15:12): this work never runs wget or conda, and all its processes have HOME=`wp0_overlay/.home`.
+  - 83 files under `<another project>`: an unrelated project.
   - 25 objects under `OS_final_project/.git/objects/` (15:17–15:28): their contents are Track B's solver sources (e.g. "SCIP (PySCIPOpt) level solver…", "Contested-subset QUBO LNS…"), staged by another agent. This work ran no git write commands.
   - Full raw output: `results/integrity.txt`.
 
@@ -156,8 +156,7 @@ S1 above.
 # check_frozen.sh (2026-10-01 15:40)
 frozen OK (94 files)
 # leak check, after removing the categories above
-/home/sxing/.wget-hsts
-/home/sxing/.conda/aau_token_host
+<home file>  x2
 ```
 
 ## 7. Where things are (under `wp0_overlay/`)

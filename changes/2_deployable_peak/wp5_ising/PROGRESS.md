@@ -87,7 +87,7 @@
 - Oct 3 00:38 scaling done (88 runs: 85 ok, the dense SB package OOM on all 3 unions at the 64 GB cap). 01:11 3-s
   rolling for milp/cpsat/lp done (CP-SAT/MILP best at 3 s too). 01:11 TIMING_IDLE created (no Track-B timing left).
 - 01:12 check_frozen: frozen OK (94 files); leak check: 378 hits, all attributable to non-Track-B activity
-  (server_fix project, coordinator git objects / SCOPE_v2.md, HF cache of the server_fix job, desktop session files).
+  (<another project> project, coordinator git objects / SCOPE_v2.md, HF cache of the <another project> job, desktop session files).
 - 01:20 RESULTS_dev.md and PROTOCOL_v2_H2.md written (finalists PT + EIM; dev predicts H2' FAIL; label solver EIM
   10-s config at 10 s). STOP at CP2: no WP5 run on samples 0.4-0.6.
 

@@ -97,15 +97,17 @@ Sessions end without warning; every track is resumable from files.
    - one `train` at a time (`flock changes/2_deployable_peak/.train.lock`);
    - timing runs hold cores 0–7, and CPUs 12–19 stay idle while they run (`TIMING_IDLE` flag);
    - leak check and `check_frozen.sh` at every milestone;
-   - only small results go to git (see each `.gitignore`).
+   - only small results go to git (see each `.gitignore`);
+   - **before every push, `python3 tools/privacy_scrub.py --check` must print nothing** (no paths or process names from outside the project).
 
 ## 8. Integrity incidents (all disclosed in the track reports)
 - **Phase 1:** a 25 s overlap of two tuning jobs (rows flagged, study re-run); one `__pycache__` file written into `0_reproduce` (removed, verified).
 - **Phase 2:**
   - One unpinned script of Track B ran on the timing cores for ≈3 minutes. Tuning was restarted and the Region4 s0 solves re-run.
   - The SMT-sibling exposure was found. The 1-s dev evaluation was re-run.
-  - A foreign job (`server_fix/match_background.py`) ran during 55 tuning runs. They are flagged; none is a selected config.
-- **Leak-check hits** outside the project come from other tools: the editor, Copilot, desktop files, and `server_fix`. None of them come from this work.
+  - A foreign job (`<another project>`) ran during 55 tuning runs. They are flagged; none is a selected config.
+- **Leak-check hits** outside the project come from other tools: the editor, Copilot, desktop files, and `<another project>`. None of them come from this work.
+- **Privacy redaction (2026-10-04).** The repo is **public**. Leak-check listings, CPU audits and notes had included paths and process names from the user's unrelated work and machine (file names only, never contents). They were replaced by category labels with counts, using `tools/privacy_scrub.py`. Code, results and numbers are unchanged. **Earlier commits still contain the originals:** purging them needs a history rewrite and force-push (captain's decision).
 
 ## 9. Next steps and dates
 1. **G3 (needs a teammate):** Ching-Hao or Jie follows `wp0_overlay/G3_REVIEW.md` and appends the sign-off line to `SCOPE_v2.md` §1a. Then the coordinator creates `wp3_test/G3_SIGNED` and launches the command in `wp3_test/PROGRESS.md`: 126 evaluations, about 3–4 h, then `evaluate_test.py`.

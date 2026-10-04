@@ -272,11 +272,11 @@ Per region; means over matched retrains × 4 instances; `results/mechanism_by_re
 |---|---|---|
 | 371 | `OS_final_project/.git/` | the coordinator's commits (`COMMIT_EDITMSG`, `index`, objects) |
 | 1 | `OS_final_project/RESEARCH.md` | another agent |
-| 139 | `~/project/server_fix/diagnose/` | an unrelated project |
-| 33 | `~/.cache/huggingface/` | a sentence-transformers model download, unrelated |
-| 14 | `~/snap/snapd-desktop-integration/` | desktop |
-| 1 each | `~/.config/dconf/user`, `~/.cache/update-manager-core`, `/tmp/krb5cc_*` | desktop / system |
-| 1 | `~/.conda/aau_token_host` | conda outside this work |
+| 139 | `<another project>` | an unrelated project |
+| 33 | `<home cache>` | a sentence-transformers model download, unrelated |
+| 14 | `<home desktop/config>` | desktop |
+| 1 each | `<home desktop/config>`, `<home cache>`, `<tmp file>` | desktop / system |
+| 1 | `<home file>` | conda outside this work |
 
 This work never ran conda, git writes or HuggingFace, and all its processes had HOME = `wp2_deployed/.home` and a private `/tmp`.
 

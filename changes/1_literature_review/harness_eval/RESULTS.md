@@ -278,13 +278,13 @@ Result: **no candidate satisfies (b).**
 ## 7. Integrity
 
 - `bash 0_reproduce/check_frozen.sh`: **`frozen OK (94 files)`**. It was also run before the runs.
-- Nothing under `0_reproduce/` or `ising_followup/` is newer than `H/.leak_marker`: `find … -newer` returned empty. This covers `0_reproduce/work/data`, used through a symlink, and both environments. Nothing was written to /var/tmp or /dev/shm either.
-- The leak check was the prescribed command: `find /home/sxing /tmp -xdev -newer H/.leak_marker -type f | grep -v "^H/" | grep -vE "/\.claude/|\.claude\.json|/\.vscode-server/|python-languageserver|tracker3|/\.codex/|^/tmp/claude-"`. It listed 18 files, none written by this work:
-  - `~/.wget-hsts` (11:34) and `~/.conda/aau_token_host` (11:36): a wget and a conda invocation outside this work. This work never runs wget or conda, and every harness/solver process has HOME=H/.home.
-  - `~/.copilot/{config.json,logs/*}` and `~/.cache/copilot/*`: the VS Code Copilot SDK, running since 10:21.
-  - `~/.config/pulse/*`: the desktop audio daemon.
-  - `~/.bash_history` (13:52): an interactive shell.
-  - `/tmp/node-compile-cache/…` and `~/.cache/claude-cli-nodejs/*/mcp-logs-*`: agent/IDE tooling.
+- Nothing under `0_reproduce/` or `ising_followup/` is newer than `H/.leak_marker`: `find … -newer` returned empty. This covers `0_reproduce/work/data`, used through a symlink, and both environments. Nothing was written to <tmp file> or /dev/shm either.
+- The leak check was the prescribed command: `find /home/sxing /tmp -xdev -newer H/.leak_marker -type f | grep -v "^H/" | grep -vE "/\.claude/|\.claude\.json|/\.vscode-server/|python-languageserver|tracker3|/\.codex/|^<tmp file>"`. It listed 18 files, none written by this work:
+  - `<home file>` (11:34) and `<home file>` (11:36): a wget and a conda invocation outside this work. This work never runs wget or conda, and every harness/solver process has HOME=H/.home.
+  - `<editor/agent state>,logs/*}` and `<home cache>`: the VS Code Copilot SDK, running since 10:21.
+  - `<home desktop/config>`: the desktop audio daemon.
+  - `<home file>` (13:52): an interactive shell.
+  - `<tmp file>` and `<home cache>`: agent/IDE tooling.
 - Every Baleen process ran under bwrap with /tmp bound to H/work/systmp.
 
 ## 8. Where things are

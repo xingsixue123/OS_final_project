@@ -22,17 +22,17 @@
 01:16:37 DIRECT pid=1032467 tid=1032473 cpu=0 used=1.5s/10s /home/sxing/project/OS_final_project/changes/0_reproduce/env/bin/python -B -m BCacheSim.cachesim.simulate_ap --trace data/tectonic/20230325/Region6/full_0.2_0.1.trace --learned-ap --ap mlnew --ap-thre
 01:16:37 SIBLING pid=1032540 tid=1032540 cpu=13 used=9.9s/10s /home/sxing/project/OS_final_project/changes/0_reproduce/env/bin/python -B -m BCacheSim.cachesim.simulate_ap --trace data/tectonic/20230325/Region6/full_0_0.1.trace --learned-ap --ap mlnew --ap-thresh
 01:16:37 DIRECT pid=1032540 tid=1032542 cpu=3 used=1.0s/10s /home/sxing/project/OS_final_project/changes/0_reproduce/env/bin/python -B -m BCacheSim.cachesim.simulate_ap --trace data/tectonic/20230325/Region6/full_0_0.1.trace --learned-ap --ap mlnew --ap-thresh
-01:45:50 SIBLING pid=1013366 tid=1013366 cpu=13 used=7.1s/10s /home/sxing/.vscode-server/bin/07f806f999227108933c2e30515b26eecc1fda74/node /home/sxing/.vscode-server/extensions/ms-python.vscode-pylance-2025.8.2/dist/server.bundle.js --cancellationReceive=file:4d
-01:45:50 SIBLING pid=1013366 tid=1013368 cpu=12 used=1.0s/10s /home/sxing/.vscode-server/bin/07f806f999227108933c2e30515b26eecc1fda74/node /home/sxing/.vscode-server/extensions/ms-python.vscode-pylance-2025.8.2/dist/server.bundle.js --cancellationReceive=file:4d
-01:45:50 SIBLING pid=1013366 tid=1013369 cpu=14 used=1.0s/10s /home/sxing/.vscode-server/bin/07f806f999227108933c2e30515b26eecc1fda74/node /home/sxing/.vscode-server/extensions/ms-python.vscode-pylance-2025.8.2/dist/server.bundle.js --cancellationReceive=file:4d
-01:45:50 SIBLING pid=1013366 tid=1013370 cpu=15 used=1.0s/10s /home/sxing/.vscode-server/bin/07f806f999227108933c2e30515b26eecc1fda74/node /home/sxing/.vscode-server/extensions/ms-python.vscode-pylance-2025.8.2/dist/server.bundle.js --cancellationReceive=file:4d
-01:45:50 SIBLING pid=1013366 tid=1013371 cpu=18 used=1.0s/10s /home/sxing/.vscode-server/bin/07f806f999227108933c2e30515b26eecc1fda74/node /home/sxing/.vscode-server/extensions/ms-python.vscode-pylance-2025.8.2/dist/server.bundle.js --cancellationReceive=file:4d
-01:46:00 DIRECT pid=1013366 tid=1013366 cpu=2 used=10.0s/10s /home/sxing/.vscode-server/bin/07f806f999227108933c2e30515b26eecc1fda74/node /home/sxing/.vscode-server/extensions/ms-python.vscode-pylance-2025.8.2/dist/server.bundle.js --cancellationReceive=file:4d
-01:46:00 SIBLING pid=1013366 tid=1013368 cpu=13 used=1.2s/10s /home/sxing/.vscode-server/bin/07f806f999227108933c2e30515b26eecc1fda74/node /home/sxing/.vscode-server/extensions/ms-python.vscode-pylance-2025.8.2/dist/server.bundle.js --cancellationReceive=file:4d
-01:46:00 SIBLING pid=1013366 tid=1013369 cpu=12 used=1.2s/10s /home/sxing/.vscode-server/bin/07f806f999227108933c2e30515b26eecc1fda74/node /home/sxing/.vscode-server/extensions/ms-python.vscode-pylance-2025.8.2/dist/server.bundle.js --cancellationReceive=file:4d
-01:46:00 SIBLING pid=1013366 tid=1013370 cpu=14 used=1.2s/10s /home/sxing/.vscode-server/bin/07f806f999227108933c2e30515b26eecc1fda74/node /home/sxing/.vscode-server/extensions/ms-python.vscode-pylance-2025.8.2/dist/server.bundle.js --cancellationReceive=file:4d
-01:46:00 SIBLING pid=1013366 tid=1013371 cpu=19 used=1.2s/10s /home/sxing/.vscode-server/bin/07f806f999227108933c2e30515b26eecc1fda74/node /home/sxing/.vscode-server/extensions/ms-python.vscode-pylance-2025.8.2/dist/server.bundle.js --cancellationReceive=file:4d
-01:46:10 DIRECT pid=1013366 tid=1013368 cpu=7 used=0.6s/10s /home/sxing/.vscode-server/bin/07f806f999227108933c2e30515b26eecc1fda74/node /home/sxing/.vscode-server/extensions/ms-python.vscode-pylance-2025.8.2/dist/server.bundle.js --cancellationReceive=file:4d
-01:46:10 SIBLING pid=1013366 tid=1013369 cpu=14 used=0.6s/10s /home/sxing/.vscode-server/bin/07f806f999227108933c2e30515b26eecc1fda74/node /home/sxing/.vscode-server/extensions/ms-python.vscode-pylance-2025.8.2/dist/server.bundle.js --cancellationReceive=file:4d
-01:46:10 SIBLING pid=1013366 tid=1013370 cpu=12 used=0.6s/10s /home/sxing/.vscode-server/bin/07f806f999227108933c2e30515b26eecc1fda74/node /home/sxing/.vscode-server/extensions/ms-python.vscode-pylance-2025.8.2/dist/server.bundle.js --cancellationReceive=file:4d
-01:46:10 SIBLING pid=1013366 tid=1013371 cpu=18 used=0.6s/10s /home/sxing/.vscode-server/bin/07f806f999227108933c2e30515b26eecc1fda74/node /home/sxing/.vscode-server/extensions/ms-python.vscode-pylance-2025.8.2/dist/server.bundle.js --cancellationReceive=file:4d
+01:45:50 SIBLING pid=1013366 tid=1013366 cpu=13 used=7.1s/10s <editor/agent state> <editor/agent state> --cancellationReceive=file:4d
+01:45:50 SIBLING pid=1013366 tid=1013368 cpu=12 used=1.0s/10s <editor/agent state> <editor/agent state> --cancellationReceive=file:4d
+01:45:50 SIBLING pid=1013366 tid=1013369 cpu=14 used=1.0s/10s <editor/agent state> <editor/agent state> --cancellationReceive=file:4d
+01:45:50 SIBLING pid=1013366 tid=1013370 cpu=15 used=1.0s/10s <editor/agent state> <editor/agent state> --cancellationReceive=file:4d
+01:45:50 SIBLING pid=1013366 tid=1013371 cpu=18 used=1.0s/10s <editor/agent state> <editor/agent state> --cancellationReceive=file:4d
+01:46:00 DIRECT pid=1013366 tid=1013366 cpu=2 used=10.0s/10s <editor/agent state> <editor/agent state> --cancellationReceive=file:4d
+01:46:00 SIBLING pid=1013366 tid=1013368 cpu=13 used=1.2s/10s <editor/agent state> <editor/agent state> --cancellationReceive=file:4d
+01:46:00 SIBLING pid=1013366 tid=1013369 cpu=12 used=1.2s/10s <editor/agent state> <editor/agent state> --cancellationReceive=file:4d
+01:46:00 SIBLING pid=1013366 tid=1013370 cpu=14 used=1.2s/10s <editor/agent state> <editor/agent state> --cancellationReceive=file:4d
+01:46:00 SIBLING pid=1013366 tid=1013371 cpu=19 used=1.2s/10s <editor/agent state> <editor/agent state> --cancellationReceive=file:4d
+01:46:10 DIRECT pid=1013366 tid=1013368 cpu=7 used=0.6s/10s <editor/agent state> <editor/agent state> --cancellationReceive=file:4d
+01:46:10 SIBLING pid=1013366 tid=1013369 cpu=14 used=0.6s/10s <editor/agent state> <editor/agent state> --cancellationReceive=file:4d
+01:46:10 SIBLING pid=1013366 tid=1013370 cpu=12 used=0.6s/10s <editor/agent state> <editor/agent state> --cancellationReceive=file:4d
+01:46:10 SIBLING pid=1013366 tid=1013371 cpu=18 used=0.6s/10s <editor/agent state> <editor/agent state> --cancellationReceive=file:4d

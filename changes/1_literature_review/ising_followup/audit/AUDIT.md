@@ -6,7 +6,7 @@ Everything lives in `audit/`: `instance.py`, `solvers/*.py`, `run_bench.py`, `ma
 
 * Machine: AMD Ryzen 9 9900X (12 cores / 24 hardware threads), 123 GB RAM, **no GPU**. Everything ran on the CPU.
 * Sandbox: `env.sh` redirects HOME, the XDG dirs, the pip and conda caches, TMPDIR, MPL, TORCH and NUMBA to `audit/` and sets `CONDA_REGISTER_ENVS=false` and `PYTHONNOUSERSITE=1`. `.leak_marker` was touched before any install.
-* Conda: `conda create -p audit/env python=3.11` failed at first with `CondaToSNonInteractiveError`. The redirected HOME has no accepted Anaconda ToS for `repo.anaconda.com`. Instead of accepting the ToS (that would have written to the real `~/.conda`), I used `--override-channels -c conda-forge`, which gave Python 3.11.16. `~/.conda/environments.txt` was not modified; see the leak check in section 8.
+* Conda: `conda create -p audit/env python=3.11` failed at first with `CondaToSNonInteractiveError`. The redirected HOME has no accepted Anaconda ToS for `repo.anaconda.com`. Instead of accepting the ToS (that would have written to the real `<home file>`), I used `--override-channels -c conda-forge`, which gave Python 3.11.16. `<home file>` was not modified; see the leak check in section 8.
 * Package versions (full list in `env.lock.txt`): numpy 2.4.6, scipy 1.17.1, highspy 1.15.1, torch 2.14.0+cpu (CPU wheel index), simulated-bifurcation 2.0.0, dwave-samplers 1.8.0, dimod 0.12.22, openjij 0.12.2 (jij-cimod 1.7.5), cim-optimizer 1.0.4, mindquantum 0.12.0, numba 0.67.0. numba was added for the true-objective local search.
 * Threads: each job sets `torch.set_num_threads` and OMP/OPENBLAS/MKL/NUMBA_NUM_THREADS explicitly. The torch-based solvers (mfSB, SB package) used 4 threads, cim-optimizer used 2, and everything else used 1. The one exception is `sb_discrete` at n=50k, which used 8 threads and a 900 s cap (see caveats). Each row's thread count is in `results.csv` under `threads` and `params.torch_threads`. Jobs ran in parallel through a core- and memory-aware scheduler. For about 40 minutes a second scheduler oversubscribed the machine (up to ~30 runnable threads on 24 hardware threads). **Wall times are therefore contended times**, not isolated per-solver timings.
 
@@ -207,11 +207,11 @@ A small, well-chosen penalty was slightly better *and* 4× cheaper than the bise
 
 ## 8. Leak check
 Command, run at the end:
-`find /home/sxing /tmp -xdev -newer $A/.leak_marker -type f 2>/dev/null | grep -v "^$A/" | grep -vE "/\.claude/|/\.vscode-server/|python-languageserver|tracker3|/\.codex/|^/tmp/claude-"`
+`find /home/sxing /tmp -xdev -newer $A/.leak_marker -type f 2>/dev/null | grep -v "^$A/" | grep -vE "/\.claude/|/\.vscode-server/|python-languageserver|tracker3|/\.codex/|^<tmp file>"`
 
 The output is **not empty**. The full list is in `results/leak_check.txt` (72 lines). It contains three kinds of file:
-1. `/home/sxing/.claude.json`, the Claude Code client's own state file. The grep excludes `/.claude/` but not `.claude.json`.
+1. `<editor/agent state>`, the Claude Code client's own state file. The grep excludes `/.claude/` but not `.claude.json`.
 2. `/home/sxing/project/OS_final_project/changes/1_literature_review/ising_followup/survey.md`, dated 02:06. This audit never wrote or opened it; it is a sibling deliverable in the parent directory, presumably written by another agent.
-3. 70 fontconfig caches under `/home/sxing/miniconda3/envs/retrial/var/cache/fontconfig/`, all dated 01:54:06. They belong to a different conda env (`retrial`). My `conda create` had finished at 01:53:10 (log mtime), and at 01:54 I was running the pip install of torch inside `audit/env`, which cannot write into `envs/retrial`. I believe they came from another process using that env. I cannot prove it from here.
+3. 70 fontconfig caches under `<other conda env>`, all dated 01:54:06. They belong to a different conda env (`retrial`). My `conda create` had finished at 01:53:10 (log mtime), and at 01:54 I was running the pip install of torch inside `audit/env`, which cannot write into `envs/retrial`. I believe they came from another process using that env. I cannot prove it from here.
 
-`~/.conda/environments.txt` was last modified on 2026-09-26, so the env was not registered. No pip or conda cache, `~/.local` or `/tmp` files were written by this audit.
+`<home file>` was last modified on 2026-09-26, so the env was not registered. No pip or conda cache, `<home file>` or `/tmp` files were written by this audit.

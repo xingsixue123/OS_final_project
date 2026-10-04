@@ -96,35 +96,35 @@ The following NEW packages will be INSTALLED:
 
 
 
-Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 MB   |            |   0% 
-icu-78.3             | 13.8 MB   |            |   0% [A
+Downloading and Extracting Packages: ...working...
+python-3.11.16       | 22.1 MB   |            |   0% 
 
-libpython-3.11.16    | 7.5 MB    |            |   0% [A[A
+icu-78.3             | 13.8 MB   |            |   0% [A
 
 
-libstdcxx-16.2.0     | 6.3 MB    |            |   0% [A[A[A
+libpython-3.11.16    | 7.5 MB    |            |   0% [A[A
 
 
 
-tk-8.6.13            | 3.4 MB    |            |   0% [A[A[A[A
+libstdcxx-16.2.0     | 6.3 MB    |            |   0% [A[A[A
 
 
 
 
-openssl-3.6.4        | 3.1 MB    |            |   0% [A[A[A[A[A
+tk-8.6.13            | 3.4 MB    |            |   0% [A[A[A[A
 
 
 
 
 
-pip-26.2.1           | 1.1 MB    |            |   0% [A[A[A[A[A[A
+openssl-3.6.4        | 3.1 MB    |            |   0% [A[A[A[A[A
 
 
 
 
 
 
-libgcc-16.2.0        | 1.0 MB    |            |   0% [A[A[A[A[A[A[A
+pip-26.2.1           | 1.1 MB    |            |   0% [A[A[A[A[A[A
 
 
 
@@ -132,7 +132,7 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
-libsqlite-3.53.4     | 952 KB    |            |   0% [A[A[A[A[A[A[A[A
+libgcc-16.2.0        | 1.0 MB    |            |   0% [A[A[A[A[A[A[A
 
 
 
@@ -141,7 +141,7 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
-ncurses-6.6          | 890 KB    |            |   0% [A[A[A[A[A[A[A[A[A
+libsqlite-3.53.4     | 952 KB    |            |   0% [A[A[A[A[A[A[A[A
 
 
 
@@ -151,7 +151,7 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
-ld_impl_linux-64-2.4 | 728 KB    |            |   0% [A[A[A[A[A[A[A[A[A[A
+ncurses-6.6          | 890 KB    |            |   0% [A[A[A[A[A[A[A[A[A
 
 
 
@@ -162,7 +162,7 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
-libgomp-16.2.0       | 626 KB    |            |   0% [A[A[A[A[A[A[A[A[A[A[A
+ld_impl_linux-64-2.4 | 728 KB    |            |   0% [A[A[A[A[A[A[A[A[A[A
 
 
 
@@ -174,7 +174,7 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
-zstd-1.5.7           | 587 KB    |            |   0% [A[A[A[A[A[A[A[A[A[A[A[A
+libgomp-16.2.0       | 626 KB    |            |   0% [A[A[A[A[A[A[A[A[A[A[A
 
 
 
@@ -187,7 +187,7 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
-setuptools-84.0.0    | 512 KB    |            |   0% [A[A[A[A[A[A[A[A[A[A[A[A[A
+zstd-1.5.7           | 587 KB    |            |   0% [A[A[A[A[A[A[A[A[A[A[A[A
 
 
 
@@ -201,7 +201,7 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
-readline-8.3         | 341 KB    |            |   0% [A[A[A[A[A[A[A[A[A[A[A[A[A[A
+setuptools-84.0.0    | 512 KB    |            |   0% [A[A[A[A[A[A[A[A[A[A[A[A[A
 
 
 
@@ -216,7 +216,7 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
-bzip2-1.0.8          | 252 KB    |            |   0% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+readline-8.3         | 341 KB    |            |   0% [A[A[A[A[A[A[A[A[A[A[A[A[A[A
 
 
 
@@ -232,7 +232,7 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
-ca-certificates-2026 | 129 KB    |            |   0% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+bzip2-1.0.8          | 252 KB    |            |   0% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
 
 
 
@@ -249,7 +249,7 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
-tzdata-2026c         | 116 KB    |            |   0% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+ca-certificates-2026 | 129 KB    |            |   0% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
 
 
 
@@ -267,7 +267,7 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
-packaging-26.3       | 114 KB    |            |   0% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+tzdata-2026c         | 116 KB    |            |   0% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
 
 
 
@@ -286,76 +286,72 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
- ... (more hidden) ...[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+packaging-26.3       | 114 KB    |            |   0% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
 
 
 
-tk-8.6.13            | 3.4 MB    | ########## | 100% [A[A[A[Apython-3.11.16       | 22.1 MB   | ##2        |  22% 
-icu-78.3             | 13.8 MB   | 9          |  10% [A
 
-libpython-3.11.16    | 7.5 MB    | ##6        |  27% [A[A
 
 
-libstdcxx-16.2.0     | 6.3 MB    | #######5   |  76% [A[A[A
 
 
 
 
-openssl-3.6.4        | 3.1 MB    |            |   1% [A[A[A[A[A
 
 
-libstdcxx-16.2.0     | 6.3 MB    | ########## | 100% [A[A[A
 
 
 
 
 
-pip-26.2.1           | 1.1 MB    | 1          |   1% [A[A[A[A[A[A
 
 
+ ... (more hidden) ...[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
 
 
 
-pip-26.2.1           | 1.1 MB    | ########## | 100% [A[A[A[A[A[A
 
+tk-8.6.13            | 3.4 MB    | ########## | 100% [A[A[A[A
+python-3.11.16       | 22.1 MB   | ##2        |  22% 
 
+icu-78.3             | 13.8 MB   | 9          |  10% [A
 
 
-openssl-3.6.4        | 3.1 MB    | ########## | 100% [A[A[A[A[A
+libpython-3.11.16    | 7.5 MB    | ##6        |  27% [A[A
 
 
 
+libstdcxx-16.2.0     | 6.3 MB    | #######5   |  76% [A[A[A
 
 
 
-libgcc-16.2.0        | 1.0 MB    | 1          |   2% [A[A[A[A[A[A[A
 
 
+openssl-3.6.4        | 3.1 MB    |            |   1% [A[A[A[A[A
 
 
 
+libstdcxx-16.2.0     | 6.3 MB    | ########## | 100% [A[A[A
 
 
-libsqlite-3.53.4     | 952 KB    | 1          |   2% [A[A[A[A[A[A[A[A
 
-libpython-3.11.16    | 7.5 MB    | ########## | 100% [A[A
 
 
 
+pip-26.2.1           | 1.1 MB    | 1          |   1% [A[A[A[A[A[A
 
 
 
-libgcc-16.2.0        | 1.0 MB    | ########## | 100% [A[A[A[A[A[A[A
 
 
 
+pip-26.2.1           | 1.1 MB    | ########## | 100% [A[A[A[A[A[A
 
 
 
 
-libsqlite-3.53.4     | 952 KB    | ########## | 100% [A[A[A[A[A[A[A[Apython-3.11.16       | 22.1 MB   | #########5 |  96% 
-icu-78.3             | 13.8 MB   | #########8 |  98% [A
 
+openssl-3.6.4        | 3.1 MB    | ########## | 100% [A[A[A[A[A
 
 
 
@@ -363,39 +359,41 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
-ncurses-6.6          | 890 KB    | 1          |   2% [A[A[A[A[A[A[A[A[A
+libgcc-16.2.0        | 1.0 MB    | 1          |   2% [A[A[A[A[A[A[A
 
 
-libstdcxx-16.2.0     | 6.3 MB    | ########## | 100% [A[A[A
 
 
 
 
 
 
+libsqlite-3.53.4     | 952 KB    | 1          |   2% [A[A[A[A[A[A[A[A
 
 
+libpython-3.11.16    | 7.5 MB    | ########## | 100% [A[A
 
-ld_impl_linux-64-2.4 | 728 KB    | 2          |   2% [A[A[A[A[A[A[A[A[A[A
 
 
 
 
 
 
+libgcc-16.2.0        | 1.0 MB    | ########## | 100% [A[A[A[A[A[A[A
 
 
-ncurses-6.6          | 890 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A
 
 
 
 
 
 
+libsqlite-3.53.4     | 952 KB    | ########## | 100% [A[A[A[A[A[A[A[A
+python-3.11.16       | 22.1 MB   | #########5 |  96% 
 
+icu-78.3             | 13.8 MB   | #########8 |  98% [A
 
 
-ld_impl_linux-64-2.4 | 728 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A
 
 
 
@@ -403,10 +401,11 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
+ncurses-6.6          | 890 KB    | 1          |   2% [A[A[A[A[A[A[A[A[A
 
 
 
-libgomp-16.2.0       | 626 KB    | 2          |   3% [A[A[A[A[A[A[A[A[A[A[A
+libstdcxx-16.2.0     | 6.3 MB    | ########## | 100% [A[A[A
 
 
 
@@ -417,7 +416,7 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
-libgomp-16.2.0       | 626 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A
+ld_impl_linux-64-2.4 | 728 KB    | 2          |   2% [A[A[A[A[A[A[A[A[A[A
 
 
 
@@ -427,9 +426,9 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
+ncurses-6.6          | 890 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A
 
 
-zstd-1.5.7           | 587 KB    | 2          |   3% [A[A[A[A[A[A[A[A[A[A[A[A
 
 
 
@@ -438,10 +437,10 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
+ld_impl_linux-64-2.4 | 728 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A
 
 
 
-zstd-1.5.7           | 587 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A
 
 
 
@@ -450,11 +449,11 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
+libgomp-16.2.0       | 626 KB    | 2          |   3% [A[A[A[A[A[A[A[A[A[A[A
 
 
 
 
-setuptools-84.0.0    | 512 KB    | 3          |   3% [A[A[A[A[A[A[A[A[A[A[A[A[A
 
 
 
@@ -462,22 +461,20 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
+libgomp-16.2.0       | 626 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A
 
 
 
 
 
-setuptools-84.0.0    | 512 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A
-icu-78.3             | 13.8 MB   | ########## | 100% [A
 
 
 
-tk-8.6.13            | 3.4 MB    | ########## | 100% [A[A[A[A
 
 
 
-tk-8.6.13            | 3.4 MB    | ########## | 100% [A[A[A[A
 
+zstd-1.5.7           | 587 KB    | 2          |   3% [A[A[A[A[A[A[A[A[A[A[A[A
 
 
 
@@ -490,7 +487,7 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
-readline-8.3         | 341 KB    | 4          |   5% [A[A[A[A[A[A[A[A[A[A[A[A[A[A
+zstd-1.5.7           | 587 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A
 
 
 
@@ -504,7 +501,7 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
-readline-8.3         | 341 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A[A
+setuptools-84.0.0    | 512 KB    | 3          |   3% [A[A[A[A[A[A[A[A[A[A[A[A[A
 
 
 
@@ -518,16 +515,19 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
+setuptools-84.0.0    | 512 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A
 
-bzip2-1.0.8          | 252 KB    | 6          |   6% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+icu-78.3             | 13.8 MB   | ########## | 100% [A
 
 
 
 
+tk-8.6.13            | 3.4 MB    | ########## | 100% [A[A[A[A
 
 
 
 
+tk-8.6.13            | 3.4 MB    | ########## | 100% [A[A[A[A
 
 
 
@@ -535,7 +535,6 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
-ca-certificates-2026 | 129 KB    | #2         |  12% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[Apython-3.11.16       | 22.1 MB   | ########## | 100% 
 
 
 
@@ -543,6 +542,7 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
+readline-8.3         | 341 KB    | 4          |   5% [A[A[A[A[A[A[A[A[A[A[A[A[A[A
 
 
 
@@ -552,12 +552,12 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
-tzdata-2026c         | 116 KB    | #3         |  14% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
 
 
 
 
 
+readline-8.3         | 341 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A[A
 
 
 
@@ -568,12 +568,12 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
-ca-certificates-2026 | 129 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
 
 
 
 
 
+bzip2-1.0.8          | 252 KB    | 6          |   6% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
 
 
 
@@ -583,7 +583,6 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
-bzip2-1.0.8          | 252 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
 
 
 
@@ -591,6 +590,8 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
+ca-certificates-2026 | 129 KB    | #2         |  12% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+python-3.11.16       | 22.1 MB   | ########## | 100% 
 
 
 
@@ -600,7 +601,6 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
-tzdata-2026c         | 116 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
 
 
 
@@ -609,6 +609,7 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
+tzdata-2026c         | 116 KB    | #3         |  14% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
 
 
 
@@ -618,7 +619,6 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
-packaging-26.3       | 114 KB    | #4         |  14% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
 
 
 
@@ -626,6 +626,7 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
+ca-certificates-2026 | 129 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
 
 
 
@@ -636,17 +637,15 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
-packaging-26.3       | 114 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
 
 
 
 
-openssl-3.6.4        | 3.1 MB    | ########## | 100% [A[A[A[A[A
 
+bzip2-1.0.8          | 252 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
 
 
 
-openssl-3.6.4        | 3.1 MB    | ########## | 100% [A[A[A[A[A
 
 
 
@@ -661,11 +660,11 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
+tzdata-2026c         | 116 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
 
 
 
 
- ... (more hidden) ...[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
 
 
 
@@ -680,53 +679,50 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
+packaging-26.3       | 114 KB    | #4         |  14% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
 
 
 
 
- ... (more hidden) ...[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
 
 
 
 
 
-pip-26.2.1           | 1.1 MB    | ########## | 100% [A[A[A[A[A[A
 
 
 
 
 
-pip-26.2.1           | 1.1 MB    | ########## | 100% [A[A[A[A[A[A
 
 
 
 
+packaging-26.3       | 114 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
 
 
 
-libsqlite-3.53.4     | 952 KB    | ########## | 100% [A[A[A[A[A[A[A[A
 
 
+openssl-3.6.4        | 3.1 MB    | ########## | 100% [A[A[A[A[A
 
 
 
 
 
-libsqlite-3.53.4     | 952 KB    | ########## | 100% [A[A[A[A[A[A[A[A
+openssl-3.6.4        | 3.1 MB    | ########## | 100% [A[A[A[A[A
 
 
 
 
 
 
-libgcc-16.2.0        | 1.0 MB    | ########## | 100% [A[A[A[A[A[A[A
 
 
 
 
 
 
-libgcc-16.2.0        | 1.0 MB    | ########## | 100% [A[A[A[A[A[A[A
 
 
 
@@ -734,9 +730,9 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
+ ... (more hidden) ...[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
 
 
-ld_impl_linux-64-2.4 | 728 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A
 
 
 
@@ -746,7 +742,6 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
-ld_impl_linux-64-2.4 | 728 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A
 
 
 
@@ -755,39 +750,39 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
+ ... (more hidden) ...[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
 
 
-libgomp-16.2.0       | 626 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A
 
 
 
 
+pip-26.2.1           | 1.1 MB    | ########## | 100% [A[A[A[A[A[A
 
 
 
 
 
 
-libgomp-16.2.0       | 626 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A
+pip-26.2.1           | 1.1 MB    | ########## | 100% [A[A[A[A[A[A
 
-libpython-3.11.16    | 7.5 MB    | ########## | 100% [A[A
 
-libpython-3.11.16    | 7.5 MB    | ########## | 100% [A[A
 
 
 
 
 
 
+libsqlite-3.53.4     | 952 KB    | ########## | 100% [A[A[A[A[A[A[A[A
 
 
 
 
 
-zstd-1.5.7           | 587 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A
 
 
 
+libsqlite-3.53.4     | 952 KB    | ########## | 100% [A[A[A[A[A[A[A[A
 
 
 
@@ -795,25 +790,26 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
+libgcc-16.2.0        | 1.0 MB    | ########## | 100% [A[A[A[A[A[A[A
 
-zstd-1.5.7           | 587 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A
 
 
 
 
 
 
+libgcc-16.2.0        | 1.0 MB    | ########## | 100% [A[A[A[A[A[A[A
 
 
 
 
 
 
-setuptools-84.0.0    | 512 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A
 
 
 
 
+ld_impl_linux-64-2.4 | 728 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A
 
 
 
@@ -822,9 +818,9 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
-setuptools-84.0.0    | 512 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A
 
 
+ld_impl_linux-64-2.4 | 728 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A
 
 
 
@@ -836,7 +832,7 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
-readline-8.3         | 341 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A[A
+libgomp-16.2.0       | 626 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A
 
 
 
@@ -848,12 +844,13 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
+libgomp-16.2.0       | 626 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A
 
 
-readline-8.3         | 341 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A[A
-icu-78.3             | 13.8 MB   | ########## | 100% [A
+libpython-3.11.16    | 7.5 MB    | ########## | 100% [A[A
 
 
+libpython-3.11.16    | 7.5 MB    | ########## | 100% [A[A
 
 
 
@@ -866,8 +863,8 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
+zstd-1.5.7           | 587 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A
 
-ca-certificates-2026 | 129 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
 
 
 
@@ -879,11 +876,11 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
+zstd-1.5.7           | 587 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A
 
 
 
 
-ca-certificates-2026 | 129 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
 
 
 
@@ -893,12 +890,12 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
+setuptools-84.0.0    | 512 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A
 
 
 
 
 
-bzip2-1.0.8          | 252 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
 
 
 
@@ -907,13 +904,13 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
+setuptools-84.0.0    | 512 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A
 
 
 
 
 
 
-bzip2-1.0.8          | 252 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
 
 
 
@@ -922,6 +919,7 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
+readline-8.3         | 341 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A[A
 
 
 
@@ -930,14 +928,15 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
-tzdata-2026c         | 116 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
 
 
 
 
 
 
+readline-8.3         | 341 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A[A
 
+icu-78.3             | 13.8 MB   | ########## | 100% [A
 
 
 
@@ -947,7 +946,6 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
-tzdata-2026c         | 116 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
 
 
 
@@ -955,6 +953,7 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
+ca-certificates-2026 | 129 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
 
 
 
@@ -965,13 +964,13 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
-packaging-26.3       | 114 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
 
 
 
 
 
 
+ca-certificates-2026 | 129 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
 
 
 
@@ -983,11 +982,11 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
-packaging-26.3       | 114 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
 
 
 
 
+bzip2-1.0.8          | 252 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
 
 
 
@@ -1002,8 +1001,8 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
- ... (more hidden) ...[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
 
+bzip2-1.0.8          | 252 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
 
 
 
@@ -1021,7 +1020,7 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
- ... (more hidden) ...[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+tzdata-2026c         | 116 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
 
 
 
@@ -1030,7 +1029,6 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
-ncurses-6.6          | 890 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A
 
 
 
@@ -1039,8 +1037,8 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
-ncurses-6.6          | 890 KB    | ########## | 100% [A[A[A[A[A[A[A[A[Apython-3.11.16       | 22.1 MB   | ########## | 100% 
 
+tzdata-2026c         | 116 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
 
 
 
@@ -1058,35 +1056,29 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
-                      [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A                                                     
-                                                     [A
 
-                                                     [A[A
+packaging-26.3       | 114 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
 
 
-                                                     [A[A[A
 
 
 
-                                                     [A[A[A[A
 
 
 
 
-                                                     [A[A[A[A[A
 
 
 
 
 
-                                                     [A[A[A[A[A[A
 
 
 
 
+packaging-26.3       | 114 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
 
 
-                                                     [A[A[A[A[A[A[A
 
 
 
@@ -1094,7 +1086,6 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
-                                                     [A[A[A[A[A[A[A[A
 
 
 
@@ -1103,9 +1094,9 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
-                                                     [A[A[A[A[A[A[A[A[A
 
 
+ ... (more hidden) ...[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
 
 
 
@@ -1113,7 +1104,6 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
-                                                     [A[A[A[A[A[A[A[A[A[A
 
 
 
@@ -1124,9 +1114,9 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
-                                                     [A[A[A[A[A[A[A[A[A[A[A
 
 
+ ... (more hidden) ...[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
 
 
 
@@ -1136,7 +1126,7 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
-                                                     [A[A[A[A[A[A[A[A[A[A[A[A
+ncurses-6.6          | 890 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A
 
 
 
@@ -1146,10 +1136,11 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
+ncurses-6.6          | 890 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A
+python-3.11.16       | 22.1 MB   | ########## | 100% 
 
 
 
-                                                     [A[A[A[A[A[A[A[A[A[A[A[A[A
 
 
 
@@ -1163,40 +1154,47 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
-                                                     [A[A[A[A[A[A[A[A[A[A[A[A[A[A
 
 
 
+                      
+[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+                                                     
 
+                                                     [A
 
 
+                                                     [A[A
 
 
 
+                                                     [A[A[A
 
 
 
 
+                                                     [A[A[A[A
 
-                                                     [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
 
 
 
 
+                                                     [A[A[A[A[A
 
 
 
 
 
 
+                                                     [A[A[A[A[A[A
 
 
 
 
 
-                                                     [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
 
 
+                                                     [A[A[A[A[A[A[A
 
 
 
@@ -1205,16 +1203,17 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
+                                                     [A[A[A[A[A[A[A[A
 
 
 
 
 
 
-                                                     [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
 
 
 
+                                                     [A[A[A[A[A[A[A[A[A
 
 
 
@@ -1225,39 +1224,34 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
+                                                     [A[A[A[A[A[A[A[A[A[A
 
 
 
 
-                                                     [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
-[A
 
-[A[A
 
 
-[A[A[A
 
 
 
-[A[A[A[A
 
+                                                     [A[A[A[A[A[A[A[A[A[A[A
 
 
 
-[A[A[A[A[A
 
 
 
 
 
-[A[A[A[A[A[A
 
 
 
 
+                                                     [A[A[A[A[A[A[A[A[A[A[A[A
 
 
-[A[A[A[A[A[A[A
 
 
 
@@ -1265,7 +1259,141 @@ Downloading and Extracting Packages: ...working...python-3.11.16       | 22.1 M
 
 
 
-[A[A[A[A[A[A[A[A done
+
+
+
+
+                                                     [A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                     [A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                     [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                     [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                     [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                     [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+[A
+
+
+[A[A
+
+
+
+[A[A[A
+
+
+
+
+[A[A[A[A
+
+
+
+
+
+[A[A[A[A[A
+
+
+
+
+
+
+[A[A[A[A[A[A
+
+
+
+
+
+
+
+[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+[A[A[A[A[A[A[A[A done
 Preparing transaction: | done
 Verifying transaction: - \ | / done
 Executing transaction: \ | / - \ | / - \ | done

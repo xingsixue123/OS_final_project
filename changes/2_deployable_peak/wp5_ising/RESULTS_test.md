@@ -191,7 +191,7 @@ costs ~4 util points against the one-shot full-trace solve at the same 1-s budge
 - Leak check (prescribed command, marker `wp5_ising/.leak_marker`): before (01:15) 595 files, after (02:09) 595 files,
   **identical lists -- the test wrote nothing outside P2**. The 595 hits are the same non-Track-B categories as at CP2
   (RESULTS_dev.md section 9): `OS_final_project/.git` objects (318, the coordinator's commits incl. fd54e76),
-  `~/project/server_fix/diagnose` (224, an unrelated user project), `~/.cache/huggingface` (33, that project's
+  `<another project>` (224, an unrelated user project), `<home cache>` (33, that project's
   model), `changes/SCOPE_v2.md` (coordinator), desktop/login files. Lists: `results/leak_check_{before,after}_h2test.txt`.
 - No commit by Track B.
 

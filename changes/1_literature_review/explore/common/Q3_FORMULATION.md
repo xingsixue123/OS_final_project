@@ -59,7 +59,7 @@ Defaults not listed: A=1, peak="lse", gamma=2 (per util-pt), f=1 (Bc = B), cells
 Instances: `common/inst/day1_<Region>_s<start>.npz` (the day-1 instance each deployed train builds is identical up to
 episode order). Example:
 ```
-X/env/bin/python common/src/q3form.py common/inst/day1_Region7_s0.1.npz '{"mu":0,"beta":0}' /tmp/P0_R7_s0.1.npz
+X/env/bin/python common/src/q3form.py common/inst/day1_Region7_s0.1.npz '{"mu":0,"beta":0}' <tmp file>
 ```
 For MILP-based classical solvers use `peak="max"` (exact epigraph) or report LSE via a convex solver; the top-k
 variant is not a finalist.

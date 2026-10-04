@@ -34,7 +34,7 @@ Why (details in sections 8 and 10):
 
 - `explore/env`: `conda create -y -p explore/env --override-channels -c conda-forge python=3.11` inside the q2 sandbox
   (`q2/env.sh`: HOME, XDG dirs, TMPDIR, pip/conda/MPL/numba/torch caches under `explore/`, `CONDA_REGISTER_ENVS=false`,
-  `PYTHONNOUSERSITE=1`, `PYTHONDONTWRITEBYTECODE=1`). Not registered in `~/.conda/environments.txt`.
+  `PYTHONNOUSERSITE=1`, `PYTHONDONTWRITEBYTECODE=1`). Not registered in `<home file>`.
 - pip (all succeeded, none skipped; `env/env.lock.txt`, `env/install_outcomes.tsv`): numpy 2.4.6, scipy 1.17.1,
   numba 0.67.0, highspy 1.15.1, PySCIPOpt 6.2.1, ortools 9.15.6755, optuna 5.0.0, torch 2.14.0+cpu (CPU wheel index),
   simulated-bifurcation 2.0.0, dwave-samplers 1.8.0, dimod 0.12.22, openjij 0.12.2, mindquantum 0.12.0, pandas 3.0.6.
@@ -343,7 +343,7 @@ not an artifact of the time allocation.
 - Leak check (prescribed command, marker `q2/.leak_marker` touched at 15:55 before any install), run at 01:55:
   `find /home/sxing /tmp -xdev -newer X/q2/.leak_marker -type f 2>/dev/null | grep -v "^X/" | grep -vE "<prescribed
   exclusions>"` -> **empty output** (also empty at 20:30 and right after the B0 install). No file under
-  `harness_eval/`, `ising_followup/` or `0_reproduce/` is newer than the marker; `~/.conda/environments.txt` is
+  `harness_eval/`, `ising_followup/` or `0_reproduce/` is newer than the marker; `<home file>` is
   unchanged (2026-09-26), i.e. the env was not registered.
 - Sandbox: every Baleen process ran under `bwrap --dev-bind / / --bind q2/work/systmp /tmp --` with `python -B`;
   every train (74 in total: 68 replay trains, each logging "prefix rule reproduces |S| exactly" and the instance-consistency
