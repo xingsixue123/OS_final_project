@@ -1,7 +1,7 @@
 # PeakBaleen: research index
 
 **Single source of truth for the project.**
-- **Last updated:** 2026-10-04.
+- **Last updated:** 2026-10-04 (after CP2-A).
 - **Team:** Ching-Hao Chiu, Jie Fu, Sixue Xing (captain).
 - **Branch:** `phase2-deployable-peak`. Phase 1 lives on `phase1-reproduce-and-litreview`.
 
@@ -20,8 +20,8 @@ Baleen (FAST '24) chooses which blocks to admit to a flash cache. It optimises *
 | 2 · WP0 | Overlay adding a causal demand-load feature (scope v2) | **done**, CP1 (`f79808f`) |
 | 2 · WP1 | H1′ offline breadth, Regions 4–7 × 10 samples | **done** (`08ad0d2`) |
 | 2 · WP5 | Ising track: tight-budget tuning, H2′ test, rolling variant, scaling | **done** (`fd54e76`, `b6f44e2`) |
-| 2 · WP2 | Deployed 2×2 study on dev (labels × `load`) | **running**, Track A (stage-2 confirmations) |
-| 2 · WP3 | H3′ test on samples 0.4–0.6 | waits on WP2 + CP2 (needs a finalist with S > 0) |
+| 2 · WP2 | Deployed 2×2 study on dev (labels × `load`) | **done**, CP2-A (`cba9970`); finalists X1/X2 |
+| 2 · WP3 | H3′ test on samples 0.4–0.6 | **protocol committed; blocked on G3** (teammate review of `PATCH.diff`) |
 | 2 · WP4/6/7 | Mechanism analysis, mid-term report, paper | to do |
 
 ## 3. Hypothesis ledger
@@ -36,7 +36,7 @@ Only valid results are listed: held-out or test data, matched write rate within 
 | H2′ | Ising beats classical at tight budgets of 1/3/10 s (pre-registered) | **No** | PT: 1/6, 6/6, 4/6 instances; EIM: 0/6, 5/6, 3/6. Ising best only at 3 s. | `wp5_ising/RESULTS_test.md` |
 | S | Ising scaling (a contribution, no pass/fail) | **Reported** | Matrix-free SB: ≤214 MB up to 126k variables. The dense SB package runs out of memory beyond ≈70k variables. | `wp5_ising/RESULTS_dev.md` |
 | Q3 | Peak labels survive distillation with frozen features | **No** | 2/6 wins; 0.4–1.1 points worse than Baleen online on average | `explore/q3/RESULTS.md` |
-| H3′ | Ising peak labels + causal `load` feature beat Baleen and Baleen + `load` (deployed) | **Pending** | Learnability gate passed. The first confirmed candidate (PT labels + load) has dev score S = −0.14: better on Region6, worse and unstable on Region7. | `wp2_deployed/PROGRESS.md` |
+| H3′ | Ising peak labels + causal `load` signal beat Baleen and Baleen + `load` (deployed) | **Pending test** (dev only so far) | Plain arm D (Ising labels + load): S = −0.14 on dev. Finalist X1 = Ising PT labels + load + load-adaptive threshold (α = −1): dev 37.20 vs A 38.50 / B 38.44 (S = +1.03, 6/8 wins), but about half of it comes from the threshold policy (A+α 37.88). The secondary test H3′-labels checks the Ising labels' share. Dev numbers are selection-biased. | `wp2_deployed/RESULTS_dev.md`, `PROTOCOL_v2_H3.md` |
 
 **What the evidence says so far:**
 - The **min-max formulation** is the source of the gain, and it is robust offline.
@@ -57,6 +57,7 @@ Only valid results are listed: held-out or test data, matched write rate within 
 | 10-01 | CPU topology: logical CPUs k and k+12 share a core; timing on 0–7 keeps 12–19 idle | `SCOPE_v2.md` §1a |
 | 10-03 | H2′ protocol committed before any test run | `wp5_ising/PROTOCOL_v2_H2.md` (`fd54e76`) |
 | 10-03 | WP2 finalist rule written before the confirmation retrains (score S vs the better of A and B) | `wp2_deployed/PROGRESS.md` |
+| 10-04 | H3′ protocol committed (X1 primary, X2 secondary, H3′-labels attribution vs A+α / B+α); WP3 waits on G3 | `wp2_deployed/PROTOCOL_v2_H3.md` (`cba9970`) |
 
 ## 5. Checkpoints and pre-registrations
 | Checkpoint | Gate | Commit |
@@ -64,7 +65,7 @@ Only valid results are listed: held-out or test data, matched write rate within 
 | Phase-1 protocol | Q1–Q3 criteria before tuning | `be284a3` (`explore/PROTOCOL.md`) |
 | CP1 | Overlay G1 (bit-exact) + train/serve parity; coordinator review | `f79808f` |
 | CP2-B | H2′ protocol before the test | `fd54e76` |
-| CP2-A | H3′ protocol before the test (only if a finalist has S > 0) | pending |
+| CP2-A | H3′ protocol before the test | `cba9970` |
 | G3 | **Teammate review of `PATCH.diff` before any WP3 test run** | pending (CC or JF) |
 
 ## 6. Where things are
@@ -107,9 +108,7 @@ Sessions end without warning; every track is resumable from files.
 - **Leak-check hits** outside the project come from other tools: the editor, Copilot, desktop files, and `server_fix`. None of them come from this work.
 
 ## 9. Next steps and dates
-1. **WP2 → CP2-A (Track A, running):** finish the confirmations and apply the finalist rule.
-   - If a finalist has S > 0: G3 teammate review, then commit `PROTOCOL_v2_H3.md`, then run the WP3 test on samples 0.4–0.6.
-   - Otherwise: H3′ is not supported on dev; write up the mechanism.
+1. **G3 (needs a teammate):** Ching-Hao or Jie reviews `wp0_overlay/PATCH.diff` and records it. Then WP3: build the test jobs, instances and labels, and run `PROTOCOL_v2_H3.md` on samples 0.4–0.6 (≈ 7 arms × 6 instances × 3 retrains).
 2. **WP4:** mechanism. Retention, the 2×2 interaction, scan windows, and the Region6 vs Region7 split.
 3. **WP6: mid-term talk and report** (date TBC, after mid-term break). Cover the reproduction nuance, H1′, the solver story (H2/H2′/scaling) and the H3′ status.
 4. **WP7: paper** (Nov 2 – Dec 2). Reserve samples 0.7–0.9 are touched once, for the final claims.
