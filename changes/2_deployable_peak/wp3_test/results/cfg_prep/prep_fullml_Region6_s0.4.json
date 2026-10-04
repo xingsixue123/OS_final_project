@@ -1,0 +1,8 @@
+{
+ "mode": "baleen",
+ "name": "pb3_fullml_Region6_s0.4",
+ "target_wr": 35.599,
+ "skip_windows": 144,
+ "inst_path": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp3_test/inst/fullml_Region6_s0.4.npz",
+ "dump_access": true
+}

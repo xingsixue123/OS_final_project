@@ -1,0 +1,36 @@
+{
+ "key": "A_baleen_Region7_s0_r1",
+ "out": {
+  "analysis": [
+   "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp3_test/work/runs/A_baleen_Region7_s0_r1/train/A_baleen_Region7_s0_r1/20230325_Region7_0_0.1/ws.20230325_Region7_0_0.1/fs_meta+block+chunk/accs_15/offline_analysis_ea_5653.15.csv",
+   "0.00555801M"
+  ],
+  "thresholds": [
+   "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp3_test/work/tmp/A_baleen_Region7_s0_r1/20230325_Region7_0_0.1/ws.20230325_Region7_0_0.1/fs_meta+block+chunk/accs_15/decisions_utility_service_time_size_fixed_ea_5653.15.pkl.bz",
+   "1.26351M"
+  ],
+  "model_prefetch_offset_start": [
+   "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp3_test/work/tmp/A_baleen_Region7_s0_r1/20230325_Region7_0_0.1/ws.20230325_Region7_0_0.1/fs_meta+block+chunk/accs_15/ea_5653.15_wr_35.599_prefetch_offset_start.model",
+   "1.50693M"
+  ],
+  "model_prefetch_size": [
+   "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp3_test/work/tmp/A_baleen_Region7_s0_r1/20230325_Region7_0_0.1/ws.20230325_Region7_0_0.1/fs_meta+block+chunk/accs_15/ea_5653.15_wr_35.599_prefetch_size.model",
+   "0.998113M"
+  ],
+  "model_prefetch_offset_end": [
+   "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp3_test/work/tmp/A_baleen_Region7_s0_r1/20230325_Region7_0_0.1/ws.20230325_Region7_0_0.1/fs_meta+block+chunk/accs_15/ea_5653.15_wr_35.599_prefetch_offset_end.model",
+   "1.82945M"
+  ],
+  "model_prefetch_pred_net_pf_st_binary": [
+   "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp3_test/work/tmp/A_baleen_Region7_s0_r1/20230325_Region7_0_0.1/ws.20230325_Region7_0_0.1/fs_meta+block+chunk/accs_15/ea_5653.15_wr_35.599_prefetch_pred_net_pf_st_binary.model",
+   "0.435141M"
+  ],
+  "model_admit_threshold_binary": [
+   "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp3_test/work/tmp/A_baleen_Region7_s0_r1/20230325_Region7_0_0.1/ws.20230325_Region7_0_0.1/fs_meta+block+chunk/accs_15/ea_5653.15_wr_35.599_admit_threshold_binary.model",
+   "6.26216M"
+  ]
+ },
+ "secs": 23.886511087417603,
+ "wait": 27.828434705734253,
+ "label_file": null
+}

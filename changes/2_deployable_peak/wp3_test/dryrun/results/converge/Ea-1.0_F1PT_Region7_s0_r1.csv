@@ -1,0 +1,6 @@
+threshold,wr,peak,result_file,emu_wr
+0.499573,57.08070844732241,38.96511590257929,/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp3_test/work/runs/Ea-1.0_F1PT_Region7_s0_r1/converge/th_0.499573/ml-ap-0.499573_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma,74.7678557730723
+0.725719,35.58466982907913,39.66028878524715,/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp3_test/work/runs/Ea-1.0_F1PT_Region7_s0_r1/converge/th_0.725719/ml-ap-0.725719_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma,51.9959072642241
+0.73019,35.1743091634666,39.66028878524715,/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp3_test/work/runs/Ea-1.0_F1PT_Region7_s0_r1/converge/th_0.730190/ml-ap-0.73019_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma,51.64850098117552
+0.746026,34.12393645056848,39.66433566429301,/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp3_test/work/runs/Ea-1.0_F1PT_Region7_s0_r1/converge/th_0.746026/ml-ap-0.746026_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma,50.44481455194943
+0.798153,31.05543424608254,39.82747345243196,/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp3_test/work/runs/Ea-1.0_F1PT_Region7_s0_r1/converge/th_0.798153/ml-ap-0.798153_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma,46.61832572089962

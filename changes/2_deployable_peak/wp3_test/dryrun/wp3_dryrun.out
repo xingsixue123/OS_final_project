@@ -1,0 +1,16 @@
+3 evaluations planned, 3 to run
+Reading from file /home/sxing/project/OS_final_project/changes/2_deployable_peak/wp3_test/work/data/tectonic/20230325/Region7/full_0_0.1.trace
+DemandLoad: 247264 GET requests from /home/sxing/project/OS_final_project/changes/2_deployable_peak/wp3_test/work/data/tectonic/20230325/Region7/full_0_0.1.trace (sample_ratio=0.1)
+[A_baleen_Region7_s0_r1] round 0: th=0.634475 WR=33.926 P100=40.000 (best WR 33.926)
+[Aa-1.0_baleen_Region7_s0_r1] round 0: th=0.905618 WR=34.593 P100=39.499 (best WR 34.593)
+[Ea-1.0_F1PT_Region7_s0_r1] round 0: th=0.499573 WR=57.081 P100=38.965 (best WR 57.081)
+[A_baleen_Region7_s0_r1] round 1: th=0.596660 WR=36.466 P100=39.935 (best WR 36.466)
+[Aa-1.0_baleen_Region7_s0_r1] round 1: th=0.879837 WR=35.922 P100=39.182 (best WR 35.922)
+== Aa-1.0_baleen_Region7_s0_r1: P100=39.182 WR=35.922 th=0.87984 (pred 0.9056) matched=True n_sims=2 k0_adm=0.062
+[Ea-1.0_F1PT_Region7_s0_r1] round 1: th=0.798153 WR=31.055 P100=39.827 (best WR 31.055)
+[A_baleen_Region7_s0_r1] round 2: th=0.609569 WR=35.809 P100=39.886 (best WR 35.809)
+== A_baleen_Region7_s0_r1: P100=39.886 WR=35.809 th=0.60957 (pred 0.6345) matched=True n_sims=3 k0_adm=0.057
+[Ea-1.0_F1PT_Region7_s0_r1] round 2: th=0.746026 WR=34.124 P100=39.664 (best WR 34.124)
+[Ea-1.0_F1PT_Region7_s0_r1] round 3: th=0.730190 WR=35.174 P100=39.660 (best WR 35.174)
+[Ea-1.0_F1PT_Region7_s0_r1] round 4: th=0.725719 WR=35.585 P100=39.660 (best WR 35.585)
+== Ea-1.0_F1PT_Region7_s0_r1: P100=39.660 WR=35.585 th=0.72572 (pred 0.4996) matched=True n_sims=5 k0_adm=0.024

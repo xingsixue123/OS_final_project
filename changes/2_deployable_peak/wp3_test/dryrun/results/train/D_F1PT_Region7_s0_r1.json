@@ -1,0 +1,36 @@
+{
+ "key": "D_F1PT_Region7_s0_r1",
+ "out": {
+  "analysis": [
+   "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp3_test/work/runs/D_F1PT_Region7_s0_r1/train/D_F1PT_Region7_s0_r1/20230325_Region7_0_0.1/ws.20230325_Region7_0_0.1/fs_meta+block+chunk+load/accs_15/offline_analysis_ea_5653.15.csv",
+   "0.0053196M"
+  ],
+  "thresholds": [
+   "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp3_test/work/tmp/D_F1PT_Region7_s0_r1/20230325_Region7_0_0.1/ws.20230325_Region7_0_0.1/fs_meta+block+chunk+load/accs_15/decisions_pb4_F1PT_r1_ea_5653.15.pkl.bz",
+   "1.26859M"
+  ],
+  "model_prefetch_offset_start": [
+   "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp3_test/work/tmp/D_F1PT_Region7_s0_r1/20230325_Region7_0_0.1/ws.20230325_Region7_0_0.1/fs_meta+block+chunk+load/accs_15/ea_5653.15_wr_35.599_prefetch_offset_start.model",
+   "1.17164M"
+  ],
+  "model_prefetch_size": [
+   "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp3_test/work/tmp/D_F1PT_Region7_s0_r1/20230325_Region7_0_0.1/ws.20230325_Region7_0_0.1/fs_meta+block+chunk+load/accs_15/ea_5653.15_wr_35.599_prefetch_size.model",
+   "1.18953M"
+  ],
+  "model_prefetch_offset_end": [
+   "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp3_test/work/tmp/D_F1PT_Region7_s0_r1/20230325_Region7_0_0.1/ws.20230325_Region7_0_0.1/fs_meta+block+chunk+load/accs_15/ea_5653.15_wr_35.599_prefetch_offset_end.model",
+   "1.21861M"
+  ],
+  "model_prefetch_pred_net_pf_st_binary": [
+   "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp3_test/work/tmp/D_F1PT_Region7_s0_r1/20230325_Region7_0_0.1/ws.20230325_Region7_0_0.1/fs_meta+block+chunk+load/accs_15/ea_5653.15_wr_35.599_prefetch_pred_net_pf_st_binary.model",
+   "0.564046M"
+  ],
+  "model_admit_threshold_binary": [
+   "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp3_test/work/tmp/D_F1PT_Region7_s0_r1/20230325_Region7_0_0.1/ws.20230325_Region7_0_0.1/fs_meta+block+chunk+load/accs_15/ea_5653.15_wr_35.599_admit_threshold_binary.model",
+   "5.08388M"
+  ]
+ },
+ "secs": 24.636504650115967,
+ "wait": 47.95156979560852,
+ "label_file": "/home/sxing/project/OS_final_project/changes/2_deployable_peak/wp2_deployed/labels/Region7_s0_F1PT_s1.npz"
+}

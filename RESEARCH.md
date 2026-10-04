@@ -1,7 +1,7 @@
 # PeakBaleen: research index
 
 **Single source of truth for the project.**
-- **Last updated:** 2026-10-04 (after CP2-A).
+- **Last updated:** 2026-10-04 (WP3 prepared; waiting on G3).
 - **Team:** Ching-Hao Chiu, Jie Fu, Sixue Xing (captain).
 - **Branch:** `phase2-deployable-peak`. Phase 1 lives on `phase1-reproduce-and-litreview`.
 
@@ -21,7 +21,7 @@ Baleen (FAST '24) chooses which blocks to admit to a flash cache. It optimises *
 | 2 · WP1 | H1′ offline breadth, Regions 4–7 × 10 samples | **done** (`08ad0d2`) |
 | 2 · WP5 | Ising track: tight-budget tuning, H2′ test, rolling variant, scaling | **done** (`fd54e76`, `b6f44e2`) |
 | 2 · WP2 | Deployed 2×2 study on dev (labels × `load`) | **done**, CP2-A (`cba9970`); finalists X1/X2 |
-| 2 · WP3 | H3′ test on samples 0.4–0.6 | **protocol committed; blocked on G3** (teammate review of `PATCH.diff`) |
+| 2 · WP3 | H3′ test on samples 0.4–0.6 | **all prerequisites ready; blocked only on G3** (guide: `wp0_overlay/G3_REVIEW.md`). The driver refuses to start until `wp3_test/G3_SIGNED` exists. |
 | 2 · WP4/6/7 | Mechanism analysis, mid-term report, paper | to do |
 
 ## 3. Hypothesis ledger
@@ -108,7 +108,8 @@ Sessions end without warning; every track is resumable from files.
 - **Leak-check hits** outside the project come from other tools: the editor, Copilot, desktop files, and `server_fix`. None of them come from this work.
 
 ## 9. Next steps and dates
-1. **G3 (needs a teammate):** Ching-Hao or Jie reviews `wp0_overlay/PATCH.diff` and records it. Then WP3: build the test jobs, instances and labels, and run `PROTOCOL_v2_H3.md` on samples 0.4–0.6 (≈ 7 arms × 6 instances × 3 retrains).
+1. **G3 (needs a teammate):** Ching-Hao or Jie follows `wp0_overlay/G3_REVIEW.md` and appends the sign-off line to `SCOPE_v2.md` §1a. Then the coordinator creates `wp3_test/G3_SIGNED` and launches the command in `wp3_test/PROGRESS.md`: 126 evaluations, about 3–4 h, then `evaluate_test.py`.
+   - Prerequisites are done: jobs, instances (sha256 recorded), 72 label sets, and RejectX/CoinFlip test baselines (RejectX 40.73, CoinFlip 48.64).
 2. **WP4:** mechanism. Retention, the 2×2 interaction, scan windows, and the Region6 vs Region7 split.
 3. **WP6: mid-term talk and report** (date TBC, after mid-term break). Cover the reproduction nuance, H1′, the solver story (H2/H2′/scaling) and the H3′ status.
 4. **WP7: paper** (Nov 2 – Dec 2). Reserve samples 0.7–0.9 are touched once, for the final claims.
