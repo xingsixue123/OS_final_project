@@ -37,3 +37,4 @@
 - 19:36 all 117 solves done (39 instances x lp/cpsat/pt; 0 over budget). 19:55 all 156 sims matched (816 sim runs).
 - 20:15 RESULTS.md written: H1' PASS for LP (36/39, 13.0%), CP-SAT (36/39, 13.2%), PT (37/39, 13.7%); Region4 weak
   (3-5%), Regions 5-7 30/30.
+- See wp5_ising/RESULTS_dev.md section 9 for the final leak check / check_frozen of the whole Track B (Oct 3 01:12).
