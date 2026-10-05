@@ -66,7 +66,7 @@ Only valid results are listed: held-out or test data, matched write rate within 
 | CP1 | Overlay G1 (bit-exact) + train/serve parity; coordinator review | `f79808f` |
 | CP2-B | H2′ protocol before the test | `fd54e76` |
 | CP2-A | H3′ protocol before the test | `cba9970` |
-| G3 | **Teammate review of `PATCH.diff` before any WP3 test run** | pending (CC or JF) |
+| G3 | Teammate review of `PATCH.diff` before any WP3 test run | **waived by the captain 2026-10-05** (`SCOPE_v2.md` §1a) |
 
 ## 6. Where things are
 ```

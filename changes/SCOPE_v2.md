@@ -40,6 +40,7 @@ The patch may only do the following:
 - **Review status:**
   - G3: coordinator review done; teammate review still required before any test-set (WP3) run.
   - Rebuilding the overlay: `wp0_overlay/rebuild_overlay.sh` (verified identical).
+- G3 waived by Sixue Xing (captain) on 2026-10-05: PATCH.diff sha256 2a914eb589bb. No teammate review; the coordinator review at CP1, the G1 gate and the parity gate stand. Recorded before any WP3 test run.
 - **CPU topology.** Logical CPUs k and k+12 are the two hyperthreads of one physical core. While timing runs hold cores 0–7, other work must avoid 12–19 and use `8-11,20-23` only.
 
 ## 3. Fairness gates (must pass before any v2 result counts)
