@@ -1,7 +1,7 @@
 # PeakBaleen: research index
 
 **Single source of truth for the project.**
-- **Last updated:** 2026-10-04 (WP3 prepared; waiting on G3).
+- **Last updated:** 2026-10-05 (G3 waived; H3′ test running).
 - **Team:** Ching-Hao Chiu, Jie Fu, Sixue Xing (captain).
 - **Branch:** `phase2-deployable-peak`. Phase 1 lives on `phase1-reproduce-and-litreview`.
 
@@ -21,7 +21,8 @@ Baleen (FAST '24) chooses which blocks to admit to a flash cache. It optimises *
 | 2 · WP1 | H1′ offline breadth, Regions 4–7 × 10 samples | **done** (`08ad0d2`) |
 | 2 · WP5 | Ising track: tight-budget tuning, H2′ test, rolling variant, scaling | **done** (`fd54e76`, `b6f44e2`) |
 | 2 · WP2 | Deployed 2×2 study on dev (labels × `load`) | **done**, CP2-A (`cba9970`); finalists X1/X2 |
-| 2 · WP3 | H3′ test on samples 0.4–0.6 | **all prerequisites ready; blocked only on G3** (guide: `wp0_overlay/G3_REVIEW.md`). The driver refuses to start until `wp3_test/G3_SIGNED` exists. |
+| 2 · WP3 | H3′ test on samples 0.4–0.6 | **running** since 2026-10-05 (G3 waived by the captain; `wp3_test/G3_SIGNED`). Log: `wp3_test/logs/wp3_test.out`; resume = re-run the same command (`wp3_test/PROGRESS.md`). |
+| 2 · WP8 (Track C) | Deployment-aware Ising objectives (Baleen-anchored repair, top-k/CVaR peak, student-field alternation); dev only, validated emulated-P100 proxy first, then full-sim dev screen, then a fresh test on Region5 | **stage 1 running** (2026-10-05; `wp8_trackC/PROGRESS.md`) |
 | 2 · WP4/6/7 | Mechanism analysis, mid-term report, paper | to do |
 
 ## 3. Hypothesis ledger
@@ -110,8 +111,9 @@ Sessions end without warning; every track is resumable from files.
 - **Privacy redaction (2026-10-04).** The repo is **public**. Leak-check listings, CPU audits and notes had included paths and process names from the user's unrelated work and machine (file names only, never contents). They were replaced by category labels with counts, using `tools/privacy_scrub.py`. Code, results and numbers are unchanged. **Earlier commits still contain the originals:** purging them needs a history rewrite and force-push (captain's decision).
 
 ## 9. Next steps and dates
-1. **G3 (needs a teammate):** Ching-Hao or Jie follows `wp0_overlay/G3_REVIEW.md` and appends the sign-off line to `SCOPE_v2.md` §1a. Then the coordinator creates `wp3_test/G3_SIGNED` and launches the command in `wp3_test/PROGRESS.md`: 126 evaluations, about 3–4 h, then `evaluate_test.py`.
-   - Prerequisites are done: jobs, instances (sha256 recorded), 72 label sets, and RejectX/CoinFlip test baselines (RejectX 40.73, CoinFlip 48.64).
-2. **WP4:** mechanism. Retention, the 2×2 interaction, scan windows, and the Region6 vs Region7 split.
-3. **WP6: mid-term talk and report** (date TBC, after mid-term break). Cover the reproduction nuance, H1′, the solver story (H2/H2′/scaling) and the H3′ status.
-4. **WP7: paper** (Nov 2 – Dec 2). Reserve samples 0.7–0.9 are touched once, for the final claims.
+1. **H3′ test (running since 2026-10-05).** When `wp3.py` exits: `evaluate_test.py` → `wp3_test/RESULTS_test.md` (H3′, H3′-labels, X2, Dc+α, retention), integrity checks, commit.
+   - Test baselines already fixed: RejectX 40.73, CoinFlip 48.64.
+2. **WP8 / Track C:** stage 1 = validated proxy + offline/learnability screen on dev (no sims while H3′ runs). Stage 2 = full-sim dev screen with a finalist rule written first. Stage 3 = fresh pre-registered test on Region5 (never run deployed); reserve 0.7–0.9 untouched. Track C never reads H3′ test outputs.
+3. **WP4:** mechanism. Retention, the 2×2 interaction, scan windows, and the Region6 vs Region7 split.
+4. **WP6: mid-term talk and report** (date TBC, after mid-term break). Cover the reproduction nuance, H1′, the solver story (H2/H2′/scaling) and the H3′ status.
+5. **WP7: paper** (Nov 2 – Dec 2). Reserve samples 0.7–0.9 are touched once, for the final claims.
