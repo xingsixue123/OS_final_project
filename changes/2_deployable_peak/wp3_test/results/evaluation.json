@@ -1,0 +1,188 @@
+{
+ "instances": [
+  "Region7_s0.4",
+  "Region7_s0.5",
+  "Region7_s0.6",
+  "Region6_s0.4",
+  "Region6_s0.5",
+  "Region6_s0.6"
+ ],
+ "n_rows": 126,
+ "comparisons": [
+  {
+   "X": "X1",
+   "ref": "A",
+   "wins": 5,
+   "n_inst": 6,
+   "mean_improvement": -1.2650678796663197,
+   "se_retrain": 0.1537157890037116,
+   "se_instance": 2.412604315080155,
+   "min_matched": 3,
+   "ok": false,
+   "per_inst": "+2.31 -13.23 +0.15 +0.65 +1.51 +1.02"
+  },
+  {
+   "X": "X1",
+   "ref": "B",
+   "wins": 5,
+   "n_inst": 6,
+   "mean_improvement": -1.3587450358482975,
+   "se_retrain": 0.16696097067310886,
+   "se_instance": 2.5539147104076094,
+   "min_matched": 3,
+   "ok": false,
+   "per_inst": "+2.66 -13.99 +0.04 +0.50 +1.71 +0.92"
+  },
+  {
+   "X": "X1",
+   "ref": "A+alpha",
+   "wins": 3,
+   "n_inst": 6,
+   "mean_improvement": -2.229584844182232,
+   "se_retrain": 0.20676453075900925,
+   "se_instance": 2.6600836064043327,
+   "min_matched": 3,
+   "ok": false,
+   "per_inst": "+1.46 -15.35 -0.70 -0.81 +0.26 +1.76"
+  },
+  {
+   "X": "X1",
+   "ref": "B+alpha",
+   "wins": 3,
+   "n_inst": 6,
+   "mean_improvement": -2.151388349326505,
+   "se_retrain": 0.2681214629869559,
+   "se_instance": 2.636747934373428,
+   "min_matched": 3,
+   "ok": false,
+   "per_inst": "+1.51 -15.24 -0.45 -0.36 +0.93 +0.70"
+  },
+  {
+   "X": "X1",
+   "ref": "Dc+alpha",
+   "wins": 3,
+   "n_inst": 6,
+   "mean_improvement": -0.8887899651874811,
+   "se_retrain": 0.35546385136167125,
+   "se_instance": 0.8444805531258601,
+   "min_matched": 3,
+   "ok": false,
+   "per_inst": "+0.37 -4.81 -1.59 +0.43 +0.38 -0.11"
+  },
+  {
+   "X": "X2",
+   "ref": "A",
+   "wins": 4,
+   "n_inst": 6,
+   "mean_improvement": -1.6099231272998011,
+   "se_retrain": 0.2103000745457947,
+   "se_instance": 2.3126051594149724,
+   "min_matched": 3,
+   "ok": false,
+   "per_inst": "+1.73 -13.09 -0.31 +0.22 +0.75 +1.03"
+  },
+  {
+   "X": "X2",
+   "ref": "B",
+   "wins": 4,
+   "n_inst": 6,
+   "mean_improvement": -1.703600283481779,
+   "se_retrain": 0.22016708040267952,
+   "se_instance": 2.452266397193202,
+   "min_matched": 3,
+   "ok": false,
+   "per_inst": "+2.08 -13.84 -0.42 +0.08 +0.95 +0.93"
+  }
+ ],
+ "baselines": {
+  "RejectX": 40.731875377705634,
+  "CoinFlip": 48.63512259345708
+ },
+ "X1_mean_p100": 40.531752712328846,
+ "X1_below_baselines": true,
+ "X2_mean_p100": 40.87660795996232,
+ "X2_below_baselines": false,
+ "H3prime": false,
+ "H3prime_labels": false,
+ "X2_rule": false,
+ "retention": {
+  "X1": -0.27654660101727524,
+  "X2": -0.3299438584126788,
+  "B": 0.018421003922392733,
+  "A+alpha": 0.16254931122719732,
+  "B+alpha": 0.15051910152632966,
+  "Dc+alpha": -0.11668745742985555
+ },
+ "secondary": {
+  "A:baleen": {
+   "p100": 39.2667,
+   "p99": 31.9582,
+   "top5": 36.0194,
+   "mean_dt": 21.014,
+   "wr": 35.6015,
+   "k0_adm": 0.0409,
+   "peak_adm": 0.3854,
+   "peak_bigoff_share": 0.2127
+  },
+  "Aa-1.0:baleen": {
+   "p100": 38.3022,
+   "p99": 31.7045,
+   "top5": 35.5499,
+   "mean_dt": 21.1376,
+   "wr": 35.592,
+   "k0_adm": 0.0428,
+   "peak_adm": 0.4518,
+   "peak_bigoff_share": 0.1913
+  },
+  "B:baleen": {
+   "p100": 39.173,
+   "p99": 31.8357,
+   "top5": 35.8456,
+   "mean_dt": 20.925,
+   "wr": 35.5019,
+   "k0_adm": 0.0482,
+   "peak_adm": 0.3512,
+   "peak_bigoff_share": 0.2465
+  },
+  "Ba-1.0:baleen": {
+   "p100": 38.3804,
+   "p99": 31.4634,
+   "top5": 35.4677,
+   "mean_dt": 21.0859,
+   "wr": 35.6223,
+   "k0_adm": 0.0442,
+   "peak_adm": 0.4125,
+   "peak_bigoff_share": 0.1714
+  },
+  "Ea-0.5:F1PT": {
+   "p100": 40.8766,
+   "p99": 31.8607,
+   "top5": 36.1282,
+   "mean_dt": 21.4557,
+   "wr": 35.5502,
+   "k0_adm": 0.0177,
+   "peak_adm": 0.3337,
+   "peak_bigoff_share": 0.2226
+  },
+  "Ea-1.0:F1CPSAT": {
+   "p100": 39.643,
+   "p99": 31.8387,
+   "top5": 35.5142,
+   "mean_dt": 21.5389,
+   "wr": 35.6427,
+   "k0_adm": 0.0177,
+   "peak_adm": 0.3364,
+   "peak_bigoff_share": 0.241
+  },
+  "Ea-1.0:F1PT": {
+   "p100": 40.5318,
+   "p99": 31.821,
+   "top5": 36.0153,
+   "mean_dt": 21.567,
+   "wr": 35.5327,
+   "k0_adm": 0.0194,
+   "peak_adm": 0.3452,
+   "peak_bigoff_share": 0.2174
+  }
+ }
+}
