@@ -1,7 +1,7 @@
 # PeakBaleen: research index
 
 **Single source of truth for the project.**
-- **Last updated:** 2026-10-16 (H3′ test done: FAIL; Track C stage 1 running).
+- **Last updated:** 2026-10-16 (H3′ FAIL; Track C stage 1 done, stage 2 dev screen running; H4 pre-registered).
 - **Team:** Ching-Hao Chiu, Jie Fu, Sixue Xing (captain).
 - **Branch:** `phase2-deployable-peak`. Phase 1 lives on `phase1-reproduce-and-litreview`.
 
@@ -22,7 +22,7 @@ Baleen (FAST '24) chooses which blocks to admit to a flash cache. It optimises *
 | 2 · WP5 | Ising track: tight-budget tuning, H2′ test, rolling variant, scaling | **done** (`fd54e76`, `b6f44e2`) |
 | 2 · WP2 | Deployed 2×2 study on dev (labels × `load`) | **done**, CP2-A (`cba9970`); finalists X1/X2 |
 | 2 · WP3 | H3′ test on samples 0.4–0.6 | **done: H3′ NO, H3′-labels NO** (`wp3_test/RESULTS_test.md`) |
-| 2 · WP8 (Track C) | Deployment-aware Ising objectives (Baleen-anchored repair, top-k/CVaR peak, student-field alternation); dev only, validated emulated-P100 proxy first, then full-sim dev screen, then a fresh test on Region5 | **stage 1 running** (2026-10-05; `wp8_trackC/PROGRESS.md`) |
+| 2 · WP8 (Track C) | Deployment-aware Ising objectives on dev | stage 1 **done** (`19d7992`): cheap proxy NOT valid (Spearman 0.49 < 0.5); Baleen-anchored PT labels (ANC3/ANC10) keep ≈96% of F1's day-1 peak cut and restore first-access admission; top-k adds nothing. **Stage 2 (full-sim dev screen of ANC3, ANC10, STU10R1) running** |
 | 2 · WP4/6/7 | Mechanism analysis, mid-term report, paper | to do |
 
 ## 3. Hypothesis ledger
@@ -59,6 +59,7 @@ Only valid results are listed: held-out or test data, matched write rate within 
 | 10-03 | H2′ protocol committed before any test run | `wp5_ising/PROTOCOL_v2_H2.md` (`fd54e76`) |
 | 10-03 | WP2 finalist rule written before the confirmation retrains (score S vs the better of A and B) | `wp2_deployed/PROGRESS.md` |
 | 10-04 | H3′ protocol committed (X1 primary, X2 secondary, H3′-labels attribution vs A+α / B+α); WP3 waits on G3 | `wp2_deployed/PROTOCOL_v2_H3.md` (`cba9970`) |
+| 10-16 | H3′ failed on test. H4 (load-adaptive threshold on Baleen's models, A+α) pre-registered for a fresh Region5 test, which runs whether or not Track C yields a finalist | `wp8_trackC/PLAN_C.md` §6 (`d10e572`) |
 
 ## 5. Checkpoints and pre-registrations
 | Checkpoint | Gate | Commit |
