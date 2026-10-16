@@ -101,3 +101,8 @@ TK72 (half-day CVaR raises the day-1 peak to 26.0, little left of the peak edit)
 C-potts-load (not implemented: phase-1 C2 cell couplings failed held-out; an episode's rows span many load buckets,
 so a per-episode label cannot be coupled by load cell; the student field is the learned, load-aware version of the
 same idea).
+
+## 6. Coordinator addendum (2026-10-16, before any Stage-2 simulation and before any Region5 deployed run)
+- **H4 (load-adaptive threshold, own hypothesis).** In the H3′ test (`wp3_test/RESULTS_test.md` §3) the load-adaptive threshold on Baleen's own models (A+α, α = −1) was the best configuration, but only as a control, so post-hoc. It is pre-registered here for the Region5 test: **H4 = YES iff A+α beats A and B** by the same rule (≥ 4/6 instances, mean improvement > 2 SE retrain-level, instance-level SE reported) and is below RejectX and CoinFlip. α = −1 and the (0, 4] threshold search are fixed; no α tuning on Region5.
+- **The Region5 test runs even if Track C yields no finalist**, with arms A, B, A+α, B+α (and X1 for the Ising record). If there is a finalist Y, it is added as in §4.
+- **Track C remains blind to the H3′ test outcome** in its design work. The coordinator added this addendum, based on the H3′ result. It changes no Track C design, short-list or finalist rule.
