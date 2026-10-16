@@ -1,0 +1,21 @@
+# Track C: commit only small text artifacts (md/csv/json/py/sh, each < 1 MB). Everything else stays local.
+*
+!*/
+!.gitignore
+!*.md
+!*.csv
+!*.json
+!*.py
+!*.sh
+# runtime / large / private state (never committed, whatever the extension)
+.home/
+.cache/
+work/
+logs/
+.sim_slots.d/
+results/proxy_cache/
+*.lock
+*.npz
+*.npy
+__pycache__/
+# no committed file may exceed 1 MB: list any exception here explicitly (none as of 2026-10-16)
