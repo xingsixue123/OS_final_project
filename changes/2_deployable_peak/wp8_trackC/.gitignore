@@ -19,3 +19,7 @@ results/proxy_cache/
 *.npy
 __pycache__/
 # no committed file may exceed 1 MB: list any exception here explicitly (none as of 2026-10-16)
+results/train/
+results/cfg/
+results/converge/
+results/wrmap_pairs.jsonl

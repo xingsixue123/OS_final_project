@@ -45,7 +45,8 @@ JOBS = json.load(open(os.path.join(COMMON, "jobs.json")))
 
 
 def cpus():
-    return BUSY_CPUS          # Track C: always 8-11,20-23 (H3' test has priority on the CPUs)
+    # Track C Stage 2 (coordinator 2026-10-16): 0-23 / cap 14 while TIMING_IDLE exists, else 8-11,20-23 / cap 6
+    return IDLE_CPUS if os.path.exists(IDLE_FLAG) else BUSY_CPUS
 
 
 def base_env(threads=2, extra=None):

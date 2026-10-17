@@ -121,3 +121,26 @@ src/run.sh baleen ../src/pl_eval.py --what wp2 ; src/run.sh baleen ../src/pl_eva
 src/run.sh baleen ../src/pl_eval.py --what c --designs F1PT4 ANC3 ANC10 ANC30 TK10 TK72 ANC10TK10 STU10R1 STU10R2 STU30R1
 ```
 Next: Stage 2 per PLAN_C.md (needs coordinator go-ahead; full sims + trainings).
+
+# STAGE 2 (dev full-sim screen; approved by the coordinator 2026-10-16, PLAN_C.md §2-§3 committed 19d7992)
+- Driver `src/wp8.py` = copy of WP2's `wp2.py` + plans D8 (Track C labels + load, alpha none; trains) and E8
+  (D8's retrain + alpha = -1, sim-only); theta search (0, 4] for every alpha arm. `wpcommon.cpus()` follows
+  TIMING_IDLE again (0-23 / 14 sims while it exists). SimSlot pool = `wp8_trackC/.sim_slots.d` (nothing else runs;
+  WP2's slot directory is not written). Train lock = `2_deployable_peak/.train.lock`. WP2's `wrmap_pairs.jsonl`
+  copied to `results/` (threshold SEEDING only). Ledger: `trials.csv`.
+- Screen queue (rep 1): D8 and E8 for ANC3, ANC10, STU10R1, ANC10CP (ANC10CP = comparison, not eligible).
+- 13:56 driver relaunched under bwrap via src/run_wp8.sh (first launch, un-bwrapped as WP2 did, killed after 1 min; its in-flight train is reused by the resume logic).
+
+## RESUME (Stage 2) — drivers are resumable (finished evaluations skipped via trials.csv; finished sims reused)
+```
+cd changes/2_deployable_peak/wp8_trackC
+pgrep -af "src/wp8.py|simulate_ap|wp2_launch_train" | grep -v pgrep      # must be empty before relaunching
+setsid nohup src/run_wp8.sh '<the latest QUEUE line below>' wp8_screen.out > /dev/null 2>&1 &
+```
+QUEUE screen: [["D8",["ANC3","ANC10","STU10R1","ANC10CP"],[1]],["E8",["ANC3","ANC10","STU10R1","ANC10CP"],[1]]]
+- 10-16 14:37 note: a foreign job (<another project>, running since 10-10, uses the Baleen env's interpreter from outside this repo) occupies ~15 of 24 CPUs; Track C sims run ~4x slower (~20-25 min each). Throughput only; simulated P100/WR are deterministic in their inputs and unaffected. Not touched.
+- 10-16 15:10 driver restarted (threshold seeding: anchored designs now use the Baleen-kind WR map; seeding only, no effect on matched results). Restarted when no train was running; 14 orphan sims held by src/hold_orphans.sh (one slot each) and re-used by the resume logic.
+- 2026-10-16 ~23:xx SCREEN COMPLETE: 64/64 evaluations matched, 0 failed. Screen gate (PLAN_C §3, unchanged):
+  S1 E8:STU10R1 -0.26, E8:ANC3 -0.84, E8:ANC10 -1.80 (comparison E8:ANC10CP -0.94) -> NO configuration confirmed,
+  NO finalist. Stage 2 ends; Track C contributes no arm to Stage 3. Report: `RESULTS_dev.md`,
+  `results/stage2_summary.md` (`src/stage2.py`). Nothing is running.

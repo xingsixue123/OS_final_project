@@ -1,7 +1,7 @@
 # PeakBaleen: research index
 
 **Single source of truth for the project.**
-- **Last updated:** 2026-10-16 (H3′ FAIL; Track C stage 1 done, stage 2 dev screen running; H4 pre-registered).
+- **Last updated:** 2026-10-16 (H3′ FAIL; Track C negative on dev, no finalist; Region5 test (H4 + X1) next).
 - **Team:** Ching-Hao Chiu, Jie Fu, Sixue Xing (captain).
 - **Branch:** `phase2-deployable-peak`. Phase 1 lives on `phase1-reproduce-and-litreview`.
 
@@ -22,7 +22,7 @@ Baleen (FAST '24) chooses which blocks to admit to a flash cache. It optimises *
 | 2 · WP5 | Ising track: tight-budget tuning, H2′ test, rolling variant, scaling | **done** (`fd54e76`, `b6f44e2`) |
 | 2 · WP2 | Deployed 2×2 study on dev (labels × `load`) | **done**, CP2-A (`cba9970`); finalists X1/X2 |
 | 2 · WP3 | H3′ test on samples 0.4–0.6 | **done: H3′ NO, H3′-labels NO** (`wp3_test/RESULTS_test.md`) |
-| 2 · WP8 (Track C) | Deployment-aware Ising objectives on dev | stage 1 **done** (`19d7992`): cheap proxy NOT valid (Spearman 0.49 < 0.5); Baleen-anchored PT labels (ANC3/ANC10) keep ≈96% of F1's day-1 peak cut and restore first-access admission; top-k adds nothing. **Stage 2 (full-sim dev screen of ANC3, ANC10, STU10R1) running** |
+| 2 · WP8 (Track C) | Deployment-aware Ising objectives on dev | **done, negative** (`wp8_trackC/RESULTS_dev.md`). Stage 1: cheap proxy NOT valid. Stage 2 (64 full-sim evaluations): no config passed the pre-registered screen gate (S1: STU10R1 −0.26, ANC3 −0.84, ANC10 −1.80). Mechanism: Baleen anchoring fixes Region7 (first-access admission back, best Region7 P100 36.46) but gives back Region6's scan gain. No Track C arm in Stage 3. |
 | 2 · WP4/6/7 | Mechanism analysis, mid-term report, paper | to do |
 
 ## 3. Hypothesis ledger
