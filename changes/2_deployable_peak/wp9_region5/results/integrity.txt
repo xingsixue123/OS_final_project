@@ -1,0 +1,10 @@
+# WP9 integrity 2026-10-16T21:29:05-04:00 (marker wp9_region5/.leak_marker 2026-10-16 20:28:25.510476242 -0400)
+# check_frozen.sh
+frozen OK (94 files)
+# under 0_reproduce/ or 1_literature_review/ (envs included) newer than the marker:
+(end)
+# known foreign cpython-312/313 .pyc dated 2026-10-10 under 0_reproduce/1_literature_review (left untouched): 125
+# __pycache__ / .pyc in wp9_region5 or the overlay:
+(end)
+# other project files newer than the marker (outside wp9_region5): .git/objects only, count 25; non-git: 0
+# PATCH.diff sha256: 2a914eb589bb

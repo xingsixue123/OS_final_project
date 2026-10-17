@@ -1,0 +1,7 @@
+1 evaluations planned, 1 to run
+Reading from file /home/sxing/project/OS_final_project/changes/2_deployable_peak/wp9_region5/work/data/tectonic/20230325/Region5/full_0_0.1.trace
+DemandLoad: 215689 GET requests from /home/sxing/project/OS_final_project/changes/2_deployable_peak/wp9_region5/work/data/tectonic/20230325/Region5/full_0_0.1.trace (sample_ratio=0.1)
+[A_baleen_Region5_s0_r1] round 0: th=0.829858 WR=25.500 P100=33.659 (best WR 25.500)
+[A_baleen_Region5_s0_r1] round 1: th=0.635242 WR=38.919 P100=32.725 (best WR 38.919)
+[A_baleen_Region5_s0_r1] round 2: th=0.683389 WR=35.780 P100=32.929 (best WR 35.780)
+== A_baleen_Region5_s0_r1: P100=32.929 WR=35.780 th=0.68339 (pred 0.8299) matched=True n_sims=3 k0_adm=0.035
