@@ -1,7 +1,7 @@
 # PeakBaleen: research index
 
 **Single source of truth for the project.**
-- **Last updated:** 2026-10-16 (H3′ FAIL; Track C negative on dev, no finalist; Region5 test (H4 + X1) running).
+- **Last updated:** 2026-10-16 (H3′ FAIL; Track C negative on dev, no finalist; Region5 H4 PASS; X1 fails again).
 - **Team:** Ching-Hao Chiu, Jie Fu, Sixue Xing (captain).
 - **Branch:** `phase2-deployable-peak`. Phase 1 lives on `phase1-reproduce-and-litreview`.
 
@@ -23,7 +23,7 @@ Baleen (FAST '24) chooses which blocks to admit to a flash cache. It optimises *
 | 2 · WP2 | Deployed 2×2 study on dev (labels × `load`) | **done**, CP2-A (`cba9970`); finalists X1/X2 |
 | 2 · WP3 | H3′ test on samples 0.4–0.6 | **done: H3′ NO, H3′-labels NO** (`wp3_test/RESULTS_test.md`) |
 | 2 · WP8 (Track C) | Deployment-aware Ising objectives on dev | **done, negative** (`wp8_trackC/RESULTS_dev.md`). Stage 1: cheap proxy NOT valid. Stage 2 (64 full-sim evaluations): no config passed the pre-registered screen gate (S1: STU10R1 −0.26, ANC3 −0.84, ANC10 −1.80). Mechanism: Baleen anchoring fixes Region7 (first-access admission back, best Region7 P100 36.46) but gives back Region6's scan gain. No Track C arm in Stage 3. |
-| 2 · WP9 (Region5) | Fresh deployed test: H4 = load-adaptive threshold on Baleen models (A+α) vs A, B; X1 as Ising record | protocol `PROTOCOL_v2_H4.md` committed `c8f655a`; **test running** since 2026-10-16 (90 evaluations; `wp9_region5/PROGRESS.md`) |
+| 2 · WP9 (Region5) | Fresh deployed test: H4 = load-adaptive threshold on Baleen models (A+α) vs A, B; X1 as Ising record | **done: H4 YES** (A+α 35.02 vs A 36.17, 5/6; B+α 34.48, 6/6); X1 fails again (s0.5 51.46). `wp9_region5/RESULTS_test.md` |
 | 2 · WP4/6/7 | Mechanism analysis, mid-term report, paper | to do |
 
 ## 3. Hypothesis ledger
@@ -39,6 +39,7 @@ Only valid results are listed: held-out or test data, matched write rate within 
 | S | Ising scaling (a contribution, no pass/fail) | **Reported** | Matrix-free SB: ≤214 MB up to 126k variables. The dense SB package runs out of memory beyond ≈70k variables. | `wp5_ising/RESULTS_dev.md` |
 | Q3 | Peak labels survive distillation with frozen features | **No** | 2/6 wins; 0.4–1.1 points worse than Baleen online on average | `explore/q3/RESULTS.md` |
 | H3′ | Ising peak labels + causal `load` signal beat Baleen and Baleen + `load` (deployed) | **No** (test) | X1 40.53 vs A 39.27 / B 39.17; wins 5/6 but one catastrophic instance (Region7 s0.5: 52.3; its peak is a big-offset scan the F1-label models do not admit). H3′-labels also NO (3/6 vs A+α). Post-hoc, not pre-registered: the load-adaptive threshold on Baleen's own models is best (A+α 38.30, 5/6 vs A, −2.5%). | `wp3_test/RESULTS_test.md` |
+| H4 | Load-adaptive admission threshold on Baleen's own models beats Baleen (deployed, fresh Region5) | **Yes** (pre-registered) | A+α 35.02 vs A 36.17 / B 36.37 (5/6, +1.16, retrain SE 0.09); B+α 34.48 (6/6). Gain concentrated on s0.5 (instance SE 0.75) | `wp9_region5/RESULTS_test.md` |
 
 **What the evidence says so far:**
 - The **min-max formulation** is the source of the gain, and it is robust offline.
