@@ -1,0 +1,10 @@
+{
+ "FINALIST": "TB-pt",
+ "CONTROL": "TB-cd",
+ "screen_pass": [
+  "TB-pt",
+  "TA-pt"
+ ],
+ "complete_confirmation": true,
+ "unmatched": []
+}

@@ -108,6 +108,13 @@ Brief: keep Ising/QUBO central but put it in the **admission-threshold schedule*
 - **Test region = Region1, not Region2:** Region2's release CSV has no Baleen Fig 9 row for s0.2 and no RejectX row for s0.1/s0.2. Region1 has all rows (same Fig 9 variant as Region5). Region3 lacks s0.4–0.6.
 - `src/e3_eval.py` gained the deterministic tie-break and the `results/finalist.json` output only (rule unchanged). `src/chain.sh` runs the rest detached (protocol §8).
 
+### 2026-10-19 19:23 Protocol committed (`2738cba`, pushed); chain launched (pid 1118179); E3 FINALIST = TB-pt
+- `e3_eval.py` ran (inside the chain) on the complete 3-retrain dev data. The rule was applied unchanged:
+  - **TB:pt qualifies:** S3 = +0.19; wins 6/8 vs A+α and 7/8 vs B+α; region mean (X − B+α) is R6 −1.36 and R7 −0.42. Dev mean 37.54, vs A+α 37.88 and B+α 38.43.
+  - **TA:pt fails:** S3 = −0.30, 4/8 and 4/8.
+  - Control TB:cd: its tables are scale-equivalent to TB:pt on 23/24 dev retrains, so its dev results are identical.
+- The chain created `TEST_GO`. It is running the static replays, the dry-run resume and the test (`--arms A B Aa Ba TB:pt TB:cd --reps 1 2 3`, 108 evaluations), then `evaluate_test.py --finalist TB-pt`, integrity, and `results/CHAIN_DONE`. Log: `logs/chain.out`.
+
 ## RESUME
 ```
 # Detached chain (E3 eval -> finalist -> E4 test -> evaluation -> integrity -> results/CHAIN_DONE); idempotent:

@@ -41,6 +41,7 @@ The patch may only do the following:
   - G3: coordinator review done; teammate review still required before any test-set (WP3) run.
   - Rebuilding the overlay: `wp0_overlay/rebuild_overlay.sh` (verified identical).
 - G3 waived by Sixue Xing (captain) on 2026-10-05: PATCH.diff sha256 2a914eb589bb. No teammate review; the coordinator review at CP1, the G1 gate and the parity gate stand. Recorded before any WP3 test run.
+- **Amendment 1.2b recorded 2026-10-19 (coordinator, captain's standing approval to explore):** an optional piecewise-constant load-adaptive threshold table (`--ap-load-adapt-table`, off by default; fitted only on the training day; causal load as 1.2). Text: `2_deployable_peak/wp10_schedule/SCOPE_v2_1b.md`. Separate overlay `PATCH_v3.diff`; `wp0_overlay/PATCH.diff` unchanged; G1 re-run and passed (`wp10_schedule/G1_v3.md`).
 - **CPU topology.** Logical CPUs k and k+12 are the two hyperthreads of one physical core. While timing runs hold cores 0–7, other work must avoid 12–19 and use `8-11,20-23` only.
 
 ## 3. Fairness gates (must pass before any v2 result counts)

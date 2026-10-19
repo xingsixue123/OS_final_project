@@ -24,7 +24,7 @@ Baleen (FAST '24) chooses which blocks to admit to a flash cache. It optimises *
 | 2 · WP3 | H3′ test on samples 0.4–0.6 | **done: H3′ NO, H3′-labels NO** (`wp3_test/RESULTS_test.md`) |
 | 2 · WP8 (Track C) | Deployment-aware Ising objectives on dev | **done, negative** (`wp8_trackC/RESULTS_dev.md`). Stage 1: cheap proxy NOT valid. Stage 2 (64 full-sim evaluations): no config passed the pre-registered screen gate (S1: STU10R1 −0.26, ANC3 −0.84, ANC10 −1.80). Mechanism: Baleen anchoring fixes Region7 (first-access admission back, best Region7 P100 36.46) but gives back Region6's scan gain. No Track C arm in Stage 3. |
 | 2 · WP9 (Region5) | Fresh deployed test: H4 = load-adaptive threshold on Baleen models (A+α) vs A, B; X1 as Ising record | **done: H4 YES** (A+α 35.02 vs A 36.17, 5/6; B+α 34.48, 6/6); X1 fails again (s0.5 51.46). `wp9_region5/RESULTS_test.md` |
-| 2 · WP10 (Track E) | Ising-optimized admission-threshold schedule (piecewise multiplier table over load buckets, one-hot spins, PT) on Baleen's models; overlay v3 + G1 re-check; dev screen, then pre-registered fresh test on Region2 if a finalist exists | **running** since 2026-10-19 (`wp10_schedule/PROGRESS.md`) |
+| 2 · WP10 (Track E) | Ising-optimized admission-threshold table (one-hot spins over load buckets, PT) on Baleen's models | G1_v3 PASS; proxy NOT valid (0.63 < 0.70); PT = exhaustive optimum 48/48 (classical CD 46/48, so no Ising-vs-classical claim). Dev finalist **TB:pt** (B models + PT table): 37.54 vs A+α 37.88 / B+α 38.43, 6/8 and 7/8 wins. Protocol `PROTOCOL_v2_H5.md` committed `2738cba`; **Region1 test running unattended** (`wp10_schedule/src/chain.sh`, log `logs/chain.out`) |
 | 2 · WP4/6/7 | Mechanism analysis, mid-term report, paper | to do |
 
 ## 3. Hypothesis ledger
