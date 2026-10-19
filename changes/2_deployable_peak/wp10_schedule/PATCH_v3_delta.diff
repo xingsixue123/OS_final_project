@@ -1,0 +1,94 @@
+diff -ruN '--exclude=.git' '--exclude=__pycache__' ../wp0_overlay/overlay/BCacheSim/cachesim/admission_policies.py overlay/BCacheSim/cachesim/admission_policies.py
+--- ../wp0_overlay/overlay/BCacheSim/cachesim/admission_policies.py	2026-10-01 14:42:18.077117432 -0400
++++ overlay/BCacheSim/cachesim/admission_policies.py	2026-10-19 17:04:39.775161307 -0400
+@@ -997,6 +997,11 @@
+             kwargs_['load_adapt'] = load_features.LoadAdaptiveThreshold(
+                 kwargs['demand_load'], options.ap_load_adapt_alpha,
+                 ref=options.ap_load_adapt_ref, window_min=options.ap_load_adapt_window)
++        if getattr(options, 'ap_load_adapt_table', None) is not None:
++            # PeakBaleen overlay v3 (SCOPE_v2_1b): piecewise-constant threshold table from JSON (off by default)
++            assert getattr(options, 'ap_load_adapt_alpha', None) is None, "--ap-load-adapt-alpha and --ap-load-adapt-table are exclusive"
++            kwargs_['load_adapt'] = load_features.LoadTableThreshold.from_json(
++                kwargs['demand_load'], options.ap_load_adapt_table)
+         ap = NewMLAP(threshold, model_path=options.learned_ap_model_path, **kwargs_)
+         print(f"{ap.name} with model: {options.learned_ap_model_path} threshold: {threshold}")
+     elif ap_id == "mlonline":
+diff -ruN '--exclude=.git' '--exclude=__pycache__' ../wp0_overlay/overlay/BCacheSim/cachesim/load_features.py overlay/BCacheSim/cachesim/load_features.py
+--- ../wp0_overlay/overlay/BCacheSim/cachesim/load_features.py	2026-10-01 14:41:07.471895775 -0400
++++ overlay/BCacheSim/cachesim/load_features.py	2026-10-19 17:04:39.776161326 -0400
+@@ -14,6 +14,8 @@
+ (the artifact's own reader, legacy_utils.read_processed_file) and look it up with the same functions below, keyed
+ by the access's physical timestamp.
+ """
++import bisect
++import json
+ import math
+ import os
+ 
+@@ -145,3 +147,41 @@
+ 
+     def __repr__(self):
+         return f"LoadAdaptiveThreshold(alpha={self.alpha}, ref={self.ref}, window={self.window_min}m, clip={LOAD_ADAPT_CLIP})"
++
++
++class LoadTableThreshold(object):
++    """PeakBaleen overlay v3 (SCOPE_v2_1b): theta_t = theta * g(load_t[, hour_t]) with g a piecewise-constant table.
++    JSON: {"window_min": 10, "edges": [e_1 < ... < e_{K-1}] (load_t in utilisation %), "mult": [m_0..m_{K-1}]}, load
++    bucket b = bisect_right(edges, load_t) (bucket b covers e_b <= load_t < e_{b+1}); optional time-of-day cells:
++    "tod_edges_h": [h_1 < ... < h_{J-1}] (UTC hour of day) and "mult": J lists of K values. load_t is the same causal
++    trailing GET demand as LoadAdaptiveThreshold (DemandLoad.load)."""
++
++    def __init__(self, demand, edges, mult, window_min=10, tod_edges_h=None, name=None):
++        assert window_min * 60 in LOAD_WINDOWS_S, window_min
++        self.demand = demand
++        self.edges = [float(e) for e in edges]
++        assert all(a < b for a, b in zip(self.edges, self.edges[1:])), "edges must increase"
++        self.tod_edges_h = None if tod_edges_h is None else [float(h) for h in tod_edges_h]
++        mult = [list(map(float, r)) for r in mult] if self.tod_edges_h is not None else [list(map(float, mult))]
++        assert len(mult) == (1 if self.tod_edges_h is None else len(self.tod_edges_h) + 1), "tod rows"
++        assert all(len(r) == len(self.edges) + 1 for r in mult), "one multiplier per load bucket"
++        assert all(m > 0 for r in mult for m in r), "multipliers must be positive"
++        self.mult = mult
++        self.idx = LOAD_WINDOWS_S.index(window_min * 60)
++        self.window_min = window_min
++        self.name = name
++
++    @classmethod
++    def from_json(cls, demand, path):
++        d = json.load(open(path))
++        return cls(demand, d["edges"], d["mult"], window_min=d.get("window_min", 10),
++                   tod_edges_h=d.get("tod_edges_h"), name=d.get("name", os.path.basename(path)))
++
++    def g(self, t):
++        b = bisect.bisect_right(self.edges, self.demand.load(t)[self.idx])
++        j = 0 if self.tod_edges_h is None else bisect.bisect_right(self.tod_edges_h, (t % 86400.0) / 3600.0)
++        return self.mult[j][b]
++
++    def __repr__(self):
++        return (f"LoadTableThreshold(name={self.name}, window={self.window_min}m, K={len(self.edges) + 1}, "
++                f"tod={'none' if self.tod_edges_h is None else len(self.tod_edges_h) + 1})")
+diff -ruN '--exclude=.git' '--exclude=__pycache__' ../wp0_overlay/overlay/BCacheSim/cachesim/sim_cache.py overlay/BCacheSim/cachesim/sim_cache.py
+--- ../wp0_overlay/overlay/BCacheSim/cachesim/sim_cache.py	2026-10-01 14:42:18.077117432 -0400
++++ overlay/BCacheSim/cachesim/sim_cache.py	2026-10-19 17:04:39.776161326 -0400
+@@ -1491,7 +1491,8 @@
+     # threshold is requested (same trace file and code as the trainers; see load_features.py).
+     demand_load = None
+     if (load_features.extra_groups(options.ap_feat_subset) or load_features.extra_groups(options.pf_feat_subset)
+-            or options.ap_load_adapt_alpha is not None):
++            or options.ap_load_adapt_alpha is not None
++            or getattr(options, 'ap_load_adapt_table', None) is not None):
+         demand_load = load_features.demand_for_trace(tracefile, sample_ratio)
+ 
+     ap = aps.construct(
+diff -ruN '--exclude=.git' '--exclude=__pycache__' ../wp0_overlay/overlay/BCacheSim/cachesim/simulate_ap.py overlay/BCacheSim/cachesim/simulate_ap.py
+--- ../wp0_overlay/overlay/BCacheSim/cachesim/simulate_ap.py	2026-10-01 14:42:18.076117415 -0400
++++ overlay/BCacheSim/cachesim/simulate_ap.py	2026-10-19 17:04:39.776161326 -0400
+@@ -57,6 +57,8 @@
+                         help="Reference demand load (utilisation %%) of the load-adaptive threshold")
+     parser.add_argument("--ap-load-adapt-window", type=int, default=10,
+                         help="Trailing window (minutes: 10, 30 or 60) of load_t for the load-adaptive threshold")
++    parser.add_argument("--ap-load-adapt-table",
++                        help="JSON file of a piecewise-constant threshold multiplier table g (load buckets [x tod buckets]); off if unset")
+     parser.add_argument("--ap-chunk-threshold",
+                         help="Set the admission policy's threshold",
+                         type=int)

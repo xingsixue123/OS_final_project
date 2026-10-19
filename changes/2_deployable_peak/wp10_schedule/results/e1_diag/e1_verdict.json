@@ -1,0 +1,38 @@
+{
+ "P1": {
+  "C1_concordance": 0.6111111111111112,
+  "C1_pairs": 126,
+  "C1_p": 0.007909102004026067,
+  "C1": false,
+  "C2_mean_sim": -0.31979247604038363,
+  "C2_mean_proxy": -0.2745901860462772,
+  "C2_cells_agree": 8,
+  "C2_cells": 9,
+  "C2": true,
+  "VALID": false
+ },
+ "P2": {
+  "C1_concordance": 0.6111111111111112,
+  "C1_pairs": 126,
+  "C1_p": 0.007909102004026067,
+  "C1": false,
+  "C2_mean_sim": -0.31979247604038363,
+  "C2_mean_proxy": -0.2745901860462772,
+  "C2_cells_agree": 8,
+  "C2_cells": 9,
+  "C2": true,
+  "VALID": false
+ },
+ "P3": {
+  "C1_concordance": 0.6111111111111112,
+  "C1_pairs": 126,
+  "C1_p": 0.007909102004026067,
+  "C1": false,
+  "C2_mean_sim": -0.31979247604038363,
+  "C2_mean_proxy": -0.2745901860462772,
+  "C2_cells_agree": 8,
+  "C2_cells": 9,
+  "C2": true,
+  "VALID": false
+ }
+}
