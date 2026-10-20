@@ -187,12 +187,12 @@ def wp1_r0_vs_author():
           f"Region4_s0.3 {d['Region4_s0.3']:+.3f} (|d| {abs(d['Region4_s0.3']):.3f})")
 
 
-def label_objectives(d, label):
+def label_objectives(d, label, insts=None, seeds=None):
     """Day-1 F1 objective (label_peak_util) of seed-matched PT vs CP-SAT label sets in one labels/ directory."""
     obj = {}
     for f in sorted(os.listdir(d)):
         m = re.match(r"(.+)_(F1PT|F1CPSAT)_s(\d+)\.json$", f)
-        if m:
+        if m and (insts is None or m.group(1) in insts) and (seeds is None or m.group(3) in seeds):
             obj[(m.group(1), m.group(3), m.group(2))] = json.load(open(os.path.join(d, f)))["label_peak_util"]
     pairs = sorted({(i, k) for i, k, _ in obj if (i, k, "F1PT") in obj and (i, k, "F1CPSAT") in obj})
     diff = [obj[(i, k, "F1PT")] - obj[(i, k, "F1CPSAT")] for i, k in pairs]
@@ -267,6 +267,65 @@ def round4():
                 for m in ("lp", "cpsat", "pt")))
     w1 = [r for r in csv.DictReader(open(os.path.join(P2, "wp1_offline", "trials.csv"))) if r["phase"] == "wp1_reused_phase1_heldout"]
     print(f"WP1 reused phase-1 held-out rows: {len(w1)} rows, {len({r['instance'] for r in w1})} instances, ts {min(r['ts'] for r in w1)} .. {max(r['ts'] for r in w1)}")
+
+
+def h1_without_reused():
+    rows = list(csv.DictReader(open(os.path.join(P2, "wp1_offline", "results", "wp1_table.csv"))))
+    reused = {r["instance"].replace("full_", "") for r in csv.DictReader(open(os.path.join(P2, "wp1_offline", "trials.csv")))
+              if r["phase"] == "wp1_reused_phase1_heldout"}
+    for name, sel in (("without the reused", [r for r in rows if r["instance"] not in reused]),
+                      ("reused only", [r for r in rows if r["instance"] in reused])):
+        print(f"WP1 H1' {name} instances (n={len(sel)}; reused = {sorted(reused)}): " + ", ".join(
+            f"{m} wins {sum(float(r[m]) < float(r['R0']) for r in sel)}/{len(sel)} mean reduction "
+            f"{st.mean((float(r['R0']) - float(r[m])) / float(r['R0']) * 100 for r in sel):.2f}%" for m in ("lp", "cpsat", "pt")))
+
+
+def drop_inst(c, inst):
+    return {a: {i: v for i, v in d.items() if i != inst} for a, d in c.items()}
+
+
+def round5():
+    print("\n## Round-5 additions")
+    tests = [("WP3 H3'", os.path.join(P2, "wp3_test", "trials.csv")),
+             ("WP9 H4", os.path.join(P2, "wp9_region5", "trials.csv")),
+             ("WP10 H5", os.path.join(P2, "wp10_schedule", "trials_test.csv")),
+             ("T2 Region4", os.path.join(AR, "t2u_region4", "trials_test.csv")),
+             ("T1 Region2 (descriptive)", os.path.join(AR, "t1u_region2", "trials_test.csv"))]
+    for name, path in tests:
+        c = cells(path)
+        if name.startswith("T1"):  # the report's evaluable instances: those where arm A is matched (s0.3-0.6)
+            c = {a: {i: v for i, v in d.items() if i in c["A"]} for a, d in c.items()}
+        both = sorted(set(c["Aa-1.0"]) & set(c["Ba-1.0"]))
+        ma, mb = (st.mean(st.mean(c[a][i]) for i in both) for a in ("Aa-1.0", "Ba-1.0"))
+        print(f"B+alpha vs A+alpha, {name}: A+alpha {ma:.3f}, B+alpha {mb:.3f} over {len(both)} instances;",
+              compare(c, "Ba-1.0", "Aa-1.0"))
+    merge = {"Ax-1.0": "Aa-1.0", "Bx-1.0": "Ba-1.0", "Bx-0.5": "Ba-0.5", "Ex-1.0": "Ea-1.0"}
+    w2 = cells_merged(os.path.join(P2, "wp2_deployed", "trials.csv"), merge,
+                      lambda r: r["arm"] + (":" + r["design"] if r["design"] not in ("", "baleen") else ""))
+    print("B+alpha vs A+alpha, WP2 dev (Ax/Bx merged):", compare(w2, "Ba-1.0", "Aa-1.0"))
+    c9 = cells(os.path.join(P2, "wp9_region5", "trials.csv"))
+    concentration(c9, "Aa-1.0", "Ba-1.0", "WP9 H4 A+alpha - B+alpha")
+    concentration(cells(os.path.join(P2, "wp10_schedule", "trials_test.csv")), "Aa-1.0", "Ba-1.0", "WP10 H5 A+alpha - B+alpha")
+    concentration(c9, "A", "Ba-1.0", "WP9 H4 A - B+alpha")
+    concentration(c9, "B", "Ba-1.0", "WP9 H4 B - B+alpha")
+    label_objectives(os.path.join(AR, "union", "labels"), "Union dev Region5_s0 labels", insts={"Region5_s0"})
+    label_objectives(os.path.join(AR, "union", "labels"), "Union dev Region1_s0 labels", insts={"Region1_s0"})
+    label_objectives(os.path.join(P2, "wp3_test", "labels"), "WP3 H3' test labels, deployed seeds 1-3", seeds={"1", "2", "3"})
+    un = cells(os.path.join(AR, "union", "trials_dev.csv"))
+    print("Union dev matched retrains on Region5_s0/Region1_s0: " + ", ".join(
+        f"{a} {len(un[a].get('Region5_s0', []))}/{len(un[a].get('Region1_s0', []))}"
+        for a in ("XA-F1PT", "XA-F1CPSAT", "XG-F1PT", "XG-F1CPSAT")))
+    h1_without_reused()
+    c3 = cells(os.path.join(P2, "wp3_test", "trials.csv"))
+    for x, r in (("Ea-1.0:F1PT", "A"), ("Ea-1.0:F1PT", "Aa-1.0")):
+        print("WP3 without Region7_s0.5:", compare(drop_inst(c3, "Region7_s0.5"), x, r))
+    for x, r in (("Ea-1.0:F1PT", "A"), ("Ea-1.0:F1PT", "Aa-1.0")):
+        print("WP9 without Region5_s0.5:", compare(drop_inst(c9, "Region5_s0.5"), x, r))
+    for name, path in (("WP3 H3'", os.path.join(P2, "wp3_test", "trials.csv")), ("WP2 dev", os.path.join(P2, "wp2_deployed", "trials.csv"))):
+        c = cells(path)
+        d = {i: st.mean(c["A"][i]) - st.mean(c["B"][i]) for i in set(c["A"]) & set(c["B"])}
+        best = max(d, key=d.get)
+        print(f"{name} per-instance A - B (positive = B better): largest {d[best]:+.3f} on {best}")
 
 
 def main():
@@ -356,6 +415,7 @@ def main():
     patch_counts()
     quoted_arithmetic()
     round4()
+    round5()
 
 
 if __name__ == "__main__":

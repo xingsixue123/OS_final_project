@@ -21,7 +21,7 @@
    "id": "F03",
    "prio": "P1",
    "evid": "INFRA",
-   "refs": 4,
+   "refs": 5,
    "unsourced": []
   },
   {
@@ -49,7 +49,7 @@
    "id": "F104",
    "prio": "P2",
    "evid": "INFRA",
-   "refs": 18,
+   "refs": 17,
    "unsourced": []
   },
   {
@@ -112,7 +112,7 @@
    "id": "F13",
    "prio": "P1",
    "evid": "INFRA",
-   "refs": 10,
+   "refs": 9,
    "unsourced": []
   },
   {
@@ -154,7 +154,7 @@
    "id": "F18",
    "prio": "P0",
    "evid": "TEST-PREREG",
-   "refs": 5,
+   "refs": 6,
    "unsourced": []
   },
   {
@@ -203,7 +203,7 @@
    "id": "F25",
    "prio": "P0",
    "evid": "OFFLINE",
-   "refs": 9,
+   "refs": 11,
    "unsourced": []
   },
   {
@@ -259,7 +259,7 @@
    "id": "F31",
    "prio": "P1",
    "evid": "OFFLINE",
-   "refs": 9,
+   "refs": 10,
    "unsourced": []
   },
   {
@@ -357,7 +357,7 @@
    "id": "F45",
    "prio": "P1",
    "evid": "NEGATIVE-TEST",
-   "refs": 4,
+   "refs": 5,
    "unsourced": []
   },
   {
@@ -413,7 +413,7 @@
    "id": "F53",
    "prio": "P1",
    "evid": "TEST-PREREG",
-   "refs": 8,
+   "refs": 9,
    "unsourced": []
   },
   {
@@ -532,7 +532,7 @@
    "id": "F105",
    "prio": "P1",
    "evid": "TEST-POSTHOC",
-   "refs": 11,
+   "refs": 13,
    "unsourced": []
   },
   {
@@ -560,7 +560,7 @@
    "id": "F73",
    "prio": "P1",
    "evid": "INFRA",
-   "refs": 24,
+   "refs": 26,
    "unsourced": []
   },
   {
@@ -574,7 +574,7 @@
    "id": "F74",
    "prio": "P2",
    "evid": "INFRA",
-   "refs": 10,
+   "refs": 12,
    "unsourced": []
   },
   {
@@ -644,7 +644,7 @@
    "id": "F100",
    "prio": "P3",
    "evid": "INFRA",
-   "refs": 23,
+   "refs": 27,
    "unsourced": []
   },
   {
@@ -700,7 +700,7 @@
    "id": "F88",
    "prio": "P3",
    "evid": "INFRA",
-   "refs": 8,
+   "refs": 13,
    "unsourced": []
   },
   {

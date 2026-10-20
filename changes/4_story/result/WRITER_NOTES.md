@@ -1,5 +1,73 @@
 # Story writer notes
 
+## Round 5, final (run 20261020_154140, started 2026-10-20 19:10)
+
+### Validator feedback: how each blocking item was resolved
+| Item | Resolution |
+|---|---|
+| Citation R4-B1 (F100) | F100 now lists three non-optimal 10 s comparisons with deployed rows: WP3; the union dev XA/XG rows; Track C. For the union rows: the Region5_s0 labels were solved on shared cores and differ by 0.16–0.31% (recomputed from `union/labels/*.json`); Region1_s0 ties; the 8 Region6/7 instances reuse WP2's near-tie D retrains (`union.py#L5-L9`). The Data column of F70's union rows and the "Reading" bullet say the same. |
+| Grill 1 (B+α vs A+α) | **F105** gains a "with the threshold" table, recomputed for every test pool at both SE levels. Under the threshold the record is two-way: +0.541 (H4) and +0.148 (H5) at ≈2.5 retrain SE but 1.1–1.2 instance SE; −0.995 on T2 (2.1 instance SE); −0.55 on dev. F105's title and priority line are rewritten. **B+α's Region5 concentration** is in F52's "Read this first", F53 and F105: 75% on s0.5 (78% vs B); the other five average +0.504. The abstract, F03, the §8 summary, §8 row 24 and §9 items 2 and 4 are updated to match. |
+
+### Non-blocking items
+**Citation R4-N1 to N16** (N17 needs no action):
+- N1: the abstract separates the WP5 configuration from the deployed one, and adds "18 deployed".
+- N2: duplicate refs removed (F104, F13).
+- N3: F70's title says "≈2.07".
+- N4: F32 says "At 10 s".
+- N5: legend caveat 2 mentions the six reused instances.
+- N6: F18 says "comparably far (6.0–7.3 points)".
+- N7: F105 distinguishes pool means from single instances (0.755, 0.542).
+- N8: the attribution anchors are widened to L14–L17.
+- N9: F68 gives both ranges.
+- N10: "18 deployed (also 18/18)" (recomputed).
+- N11: F73's H4 row and F53 note that the dumps and label sets were built before the commit.
+- N12: F84 says R0–R4.
+- N13: F74 is retitled and scoped; the T1/T2 evaluator was only asserted identical and has the known defect.
+- N14: §8 row 7's evidence column.
+- N15: Appendix B shows 15:02 / 15:06.
+- N16: F88 adds RESEARCH.md's ≤214 MB and the nonexistent `PROTOCOL_v2.md`.
+
+**Grill non-blocking 1–7:**
+1. H1′ without the six reused instances still passes (LP 30/33 12.54%, CP-SAT 30/33 12.53%, PT 31/33 13.18%). This is in F25, legend caveat 2 and F73's title.
+2. F66's title is rewritten.
+3. F31 and §8 row 8: the scaling result is not an advantage over classical solvers.
+4. F45: concentration of the H3′-labels loss (without Region7 s0.5: 5/5 vs A, +1.13; +0.39 vs A+α).
+5. F69's title says "worse on Region1 (post hoc, no pass rule)".
+6. §8 row 7 is "Partly supported (per-budget results of Q2/H2′)".
+7. Appendix C adds `documents/prompt.txt`. It is not quoted, because it contains an absolute path, and its author is not recorded.
+
+### Other changes
+- `recompute.py` gains "Round-5 additions" (listed in Appendix D). The output is regenerated, and stdout matches the file.
+- Abstract wording: "about 16%"; the Region4 caveat (F66).
+- `recompute.py` also adds WP2 dev B+α vs A+α (merged) and the H4/H5 A+α − B+α concentration.
+
+### Self-audit after the validator fixes
+One read-only fact-check agent checked every added line, about 165 claims or anchors. All its findings were applied.
+
+**Blocking:**
+- **F105's "Two SE standards" bullet** dropped WP2 dev. Under the threshold, the feature hurt there by ≈5.7 retrain SE (1.1 instance SE; recomputed with the Ax/Bx merge), and on the descriptive T1 it reached 1.4 instance SE. The dev cells are now filled.
+- **F73's H4 row and F53.** Only the sha256 hashes, the label JSONs and INSTANCES.md were committed; the .npz files are git-ignored. The 36 F1PT sets are seeds 1–6, of which X1 used seeds 1–3.
+
+**Minor:**
+- The abstract and F03 replace "noise-level" with the explicit SE values (≈1.2 for, 2.1 against).
+- F100 lists all four non-optimal 10 s comparisons with deployed rows (adds WP2 dev). It now says the "union driver", uses the `union.py#L47-L53` anchor, and indents the Track C sub-bullets.
+- F25 has no duplicate ref.
+- F69's table says "worse".
+- F88's protocol-split wording.
+- F105 adds the H4/H5 concentration (89% on s0.5; 69% on s0.4).
+- The §8 summary says "The threshold's gain passed".
+- Appendix D "Used by" is in order.
+
+### Final state
+- **Story:** 105 findings; P0 9, P1 45, P2 34, P3 17.
+- **Checks:** `check_story.py` reports 0 problems, and the privacy check is clean.
+- **Pipeline:** `make_index.py` → `linkify.py` is idempotent.
+
+### Still open (for whoever continues)
+- Anchors in rarely cited long files may still be off by a few lines.
+- `git_timeline.txt` is a snapshot (Appendix D item 2). Re-running it adds the story's own commits.
+- Inherited source roundings are disclosed under Appendix D "Agreement", not changed.
+
 ## Round 4 (run 20261020_154140, started 2026-10-20 18:31)
 
 ### Validator feedback: how each blocking item was resolved

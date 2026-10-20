@@ -144,3 +144,27 @@ WP1 Region4_s0.7 reduction vs R0 % (simulated argmax / planned argmax): lp +7.6 
 WP1 Region4_s0.8 reduction vs R0 % (simulated argmax / planned argmax): lp -1.6 (454/600), cpsat -4.8 (455/454), pt -4.1 (455/454)
 WP1 Region4_s0.9 reduction vs R0 % (simulated argmax / planned argmax): lp +10.7 (455/293), cpsat -6.9 (455/870), pt +10.0 (871/870)
 WP1 reused phase-1 held-out rows: 18 rows, 6 instances, ts 2026-09-28T18:54:30 .. 2026-09-29T01:05:51
+
+## Round-5 additions
+B+alpha vs A+alpha, WP3 H3': A+alpha 38.302, B+alpha 38.380 over 6 instances; Ba-1.0 vs Aa-1.0: wins 1/6, mean(ref-X) -0.078, SE_retrain 0.272, SE_inst 0.247, worst -0.671; |mean|/SE_retrain 0.288, |mean|/SE_inst 0.317
+B+alpha vs A+alpha, WP9 H4: A+alpha 35.020, B+alpha 34.479 over 6 instances; Ba-1.0 vs Aa-1.0: wins 4/6, mean(ref-X) +0.541, SE_retrain 0.216, SE_inst 0.492, worst -0.314; |mean|/SE_retrain 2.511, |mean|/SE_inst 1.101
+B+alpha vs A+alpha, WP10 H5: A+alpha 24.624, B+alpha 24.476 over 6 instances; Ba-1.0 vs Aa-1.0: wins 4/6, mean(ref-X) +0.148, SE_retrain 0.060, SE_inst 0.119, worst -0.260; |mean|/SE_retrain 2.463, |mean|/SE_inst 1.242
+B+alpha vs A+alpha, T2 Region4: A+alpha 42.870, B+alpha 43.865 over 5 instances; Ba-1.0 vs Aa-1.0: wins 1/5, mean(ref-X) -0.995, SE_retrain 0.546, SE_inst 0.464, worst -2.429; |mean|/SE_retrain 1.823, |mean|/SE_inst 2.143
+B+alpha vs A+alpha, T1 Region2 (descriptive): A+alpha 10.188, B+alpha 10.135 over 4 instances; Ba-1.0 vs Aa-1.0: wins 3/4, mean(ref-X) +0.053, SE_retrain 0.024, SE_inst 0.037, worst -0.019; |mean|/SE_retrain 2.195, |mean|/SE_inst 1.436
+B+alpha vs A+alpha, WP2 dev (Ax/Bx merged): Ba-1.0 vs Aa-1.0: wins 5/8, mean(ref-X) -0.550, SE_retrain 0.097, SE_inst 0.517, worst -3.764; |mean|/SE_retrain 5.673, |mean|/SE_inst 1.065
+WP9 H4 A+alpha - B+alpha: per-instance Aa-1.0 - Ba-1.0: Region5_s0.1 -0.235, Region5_s0.2 +0.650, Region5_s0.3 +0.183, Region5_s0.4 +0.064, Region5_s0.5 +2.899, Region5_s0.6 -0.314; sum 3.248; largest Region5_s0.5 +2.899 = 89% of the sum; mean of the other 5 +0.070 (0.2% of Aa-1.0's mean); mean/SE_inst = 1.10
+WP10 H5 A+alpha - B+alpha: per-instance Aa-1.0 - Ba-1.0: Region1_s0.1 +0.130, Region1_s0.2 -0.260, Region1_s0.3 +0.147, Region1_s0.4 +0.613, Region1_s0.5 -0.019, Region1_s0.6 +0.278; sum 0.890; largest Region1_s0.4 +0.613 = 69% of the sum; mean of the other 5 +0.055 (0.2% of Aa-1.0's mean); mean/SE_inst = 1.24
+WP9 H4 A - B+alpha: per-instance A - Ba-1.0: Region5_s0.1 +0.373, Region5_s0.2 +0.404, Region5_s0.3 +0.435, Region5_s0.4 +0.439, Region5_s0.5 +7.656, Region5_s0.6 +0.869; sum 10.175; largest Region5_s0.5 +7.656 = 75% of the sum; mean of the other 5 +0.504 (1.4% of A's mean); mean/SE_inst = 1.42
+WP9 H4 B - B+alpha: per-instance B - Ba-1.0: Region5_s0.1 +0.808, Region5_s0.2 +0.271, Region5_s0.3 +0.653, Region5_s0.4 +0.232, Region5_s0.5 +8.849, Region5_s0.6 +0.508; sum 11.321; largest Region5_s0.5 +8.849 = 78% of the sum; mean of the other 5 +0.494 (1.4% of B's mean); mean/SE_inst = 1.35
+Union dev Region5_s0 labels day-1 F1 objective, 3 seed-matched pairs: CP-SAT lower 2, PT lower 1, equal 0; PT - CP-SAT -0.067 .. +0.037 (-0.31% .. +0.17%); means PT 21.625 CP-SAT 21.624
+Union dev Region1_s0 labels day-1 F1 objective, 3 seed-matched pairs: CP-SAT lower 0, PT lower 0, equal 3; PT - CP-SAT +0.000 .. +0.000 (+0.00% .. +0.00%); means PT 15.583 CP-SAT 15.583
+WP3 H3' test labels, deployed seeds 1-3 day-1 F1 objective, 18 seed-matched pairs: CP-SAT lower 18, PT lower 0, equal 0; PT - CP-SAT +0.044 .. +0.198 (+0.21% .. +0.89%); means PT 21.060 CP-SAT 20.961
+Union dev matched retrains on Region5_s0/Region1_s0: XA-F1PT 3/3, XA-F1CPSAT 3/3, XG-F1PT 3/3, XG-F1CPSAT 3/3
+WP1 H1' without the reused instances (n=33; reused = ['Region6_s0.1', 'Region6_s0.2', 'Region6_s0.3', 'Region7_s0.1', 'Region7_s0.2', 'Region7_s0.3']): lp wins 30/33 mean reduction 12.54%, cpsat wins 30/33 mean reduction 12.53%, pt wins 31/33 mean reduction 13.18%
+WP1 H1' reused only instances (n=6; reused = ['Region6_s0.1', 'Region6_s0.2', 'Region6_s0.3', 'Region7_s0.1', 'Region7_s0.2', 'Region7_s0.3']): lp wins 6/6 mean reduction 15.73%, cpsat wins 6/6 mean reduction 16.56%, pt wins 6/6 mean reduction 16.49%
+WP3 without Region7_s0.5: Ea-1.0:F1PT vs A: wins 5/5, mean(ref-X) +1.128, SE_retrain 0.170, SE_inst 0.371, worst +0.147; |mean|/SE_retrain 6.633, |mean|/SE_inst 3.043
+WP3 without Region7_s0.5: Ea-1.0:F1PT vs Aa-1.0: wins 3/5, mean(ref-X) +0.395, SE_retrain 0.205, SE_inst 0.532, worst -0.806; |mean|/SE_retrain 1.930, |mean|/SE_inst 0.742
+WP9 without Region5_s0.5: Ea-1.0:F1PT vs A: wins 3/5, mean(ref-X) -0.556, SE_retrain 0.427, SE_inst 1.055, worst -4.405; |mean|/SE_retrain 1.302, |mean|/SE_inst 0.527
+WP9 without Region5_s0.5: Ea-1.0:F1PT vs Aa-1.0: wins 2/5, mean(ref-X) -0.990, SE_retrain 0.426, SE_inst 1.263, worst -5.588; |mean|/SE_retrain 2.324, |mean|/SE_inst 0.784
+WP3 H3' per-instance A - B (positive = B better): largest +0.755 on Region7_s0.5
+WP2 dev per-instance A - B (positive = B better): largest +0.542 on Region6_s0
