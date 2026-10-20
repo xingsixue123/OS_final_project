@@ -5,8 +5,9 @@
 This is the cited record of everything the project did, from the reproduction to the auto-research loop.
 - **Checking.** [`changes/4_story/code/check_story.py`](../../changes/4_story/code/check_story.py) verifies that every non-trivial number in a finding occurs somewhere in a file the finding cites. It checks only that line anchors fall inside their files (and that link targets exist), not that they point at the supporting text. It does not check arms, instances or budgets, and it skips the integers 0–12 and a few other constants. Those were checked by hand and by the two validators.
 - **Recomputations** are in Appendix D.
-- **Status:** story-writer round 2 of 5 (run 20261020_154140). Open items are in [`changes/4_story/result/WRITER_NOTES.md`](../../changes/4_story/result/WRITER_NOTES.md).
+- **Status:** story-writer round 3 of 5 (run 20261020_154140). Open items are in [`changes/4_story/result/WRITER_NOTES.md`](../../changes/4_story/result/WRITER_NOTES.md).
 - **How it was produced.** This story is written by a headless writer/validator loop that, like the auto-research loop ([F61](#F61)), runs with permission checks skipped ([`changes/4_story/autoscript/run_story.sh#L24-L27`](../../changes/4_story/autoscript/run_story.sh#L24-L27)). It is instructed to write only inside `changes/4_story/` ([`changes/4_story/autoscript/agent_prompt.md#L69`](../../changes/4_story/autoscript/agent_prompt.md#L69)). This is an instruction, not an enforced sandbox.
+- **The story loop's own incidents** (round 2; details in [`changes/4_story/result/WRITER_NOTES.md`](../../changes/4_story/result/WRITER_NOTES.md)): the writer redacted one absolute scratchpad path that the round-1 citation validator had printed in its committed report ([`changes/4_story/result/validator_citation_round_1.md`](../../changes/4_story/result/validator_citation_round_1.md)), because it failed the repo's privacy check; and importing the scrub tool for that briefly created a git-ignored bytecode cache under tools/, outside the write area. The writer deleted it at once.
 
 ## 0. Abstract
 
@@ -25,15 +26,15 @@ Baleen trains its admission model on an offline selection that maximises *averag
 **Deployed, every Ising/QUBO component failed its pre-registered test or its pre-registered dev gate:**
 - Ising peak labels: phase-1 Q3 ([`changes/1_literature_review/explore/q3/RESULTS.md#L6-L15`](../../changes/1_literature_review/explore/q3/RESULTS.md#L6-L15)) and the scope-v2 test H3′ ([`changes/2_deployable_peak/wp3_test/RESULTS_test.md#L6-L16`](../../changes/2_deployable_peak/wp3_test/RESULTS_test.md#L6-L16));
 - deployment-aware Ising labels (Track C): failed their dev screen and never reached a test ([F50](#F50));
-- an Ising-fitted threshold table: H5 ([`changes/2_deployable_peak/wp10_schedule/RESULTS_test.md#L9-L17`](../../changes/2_deployable_peak/wp10_schedule/RESULTS_test.md#L9-L17));
+- an Ising-fitted threshold table: H5 ([`changes/2_deployable_peak/wp10_schedule/RESULTS_test.md#L9-L17`](../../changes/2_deployable_peak/wp10_schedule/RESULTS_test.md#L9-L17)). The table was neutral on 10/18 test retrains, and PT equals the exhaustive optimum ([F59](#F59));
 - a peak-label union model: the auto-research loop, whose last test failed against the threshold arm ([`changes/3_autoresearch/result/FINAL_REPORT.md#L1-L7`](../../changes/3_autoresearch/result/FINAL_REPORT.md#L1-L7)).
 
 For the label-based tests the recurring mechanism is that day-1 labels are brittle when the peak *type* changes (big-offset scan vs burst of new episodes). Part of this comes from how Baleen's trainer learns scans ([F68](#F68)).
 
-**The one deployed win** is the scope-v2 load-adaptive admission threshold on Baleen's *own* models (A+α), a non-Ising control.
+**The one deployed win** is the scope-v2 load-adaptive admission threshold on Baleen's *own* models (A+α), a non-Ising control. The idea predates the Ising work: the 2026-09-14 paper audit that picked Baleen already proposed load-adaptive gating of the admission threshold ([F104](#F104)).
 - **First seen as a control, then pre-registered.** It was first seen as a positive control on WP2 dev ([F39](#F39)), and then post hoc on the H3′ test ([F47](#F47)). A pre-registered test on fresh Region5 (H4) gave 35.02 vs 36.17, 5/6 ([`changes/2_deployable_peak/wp9_region5/RESULTS_test.md#L7-L19`](../../changes/2_deployable_peak/wp9_region5/RESULTS_test.md#L7-L19)).
 - **The margin passed only on the retrain-level SE.** At instance level the gain is +1.16 ± 0.75 (≈1.5 SE), and one instance (s0.5) gives 69% of the summed gain; the other five average +0.43 ([F53](#F53)).
-- **Other regions, post hoc.** It helped on Regions 6/7 ([`changes/2_deployable_peak/wp3_test/RESULTS_test.md#L53-L60`](../../changes/2_deployable_peak/wp3_test/RESULTS_test.md#L53-L60)) and Region4 ([`changes/3_autoresearch/result/FINAL_REPORT.md#L75`](../../changes/3_autoresearch/result/FINAL_REPORT.md#L75)). It did not help on low-load Region1 ([`changes/2_deployable_peak/wp10_schedule/RESULTS_test.md#L19`](../../changes/2_deployable_peak/wp10_schedule/RESULTS_test.md#L19)) ([F69](#F69)).
+- **Other regions, post hoc.** It helped on Regions 6/7 ([`changes/2_deployable_peak/wp3_test/RESULTS_test.md#L53-L60`](../../changes/2_deployable_peak/wp3_test/RESULTS_test.md#L53-L60)) and Region4 ([`changes/3_autoresearch/result/FINAL_REPORT.md#L75`](../../changes/3_autoresearch/result/FINAL_REPORT.md#L75)). On low-load Region1 it was worse than Baleen (A+α 1/6, −0.49) ([`changes/2_deployable_peak/wp10_schedule/RESULTS_test.md#L19`](../../changes/2_deployable_peak/wp10_schedule/RESULTS_test.md#L19)) ([F60](#F60), [F69](#F69)).
 - **Prior art.** Two earlier load-based admission attempts (Baleen §5.6 and Wong's thesis §7.4.1) did not reduce the peak, or barely did; how A+α differs is discussed in [F95](#F95).
 
 **Freshness and the reserve.**
@@ -66,7 +67,7 @@ For the label-based tests the recurring mechanism is that day-1 labels are britt
 - **Solver names.**
   - **"Ising" solvers.** PT and EIM are replica-exchange (parallel-tempering) samplers on the LSE-smoothed true peak, with a QUBO budget penalty (PT) or a native hinge plus augmented Lagrangian (EIM).
     - They run on CPU (no GPU, [F90](#F90)).
-    - They start from the classical LP + round + repair solution in phase 1 and in every deployed label set.
+    - They start from the classical LP + round + repair solution in phase-1 Q1/Q2 and in every deployed F1PT/F1EIM label set. The Q3 designs (phase-1 Q3, and WP2's D:P0/D:T2) and Track C's anchored and student labels instead started from Baleen's set or the previous round ([F14](#F14), [F21](#F21)).
     - In H2′ the warm start was tuned over {LP + repair, peak-aware greedy} for both families alike; the finalists chose LP at 3/10 s and the greedy start at 1 s ([F21](#F21), [F24](#F24)).
     - SB is matrix-free simulated bifurcation on a sum-of-squares QUBO surrogate; MQ is MindQuantum QAIA (or dwave/OpenJij SA; tuned) on sub-QUBOs.
   - **Classical solvers:** LP + round + repair, HiGHS MILP, CP-SAT, and true-objective local search (LS).
@@ -80,129 +81,130 @@ For the label-based tests the recurring mechanism is that day-1 labels are britt
 ## 0.1 Findings index
 
 <!-- INDEX:BEGIN -->
-103 findings: P0 9, P1 44, P2 33, P3 17. Evidence: DEV 21, INFRA 40, NEGATIVE-TEST 8, OFFLINE 14, REPRO 5, TEST-POSTHOC 12, TEST-PREREG 3.
+104 findings: P0 9, P1 44, P2 34, P3 17. Evidence: DEV 21, INFRA 41, NEGATIVE-TEST 8, OFFLINE 13, REPRO 5, TEST-POSTHOC 13, TEST-PREREG 3.
 
 **Headlines at a glance (the P0 findings):**
 
 | ID | Evidence | Verdict and key number |
 |---|---|---|
-| [F18](#F18) | TEST-PREREG | Q1 = YES: min–max selection beats Baleen's peak-blind oracle offline on 6/6 held-out instances |
-| [F20](#F20) | NEGATIVE-TEST | Q2 = NO: on the same F1 formulation the Ising samplers beat the best classical solver only at the 10 s budget |
-| [F25](#F25) | OFFLINE | H1′ breadth: on 39 instances in four regions, peak-aware selection beats the peak-blind oracle on 36–37 of them by −13.0% to −13.7% on average; 30/30 and 13.0–17.7% per region on Regions 5–7 |
-| [F28](#F28) | NEGATIVE-TEST | H2′ = NO: at re-solve budgets of 1, 3 and 10 s the tuned Ising solvers are not better than the best classical solver |
-| [F33](#F33) | NEGATIVE-TEST | Q3 = NO: Ising-family peak labels distilled into Baleen's unchanged GBM lose to Baleen on held-out instances |
-| [F44](#F44) | NEGATIVE-TEST | H3′ = NO: Ising peak labels + `load` + the load-adaptive threshold (X1) lose to Baleen on the test set |
-| [F52](#F52) | TEST-PREREG | H4 = YES: the load-adaptive admission threshold on Baleen's own models beats Baleen on fresh Region5 (pre-registered; passes on the retrain-level SE, and one instance carries 69% of the gain) |
-| [F59](#F59) | NEGATIVE-TEST | H5 = NO: the Ising-fitted load-bucket threshold table does not beat Baleen on fresh Region1 |
-| [F65](#F65) | NEGATIVE-TEST | Auto-research T2 (Region4) = FAIL: the Ising-label union does not beat the threshold arm A+α (1/5, −0.30); its gain over Baleen is the threshold's, so the loop ends NEGATIVE |
+| F18 | TEST-PREREG | Q1 = YES: min–max selection beats Baleen's peak-blind oracle offline on 6/6 held-out instances |
+| F20 | NEGATIVE-TEST | Q2 = NO: on the same F1 formulation the Ising samplers beat the best classical solver only at the 10 s budget (PT 22.524 vs 22.569 at 10 s; 22.508 vs 22.415 at 60 s) |
+| F25 | OFFLINE | H1′ breadth: on 39 instances in four regions, peak-aware selection beats the peak-blind oracle on 36–37 of them by −13.0% to −13.7% on average; 30/30 and 13.0–17.7% per region on Regions 5–7 |
+| F28 | NEGATIVE-TEST | H2′ = NO: at re-solve budgets of 1, 3 and 10 s the tuned Ising solvers fail the pre-registered criteria (better only at 3 s; PT 22.7336 vs best classical 22.7166 over all 18 cells) |
+| F33 | NEGATIVE-TEST | Q3 = NO: Ising-family peak labels distilled into Baleen's unchanged GBM lose to Baleen on held-out instances (2/6 wins each; −0.41 to −1.07) |
+| F44 | NEGATIVE-TEST | H3′ = NO: Ising peak labels + `load` + the load-adaptive threshold (X1) win 5/6 instances but lose to Baleen on the mean (40.53 vs A 39.27), failing the pre-registered rule |
+| F52 | TEST-PREREG | H4 = YES: the load-adaptive admission threshold on Baleen's own models beats Baleen on fresh Region5 (pre-registered; passes on the retrain-level SE, and one instance carries 69% of the gain) |
+| F59 | NEGATIVE-TEST | H5 = NO: the Ising-fitted load-bucket threshold table does not beat Baleen on fresh Region1 (24.45 vs A 24.14, 1/6); the fitted table was neutral on 10/18 test retrains |
+| F65 | NEGATIVE-TEST | Auto-research T2 (Region4) = FAIL: the Ising-label union does not beat the threshold arm A+α (1/5, −0.30); its gain over Baleen is the threshold's, so the loop ends NEGATIVE |
 
 **All findings, in document order:**
 
 | ID | Priority | Evidence | Claim | Section |
 |---|---|---|---|---|
-| [F01](#F01) | P1 | INFRA | The question: optimise the peak 10-minute window, not average DT saved, and keep the gain online | 1. Question, proposal and scope |
-| [F02](#F02) | P1 | INFRA | Scope v1 (frozen 2026-09-27): only the offline selection Policy may change; operating point and metric fixed for every method | 1. Question, proposal and scope |
-| [F03](#F03) | P1 | INFRA | Scope v2 (2026-09-29) widens the boundary by one causal demand-load feature group (plus optional hour of day); CP1 fixes its details | 1. Question, proposal and scope |
-| [F04](#F04) | P2 | INFRA | Amendments 1.2b (threshold table), 1.2c (load × access-class table) and 1.2d (union of two admission models), each behind a bit-exact gate | 1. Question, proposal and scope |
-| [F05](#F05) | P2 | INFRA | Team decision log: reproduce first, freeze the boundary, keep Ising central against the literature review's LP-first advice | 1. Question, proposal and scope |
-| [F06](#F06) | P3 | INFRA | How Baleen was chosen: an automated paper-feasibility pipeline ranked it first of eight shortlisted papers | 1. Question, proposal and scope |
-| [F07](#F07) | P1 | REPRO | The baselines replay bit-exactly and the authors' Figure 9 notebook reproduces exactly | 2. Reproduction of Baleen |
-| [F08](#F08) | P1 | REPRO | Baleen matches the authors' released-metric runs within ±0.6 points; the paper's Figure 9 Baleen bars (`tracedrop`) do not reproduce | 2. Reproduction of Baleen |
-| [F09](#F09) | P2 | REPRO | Retraining is nondeterministic, and episode order is its only source; the peak is almost insensitive to the write budget | 2. Reproduction of Baleen |
-| [F10](#F10) | P2 | REPRO | README smoke test passes; the operating point is DWPD 7.5, not the proposal's 3 drive-writes per day | 2. Reproduction of Baleen |
-| [F98](#F98) | P2 | REPRO | Reproduction scope: sample 0 of two traces plus a Region1 smoke test; Region6 at s0 is a weak test, and no Stage B+ results are recorded | 2. Reproduction of Baleen |
-| [F11](#F11) | P1 | OFFLINE | The literature review and a synthetic CPU audit predicted the gain would come from the formulation, with LP beating Ising solvers | 3. Formulation, solvers and the literature review |
-| [F95](#F95) | P1 | INFRA | Prior art: Baleen and Wong's thesis already tried load-based admission and a fixed-window peak OPT; the novelty search is outstanding | 3. Formulation, solvers and the literature review |
-| [F12](#F12) | P2 | OFFLINE | Synthetic audit: matrix-free SB scales to 200k variables in about 512 MB; the dense SB package needs 58 GB at 50k | 3. Formulation, solvers and the literature review |
-| [F13](#F13) | P1 | INFRA | The real-harness formulation: true min–max F1 over the post-day-1 windows, nested-prefix output, and two equally tuned solver families | 3. Formulation, solvers and the literature review |
-| [F14](#F14) | P2 | INFRA | The phase-1 deployed (Q3) labels used an extended-Ising energy on day 1 | 3. Formulation, solvers and the literature review |
-| [F15](#F15) | P1 | DEV | Phase-1 harness test on sample 0: the offline gain is real, but distillation into the unchanged GBM keeps almost none of it | 3. Formulation, solvers and the literature review |
-| [F16](#F16) | P2 | OFFLINE | Gate 0: the analytic window loads match the simulator, and peak-aware plans migrate; the evidence points to admissions overrunning the cache | 3. Formulation, solvers and the literature review |
-| [F17](#F17) | P2 | OFFLINE | Phase-1 harness solver attribution: inside the hybrids the classical sub-solvers did most of the work, and the one analytic Ising edge was EIM on Region7 | 3. Formulation, solvers and the literature review |
-| [F103](#F103) | P2 | INFRA | Design levers harness_eval flagged for a team decision were never implemented | 3. Formulation, solvers and the literature review |
-| [F18](#F18) | P0 | TEST-PREREG | Q1 = YES: min–max selection beats Baleen's peak-blind oracle offline on 6/6 held-out instances | 4. Offline results |
-| [F19](#F19) | P1 | OFFLINE | The offline gain is a formulation effect, not a solver effect | 4. Offline results |
-| [F20](#F20) | P0 | NEGATIVE-TEST | Q2 = NO: on the same F1 formulation the Ising samplers beat the best classical solver only at the 10 s budget | 4. Offline results |
-| [F21](#F21) | P1 | DEV | The proposal's own Ising design (a sum-of-squares QUBO surrogate solved by simulated bifurcation) was the weakest Ising solver in phase-1 dev tuning and in WP5; the "Ising" finalists are LP-started replica-exchange samplers on the true objective | 4. Offline results |
-| [F22](#F22) | P3 | DEV | Q2 post hoc: the 10 s Ising win and the 60 s CP-SAT win do not depend on the nested time split | 4. Offline results |
-| [F23](#F23) | P3 | DEV | Phase-1 dev on the squared-hinge F2b: the classical local search led at 10 s, so the held-out solver comparison was run on F1 | 4. Offline results |
-| [F24](#F24) | P1 | OFFLINE | The phase-1 "Ising" arms are a classical LP start polished by a sampler: LP + round + repair already reaches ≈94% of the greedy → PT analytic reduction, and the sampler supplies the rest | 4. Offline results |
-| [F25](#F25) | P0 | OFFLINE | H1′ breadth: on 39 instances in four regions, peak-aware selection beats the peak-blind oracle on 36–37 of them by −13.0% to −13.7% on average; 30/30 and 13.0–17.7% per region on Regions 5–7 | 4. Offline results |
-| [F26](#F26) | P1 | OFFLINE | Peak migration is the rule offline: the planned peak window almost never is the simulated one | 4. Offline results |
-| [F27](#F27) | P1 | OFFLINE | Region4 has little peak headroom; its peaks are short bursts the oracle already absorbs, and the losses come from migration | 4. Offline results |
-| [F101](#F101) | P3 | OFFLINE | WP1's peak-blind oracle R0 reproduces the authors' OPT-AP rows closely, so the H1′ comparator is the paper's own oracle | 4. Offline results |
-| [F28](#F28) | P0 | NEGATIVE-TEST | H2′ = NO: at re-solve budgets of 1, 3 and 10 s the tuned Ising solvers are not better than the best classical solver | 4. Offline results |
-| [F102](#F102) | P2 | OFFLINE | H2′ mechanism: at 1 s the first nested level decides, and the exact solvers cannot get past their LP rounding there | 4. Offline results |
-| [F29](#F29) | P2 | DEV | H2′ dev tuning: equal trials for both families, and the ranking flips with the budget | 4. Offline results |
-| [F30](#F30) | P2 | TEST-POSTHOC | Rolling re-solve at 1 s (pre-declared secondary, no pass/fail): the exact classical solvers win on the small window instances | 4. Offline results |
-| [F31](#F31) | P1 | OFFLINE | Scaling (contribution S): matrix-free SB runs real unions of up to 125541 QUBO variables in at most 214 MB, where the dense SB package runs out of memory | 4. Offline results |
-| [F32](#F32) | P2 | DEV | Choosing the label solver: WP5 recommended EIM, the deployed tests used the phase-1 PT configuration, and the deployed F1 label sets of PT and CP-SAT have the same day-1 peak | 4. Offline results |
-| [F33](#F33) | P0 | NEGATIVE-TEST | Q3 = NO: Ising-family peak labels distilled into Baleen's unchanged GBM lose to Baleen on held-out instances | 5.1 Phase 1 (Q3) |
-| [F34](#F34) | P1 | DEV | Q3 mechanism: the Ising labels changed first-access admission, not peak targeting | 5.1 Phase 1 (Q3) |
-| [F35](#F35) | P1 | TEST-POSTHOC | Q3 held-out: on 3/6 instances P100 is set by rare scan-like windows, and relabelling moves those decisions in either direction | 5.1 Phase 1 (Q3) |
-| [F36](#F36) | P1 | INFRA | The scope-v2 overlay passes CP1: bit-exact default equivalence and exact train/serve parity of `load` | 5.2 Scope v2 |
-| [F37](#F37) | P1 | DEV | Learnability gate PASSES: given `load`, the GBM fits the F1 (min–max) peak-aware labels much better, PT- or CP-SAT-solved alike, and Baleen's own labels not at all | 5.2 Scope v2 |
-| [F38](#F38) | P1 | DEV | The plain 2×2 hypothesis (Ising labels + `load`, arm D) does not survive confirmation on dev | 5.3 WP2 |
-| [F39](#F39) | P1 | DEV | The WP2 finalists X1/X2 (F1PT labels + `load` + α) come from a rule written after the rep-1 screen but before confirmation; about half of X1's dev gain is the threshold alone | 5.3 WP2 |
-| [F40](#F40) | P2 | DEV | On dev, Ising (PT/EIM) vs classical (CP-SAT) labels of the same F1 formulation: no claim either way; with α the PT labels lead by +1.26 (5/8) | 5.3 WP2 |
-| [F41](#F41) | P1 | DEV | WP2 mechanism: on Region6 the Ising labels plus α admit the big-offset scans that set the peak; on Region7 they suppress first-access admission | 5.3 WP2 |
-| [F42](#F42) | P2 | DEV | The other WP2 ablations failed their screens or the confirmation rule | 5.3 WP2 |
-| [F43](#F43) | P3 | INFRA | WP2 bookkeeping: 40 unmatched rows, all reported; the threshold-search bound was a tool limitation | 5.3 WP2 |
-| [F44](#F44) | P0 | NEGATIVE-TEST | H3′ = NO: Ising peak labels + `load` + the load-adaptive threshold (X1) lose to Baleen on the test set | 5.4 WP3 |
-| [F45](#F45) | P1 | NEGATIVE-TEST | H3′-labels = NO: X1 is not better than the same threshold on Baleen's own models | 5.4 WP3 |
-| [F46](#F46) | P1 | TEST-POSTHOC | Why H3′ failed: one big-offset scan peak (Region7 s0.5) that the F1-label models do not admit | 5.4 WP3 |
-| [F47](#F47) | P1 | TEST-POSTHOC | Post hoc on the H3′ test: the load-adaptive threshold on Baleen's own models is the best configuration | 5.4 WP3 |
-| [F48](#F48) | P2 | TEST-POSTHOC | H3′ pre-declared comparisons (no pass/fail): CP-SAT labels have the lower mean by 0.89 at ≈1 instance SE, and retention is negative for every F1-label arm | 5.4 WP3 |
-| [F49](#F49) | P2 | DEV | Track C stage 1: the cheap deployed proxy fails its pre-registered validation, so every screen used full simulations | 5.5 Track C (WP8) |
-| [F50](#F50) | P1 | DEV | Track C stage 2 is negative: no deployment-aware Ising objective passes the pre-registered dev screen | 5.5 Track C (WP8) |
-| [F51](#F51) | P3 | DEV | Track C near miss: a single retrain of STU10R1 had the lowest dev mean, but the pre-registered gate rejected it | 5.5 Track C (WP8) |
-| [F52](#F52) | P0 | TEST-PREREG | H4 = YES: the load-adaptive admission threshold on Baleen's own models beats Baleen on fresh Region5 (pre-registered; passes on the retrain-level SE, and one instance carries 69% of the gain) | 5.6 WP9 |
-| [F53](#F53) | P1 | TEST-PREREG | H4 caveats: the margin rests on the retrain-level SE, one instance carries most of the gain, and RejectX could not be matched | 5.6 WP9 |
-| [F54](#F54) | P1 | TEST-POSTHOC | The Ising record X1 on Region5 (pre-declared, no pass/fail): it fails the reported rule again, with one catastrophic scan-type instance and a second large loss | 5.6 WP9 |
-| [F55](#F55) | P3 | INFRA | WP9 preparation: the dry run and the static replays | 5.6 WP9 |
-| [F56](#F56) | P2 | DEV | WP10 E1: no training-window proxy ranks threshold variants well enough (pre-registered validity criterion) | 5.7 WP10 |
-| [F57](#F57) | P1 | OFFLINE | WP10 E2: the Ising solver (PT) and the classical solver (coordinate descent) find the same (scale-equivalent) threshold tables on 46/48 packs | 5.7 WP10 |
-| [F58](#F58) | P2 | DEV | WP10 E3: TB:pt is the dev finalist under a rule written before any E2 solve or E3 simulation | 5.7 WP10 |
-| [F59](#F59) | P0 | NEGATIVE-TEST | H5 = NO: the Ising-fitted load-bucket threshold table does not beat Baleen on fresh Region1 | 5.7 WP10 |
-| [F60](#F60) | P1 | TEST-POSTHOC | On low-load Region1 the α arms do not help either (pre-declared reported comparison, no pass/fail) | 5.7 WP10 |
-| [F61](#F61) | P2 | INFRA | The auto-research contract: an Ising-centric Y, a fresh pre-registered pool, a stricter rule and at most two test spends | 5.8 The auto-research loop (3_autoresearch, run 20261020_004634) |
-| [F62](#F62) | P2 | DEV | Auto-research H-CLS (Ising-fitted load × access-class threshold tables): no finalist | 5.8 The auto-research loop (3_autoresearch, run 20261020_004634) |
-| [F63](#F63) | P2 | DEV | Auto-research H-UX (union of Baleen's model and an Ising-label model): the dev finalist XA:F1PT | 5.8 The auto-research loop (3_autoresearch, run 20261020_004634) |
-| [F64](#F64) | P1 | NEGATIVE-TEST | Auto-research T1 (Region2): spent, failed, and unevaluable as pre-registered | 5.8 The auto-research loop (3_autoresearch, run 20261020_004634) |
-| [F65](#F65) | P0 | NEGATIVE-TEST | Auto-research T2 (Region4) = FAIL: the Ising-label union does not beat the threshold arm A+α (1/5, −0.30); its gain over Baleen is the threshold's, so the loop ends NEGATIVE | 5.8 The auto-research loop (3_autoresearch, run 20261020_004634) |
-| [F66](#F66) | P1 | TEST-POSTHOC | Region4 replicates the H4 effect post hoc: A+α is 15% below Baleen | 5.8 The auto-research loop (3_autoresearch, run 20261020_004634) |
-| [F67](#F67) | P1 | TEST-POSTHOC | Why the union did not transfer: neither test pool has scan peaks | 5.8 The auto-research loop (3_autoresearch, run 20261020_004634) |
-| [F68](#F68) | P1 | TEST-POSTHOC | Day-1 min–max labels are brittle when the peak *type* changes (big-offset scan vs burst of new episodes) | 6. Cross-cutting mechanisms |
-| [F69](#F69) | P1 | TEST-POSTHOC | The load-adaptive threshold's evidence status, region by region: pre-registered YES on Region5, post-hoc on Regions 6/7 and 4, null on Region1 | 6. Cross-cutting mechanisms |
-| [F70](#F70) | P1 | OFFLINE | Ising and classical solvers: identical objectives where both reach the optimum, budget-dependent winners elsewhere, and a two-way record for deployed labels (no row beyond ≈2 instance-level SE) | 6. Cross-cutting mechanisms |
-| [F71](#F71) | P1 | TEST-POSTHOC | Mean retention of the offline gain never approached the proposal's 60% target for any Ising-label configuration (pre-declared metric, no pass/fail; the 60% criterion comes only from the proposal) | 6. Cross-cutting mechanisms |
-| [F72](#F72) | P2 | DEV | First-access admission is the recurring lever on Region7 (mostly dev evidence) | 6. Cross-cutting mechanisms |
-| [F73](#F73) | P1 | INFRA | Every phase-2 and auto-research test protocol was committed to git before its test ran | 7. Methodology and integrity |
-| [F94](#F94) | P1 | INFRA | PLAN's pre-stated "dev signal" gate failed; instead of the pre-stated negative-and-pivot, H3′ was re-specified around PLAN's ablation arm E (labels + `load` + α) | 7. Methodology and integrity |
-| [F74](#F74) | P2 | INFRA | Each deployed test's evaluator was written and validated on earlier data before the test data existed, and the drivers refused to run without a go-file | 7. Methodology and integrity |
-| [F75](#F75) | P1 | INFRA | Phase-1 pre-registration (Q1–Q3) is file-dated, not git-attested | 7. Methodology and integrity |
-| [F96](#F96) | P2 | INFRA | Phase-1 forking paths and interim looks, all followed by negative verdicts | 7. Methodology and integrity |
-| [F97](#F97) | P2 | INFRA | Deployed testing went beyond PLAN's instance plan, each time under its own protocol; the later G1 re-runs used one trace | 7. Methodology and integrity |
-| [F76](#F76) | P1 | INFRA | Gate G3 (a teammate review of the overlay patch) was waived by the captain; no teammate sign-off is recorded for scope v2 | 7. Methodology and integrity |
-| [F77](#F77) | P3 | INFRA | Frozen-artifact checks always passed and sandboxing was the rule (with the exceptions in [F78](#F78)–[F82](#F82)); leak-check hits came from other tools and agents | 7. Methodology and integrity |
-| [F78](#F78) | P3 | INFRA | Phase-1 incidents: a 25-second tuning overlap and a stray `__pycache__` file in the frozen tree's wrapper | 7. Methodology and integrity |
-| [F99](#F99) | P3 | INFRA | harness_eval's operational deviations | 7. Methodology and integrity |
-| [F79](#F79) | P3 | INFRA | Phase-2 timing incidents (WP1/WP5), handled by superseding, flagging or re-running | 7. Methodology and integrity |
-| [F80](#F80) | P2 | INFRA | SMT-sibling exposure in phase-1 timing and early WP5 tuning, a seed-reuse artefact in tuning, and a lost session | 7. Methodology and integrity |
-| [F100](#F100) | P3 | INFRA | The 10 s label and table solves outside WP5 ran without core isolation; after H2′ the timing cores were released to all tracks | 7. Methodology and integrity |
-| [F81](#F81) | P3 | INFRA | Track C, WP9 and WP10 operational deviations | 7. Methodology and integrity |
-| [F82](#F82) | P3 | INFRA | Smaller recorded disclosures not listed elsewhere in this story | 7. Methodology and integrity |
-| [F83](#F83) | P2 | INFRA | WP10 committed its H5 protocol after the dev confirmation had run, before its P100 values were read | 7. Methodology and integrity |
-| [F84](#F84) | P1 | INFRA | Auto-research integrity disclosures (final report §5) | 7. Methodology and integrity |
-| [F85](#F85) | P3 | INFRA | The round-1 auto-research validators failed the run on two blocking findings; both were fixed before T2's TEST_GO | 7. Methodology and integrity |
-| [F86](#F86) | P2 | INFRA | Six items the round-2 validators raised are not carried into the auto-research notebook or final report | 7. Methodology and integrity |
-| [F87](#F87) | P2 | INFRA | Privacy redaction of a public repo (2026-10-04): git history still holds the originals, and so does the current tree, inside the redaction tool | 7. Methodology and integrity |
-| [F88](#F88) | P3 | INFRA | Documentation drift in the index file | 7. Methodology and integrity |
-| [F89](#F89) | P3 | INFRA | An earlier auto-research launch (Codex worker, run 20261019_233548) did no work | 7. Methodology and integrity |
-| [F90](#F90) | P2 | INFRA | The hardware differed from the proposal's plan: no GPU | 7. Methodology and integrity |
-| [F91](#F91) | P2 | INFRA | Planned but never measured | 7. Methodology and integrity |
-| [F92](#F92) | P1 | INFRA | The 0.7–0.9 reserve was never used in a deployed run, but WP1 simulated it offline, including the Region6/7 reserve | 7. Methodology and integrity |
-| [F93](#F93) | P1 | INFRA | "Fresh" test pools were fresh only in deployed mode: WP1 had simulated the offline OPT of the H2′/H3′, H4 and T2 test instances before those tests | 7. Methodology and integrity |
+| F01 | P1 | INFRA | The question: optimise the peak 10-minute window, not average DT saved, and keep the gain online | 1. Question, proposal and scope |
+| F02 | P1 | INFRA | Scope v1 (frozen 2026-09-27): only the offline selection Policy may change; operating point and metric fixed for every method | 1. Question, proposal and scope |
+| F03 | P1 | INFRA | Scope v2 (2026-09-29) widens the boundary by one causal demand-load feature group (plus optional hour of day); CP1 fixes its details | 1. Question, proposal and scope |
+| F04 | P2 | INFRA | Amendments 1.2b (threshold table), 1.2c (load × access-class table) and 1.2d (union of two admission models), each behind a bit-exact gate | 1. Question, proposal and scope |
+| F05 | P2 | INFRA | Team decision log: reproduce first, freeze the boundary, keep Ising central against the literature review's LP-first advice | 1. Question, proposal and scope |
+| F06 | P3 | INFRA | How Baleen was chosen: an automated paper-feasibility pipeline ranked it first of eight shortlisted papers | 1. Question, proposal and scope |
+| F104 | P2 | INFRA | The load-adaptive admission threshold was in the project's founding idea: the 2026-09-14 paper audit proposed peak-aware scoring plus load-adaptive gating, with no QUBO/Ising, targeting ≥ 5% | 1. Question, proposal and scope |
+| F07 | P1 | REPRO | The baselines replay bit-exactly and the authors' Figure 9 notebook reproduces exactly | 2. Reproduction of Baleen |
+| F08 | P1 | REPRO | Baleen matches the authors' released-metric runs within ±0.6 points; the paper's Figure 9 Baleen bars (`tracedrop`) do not reproduce | 2. Reproduction of Baleen |
+| F09 | P2 | REPRO | Retraining is nondeterministic, and episode order is its only source; the peak is almost insensitive to the write budget | 2. Reproduction of Baleen |
+| F10 | P2 | REPRO | README smoke test passes; the operating point is DWPD 7.5, not the proposal's 3 drive-writes per day | 2. Reproduction of Baleen |
+| F98 | P2 | REPRO | Reproduction scope: sample 0 of two traces plus a Region1 smoke test; Region6 at s0 is a weak test, and no Stage B+ results are recorded | 2. Reproduction of Baleen |
+| F11 | P1 | OFFLINE | The literature review and a synthetic CPU audit predicted the gain would come from the formulation, with LP beating Ising solvers | 3. Formulation, solvers and the literature review |
+| F95 | P1 | INFRA | Prior art: Baleen and Wong's thesis already tried load-based admission and a fixed-window peak OPT; the novelty search is outstanding | 3. Formulation, solvers and the literature review |
+| F12 | P2 | OFFLINE | Synthetic audit: matrix-free SB scales to 200k variables in about 512 MB; the dense SB package needs 58 GB at 50k | 3. Formulation, solvers and the literature review |
+| F13 | P1 | INFRA | The real-harness formulation: true min–max F1 over the post-day-1 windows, nested-prefix output, and two equally tuned solver families | 3. Formulation, solvers and the literature review |
+| F14 | P2 | INFRA | The phase-1 deployed (Q3) labels used an extended-Ising energy on day 1 | 3. Formulation, solvers and the literature review |
+| F15 | P1 | DEV | Phase-1 harness test on sample 0: the offline gain is real, but distillation into the unchanged GBM keeps almost none of it | 3. Formulation, solvers and the literature review |
+| F16 | P2 | OFFLINE | Gate 0: the analytic window loads match the simulator, and peak-aware plans migrate; the evidence points to admissions overrunning the cache | 3. Formulation, solvers and the literature review |
+| F17 | P2 | OFFLINE | Phase-1 harness solver attribution: inside the hybrids the classical sub-solvers did most of the work, and the one analytic Ising edge was EIM on Region7 | 3. Formulation, solvers and the literature review |
+| F103 | P2 | INFRA | Design levers harness_eval flagged for a team decision were never implemented | 3. Formulation, solvers and the literature review |
+| F18 | P0 | TEST-PREREG | Q1 = YES: min–max selection beats Baleen's peak-blind oracle offline on 6/6 held-out instances | 4. Offline results |
+| F19 | P1 | OFFLINE | The offline gain is a formulation effect, not a solver effect | 4. Offline results |
+| F20 | P0 | NEGATIVE-TEST | Q2 = NO: on the same F1 formulation the Ising samplers beat the best classical solver only at the 10 s budget (PT 22.524 vs 22.569 at 10 s; 22.508 vs 22.415 at 60 s) | 4. Offline results |
+| F21 | P1 | DEV | The proposal's own Ising design (a sum-of-squares QUBO surrogate solved by simulated bifurcation) was the weakest Ising solver in phase-1 dev tuning and in WP5; the "Ising" finalists are LP-started replica-exchange samplers on the true objective | 4. Offline results |
+| F22 | P3 | DEV | Q2 post hoc: the 10 s Ising win and the 60 s CP-SAT win do not depend on the nested time split | 4. Offline results |
+| F23 | P3 | DEV | Phase-1 dev on the squared-hinge F2b: the classical local search led at 10 s, so the held-out solver comparison was run on F1 | 4. Offline results |
+| F24 | P1 | OFFLINE | The phase-1 "Ising" arms are a classical LP start polished by a sampler: LP + round + repair already reaches ≈94% of the greedy → PT analytic reduction, and the sampler supplies the rest | 4. Offline results |
+| F25 | P0 | OFFLINE | H1′ breadth: on 39 instances in four regions, peak-aware selection beats the peak-blind oracle on 36–37 of them by −13.0% to −13.7% on average; 30/30 and 13.0–17.7% per region on Regions 5–7 | 4. Offline results |
+| F26 | P1 | OFFLINE | Peak migration is the rule offline: the planned peak window almost never is the simulated one | 4. Offline results |
+| F27 | P1 | OFFLINE | Region4 has little peak headroom; its peaks are short bursts the oracle already absorbs, and the losses come from migration | 4. Offline results |
+| F101 | P3 | OFFLINE | WP1's peak-blind oracle R0 reproduces the authors' OPT-AP rows closely, so the H1′ comparator is the paper's own oracle | 4. Offline results |
+| F28 | P0 | NEGATIVE-TEST | H2′ = NO: at re-solve budgets of 1, 3 and 10 s the tuned Ising solvers fail the pre-registered criteria (better only at 3 s; PT 22.7336 vs best classical 22.7166 over all 18 cells) | 4. Offline results |
+| F102 | P2 | TEST-POSTHOC | H2′ mechanism (pre-declared per-level report, no pass/fail): at 1 s the first nested level decides, and the exact solvers cannot get past their LP rounding there | 4. Offline results |
+| F29 | P2 | DEV | H2′ dev tuning: equal trials for both families, and the ranking flips with the budget | 4. Offline results |
+| F30 | P2 | TEST-POSTHOC | Rolling re-solve at 1 s (pre-declared secondary, no pass/fail): the exact classical solvers win on the small window instances | 4. Offline results |
+| F31 | P1 | OFFLINE | Scaling (contribution S): matrix-free SB runs real unions of up to 125541 QUBO variables in at most 214 MB, where the dense SB package runs out of memory | 4. Offline results |
+| F32 | P2 | DEV | Choosing the label solver: WP5 recommended EIM, the deployed tests used the phase-1 PT configuration, and the deployed F1 label sets of PT and CP-SAT have the same day-1 peak | 4. Offline results |
+| F33 | P0 | NEGATIVE-TEST | Q3 = NO: Ising-family peak labels distilled into Baleen's unchanged GBM lose to Baleen on held-out instances (2/6 wins each; −0.41 to −1.07) | 5.1 Phase 1 (Q3) |
+| F34 | P1 | DEV | Q3 mechanism: the Ising labels changed first-access admission, not peak targeting | 5.1 Phase 1 (Q3) |
+| F35 | P1 | TEST-POSTHOC | Q3 held-out: on 3/6 instances P100 is set by rare scan-like windows, and relabelling moves those decisions in either direction | 5.1 Phase 1 (Q3) |
+| F36 | P1 | INFRA | The scope-v2 overlay passes CP1: bit-exact default equivalence and exact train/serve parity of `load` | 5.2 Scope v2 |
+| F37 | P1 | DEV | Learnability gate PASSES: given `load`, the GBM fits the F1 (min–max) peak-aware labels much better, PT- or CP-SAT-solved alike, and Baleen's own labels not at all | 5.2 Scope v2 |
+| F38 | P1 | DEV | The plain 2×2 hypothesis (Ising labels + `load`, arm D) does not survive confirmation on dev | 5.3 WP2 |
+| F39 | P1 | DEV | The WP2 finalists X1/X2 (F1PT labels + `load` + α) come from a rule written after the rep-1 screen but before confirmation; about half of X1's dev gain is the threshold alone | 5.3 WP2 |
+| F40 | P2 | DEV | On dev, Ising (PT/EIM) vs classical (CP-SAT) labels of the same F1 formulation: no claim either way; with α the PT labels lead by +1.26 (5/8) | 5.3 WP2 |
+| F41 | P1 | DEV | WP2 mechanism: on Region6 the Ising labels plus α admit the big-offset scans that set the peak; on Region7 they suppress first-access admission | 5.3 WP2 |
+| F42 | P2 | DEV | The other WP2 ablations failed their screens or the confirmation rule | 5.3 WP2 |
+| F43 | P3 | INFRA | WP2 bookkeeping: 40 unmatched rows, all reported; the threshold-search bound was a tool limitation | 5.3 WP2 |
+| F44 | P0 | NEGATIVE-TEST | H3′ = NO: Ising peak labels + `load` + the load-adaptive threshold (X1) win 5/6 instances but lose to Baleen on the mean (40.53 vs A 39.27), failing the pre-registered rule | 5.4 WP3 |
+| F45 | P1 | NEGATIVE-TEST | H3′-labels = NO: X1 is not better than the same threshold on Baleen's own models | 5.4 WP3 |
+| F46 | P1 | TEST-POSTHOC | Why H3′ failed: one big-offset scan peak (Region7 s0.5) that the F1-label models do not admit | 5.4 WP3 |
+| F47 | P1 | TEST-POSTHOC | Post hoc on the H3′ test: the load-adaptive threshold on Baleen's own models is the best configuration | 5.4 WP3 |
+| F48 | P2 | TEST-POSTHOC | H3′ pre-declared comparisons (no pass/fail): CP-SAT labels have the lower mean by 0.89 at ≈1 instance SE, and retention is negative for every F1-label arm | 5.4 WP3 |
+| F49 | P2 | DEV | Track C stage 1: the cheap deployed proxy fails its pre-registered validation, so every screen used full simulations | 5.5 Track C (WP8) |
+| F50 | P1 | DEV | Track C stage 2 is negative: no deployment-aware Ising objective passes the pre-registered dev screen | 5.5 Track C (WP8) |
+| F51 | P3 | DEV | Track C near miss: a single retrain of STU10R1 had the lowest dev mean, but the pre-registered gate rejected it | 5.5 Track C (WP8) |
+| F52 | P0 | TEST-PREREG | H4 = YES: the load-adaptive admission threshold on Baleen's own models beats Baleen on fresh Region5 (pre-registered; passes on the retrain-level SE, and one instance carries 69% of the gain) | 5.6 WP9 |
+| F53 | P1 | TEST-PREREG | H4 caveats: the margin rests on the retrain-level SE, one instance carries most of the gain, and RejectX could not be matched | 5.6 WP9 |
+| F54 | P1 | TEST-POSTHOC | The Ising record X1 on Region5 (pre-declared, no pass/fail): it fails the reported rule again, with one catastrophic scan-type instance and a second large loss | 5.6 WP9 |
+| F55 | P3 | INFRA | WP9 preparation: the dry run and the static replays | 5.6 WP9 |
+| F56 | P2 | DEV | WP10 E1: no training-window proxy ranks threshold variants well enough (pre-registered validity criterion) | 5.7 WP10 |
+| F57 | P1 | OFFLINE | WP10 E2: the Ising solver (PT) and the classical solver (coordinate descent) find the same (scale-equivalent) threshold tables on 46/48 packs | 5.7 WP10 |
+| F58 | P2 | DEV | WP10 E3: TB:pt is the dev finalist under a rule written before any E2 solve or E3 simulation | 5.7 WP10 |
+| F59 | P0 | NEGATIVE-TEST | H5 = NO: the Ising-fitted load-bucket threshold table does not beat Baleen on fresh Region1 (24.45 vs A 24.14, 1/6); the fitted table was neutral on 10/18 test retrains | 5.7 WP10 |
+| F60 | P1 | TEST-POSTHOC | On low-load Region1 the α arms are worse than Baleen (A+α 1/6, −0.49; pre-declared reported comparison, no pass/fail) | 5.7 WP10 |
+| F61 | P2 | INFRA | The auto-research contract: an Ising-centric Y, a fresh pre-registered pool, a stricter rule and at most two test spends | 5.8 The auto-research loop (3_autoresearch, run 20261020_004634) |
+| F62 | P2 | DEV | Auto-research H-CLS (Ising-fitted load × access-class threshold tables): no finalist | 5.8 The auto-research loop (3_autoresearch, run 20261020_004634) |
+| F63 | P2 | DEV | Auto-research H-UX (union of Baleen's model and an Ising-label model): the dev finalist XA:F1PT | 5.8 The auto-research loop (3_autoresearch, run 20261020_004634) |
+| F64 | P1 | NEGATIVE-TEST | Auto-research T1 (Region2): spent, failed, and unevaluable as pre-registered | 5.8 The auto-research loop (3_autoresearch, run 20261020_004634) |
+| F65 | P0 | NEGATIVE-TEST | Auto-research T2 (Region4) = FAIL: the Ising-label union does not beat the threshold arm A+α (1/5, −0.30); its gain over Baleen is the threshold's, so the loop ends NEGATIVE | 5.8 The auto-research loop (3_autoresearch, run 20261020_004634) |
+| F66 | P1 | TEST-POSTHOC | Region4 replicates the H4 effect post hoc: A+α is 15% below Baleen | 5.8 The auto-research loop (3_autoresearch, run 20261020_004634) |
+| F67 | P1 | TEST-POSTHOC | Why the union did not transfer (the final report's interpretation): neither test pool has scan peaks | 5.8 The auto-research loop (3_autoresearch, run 20261020_004634) |
+| F68 | P1 | TEST-POSTHOC | Day-1 min–max labels are brittle when the peak *type* changes (big-offset scan vs burst of new episodes) | 6. Cross-cutting mechanisms |
+| F69 | P1 | TEST-POSTHOC | The load-adaptive threshold's evidence status, region by region: pre-registered YES on Region5, post-hoc on Regions 6/7 and 4, null on Region1 | 6. Cross-cutting mechanisms |
+| F70 | P1 | OFFLINE | Ising and classical solvers: identical objectives where both reach the optimum, budget-dependent winners elsewhere, and a two-way record for deployed labels (at most ≈2.1 instance-level SE) | 6. Cross-cutting mechanisms |
+| F71 | P1 | TEST-POSTHOC | Mean retention of the offline gain never approached the proposal's 60% target for any Ising-label configuration (pre-declared metric, no pass/fail; the 60% criterion comes only from the proposal) | 6. Cross-cutting mechanisms |
+| F72 | P2 | DEV | First-access admission is the recurring lever on Region7 (mostly dev evidence) | 6. Cross-cutting mechanisms |
+| F73 | P1 | INFRA | Every phase-2 and auto-research test protocol was committed to git before its test ran | 7. Methodology and integrity |
+| F94 | P1 | INFRA | PLAN's pre-stated "dev signal" gate failed; instead of the pre-stated negative-and-pivot, H3′ was re-specified around PLAN's ablation arm E (labels + `load` + α) | 7. Methodology and integrity |
+| F74 | P2 | INFRA | Each deployed test's evaluator was written and validated on earlier data before the test data existed, and the drivers refused to run without a go-file | 7. Methodology and integrity |
+| F75 | P1 | INFRA | Phase-1 pre-registration (Q1–Q3) is file-dated, not git-attested | 7. Methodology and integrity |
+| F96 | P2 | INFRA | Phase-1 forking paths and interim looks: the formulation switch also preceded Q1 (YES); all the others were followed by negative verdicts | 7. Methodology and integrity |
+| F97 | P2 | INFRA | Deployed testing went beyond PLAN's instance plan, each time under its own protocol; the later G1 re-runs used one trace | 7. Methodology and integrity |
+| F76 | P1 | INFRA | Gate G3 (a teammate review of the overlay patch) was waived by the captain; no teammate sign-off is recorded for scope v2 | 7. Methodology and integrity |
+| F77 | P3 | INFRA | Frozen-artifact checks always passed and sandboxing was the rule (with the exceptions in F78–F82); leak-check hits came from other tools and agents | 7. Methodology and integrity |
+| F78 | P3 | INFRA | Phase-1 incidents: a 25-second tuning overlap and a stray `__pycache__` file in the frozen tree's wrapper | 7. Methodology and integrity |
+| F99 | P3 | INFRA | harness_eval's operational deviations | 7. Methodology and integrity |
+| F79 | P3 | INFRA | Phase-2 timing incidents (WP1/WP5), handled by superseding, flagging or re-running | 7. Methodology and integrity |
+| F80 | P2 | INFRA | SMT-sibling exposure in phase-1 timing and early WP5 tuning, a seed-reuse artefact in tuning, and a lost session | 7. Methodology and integrity |
+| F100 | P3 | INFRA | The 10 s label and table solves outside WP5 ran without core isolation; after H2′ the timing cores were released to all tracks | 7. Methodology and integrity |
+| F81 | P3 | INFRA | Track C, WP9 and WP10 operational deviations | 7. Methodology and integrity |
+| F82 | P3 | INFRA | Smaller recorded disclosures not listed elsewhere in this story | 7. Methodology and integrity |
+| F83 | P2 | INFRA | WP10 committed its H5 protocol after the dev confirmation had run, before its P100 values were read | 7. Methodology and integrity |
+| F84 | P1 | INFRA | Auto-research integrity disclosures (final report §5) | 7. Methodology and integrity |
+| F85 | P3 | INFRA | The round-1 auto-research validators failed the run on two blocking findings; both were fixed before T2's TEST_GO | 7. Methodology and integrity |
+| F86 | P2 | INFRA | Six items the round-2 validators raised are not carried into the auto-research notebook or final report | 7. Methodology and integrity |
+| F87 | P2 | INFRA | Privacy redaction of a public repo (2026-10-04): git history still holds the originals, and so does the current tree, inside the redaction tool | 7. Methodology and integrity |
+| F88 | P3 | INFRA | Documentation drift in the index file | 7. Methodology and integrity |
+| F89 | P3 | INFRA | An earlier auto-research launch (Codex worker, run 20261019_233548) did no work | 7. Methodology and integrity |
+| F90 | P2 | INFRA | The hardware differed from the proposal's plan: no GPU | 7. Methodology and integrity |
+| F91 | P2 | INFRA | Planned but never measured | 7. Methodology and integrity |
+| F92 | P1 | INFRA | The 0.7–0.9 reserve was never used in a deployed run, but WP1 simulated it offline, including the Region6/7 reserve | 7. Methodology and integrity |
+| F93 | P1 | INFRA | "Fresh" test pools were fresh only in deployed mode: WP1 had simulated the offline OPT of the H2′/H3′, H4 and T2 test instances before those tests | 7. Methodology and integrity |
 <!-- INDEX:END -->
 
 ## 1. Question, proposal and scope
@@ -252,14 +254,14 @@ Refs: [`changes/SCOPE.md#L3-L33`](../../changes/SCOPE.md#L3-L33), [`changes/SCOP
 **Why v2.** It exists because phase-1 peak labels did not survive distillation (retention ≈ 0; the GBM has no time or load signal).
 
 **What may change.** All changes go into an overlay copy of BCacheSim:
-- a `load` feature group: trailing *demand-side* DT over the last 10, 30 and 60 minutes, optionally with hour of day as sin/cos (the `tod` group, used only by WP2's D2 ablation, [F42](#F42)). Demand-side is required because it is identical in training and serving, which rules out train/serve skew.
+- a `load` feature group: trailing *demand-side* DT over the last 10, 30 and 60 minutes, optionally with hour of day as sin/cos (the `tod` group; the only deployed arm using it was WP2's D2 ablation, [F42](#F42); it was also fitted in the learnability gate and parity-tested in WP0). Demand-side is required because it is identical in training and serving, which rules out train/serve skew.
 - optionally, a load-adaptive threshold θ_t = θ·g(load_t) with a fixed shape parameter, off by default;
 - optionally, `load` for the prefetch models.
 
 **CP1 clarifications (2026-10-01):**
 - `load` counts GET demand only;
 - one plumbing line in `train.py`;
-- a known train/serve skew for the prefetch-model `load` (arm E only);
+- a known train/serve skew for the prefetch-model `load` ("arm E only"; in practice only WP2's Epf screen used prefetch `load`, [F104](#F104));
 - the admission `load` is exact on 26,499 accesses;
 - ≥3 retrains per configuration.
 
@@ -267,7 +269,7 @@ Refs: [`changes/SCOPE.md#L3-L33`](../../changes/SCOPE.md#L3-L33), [`changes/SCOP
 
 **Not confirmed.** The file still says "agreed by Sixue Xing (captain) on 2026-09-29, pending confirmation by Ching-Hao Chiu and Jie Fu". No later confirmation is recorded in it.
 **Why this priority:** it defines the only new signal, which became the source of the one deployed win.
-Refs: [`changes/SCOPE_v2.md#L3-L25`](../../changes/SCOPE_v2.md#L3-L25), [`changes/SCOPE_v2.md#L33-L50`](../../changes/SCOPE_v2.md#L33-L50)
+Refs: [`changes/2_deployable_peak/wp2_deployed/RESULTS_dev.md#L98-L111`](../../changes/2_deployable_peak/wp2_deployed/RESULTS_dev.md#L98-L111), [`changes/2_deployable_peak/wp0_overlay/PROGRESS.md#L20`](../../changes/2_deployable_peak/wp0_overlay/PROGRESS.md#L20), [`changes/SCOPE_v2.md#L3-L25`](../../changes/SCOPE_v2.md#L3-L25), [`changes/SCOPE_v2.md#L33-L50`](../../changes/SCOPE_v2.md#L33-L50)
 
 <a id="F04"></a>
 ### F04 [P2] [INFRA] Amendments 1.2b (threshold table), 1.2c (load × access-class table) and 1.2d (union of two admission models), each behind a bit-exact gate
@@ -282,8 +284,10 @@ Refs: [`changes/SCOPE_v2.md#L3-L25`](../../changes/SCOPE_v2.md#L3-L25), [`change
   - frozen vs overlay are bit-identical on all 425 result keys;
   - a union whose second model can never admit (κ = 1e9), or that unions a model with itself, reproduces the A+α run bit-for-bit.
 
+**No review gate.** These gates are automated bit-exact equivalence checks: the default path is unchanged, and degenerate settings of the new option reproduce the existing α run bit-for-bit. They do not review the new code path itself. No teammate review was required or recorded for `PATCH_v3`, v4 or v5, while the G3 review of `PATCH.diff` was itself waived ([F76](#F76)). The H5 test ran on overlay v3, and both auto-research tests that ran (T1 and T2 of the union family) ran on v5.
+
 **Why this priority:** it shows how far the boundary moved and that each move was gated; it is secondary to the results.
-Refs: [`changes/SCOPE_v2.md#L44`](../../changes/SCOPE_v2.md#L44), [`changes/2_deployable_peak/wp10_schedule/SCOPE_v2_1b.md#L1-L21`](../../changes/2_deployable_peak/wp10_schedule/SCOPE_v2_1b.md#L1-L21), [`changes/2_deployable_peak/wp10_schedule/G1_v3.md#L6-L15`](../../changes/2_deployable_peak/wp10_schedule/G1_v3.md#L6-L15), [`changes/3_autoresearch/work/cls_table/SCOPE_AMENDMENT.md#L1-L11`](../../changes/3_autoresearch/work/cls_table/SCOPE_AMENDMENT.md#L1-L11), [`changes/3_autoresearch/work/union/SCOPE_AMENDMENT.md#L1-L5`](../../changes/3_autoresearch/work/union/SCOPE_AMENDMENT.md#L1-L5), [`changes/3_autoresearch/work/cls_table/G1_v4.md#L5-L19`](../../changes/3_autoresearch/work/cls_table/G1_v4.md#L5-L19), [`changes/3_autoresearch/work/union/G1_v5.md#L5-L19`](../../changes/3_autoresearch/work/union/G1_v5.md#L5-L19)
+Refs: [`changes/2_deployable_peak/wp10_schedule/SCOPE_v2_1b.md#L15`](../../changes/2_deployable_peak/wp10_schedule/SCOPE_v2_1b.md#L15), [`changes/2_deployable_peak/wp10_schedule/PROTOCOL_v2_H5.md#L30`](../../changes/2_deployable_peak/wp10_schedule/PROTOCOL_v2_H5.md#L30), [`changes/3_autoresearch/work/t1u_region2/PROTOCOL.md#L27`](../../changes/3_autoresearch/work/t1u_region2/PROTOCOL.md#L27), [`changes/3_autoresearch/work/t2u_region4/PROTOCOL.md#L29`](../../changes/3_autoresearch/work/t2u_region4/PROTOCOL.md#L29), [`changes/SCOPE_v2.md#L44`](../../changes/SCOPE_v2.md#L44), [`changes/2_deployable_peak/wp10_schedule/SCOPE_v2_1b.md#L1-L21`](../../changes/2_deployable_peak/wp10_schedule/SCOPE_v2_1b.md#L1-L21), [`changes/2_deployable_peak/wp10_schedule/G1_v3.md#L6-L15`](../../changes/2_deployable_peak/wp10_schedule/G1_v3.md#L6-L15), [`changes/3_autoresearch/work/cls_table/SCOPE_AMENDMENT.md#L1-L11`](../../changes/3_autoresearch/work/cls_table/SCOPE_AMENDMENT.md#L1-L11), [`changes/3_autoresearch/work/union/SCOPE_AMENDMENT.md#L1-L5`](../../changes/3_autoresearch/work/union/SCOPE_AMENDMENT.md#L1-L5), [`changes/3_autoresearch/work/cls_table/G1_v4.md#L5-L19`](../../changes/3_autoresearch/work/cls_table/G1_v4.md#L5-L19), [`changes/3_autoresearch/work/union/G1_v5.md#L5-L19`](../../changes/3_autoresearch/work/union/G1_v5.md#L5-L19)
 
 <a id="F05"></a>
 ### F05 [P2] [INFRA] Team decision log: reproduce first, freeze the boundary, keep Ising central against the literature review's LP-first advice
@@ -310,6 +314,22 @@ On 2026-09-14 an agent pipeline ranked candidate papers for the "improvement pap
 **The yardstick machine differed from the one used.** The desk check was sized for, and run on, a "Threadripper PRO 5955WX … 16 cores / 32 threads … 125 GiB" with an RTX A5000 GPU. All experiments later ran on a 24-thread Ryzen 9 9900X with no GPU ([F90](#F90)).
 **Why this priority:** project provenance; no result depends on it.
 Refs: [`documents/top_doable_papers_filtered.md#L1-L40`](../../documents/top_doable_papers_filtered.md#L1-L40), [`lit_review/README.md#L1-L4`](../../lit_review/README.md#L1-L4), [`lit_review/paper_list.md#L870`](../../lit_review/paper_list.md#L870), [`changes/1_literature_review/explore/q2/RESULTS.md#L46`](../../changes/1_literature_review/explore/q2/RESULTS.md#L46)
+
+<a id="F104"></a>
+### F104 [P2] [INFRA] The load-adaptive admission threshold was in the project's founding idea: the 2026-09-14 paper audit proposed peak-aware scoring plus load-adaptive gating, with no QUBO/Ising, targeting ≥ 5%
+The audit that ranked Baleen first ([F06](#F06)) lists add-on A1, "Peak-aware episode scoring and load-adaptive gating ("PeakBaleen")". The audit report was committed in `2264e66` on 2026-09-14 and never changed afterwards. A1 is the add-on named in that day's top-8 table ([`documents/top_doable_papers_filtered.md#L72`](../../documents/top_doable_papers_filtered.md#L72)), and later in the ranking table committed with the proposal on 2026-09-26 (`527f8bc`; one-liner in Appendix D).
+- **Hypothesis.** Scoring episodes by their contribution to the peak 10-minute windows, and "modulating the admission threshold and the ML-When prefetch gate by the current load level", reduces Peak DT by ≥ 5% over stock Baleen at the same write rate on the 7 Meta traces.
+- **Mechanism.** (i) Weight each episode's DT saved by the load percentile of the windows its hits fall in. (ii) Raise the ML-When confidence threshold off-peak and lower it near peak, from a short trailing-load estimate. (iii) Re-run the convergence loop so the write-rate constraint still holds.
+- **Scoop check "clear"**, from two web queries. The closest prior work it names is CacheSack (a knapsack over admission policies for *average* cost) and HALP (eviction). It did not find Wong's thesis load-dependent thresholds, which the later literature review did ([F95](#F95)).
+- The audit does not mention QUBO or Ising (a case-insensitive grep finds only the substrings in "surprising" and "optimising").
+
+**How the idea maps onto what was tested.**
+- Part (i) became the min–max episode selection: an offline win ([F18](#F18), [F25](#F25)), not a deployed one.
+- The load-adaptive admission threshold became SCOPE_v2 item 1.2, arm A+α. It is the source of the only pre-registered deployed gain (H4, −3.2% on Region5, [F52](#F52)). That is below A1's ≥ 5% hypothesis, and on Region1 (the H5 test pool) A+α was worse than Baleen ([F60](#F60)).
+- The prefetch gate became SCOPE_v2 item 1.3, the `load` group in the prefetch models ("the proposal's load-adaptive gate"). PLAN listed it as an option of arm E, but it was tested only as WP2's dev screen Epf:F1PT (Region7 only, 1 retrain × 4 instances, not confirmed; [F42](#F42)). X1 and every test arm used the default prefetch models (empty `pf_subset` in the ledgers).
+
+**Why this priority:** it fixes the provenance of the one deployed gain: the threshold predates the QUBO/Ising work and was not derived from it. This bears on how the result may be credited; it is not a result itself.
+Refs: [`changes/2_deployable_peak/PLAN.md#L60`](../../changes/2_deployable_peak/PLAN.md#L60), [`changes/2_deployable_peak/wp2_deployed/RESULTS_dev.md#L63`](../../changes/2_deployable_peak/wp2_deployed/RESULTS_dev.md#L63), [`changes/2_deployable_peak/wp2_deployed/RESULTS_dev.md#L132`](../../changes/2_deployable_peak/wp2_deployed/RESULTS_dev.md#L132), [`changes/2_deployable_peak/wp3_test/trials.csv`](../../changes/2_deployable_peak/wp3_test/trials.csv), [`documents/top_doable_papers_filtered.md#L72`](../../documents/top_doable_papers_filtered.md#L72), [`lit_review/papers/fast24-baleen-ml-admission-and-prefetching-for/audit/report.md#L203-L258`](../../lit_review/papers/fast24-baleen-ml-admission-and-prefetching-for/audit/report.md#L203-L258), [`lit_review/ranking.md#L9`](../../lit_review/ranking.md#L9), [`changes/4_story/result/git_timeline.txt`](../../changes/4_story/result/git_timeline.txt), [`changes/SCOPE_v2.md#L23-L24`](../../changes/SCOPE_v2.md#L23-L24), [`changes/2_deployable_peak/wp9_region5/RESULTS_test.md#L15`](../../changes/2_deployable_peak/wp9_region5/RESULTS_test.md#L15)
 
 ## 2. Reproduction of Baleen
 
@@ -441,11 +461,11 @@ The literature review's prior-art section records two kinds of earlier attempt.
   - it scales Baleen's own trained-model threshold continuously with trailing demand load, θ·clip((load_10m/20)^α, 0.25, 4);
   - the base θ is re-converged to the target write rate;
   - it is judged on P100 at a matched write rate.
-- **Open question.** Whether those differences explain its different outcome (−3.2% on Region5, against a 1.4% or zero peak reduction before) was not measured. The thesis result is on Region3, which this project never ran.
+- **Open question.** Whether those differences explain its different outcome (−3.2% on Region5, against a 1.4% or zero peak reduction before) was not measured. The thesis result is on Region3, which this project never ran: it was excluded from H5 for lacking samples 0.4–0.6, and the auto-research loop never spent its Region3 pool ([F61](#F61), [F64](#F64), [F65](#F65)).
 - **Framing.** The review's suggested framing makes Ising "an evaluated solver, not the headline".
 
 **Why this priority:** it is the first question a reviewer will ask about both of the story's positive results.
-Refs: [`changes/SCOPE_v2.md#L23`](../../changes/SCOPE_v2.md#L23), [`changes/1_literature_review/lit_review_qubo/REPORT.md#L77-L90`](../../changes/1_literature_review/lit_review_qubo/REPORT.md#L77-L90), [`changes/2_deployable_peak/wp9_region5/RESULTS_test.md#L15`](../../changes/2_deployable_peak/wp9_region5/RESULTS_test.md#L15), [`changes/2_deployable_peak/wp9_region5/PROTOCOL_v2_H4.md#L53`](../../changes/2_deployable_peak/wp9_region5/PROTOCOL_v2_H4.md#L53)
+Refs: [`changes/2_deployable_peak/wp10_schedule/PROTOCOL_v2_H5.md#L24`](../../changes/2_deployable_peak/wp10_schedule/PROTOCOL_v2_H5.md#L24), [`changes/3_autoresearch/README.md#L7`](../../changes/3_autoresearch/README.md#L7), [`changes/SCOPE_v2.md#L23`](../../changes/SCOPE_v2.md#L23), [`changes/1_literature_review/lit_review_qubo/REPORT.md#L77-L90`](../../changes/1_literature_review/lit_review_qubo/REPORT.md#L77-L90), [`changes/2_deployable_peak/wp9_region5/RESULTS_test.md#L15`](../../changes/2_deployable_peak/wp9_region5/RESULTS_test.md#L15), [`changes/2_deployable_peak/wp9_region5/PROTOCOL_v2_H4.md#L53`](../../changes/2_deployable_peak/wp9_region5/PROTOCOL_v2_H4.md#L53)
 
 <a id="F12"></a>
 ### F12 [P2] [OFFLINE] Synthetic audit: matrix-free SB scales to 200k variables in about 512 MB; the dense SB package needs 58 GB at 50k
@@ -465,7 +485,7 @@ Refs: [`changes/1_literature_review/ising_followup/audit/AUDIT.md#L158-L190`](..
 - B is the harness chunk budget at 35.599 MB/s.
 
 **Formulations:**
-- **F1:** max_w L_w, used by every Q1/Q2, H1′ and H2′ configuration and by the phase-2 F1-label arms (the phase-1 Q3 labels used F4, see [F14](#F14));
+- **F1:** max_w L_w, used by every held-out Q1/Q2 configuration, every H1′ and H2′ configuration, and by the phase-2 F1-label arms (the phase-1 Q3 labels used F4, see [F14](#F14));
 - **F2a:** the top-4 mean;
 - **F2b:** a squared hinge;
 - **F3:** a capacity/eviction-coupled QKP, not implemented;
@@ -482,18 +502,18 @@ Refs: [`changes/1_literature_review/explore/q2/RESULTS.md#L46-L125`](../../chang
 <a id="F14"></a>
 ### F14 [P2] [INFRA] The phase-1 deployed (Q3) labels used an extended-Ising energy on day 1
 E = A·LSE_γ(L(x)) + a DT blend + a trust region toward Baleen's labels, plus optional kNN feature couplings, under a native hard budget.
-- It was solved by numba parallel tempering (16 replicas).
+- It was solved by numba parallel tempering (16 replicas), started from Baleen's selection (not the LP start of the Q1/Q2 solvers).
 - `q3form.py` reproduces the solver's energies exactly: Baleen start 24.5180 and solution 22.4457 on dev Region7 day 1.
 - Finalists: P0 (pure soft peak), T2 (+ DT blend + trust region) and C2 (T2's energy over ~1.6k feature cells).
 **Why this priority:** it is the method behind the Q3 labels; detail.
-Refs: [`changes/1_literature_review/explore/common/Q3_FORMULATION.md#L6-L56`](../../changes/1_literature_review/explore/common/Q3_FORMULATION.md#L6-L56)
+Refs: [`changes/1_literature_review/explore/q3/src/q3solve.py#L282-L286`](../../changes/1_literature_review/explore/q3/src/q3solve.py#L282-L286), [`changes/1_literature_review/explore/common/Q3_FORMULATION.md#L6-L56`](../../changes/1_literature_review/explore/common/Q3_FORMULATION.md#L6-L56)
 
 <a id="F15"></a>
 ### F15 [P1] [DEV] Phase-1 harness test on sample 0: the offline gain is real, but distillation into the unchanged GBM keeps almost none of it
 **Offline (OPT).** Every arm cut the simulated P100 by 5.5–8.0 points below Baleen's peak-blind OPT (R0):
 - Region7 34.52 → 27.77 (R2);
 - Region6 35.56 → 27.60;
-- Ising arms 27.7–28.3, classical arms 27.6–28.3.
+- Ising arms 27.7–28.3, classical arms 27.6–28.3 (excluding the capacity-coupled C3/C3L at 28.9–29.6, [F16](#F16)).
 
 **Deployed.**
 - Every Region7 arm scored 40.06–40.85, against Baleen online 40.10 ± 0.18.
@@ -504,7 +524,7 @@ The only deployed arm more than 2 SE below Baleen online was the *classical* R2 
 
 This is sample 0 only, i.e. the later dev instance. The run's operational deviations are listed in [F99](#F99).
 **Why this priority:** it is the first evidence of the deployment gap that motivated scope v2; dev-only, so not a test result.
-Refs: [`changes/1_literature_review/harness_eval/RESULTS.md#L3-L10`](../../changes/1_literature_review/harness_eval/RESULTS.md#L3-L10), [`changes/1_literature_review/harness_eval/RESULTS.md#L220-L257`](../../changes/1_literature_review/harness_eval/RESULTS.md#L220-L257)
+Refs: [`changes/1_literature_review/harness_eval/RESULTS.md#L200-L218`](../../changes/1_literature_review/harness_eval/RESULTS.md#L200-L218), [`changes/1_literature_review/harness_eval/RESULTS.md#L3-L10`](../../changes/1_literature_review/harness_eval/RESULTS.md#L3-L10), [`changes/1_literature_review/harness_eval/RESULTS.md#L220-L257`](../../changes/1_literature_review/harness_eval/RESULTS.md#L220-L257)
 
 <a id="F16"></a>
 ### F16 [P2] [OFFLINE] Gate 0: the analytic window loads match the simulator, and peak-aware plans migrate; the evidence points to admissions overrunning the cache
@@ -559,6 +579,8 @@ The held-out set was Region7/Region6 × samples 0.1–0.3, never used for tuning
 
 **Pass rule:** ≥ 5/6 instances and lower on average.
 
+**Forking path.** The F1 formulation was chosen after a dev look ([F96](#F96)); F2b's dev selections were equally far below the oracle.
+
 **Pre-registration caveat.** [`changes/1_literature_review/explore/PROTOCOL.md`](../../changes/1_literature_review/explore/PROTOCOL.md) says "Frozen: 2026-09-28, before any tuning". Its first git commit, however, is `be284a3` (2026-09-29 15:02), after the held-out runs ([F75](#F75)).
 **Why this priority:** this is the project's headline positive result, the offline premise of everything after it.
 Refs: [`changes/1_literature_review/explore/q2/RESULTS.md#L12-L20`](../../changes/1_literature_review/explore/q2/RESULTS.md#L12-L20), [`changes/1_literature_review/explore/q2/RESULTS.md#L259-L277`](../../changes/1_literature_review/explore/q2/RESULTS.md#L259-L277), [`changes/1_literature_review/explore/PROTOCOL.md#L3-L12`](../../changes/1_literature_review/explore/PROTOCOL.md#L3-L12), [`changes/4_story/result/protocol_commits.txt`](../../changes/4_story/result/protocol_commits.txt)
@@ -567,15 +589,15 @@ Refs: [`changes/1_literature_review/explore/q2/RESULTS.md#L12-L20`](../../change
 ### F19 [P1] [OFFLINE] The offline gain is a formulation effect, not a solver effect
 Classical and Ising selections land on the same simulated peak at every stage:
 - **Phase 1 (held-out).** The best classical selections simulate at 26.954, against PT 27.063 and EIM 26.951.
-- **harness_eval.** Ising arms 27.7–28.3 vs classical 27.6–28.3.
+- **harness_eval.** Ising arms 27.7–28.3 vs classical 27.6–28.3 (excluding the capacity-coupled C3/C3L at 28.9–29.6).
 - **WP1 (39 instances).** PT − CP-SAT = −0.18 on average, with PT lower on 18/39. Taking the best of the three methods per instance would give 14.6%.
 
 Selections with near-identical analytic objectives can still differ by up to ~1 P100 point in simulation (peak migration), with no family pattern.
 **Why this priority:** it determines what can be credited to Ising (nothing offline beyond parity); a central supporting fact.
-Refs: [`changes/1_literature_review/explore/q2/RESULTS.md#L18-L24`](../../changes/1_literature_review/explore/q2/RESULTS.md#L18-L24), [`changes/1_literature_review/explore/q2/RESULTS.md#L271-L277`](../../changes/1_literature_review/explore/q2/RESULTS.md#L271-L277), [`changes/1_literature_review/harness_eval/RESULTS.md#L4`](../../changes/1_literature_review/harness_eval/RESULTS.md#L4), [`changes/2_deployable_peak/wp1_offline/RESULTS.md#L91-L95`](../../changes/2_deployable_peak/wp1_offline/RESULTS.md#L91-L95)
+Refs: [`changes/1_literature_review/harness_eval/RESULTS.md#L200-L218`](../../changes/1_literature_review/harness_eval/RESULTS.md#L200-L218), [`changes/1_literature_review/explore/q2/RESULTS.md#L18-L24`](../../changes/1_literature_review/explore/q2/RESULTS.md#L18-L24), [`changes/1_literature_review/explore/q2/RESULTS.md#L271-L277`](../../changes/1_literature_review/explore/q2/RESULTS.md#L271-L277), [`changes/1_literature_review/harness_eval/RESULTS.md#L4`](../../changes/1_literature_review/harness_eval/RESULTS.md#L4), [`changes/2_deployable_peak/wp1_offline/RESULTS.md#L91-L95`](../../changes/2_deployable_peak/wp1_offline/RESULTS.md#L91-L95)
 
 <a id="F20"></a>
-### F20 [P0] [NEGATIVE-TEST] Q2 = NO: on the same F1 formulation the Ising samplers beat the best classical solver only at the 10 s budget
+### F20 [P0] [NEGATIVE-TEST] Q2 = NO: on the same F1 formulation the Ising samplers beat the best classical solver only at the 10 s budget (PT 22.524 vs 22.569 at 10 s; 22.508 vs 22.415 at 60 s)
 **PT vs the best classical method per (instance, budget):**
 - ≤ on 5/6 instances at 10 s, 2/6 at 60 s and 1/6 at 300 s. The rule needs ≥ 5/6 at ≥ 2 of 3 budgets.
 - Means 22.524 vs 22.569 (10 s), 22.508 vs 22.415 (60 s) and 22.503 vs 22.313 (300 s).
@@ -607,11 +629,14 @@ Refs: [`changes/1_literature_review/explore/q2/RESULTS.md#L12-L31`](../../change
 
 **What the finalists are.**
 - PT and EIM are replica-exchange (parallel-tempering) samplers on the LSE-smoothed true peak, with a QUBO budget penalty (PT) or a native hinge plus ALM (EIM).
-- Both start from the classical LP + round + repair solution in phase 1 ("16 replicas, LP start") and in every deployed label set. In H2′ the start was a tuned choice: LP at 3 s and 10 s, but the peak-aware greedy at 1 s for both PT and EIM. [F24](#F24) quantifies what the sampler adds to the LP start.
+- **Phase-1 Q1/Q2.** Both finalists start from the classical LP + round + repair solution ("16 replicas, LP start"). So do harness_eval's EIM-style arm C2 (24 replicas, "starts from the repaired LP") and every deployed F1PT/F1EIM label set (WP2, WP3, WP9, the union).
+- **Not every "Ising" label set.** The Q3 designs (P0/T2/C2, [F14](#F14)), used in phase-1 Q3 and again in WP2's deployed dev arms D:P0 and D:T2, come from a PT started at Baleen's selection with a native hard budget. Track C's anchored (ANC) designs start from Baleen's set, and its student (STU) designs from the previous round's labels.
+- **H2′.** The start was a tuned choice: LP at 3 s and 10 s, but the peak-aware greedy at 1 s, for both PT and EIM.
+- [F24](#F24) quantifies what the sampler adds to the LP start.
 - They sit inside the protocol's Ising/QUBO family ("parallel tempering … on a QUBO/Ising energy"), but they are CPU samplers, not physical or GPU Ising machines ([F90](#F90)).
 
 **Why this priority:** it fixes what "Ising" means in every result in this story, and shows that the proposal's surrogate route under-performed in the solver comparisons.
-Refs: [`changes/2_deployable_peak/wp5_ising/results/plan_H2test.json`](../../changes/2_deployable_peak/wp5_ising/results/plan_H2test.json), [`documents/proposal_docx_compose/proposal.js#L200`](../../documents/proposal_docx_compose/proposal.js#L200), [`documents/proposal_docx_compose/proposal.js#L244`](../../documents/proposal_docx_compose/proposal.js#L244), [`changes/1_literature_review/explore/q2/RESULTS.md#L127-L143`](../../changes/1_literature_review/explore/q2/RESULTS.md#L127-L143), [`changes/1_literature_review/explore/q2/RESULTS.md#L163-L167`](../../changes/1_literature_review/explore/q2/RESULTS.md#L163-L167), [`changes/1_literature_review/harness_eval/RESULTS.md#L162-L168`](../../changes/1_literature_review/harness_eval/RESULTS.md#L162-L168), [`changes/1_literature_review/harness_eval/RESULTS.md#L184-L197`](../../changes/1_literature_review/harness_eval/RESULTS.md#L184-L197), [`changes/1_literature_review/harness_eval/RESULTS.md#L250`](../../changes/1_literature_review/harness_eval/RESULTS.md#L250), [`changes/2_deployable_peak/wp5_ising/RESULTS_dev.md#L187-L196`](../../changes/2_deployable_peak/wp5_ising/RESULTS_dev.md#L187-L196), [`changes/1_literature_review/explore/PROTOCOL.md#L37`](../../changes/1_literature_review/explore/PROTOCOL.md#L37)
+Refs: [`changes/1_literature_review/explore/q2/RESULTS.md#L165-L167`](../../changes/1_literature_review/explore/q2/RESULTS.md#L165-L167), [`changes/1_literature_review/harness_eval/RESULTS.md#L42`](../../changes/1_literature_review/harness_eval/RESULTS.md#L42), [`changes/2_deployable_peak/wp2_deployed/src/labels.py#L1-L4`](../../changes/2_deployable_peak/wp2_deployed/src/labels.py#L1-L4), [`changes/1_literature_review/explore/q3/src/q3solve.py#L282-L286`](../../changes/1_literature_review/explore/q3/src/q3solve.py#L282-L286), [`changes/2_deployable_peak/wp8_trackC/src/labels_c.py#L1-L11`](../../changes/2_deployable_peak/wp8_trackC/src/labels_c.py#L1-L11), [`changes/2_deployable_peak/wp8_trackC/src/labels_c.py#L126-L131`](../../changes/2_deployable_peak/wp8_trackC/src/labels_c.py#L126-L131), [`changes/1_literature_review/harness_eval/RESULTS.md#L42`](../../changes/1_literature_review/harness_eval/RESULTS.md#L42), [`changes/2_deployable_peak/wp5_ising/results/plan_H2test.json`](../../changes/2_deployable_peak/wp5_ising/results/plan_H2test.json), [`documents/proposal_docx_compose/proposal.js#L200`](../../documents/proposal_docx_compose/proposal.js#L200), [`documents/proposal_docx_compose/proposal.js#L244`](../../documents/proposal_docx_compose/proposal.js#L244), [`changes/1_literature_review/explore/q2/RESULTS.md#L127-L143`](../../changes/1_literature_review/explore/q2/RESULTS.md#L127-L143), [`changes/1_literature_review/explore/q2/RESULTS.md#L163-L167`](../../changes/1_literature_review/explore/q2/RESULTS.md#L163-L167), [`changes/1_literature_review/harness_eval/RESULTS.md#L162-L168`](../../changes/1_literature_review/harness_eval/RESULTS.md#L162-L168), [`changes/1_literature_review/harness_eval/RESULTS.md#L184-L197`](../../changes/1_literature_review/harness_eval/RESULTS.md#L184-L197), [`changes/1_literature_review/harness_eval/RESULTS.md#L250`](../../changes/1_literature_review/harness_eval/RESULTS.md#L250), [`changes/2_deployable_peak/wp5_ising/RESULTS_dev.md#L187-L196`](../../changes/2_deployable_peak/wp5_ising/RESULTS_dev.md#L187-L196), [`changes/1_literature_review/explore/PROTOCOL.md#L37`](../../changes/1_literature_review/explore/PROTOCOL.md#L37)
 
 <a id="F22"></a>
 ### F22 [P3] [DEV] Q2 post hoc: the 10 s Ising win and the 60 s CP-SAT win do not depend on the nested time split
@@ -641,6 +666,7 @@ Refs: [`changes/1_literature_review/explore/q2/RESULTS.md#L127-L163`](../../chan
 **Phase 1 (held-out, 10 s, mean analytic objective over 6 instances).**
 - Baleen-order greedy 31.816 → LP + round + repair 23.039 → PT 22.524.
 - The classical LP start therefore covers 94.5% of the greedy → PT reduction (recomputed in Appendix D). The sampler adds the remaining 0.515.
+- This uses the `lp` method's row as a proxy for PT's own start, which was not logged separately; the source makes the same equivalence.
 - The source's own wording: "Relative to that classical start (LP + round + repair …), the samplers contribute the whole improvement to 22.50-22.55".
 
 **Move shares.**
@@ -657,7 +683,7 @@ Refs: [`changes/1_literature_review/explore/q2/RESULTS.md#L127-L163`](../../chan
 - The guard discarded 5 of HiGHS's 144 held-out level solutions that came back after their deadline.
 
 **Why this priority:** it bounds what the Ising sampler can be credited with: the improvement over its classical start, not the gain over Baleen.
-Refs: [`changes/2_deployable_peak/wp5_ising/results/plan_H2test.json`](../../changes/2_deployable_peak/wp5_ising/results/plan_H2test.json), [`changes/1_literature_review/explore/q2/RESULTS.md#L163-L167`](../../changes/1_literature_review/explore/q2/RESULTS.md#L163-L167), [`changes/1_literature_review/explore/q2/RESULTS.md#L196-L218`](../../changes/1_literature_review/explore/q2/RESULTS.md#L196-L218), [`changes/1_literature_review/explore/q2/RESULTS.md#L254-L257`](../../changes/1_literature_review/explore/q2/RESULTS.md#L254-L257), [`changes/4_story/result/recompute_out.txt`](../../changes/4_story/result/recompute_out.txt), [`changes/2_deployable_peak/wp5_ising/PROTOCOL_v2_H2.md#L58`](../../changes/2_deployable_peak/wp5_ising/PROTOCOL_v2_H2.md#L58), [`changes/2_deployable_peak/wp2_deployed/PROTOCOL_v2_H3.md#L67-L71`](../../changes/2_deployable_peak/wp2_deployed/PROTOCOL_v2_H3.md#L67-L71)
+Refs: [`changes/1_literature_review/explore/q2/trials.csv`](../../changes/1_literature_review/explore/q2/trials.csv), [`changes/2_deployable_peak/wp5_ising/results/plan_H2test.json`](../../changes/2_deployable_peak/wp5_ising/results/plan_H2test.json), [`changes/1_literature_review/explore/q2/RESULTS.md#L163-L167`](../../changes/1_literature_review/explore/q2/RESULTS.md#L163-L167), [`changes/1_literature_review/explore/q2/RESULTS.md#L196-L218`](../../changes/1_literature_review/explore/q2/RESULTS.md#L196-L218), [`changes/1_literature_review/explore/q2/RESULTS.md#L254-L257`](../../changes/1_literature_review/explore/q2/RESULTS.md#L254-L257), [`changes/4_story/result/recompute_out.txt`](../../changes/4_story/result/recompute_out.txt), [`changes/2_deployable_peak/wp5_ising/PROTOCOL_v2_H2.md#L58`](../../changes/2_deployable_peak/wp5_ising/PROTOCOL_v2_H2.md#L58), [`changes/2_deployable_peak/wp2_deployed/PROTOCOL_v2_H3.md#L67-L71`](../../changes/2_deployable_peak/wp2_deployed/PROTOCOL_v2_H3.md#L67-L71)
 
 <a id="F25"></a>
 ### F25 [P0] [OFFLINE] H1′ breadth: on 39 instances in four regions, peak-aware selection beats the peak-blind oracle on 36–37 of them by −13.0% to −13.7% on average; 30/30 and 13.0–17.7% per region on Regions 5–7
@@ -711,15 +737,16 @@ Refs: [`changes/2_deployable_peak/wp1_offline/RESULTS.md#L11-L15`](../../changes
 
 <a id="F101"></a>
 ### F101 [P3] [OFFLINE] WP1's peak-blind oracle R0 reproduces the authors' OPT-AP rows closely, so the H1′ comparator is the paper's own oracle
-- **Agreement.** Across the 39 instances, R0 − the authors' OPT-AP P100 is −0.55 on average (mean |diff| 1.02), with the largest gap 4.81 on Region4 s0.3.
+- **Agreement.** Across the 39 instances, R0 − the authors' OPT-AP P100 is −0.55 on average (mean |diff| 1.02).
+- **Largest gap.** It is 4.81, on Region6 s0.9 (R0 33.62 vs the authors' 38.44). The source's summary line says "max 4.81 on Region4 s0.3", but its own per-instance table gives Region4 s0.3 a gap of 4.01 (42.34 vs 46.35); recomputed.
 - **Why they differ.** Our R0 is converged to 35.599 MB/s ± 1%, while the authors' rows sit at 34.0–35.8 MB/s.
 - **Instance identity.** Rebuilt Region7 s0.1 is identical to the phase-1 instance up to episode permutation.
 
 **Why this priority:** pipeline fidelity for the strongest positive result ([F25](#F25)); minor.
-Refs: [`changes/2_deployable_peak/wp1_offline/RESULTS.md#L17-L38`](../../changes/2_deployable_peak/wp1_offline/RESULTS.md#L17-L38)
+Refs: [`changes/2_deployable_peak/wp1_offline/RESULTS.md#L17-L38`](../../changes/2_deployable_peak/wp1_offline/RESULTS.md#L17-L38), [`changes/2_deployable_peak/wp1_offline/RESULTS.md#L49`](../../changes/2_deployable_peak/wp1_offline/RESULTS.md#L49), [`changes/2_deployable_peak/wp1_offline/RESULTS.md#L75`](../../changes/2_deployable_peak/wp1_offline/RESULTS.md#L75), [`changes/2_deployable_peak/wp1_offline/results/wp1_table.csv`](../../changes/2_deployable_peak/wp1_offline/results/wp1_table.csv), [`changes/4_story/result/recompute_out.txt`](../../changes/4_story/result/recompute_out.txt)
 
 <a id="F28"></a>
-### F28 [P0] [NEGATIVE-TEST] H2′ = NO: at re-solve budgets of 1, 3 and 10 s the tuned Ising solvers are not better than the best classical solver
+### F28 [P0] [NEGATIVE-TEST] H2′ = NO: at re-solve budgets of 1, 3 and 10 s the tuned Ising solvers fail the pre-registered criteria (better only at 3 s; PT 22.7336 vs best classical 22.7166 over all 18 cells)
 **PT vs the best classical method per cell:**
 - ≤ on 1/6 instances at 1 s (a floored tie), 6/6 at 3 s and 4/6 at 10 s. The count criterion (≥ 5/6 at ≥ 2 budgets) is met at one budget only.
 - Average over the 18 pairs: 22.7336 vs 22.7166. FAIL.
@@ -738,7 +765,7 @@ Refs: [`changes/2_deployable_peak/wp1_offline/RESULTS.md#L17-L38`](../../changes
 Refs: [`changes/2_deployable_peak/wp5_ising/RESULTS_test.md#L1-L24`](../../changes/2_deployable_peak/wp5_ising/RESULTS_test.md#L1-L24), [`changes/2_deployable_peak/wp5_ising/RESULTS_test.md#L104-L105`](../../changes/2_deployable_peak/wp5_ising/RESULTS_test.md#L104-L105), [`changes/2_deployable_peak/wp5_ising/RESULTS_test.md#L167-L173`](../../changes/2_deployable_peak/wp5_ising/RESULTS_test.md#L167-L173), [`changes/2_deployable_peak/wp5_ising/PROTOCOL_v2_H2.md#L69-L78`](../../changes/2_deployable_peak/wp5_ising/PROTOCOL_v2_H2.md#L69-L78), [`changes/4_story/result/protocol_commits.txt`](../../changes/4_story/result/protocol_commits.txt)
 
 <a id="F102"></a>
-### F102 [P2] [OFFLINE] H2′ mechanism: at 1 s the first nested level decides, and the exact solvers cannot get past their LP rounding there
+### F102 [P2] [TEST-POSTHOC] H2′ mechanism (pre-declared per-level report, no pass/fail): at 1 s the first nested level decides, and the exact solvers cannot get past their LP rounding there
 - **Level 1 at 1 s.** Level 1 (65% of B, given 2/9 of T) decides the 1 s result.
   - LP, MILP and CP-SAT stay at the LP rounding (level-1 mean 30.8).
   - PT and EIM reach 23.5–23.8, and LS 23.4.
@@ -747,7 +774,7 @@ Refs: [`changes/2_deployable_peak/wp5_ising/RESULTS_test.md#L1-L24`](../../chang
 - **Early returns.** MILP and CP-SAT return before the budget, because they solve the small later levels exactly and the split only carries unused time forward.
 
 **Why this priority:** it explains the budget-dependent ranking behind the H2′ verdict; mechanism detail.
-Refs: [`changes/2_deployable_peak/wp5_ising/RESULTS_test.md#L69-L102`](../../changes/2_deployable_peak/wp5_ising/RESULTS_test.md#L69-L102), [`changes/2_deployable_peak/wp5_ising/RESULTS_test.md#L135-L136`](../../changes/2_deployable_peak/wp5_ising/RESULTS_test.md#L135-L136)
+Refs: [`changes/2_deployable_peak/wp5_ising/PROTOCOL_v2_H2.md#L79-L80`](../../changes/2_deployable_peak/wp5_ising/PROTOCOL_v2_H2.md#L79-L80), [`changes/2_deployable_peak/wp5_ising/RESULTS_test.md#L69-L102`](../../changes/2_deployable_peak/wp5_ising/RESULTS_test.md#L69-L102), [`changes/2_deployable_peak/wp5_ising/RESULTS_test.md#L135-L136`](../../changes/2_deployable_peak/wp5_ising/RESULTS_test.md#L135-L136)
 
 <a id="F29"></a>
 ### F29 [P2] [DEV] H2′ dev tuning: equal trials for both families, and the ranking flips with the budget
@@ -795,7 +822,7 @@ Refs: [`changes/2_deployable_peak/wp5_ising/RESULTS_test.md#L138-L165`](../../ch
 ### F31 [P1] [OFFLINE] Scaling (contribution S): matrix-free SB runs real unions of up to 125541 QUBO variables in at most 214 MB, where the dense SB package runs out of memory
 **Matrix-free SB** (32 agents):
 - 0.3–1.9 ms per step and +12–86 MB on every real day-1 and full-trace instance (up to 32k variables);
-- 4.5–12.7 ms per step and +111–214 MB on real 0.2–0.4% unions (62k–126k variables).
+- 4.5–12.7 ms per step and +111–214 MB on real 0.2–0.4% unions (62k–126k variables). The matrix-free SB and PT memory figures are *extra* memory above the loaded instance (~355–410 MB); the dense package's failure figures are absolute RSS.
 
 **The dense simulated-bifurcation package:**
 - On the full traces: 1.5–3.6 s per step and 12–22 GB RSS, i.e. ~1,400–3,600× slower per step.
@@ -806,13 +833,14 @@ Refs: [`changes/2_deployable_peak/wp5_ising/RESULTS_test.md#L138-L165`](../../ch
 **What was measured.** The level-1 QUBO surrogate (pure solver cost, no repair loop).
 
 **What this is worth.**
-- The solver that scales is matrix-free SB. By the WP5 rule its solution quality is the worst of the four Ising solvers ([F21](#F21)), and it is in no finalist or deployed configuration.
+- The solver that scales is matrix-free SB. Its solution quality was last of the five Ising solvers in phase-1 dev tuning, and the worst of four by the WP5 rule ([F21](#F21)).
+- It is in no phase-2 finalist or deployed test configuration. In phase-1 harness_eval, however, C4 (matrix-free SB on the SoS QUBO) was deployed on dev (sample 0): it tied Baleen (Region7 40.07, Region6 43.20) with retention +0.01.
 - The sparse PT used everywhere also stays under 165 MB.
 - So this is a scalability result for matrix-free SB, not a contribution of Ising solving to PeakBaleen's peak.
 
 **Wording discrepancy.** [`./RESEARCH.md`](../../RESEARCH.md) says the dense package fails "beyond ≈70k variables". That is the projected limit on the 123-GB machine; the observed failure was at 62.5k variables under the 64 GB cap.
 **Why this priority:** this is the one reported Ising contribution that stands (engineering scalability); no pass/fail was attached.
-Refs: [`changes/2_deployable_peak/wp5_ising/RESULTS_dev.md#L27-L31`](../../changes/2_deployable_peak/wp5_ising/RESULTS_dev.md#L27-L31), [`changes/2_deployable_peak/wp5_ising/RESULTS_dev.md#L333-L392`](../../changes/2_deployable_peak/wp5_ising/RESULTS_dev.md#L333-L392), [`changes/2_deployable_peak/wp5_ising/results/scaling_summary.md`](../../changes/2_deployable_peak/wp5_ising/results/scaling_summary.md), [`./RESEARCH.md#L41`](../../RESEARCH.md#L41)
+Refs: [`changes/1_literature_review/explore/q2/RESULTS.md#L133-L139`](../../changes/1_literature_review/explore/q2/RESULTS.md#L133-L139), [`changes/1_literature_review/harness_eval/RESULTS.md#L197-L198`](../../changes/1_literature_review/harness_eval/RESULTS.md#L197-L198), [`changes/1_literature_review/harness_eval/RESULTS.md#L231-L233`](../../changes/1_literature_review/harness_eval/RESULTS.md#L231-L233), [`changes/1_literature_review/harness_eval/RESULTS.md#L250`](../../changes/1_literature_review/harness_eval/RESULTS.md#L250), [`changes/2_deployable_peak/wp5_ising/RESULTS_dev.md#L27-L31`](../../changes/2_deployable_peak/wp5_ising/RESULTS_dev.md#L27-L31), [`changes/2_deployable_peak/wp5_ising/RESULTS_dev.md#L333-L392`](../../changes/2_deployable_peak/wp5_ising/RESULTS_dev.md#L333-L392), [`changes/2_deployable_peak/wp5_ising/results/scaling_summary.md`](../../changes/2_deployable_peak/wp5_ising/results/scaling_summary.md), [`./RESEARCH.md#L41`](../../RESEARCH.md#L41)
 
 <a id="F32"></a>
 ### F32 [P2] [DEV] Choosing the label solver: WP5 recommended EIM, the deployed tests used the phase-1 PT configuration, and the deployed F1 label sets of PT and CP-SAT have the same day-1 peak
@@ -828,8 +856,8 @@ Refs: [`changes/2_deployable_peak/wp5_ising/RESULTS_dev.md#L27-L31`](../../chang
 | PT | Ising | 22.6071 |
 
 - The WP5-tuned PT is the worst of the four: its 10-s configuration, tuned on the 7× larger full traces, is worse on day 1 than its own 3-s one.
-- The deployed labels instead used the *phase-1* PT 10 s configuration at a single level f = 1. At that setting the seed-1 day-1 label peak of F1PT equals F1CPSAT's (21.5; F1EIM 21.6).
-- On dev full traces, LS 10 s gives the best offline simulated P100 (27.067).
+- The deployed labels instead used the *phase-1* PT 10 s configuration at a single level f = 1. At that setting the seed-1 day-1 label peak of F1PT equals F1CPSAT's (21.5; F1EIM 21.6), as seed-1 means over 8 instances rounded to 0.1.
+- On dev full traces, LS 10 s gives the best offline simulated P100 among the 8-instance rows (27.067).
 
 **What was used.**
 - WP2 ran both F1PT and F1EIM label sets, and the finalists used F1PT.
@@ -860,7 +888,7 @@ The sequence was:
 ## 5.1 Phase 1 (Q3): Ising labels into Baleen's unchanged GBM
 
 <a id="F33"></a>
-### F33 [P0] [NEGATIVE-TEST] Q3 = NO: Ising-family peak labels distilled into Baleen's unchanged GBM lose to Baleen on held-out instances
+### F33 [P0] [NEGATIVE-TEST] Q3 = NO: Ising-family peak labels distilled into Baleen's unchanged GBM lose to Baleen on held-out instances (2/6 wins each; −0.41 to −1.07)
 Three finalists, held-out Region7/Region6 × samples 0.1–0.3, 3 retrains each (only 2 matched for T2 on Region7 s0.2), matched WR:
 
 | Finalist | Wins vs Baleen online (need ≥ 4/6) | Mean improvement | 2 SE |
@@ -893,7 +921,7 @@ Refs: [`changes/1_literature_review/explore/q3/RESULTS.md#L236-L259`](../../chan
 
 <a id="F35"></a>
 ### F35 [P1] [TEST-POSTHOC] Q3 held-out: on 3/6 instances P100 is set by rare scan-like windows, and relabelling moves those decisions in either direction
-**What sets the peak.** On Region7 s0.3, Region6 s0.1 and Region6 s0.2, the peak lies in scan-like windows: 25–42% of the window's accesses end beyond 8 MB. The fraction of those accesses a model admits varies with the labels and the retrain: Baleen 0.20–0.42, relabelled models 0.13–0.44 over all six instances (0.13–0.41 on the three scan instances).
+**What sets the peak.** On Region7 s0.3, Region6 s0.1 and Region6 s0.2, the peak lies in scan-like windows: 18–42% of the window's accesses end beyond 8 MB (the range of the report's table over all four label sets; its text says 25–42%). The fraction of those accesses a model admits varies with the labels and the retrain: Baleen 0.20–0.42, relabelled models 0.13–0.44 over all six instances (0.13–0.41 on the three scan instances).
 
 **What carries over.** The first-access shift persists on held-out (Region7 8–11% → 14–36%), and Region7's mean load drops, but P100 does not follow the mean.
 
@@ -906,15 +934,15 @@ Refs: [`changes/1_literature_review/explore/q3/RESULTS.md#L261-L299`](../../chan
 <a id="F36"></a>
 ### F36 [P1] [INFRA] The scope-v2 overlay passes CP1: bit-exact default equivalence and exact train/serve parity of `load`
 **G1 (Region7/Region6 s0):**
-- RejectX/CoinFlip frozen vs overlay are bit-identical on all 425 result keys and every per-window series.
+- RejectX/CoinFlip frozen vs overlay are bit-identical on all 425 result keys (except wall-clock and RAM) and every per-window series (except `realtime_elapsed`).
 - Pinned Baleen training is identical in rows, labels and all 5 model files. The frozen and overlay end-to-end pipelines give the same P100 on both code bases: 40.130989380934864 (Region7) and 43.26696451693124 (Region6).
 - Unpinned runs differ only in the ways frozen-vs-frozen also differs: on Region6, 8 label flips vs 16 between two frozen runs.
 
 **Parity.** All 79,497 `load` values on 26,499 training accesses equal the simulator's values exactly (max abs diff 0).
 
-**Patch.** `PATCH.diff`: 9 files, +217/−6.
+**Patch.** `PATCH.diff`: 9 files, +217/−6 lines per CP1, which equals the number of non-blank added lines. Counting every added line, as git's numstat does, gives +256/−6 (recomputed, Appendix D).
 **Why this priority:** it is the gate that makes every scope-v2 deployed result attributable to the intended change only.
-Refs: [`changes/2_deployable_peak/wp0_overlay/CP1.md#L5-L17`](../../changes/2_deployable_peak/wp0_overlay/CP1.md#L5-L17), [`changes/2_deployable_peak/wp0_overlay/CP1.md#L57-L98`](../../changes/2_deployable_peak/wp0_overlay/CP1.md#L57-L98), [`changes/2_deployable_peak/wp0_overlay/CP1.md#L100-L109`](../../changes/2_deployable_peak/wp0_overlay/CP1.md#L100-L109)
+Refs: [`changes/2_deployable_peak/wp0_overlay/PATCH.diff`](../../changes/2_deployable_peak/wp0_overlay/PATCH.diff), [`changes/4_story/result/recompute_out.txt`](../../changes/4_story/result/recompute_out.txt), [`changes/2_deployable_peak/wp0_overlay/CP1.md#L5-L17`](../../changes/2_deployable_peak/wp0_overlay/CP1.md#L5-L17), [`changes/2_deployable_peak/wp0_overlay/CP1.md#L57-L98`](../../changes/2_deployable_peak/wp0_overlay/CP1.md#L57-L98), [`changes/2_deployable_peak/wp0_overlay/CP1.md#L100-L109`](../../changes/2_deployable_peak/wp0_overlay/CP1.md#L100-L109)
 
 <a id="F37"></a>
 ### F37 [P1] [DEV] Learnability gate PASSES: given `load`, the GBM fits the F1 (min–max) peak-aware labels much better, PT- or CP-SAT-solved alike, and Baleen's own labels not at all
@@ -952,7 +980,7 @@ With 3 retrains on 8 dev instances:
 
 **Consequence for the plan.** This failed PLAN's pre-stated "dev signal" gate for arm D, and the plan's pre-stated response (a negative H3′ and a pivot) was not taken ([F94](#F94)).
 **Why this priority:** it is the dev answer to the scope-v2 hypothesis as originally planned (labels + signal); negative.
-Refs: [`changes/2_deployable_peak/wp2_deployed/RESULTS_dev.md#L16-L23`](../../changes/2_deployable_peak/wp2_deployed/RESULTS_dev.md#L16-L23), [`changes/2_deployable_peak/wp2_deployed/RESULTS_dev.md#L91-L94`](../../changes/2_deployable_peak/wp2_deployed/RESULTS_dev.md#L91-L94), [`changes/2_deployable_peak/wp2_deployed/RESULTS_dev.md#L123-L170`](../../changes/2_deployable_peak/wp2_deployed/RESULTS_dev.md#L123-L170)
+Refs: [`changes/2_deployable_peak/PLAN.md#L107`](../../changes/2_deployable_peak/PLAN.md#L107), [`changes/2_deployable_peak/wp2_deployed/RESULTS_dev.md#L16-L23`](../../changes/2_deployable_peak/wp2_deployed/RESULTS_dev.md#L16-L23), [`changes/2_deployable_peak/wp2_deployed/RESULTS_dev.md#L91-L94`](../../changes/2_deployable_peak/wp2_deployed/RESULTS_dev.md#L91-L94), [`changes/2_deployable_peak/wp2_deployed/RESULTS_dev.md#L123-L170`](../../changes/2_deployable_peak/wp2_deployed/RESULTS_dev.md#L123-L170)
 
 <a id="F39"></a>
 ### F39 [P1] [DEV] The WP2 finalists X1/X2 (F1PT labels + `load` + α) come from a rule written after the rep-1 screen but before confirmation; about half of X1's dev gain is the threshold alone
@@ -996,7 +1024,7 @@ Refs: [`changes/2_deployable_peak/wp2_deployed/RESULTS_dev.md#L172-L184`](../../
 - Its peak sits in a scan window in only 2/12 retrains, against 9/12 for A. A+α leaves 9/12.
 
 **Region7.** Its peaks are bursts of new episodes.
-- The F1 labels have no zero-value positives, so first-access admission falls to 2.4–2.8% vs Baleen's 8.7%.
+- The F1 labels have no zero-value positives, so first-access admission falls to 2–3% (D:F1PT 2.4%, X1 2.8%) vs 8–10% for the Baleen-label arms (A 8.7%).
 - Mean DT rises by about 0.7, and X1 ≈ A (37.67 vs 37.69).
 
 **Retention on dev:** X1 0.24 (per-instance mean).
@@ -1030,7 +1058,7 @@ Refs: [`changes/2_deployable_peak/wp2_deployed/RESULTS_dev.md#L7-L9`](../../chan
 ## 5.4 WP3: the pre-registered deployability test H3′
 
 <a id="F44"></a>
-### F44 [P0] [NEGATIVE-TEST] H3′ = NO: Ising peak labels + `load` + the load-adaptive threshold (X1) lose to Baleen on the test set
+### F44 [P0] [NEGATIVE-TEST] H3′ = NO: Ising peak labels + `load` + the load-adaptive threshold (X1) win 5/6 instances but lose to Baleen on the mean (40.53 vs A 39.27), failing the pre-registered rule
 **Test set.** Region7/Region6 × samples 0.4–0.6, touched once in deployed mode.
 - Their offline OPT peaks had already been simulated in WP1 (committed 2026-10-03, before this protocol). They were used for retention only, never for selection ([F93](#F93)).
 - The protocol's claim that they were never used "for any tuning, selection or inspection" is therefore true only of deployed runs.
@@ -1045,13 +1073,13 @@ Refs: [`changes/2_deployable_peak/wp2_deployed/RESULTS_dev.md#L7-L9`](../../chan
 **Run.**
 - 126 evaluations, 126 matched; the arm means were recomputed from `trials.csv` (Appendix D).
 - The ledger's timestamps put the whole test on 2026-10-05, from 14:23:12 to 17:41:42.
-- The result was committed on 2026-10-16 (`46608e0`); in between, Track C ran without reading any WP3 output ([F73](#F73)).
+- It was evaluated on 2026-10-16 and committed that day (`46608e0`). Track C's processes never read WP3 output; its session was down from 10-05 ~15:05 to 10-16 ([F73](#F73)).
 
 **P100 only.** X1's loss is a peak-window event: its P99 (31.82) and top-5 mean (36.02) are level with A's (31.96, 36.02).
 
 **Pre-registration.** `PROTOCOL_v2_H3.md` was committed as `cba9970` (2026-10-04 09:16) before the test. The test was launched 2026-10-05, after the G3 waiver.
 **Why this priority:** this is the decisive pre-registered answer to "does the Ising peak gain survive deployment". How X1 became the primary configuration is in [F94](#F94).
-Refs: [`changes/2_deployable_peak/wp3_test/RESULTS_test.md#L1-L41`](../../changes/2_deployable_peak/wp3_test/RESULTS_test.md#L1-L41), [`changes/2_deployable_peak/wp3_test/RESULTS_test.md#L63-L73`](../../changes/2_deployable_peak/wp3_test/RESULTS_test.md#L63-L73), [`changes/2_deployable_peak/wp2_deployed/PROTOCOL_v2_H3.md#L23-L31`](../../changes/2_deployable_peak/wp2_deployed/PROTOCOL_v2_H3.md#L23-L31), [`changes/2_deployable_peak/wp2_deployed/PROTOCOL_v2_H3.md#L84-L97`](../../changes/2_deployable_peak/wp2_deployed/PROTOCOL_v2_H3.md#L84-L97), [`changes/2_deployable_peak/wp3_test/trials.csv`](../../changes/2_deployable_peak/wp3_test/trials.csv), [`changes/2_deployable_peak/wp1_offline/results/wp1_table.csv`](../../changes/2_deployable_peak/wp1_offline/results/wp1_table.csv), [`changes/4_story/result/recompute_out.txt`](../../changes/4_story/result/recompute_out.txt), [`changes/4_story/result/protocol_commits.txt`](../../changes/4_story/result/protocol_commits.txt), [`changes/4_story/result/git_timeline.txt`](../../changes/4_story/result/git_timeline.txt)
+Refs: [`changes/4_story/result/untracked_evidence.txt`](../../changes/4_story/result/untracked_evidence.txt), [`changes/2_deployable_peak/wp8_trackC/PROGRESS.md#L81-L86`](../../changes/2_deployable_peak/wp8_trackC/PROGRESS.md#L81-L86), [`changes/2_deployable_peak/wp3_test/RESULTS_test.md#L1-L41`](../../changes/2_deployable_peak/wp3_test/RESULTS_test.md#L1-L41), [`changes/2_deployable_peak/wp3_test/RESULTS_test.md#L63-L73`](../../changes/2_deployable_peak/wp3_test/RESULTS_test.md#L63-L73), [`changes/2_deployable_peak/wp2_deployed/PROTOCOL_v2_H3.md#L23-L31`](../../changes/2_deployable_peak/wp2_deployed/PROTOCOL_v2_H3.md#L23-L31), [`changes/2_deployable_peak/wp2_deployed/PROTOCOL_v2_H3.md#L84-L97`](../../changes/2_deployable_peak/wp2_deployed/PROTOCOL_v2_H3.md#L84-L97), [`changes/2_deployable_peak/wp3_test/trials.csv`](../../changes/2_deployable_peak/wp3_test/trials.csv), [`changes/2_deployable_peak/wp1_offline/results/wp1_table.csv`](../../changes/2_deployable_peak/wp1_offline/results/wp1_table.csv), [`changes/4_story/result/recompute_out.txt`](../../changes/4_story/result/recompute_out.txt), [`changes/4_story/result/protocol_commits.txt`](../../changes/4_story/result/protocol_commits.txt), [`changes/4_story/result/git_timeline.txt`](../../changes/4_story/result/git_timeline.txt)
 
 <a id="F45"></a>
 ### F45 [P1] [NEGATIVE-TEST] H3′-labels = NO: X1 is not better than the same threshold on Baleen's own models
@@ -1128,7 +1156,7 @@ Refs: [`changes/2_deployable_peak/wp8_trackC/results/proxy_validation.md#L1-L28`
 
 <a id="F50"></a>
 ### F50 [P1] [DEV] Track C stage 2 is negative: no deployment-aware Ising objective passes the pre-registered dev screen
-**The screen.** The finalist rule was committed as `19d7992` before stage 2. Rep-1 screen score S1 = mean_i min(X1_i − Y_i, A+α_i − Y_i):
+**The screen.** The finalist rule was committed as `19d7992` before stage 2, but after the H3′ test result had been committed ([F73](#F73)). Rep-1 screen score S1 = mean_i min(X1_i − Y_i, A+α_i − Y_i):
 
 | Config | S1 |
 |---|---|
@@ -1145,7 +1173,7 @@ So there was no confirmation, no finalist, and no Track C arm in the Region5 tes
 
 **Solver comparison** on the anchored energy, single retrain, no claim: CP-SAT labels deployed better than PT labels (37.46 vs 38.32).
 **Why this priority:** it is the dev-level negative for "make the Ising labels themselves deployment-aware"; dev only, hence P1, not P0.
-Refs: [`changes/2_deployable_peak/wp8_trackC/RESULTS_dev.md#L1-L28`](../../changes/2_deployable_peak/wp8_trackC/RESULTS_dev.md#L1-L28), [`changes/2_deployable_peak/wp8_trackC/results/stage2_summary.md#L1-L41`](../../changes/2_deployable_peak/wp8_trackC/results/stage2_summary.md#L1-L41), [`changes/2_deployable_peak/wp8_trackC/RESULTS_dev.md#L72-L100`](../../changes/2_deployable_peak/wp8_trackC/RESULTS_dev.md#L72-L100), [`changes/2_deployable_peak/wp8_trackC/PLAN_C.md#L43-L55`](../../changes/2_deployable_peak/wp8_trackC/PLAN_C.md#L43-L55)
+Refs: [`changes/4_story/result/git_timeline.txt`](../../changes/4_story/result/git_timeline.txt), [`changes/2_deployable_peak/wp8_trackC/RESULTS_dev.md#L1-L28`](../../changes/2_deployable_peak/wp8_trackC/RESULTS_dev.md#L1-L28), [`changes/2_deployable_peak/wp8_trackC/results/stage2_summary.md#L1-L41`](../../changes/2_deployable_peak/wp8_trackC/results/stage2_summary.md#L1-L41), [`changes/2_deployable_peak/wp8_trackC/RESULTS_dev.md#L72-L100`](../../changes/2_deployable_peak/wp8_trackC/RESULTS_dev.md#L72-L100), [`changes/2_deployable_peak/wp8_trackC/PLAN_C.md#L43-L55`](../../changes/2_deployable_peak/wp8_trackC/PLAN_C.md#L43-L55)
 
 <a id="F51"></a>
 ### F51 [P3] [DEV] Track C near miss: a single retrain of STU10R1 had the lowest dev mean, but the pre-registered gate rejected it
@@ -1188,7 +1216,7 @@ Refs: [`changes/2_deployable_peak/wp9_region5/RESULTS_test.md#L1-L19`](../../cha
 ### F53 [P1] [TEST-PREREG] H4 caveats: the margin rests on the retrain-level SE, one instance carries most of the gain, and RejectX could not be matched
 **One instance carries the gain.**
 - On Region5 s0.5, A+α is 4.76 below A. On the other five instances the differences are −0.24 to +1.19 per the report (raw: −0.246 on s0.2 to +1.183 on s0.6).
-- Recomputed: s0.5 is 69% of the 6.927 summed gain; the other five average +0.434 (≈1.2% of A's mean); mean/SE_inst = 1.55.
+- Recomputed, post hoc (not part of the pre-registered rule): s0.5 is 69% of the 6.927 summed gain; the other five average +0.434 (≈1.2% of A's mean); mean/SE_inst = 1.55.
 
 **The margin passes only at retrain level.**
 - The pre-registered rule uses the retrain-level SE (0.09).
@@ -1219,12 +1247,13 @@ Refs: [`changes/2_deployable_peak/wp9_region5/RESULTS_test.md#L7-L17`](../../cha
 - A second large loss: on s0.6 X1 scores 40.78 vs A 36.38. All three X1 retrains peak in window 927, where 0.44 of the accesses end beyond 8 MB; A peaks there in 2 of 3 retrains, at lower P100 (recomputed).
 - The window analyses above are post hoc, on raw `trials.csv`.
 - X1's labels again cut first-access admission (2.2% vs 3.8%) and raise mean DT by 0.8.
+- **The labels themselves did cut the training-day peak.** On every test instance the F1PT label sets' day-1 peak (17.11–22.11; means over 6 seeds, util %) is below that of Baleen's labels (22.55–33.53). They contain no zero-value labels, and their Jaccard overlap with Baleen's labels is 0.426–0.550. On s0.5, the catastrophic instance, the pair is 20.47 vs 24.57. The reading that the loss arises in deployment rather than in the labels' offline objective is the story's interpretation.
 
 **Retention:** X1 −0.54 vs A+α 0.31.
 
 **Status.** The protocol reported the rule for X1 as an "Ising record" without attaching a pass/fail. It fails the rule against every reference.
 **Why this priority:** it is the second fresh-region failure of the Ising-label configuration; it confirms H3′ was not a one-off.
-Refs: [`changes/2_deployable_peak/wp9_region5/RESULTS_test.md#L13`](../../changes/2_deployable_peak/wp9_region5/RESULTS_test.md#L13), [`changes/2_deployable_peak/wp9_region5/RESULTS_test.md#L19-L31`](../../changes/2_deployable_peak/wp9_region5/RESULTS_test.md#L19-L31), [`changes/2_deployable_peak/wp9_region5/RESULTS_test.md#L35-L49`](../../changes/2_deployable_peak/wp9_region5/RESULTS_test.md#L35-L49), [`changes/2_deployable_peak/wp9_region5/PROTOCOL_v2_H4.md#L17`](../../changes/2_deployable_peak/wp9_region5/PROTOCOL_v2_H4.md#L17), [`changes/2_deployable_peak/wp9_region5/PROTOCOL_v2_H4.md#L80`](../../changes/2_deployable_peak/wp9_region5/PROTOCOL_v2_H4.md#L80), [`changes/3_autoresearch/work/union/SCOPE_AMENDMENT.md#L8-L12`](../../changes/3_autoresearch/work/union/SCOPE_AMENDMENT.md#L8-L12), [`changes/2_deployable_peak/wp9_region5/trials.csv`](../../changes/2_deployable_peak/wp9_region5/trials.csv), [`changes/4_story/result/recompute_out.txt`](../../changes/4_story/result/recompute_out.txt)
+Refs: [`changes/2_deployable_peak/wp9_region5/INSTANCES.md#L29-L38`](../../changes/2_deployable_peak/wp9_region5/INSTANCES.md#L29-L38), [`changes/2_deployable_peak/wp9_region5/RESULTS_test.md#L13`](../../changes/2_deployable_peak/wp9_region5/RESULTS_test.md#L13), [`changes/2_deployable_peak/wp9_region5/RESULTS_test.md#L19-L31`](../../changes/2_deployable_peak/wp9_region5/RESULTS_test.md#L19-L31), [`changes/2_deployable_peak/wp9_region5/RESULTS_test.md#L35-L49`](../../changes/2_deployable_peak/wp9_region5/RESULTS_test.md#L35-L49), [`changes/2_deployable_peak/wp9_region5/PROTOCOL_v2_H4.md#L17`](../../changes/2_deployable_peak/wp9_region5/PROTOCOL_v2_H4.md#L17), [`changes/2_deployable_peak/wp9_region5/PROTOCOL_v2_H4.md#L80`](../../changes/2_deployable_peak/wp9_region5/PROTOCOL_v2_H4.md#L80), [`changes/3_autoresearch/work/union/SCOPE_AMENDMENT.md#L8-L12`](../../changes/3_autoresearch/work/union/SCOPE_AMENDMENT.md#L8-L12), [`changes/2_deployable_peak/wp9_region5/trials.csv`](../../changes/2_deployable_peak/wp9_region5/trials.csv), [`changes/4_story/result/recompute_out.txt`](../../changes/4_story/result/recompute_out.txt)
 
 <a id="F55"></a>
 ### F55 [P3] [INFRA] WP9 preparation: the dry run and the static replays
@@ -1253,6 +1282,7 @@ Refs: [`changes/2_deployable_peak/wp10_schedule/PROGRESS.md#L16-L49`](../../chan
 
 **Results.**
 - PT (10 s) reaches the exhaustive optimum on 48/48 dev packs; CD on 46/48 (max gap 0.006).
+- The classical exhaustive reference enumerates all 3003 tables in 1.5–2.3 s, against 10 s for PT and CD. On the 18 test fits, PT = exhaustive = CD ([F59](#F59)).
 - The tables are scale-equivalent on 46/48. On test, TB:cd produced the same tables as TB:pt and hence identical results.
 
 **In-sample day-1 replayed peak:** 31.28 for the neutral table, 29.75 fitted (−1.5). The proxy is not valid ([F56](#F56)), so this is not evidence.
@@ -1274,7 +1304,7 @@ Refs: [`changes/2_deployable_peak/wp10_schedule/PROGRESS.md#L10`](../../changes/
 Refs: [`changes/2_deployable_peak/wp10_schedule/PROGRESS.md#L70-L80`](../../changes/2_deployable_peak/wp10_schedule/PROGRESS.md#L70-L80), [`changes/2_deployable_peak/wp10_schedule/PROGRESS.md#L98-L116`](../../changes/2_deployable_peak/wp10_schedule/PROGRESS.md#L98-L116), [`changes/2_deployable_peak/wp10_schedule/results/e3_tables.md#L13-L14`](../../changes/2_deployable_peak/wp10_schedule/results/e3_tables.md#L13-L14)
 
 <a id="F59"></a>
-### F59 [P0] [NEGATIVE-TEST] H5 = NO: the Ising-fitted load-bucket threshold table does not beat Baleen on fresh Region1
+### F59 [P0] [NEGATIVE-TEST] H5 = NO: the Ising-fitted load-bucket threshold table does not beat Baleen on fresh Region1 (24.45 vs A 24.14, 1/6); the fitted table was neutral on 10/18 test retrains
 TB:pt scores 24.45.
 
 | Reference | Mean | Wins | Mean improvement | SE |
@@ -1284,16 +1314,18 @@ TB:pt scores 24.45.
 | B+α (best α arm) | 24.48 | 3/6 | +0.02 | 0.09 |
 
 - It is below RejectX (28.20) and CoinFlip (50.39).
+- Against A it is *worse*: −0.314 (≈2.2 instance SE, ≈3.4 retrain SE; recomputed).
+- **What the test exercised** (raw `solves_test.csv`; not in the report). The fitted table was neutral on 10 of the 18 test retrains: all multipliers 1.0, i.e. plain arm B. PT's tables equal the classical exhaustive enumeration's (and CD's) on all 18. The 3003-table space enumerates in 1.5–2.3 s ([F57](#F57)).
 - **Run.** 108 evaluations, all matched.
 - **Pre-registration.** `2738cba` (2026-10-19 19:23), with a disclosed deviation ([F83](#F83)).
 - **Not reported.** The results report omits several items its protocol listed as "Reported, no claim": F vs the other α arm (A+α), P99, top-5, θ, first-access and peak-window admission, and the solver ledger. They are not in the report. The raw values are in `trials_test.csv`, and the solver ledger in [`changes/2_deployable_peak/wp10_schedule/results/solves_test.csv`](../../changes/2_deployable_peak/wp10_schedule/results/solves_test.csv).
 - **Why Region1.** Region2 lacked the authors' release rows (no Baleen Fig 9 row for s0.2; no RejectX rows for s0.1/s0.2).
-**Why this priority:** a decisive pre-registered negative for "put Ising in the threshold schedule".
-Refs: [`changes/2_deployable_peak/wp10_schedule/RESULTS_test.md#L1-L17`](../../changes/2_deployable_peak/wp10_schedule/RESULTS_test.md#L1-L17), [`changes/2_deployable_peak/wp10_schedule/RESULTS_test.md#L42`](../../changes/2_deployable_peak/wp10_schedule/RESULTS_test.md#L42), [`changes/2_deployable_peak/wp10_schedule/PROTOCOL_v2_H5.md#L20-L27`](../../changes/2_deployable_peak/wp10_schedule/PROTOCOL_v2_H5.md#L20-L27), [`changes/2_deployable_peak/wp10_schedule/PROTOCOL_v2_H5.md#L58-L66`](../../changes/2_deployable_peak/wp10_schedule/PROTOCOL_v2_H5.md#L58-L66), [`changes/2_deployable_peak/wp10_schedule/trials_test.csv`](../../changes/2_deployable_peak/wp10_schedule/trials_test.csv), [`changes/2_deployable_peak/wp10_schedule/results/solves_test.csv`](../../changes/2_deployable_peak/wp10_schedule/results/solves_test.csv), [`changes/4_story/result/recompute_out.txt`](../../changes/4_story/result/recompute_out.txt), [`changes/4_story/result/protocol_commits.txt`](../../changes/4_story/result/protocol_commits.txt)
+**Why this priority:** the pre-registered negative for per-retrain day-1 table fitting on Region1. As a test of Ising solving it is uninformative: the table space is enumerable in ~2 s, and the fit was mostly neutral.
+Refs: [`changes/2_deployable_peak/wp10_schedule/PROGRESS.md#L82-L85`](../../changes/2_deployable_peak/wp10_schedule/PROGRESS.md#L82-L85), [`changes/2_deployable_peak/wp10_schedule/RESULTS_test.md#L1-L17`](../../changes/2_deployable_peak/wp10_schedule/RESULTS_test.md#L1-L17), [`changes/2_deployable_peak/wp10_schedule/RESULTS_test.md#L42`](../../changes/2_deployable_peak/wp10_schedule/RESULTS_test.md#L42), [`changes/2_deployable_peak/wp10_schedule/PROTOCOL_v2_H5.md#L20-L27`](../../changes/2_deployable_peak/wp10_schedule/PROTOCOL_v2_H5.md#L20-L27), [`changes/2_deployable_peak/wp10_schedule/PROTOCOL_v2_H5.md#L58-L66`](../../changes/2_deployable_peak/wp10_schedule/PROTOCOL_v2_H5.md#L58-L66), [`changes/2_deployable_peak/wp10_schedule/trials_test.csv`](../../changes/2_deployable_peak/wp10_schedule/trials_test.csv), [`changes/2_deployable_peak/wp10_schedule/results/solves_test.csv`](../../changes/2_deployable_peak/wp10_schedule/results/solves_test.csv), [`changes/4_story/result/recompute_out.txt`](../../changes/4_story/result/recompute_out.txt), [`changes/4_story/result/protocol_commits.txt`](../../changes/4_story/result/protocol_commits.txt)
 
 <a id="F60"></a>
-### F60 [P1] [TEST-POSTHOC] On low-load Region1 the α arms do not help either (pre-declared reported comparison, no pass/fail)
-**Result.** A+α scores 24.62 and B+α 24.48, vs A 24.14. Recomputed: A+α vs A 1/6, −0.487; B+α vs A 1/6, −0.338.
+### F60 [P1] [TEST-POSTHOC] On low-load Region1 the α arms are worse than Baleen (A+α 1/6, −0.49; pre-declared reported comparison, no pass/fail)
+**Result.** A+α scores 24.62 and B+α 24.48, vs A 24.14. Recomputed: A+α vs A 1/6, −0.487 (≈2.7 instance SE, ≈7.9 retrain SE); B+α vs A 1/6, −0.338.
 
 **Why.** Region1 is a low-load trace: mean DT ≈ 12 util-% vs ≈ 19–21 on Regions 5–7, and Baleen's peak ≈ 24 vs 36–39. The threshold arms raise mean DT by ≈ 0.25 without lowering the peak.
 
@@ -1391,11 +1423,12 @@ Y = XA-F1PT scores 43.17.
 - **Classical control** (the same union with CP-SAT labels, XA-F1CPSAT, 44.37; reported, no pass/fail): Y has the lower mean by 1.20 but wins only 2/5. The lead is carried by s0.2 (Y 49.61 vs control 55.05), where Y's own retrains span 42.87–59.28 (sd 8.59). The source: "Not significant, and not attributable to better optimization".
 - **Run.** All 30 cells have 3/3 matched retrains; 8 `__FAILED_` incident rows are kept.
 - **Pre-registration.** `1cda6af` (05:19) was committed before any T1 or T2 test run. TEST_GO came at 07:05:04, after addendum `3fdba1b`.
+- **Prerequisites built before the protocol.** The T2 instance dumps and the 60 F1 label sets were built at 04:57–05:04, before the 05:19 protocol commit and before Y was fixed. The protocol and the notebook disclose this and state that none was read; the round-2 red-team validator found no read before TEST_GO. The pool choice was fixed in the notebook at 04:56.
 - **Outcome.** The test budget (2 of 2) is exhausted and the loop's verdict is NEGATIVE.
 
 Means recomputed (Appendix D).
 **Why this priority:** it is the last and cleanest pre-registered test of an Ising/QUBO deployed component, and it shows the gain over Baleen is the threshold's.
-Refs: [`changes/3_autoresearch/work/t2u_region4/RESULTS_test.md#L1-L38`](../../changes/3_autoresearch/work/t2u_region4/RESULTS_test.md#L1-L38), [`changes/3_autoresearch/work/t2u_region4/RESULTS_test.md#L54-L56`](../../changes/3_autoresearch/work/t2u_region4/RESULTS_test.md#L54-L56), [`changes/3_autoresearch/result/FINAL_REPORT.md#L1-L7`](../../changes/3_autoresearch/result/FINAL_REPORT.md#L1-L7), [`changes/3_autoresearch/result/FINAL_REPORT.md#L60-L69`](../../changes/3_autoresearch/result/FINAL_REPORT.md#L60-L69), [`changes/3_autoresearch/work/t2u_region4/trials_test.csv`](../../changes/3_autoresearch/work/t2u_region4/trials_test.csv), [`changes/4_story/result/recompute_out.txt`](../../changes/4_story/result/recompute_out.txt), [`changes/4_story/result/protocol_commits.txt`](../../changes/4_story/result/protocol_commits.txt)
+Refs: [`changes/3_autoresearch/work/t2u_region4/PROTOCOL.md#L14`](../../changes/3_autoresearch/work/t2u_region4/PROTOCOL.md#L14), [`changes/3_autoresearch/work/t2u_region4/PROTOCOL.md#L23-L25`](../../changes/3_autoresearch/work/t2u_region4/PROTOCOL.md#L23-L25), [`changes/3_autoresearch/result/LAB_NOTEBOOK.md#L268-L280`](../../changes/3_autoresearch/result/LAB_NOTEBOOK.md#L268-L280), [`changes/3_autoresearch/result/validator_red_team_round_2.md#L44`](../../changes/3_autoresearch/result/validator_red_team_round_2.md#L44), [`changes/3_autoresearch/work/t2u_region4/RESULTS_test.md#L1-L38`](../../changes/3_autoresearch/work/t2u_region4/RESULTS_test.md#L1-L38), [`changes/3_autoresearch/work/t2u_region4/RESULTS_test.md#L54-L56`](../../changes/3_autoresearch/work/t2u_region4/RESULTS_test.md#L54-L56), [`changes/3_autoresearch/result/FINAL_REPORT.md#L1-L7`](../../changes/3_autoresearch/result/FINAL_REPORT.md#L1-L7), [`changes/3_autoresearch/result/FINAL_REPORT.md#L60-L69`](../../changes/3_autoresearch/result/FINAL_REPORT.md#L60-L69), [`changes/3_autoresearch/work/t2u_region4/trials_test.csv`](../../changes/3_autoresearch/work/t2u_region4/trials_test.csv), [`changes/4_story/result/recompute_out.txt`](../../changes/4_story/result/recompute_out.txt), [`changes/4_story/result/protocol_commits.txt`](../../changes/4_story/result/protocol_commits.txt)
 
 <a id="F66"></a>
 ### F66 [P1] [TEST-POSTHOC] Region4 replicates the H4 effect post hoc: A+α is 15% below Baleen
@@ -1408,7 +1441,7 @@ Refs: [`changes/3_autoresearch/work/t2u_region4/RESULTS_test.md#L1-L38`](../../c
 Refs: [`changes/3_autoresearch/work/t2u_region4/RESULTS_test.md#L40-L52`](../../changes/3_autoresearch/work/t2u_region4/RESULTS_test.md#L40-L52), [`changes/3_autoresearch/result/FINAL_REPORT.md#L75`](../../changes/3_autoresearch/result/FINAL_REPORT.md#L75), [`changes/4_story/result/recompute_out.txt`](../../changes/4_story/result/recompute_out.txt)
 
 <a id="F67"></a>
-### F67 [P1] [TEST-POSTHOC] Why the union did not transfer: neither test pool has scan peaks
+### F67 [P1] [TEST-POSTHOC] Why the union did not transfer (the final report's interpretation): neither test pool has scan peaks
 The union's added value on dev was admitting big-offset scans at peak load (Region6). On the pools, the peak window's big-offset share is ≈ 0.01 (Region2) and 0.02–0.04 (Region4), against 0.33 for A+α on dev Region6.
 - On Region4, Y lands at A+α's level with slightly lower peak-window admission (0.31 vs 0.41).
 - The final report's conclusion: "the deployed peak gain comes from spending the write budget at high load, not from the Ising labels".
@@ -1435,7 +1468,7 @@ The same pattern appears in every phase:
 - On dev Region6 it was *Baleen's own* model that failed the scan peak (phase-1 window 712; WP2: A has a scan peak in 9/12 retrains, [F41](#F41)).
 - So the brittleness lies in the GBM/trainer combined with day-1 labels, and min–max labels amplify it when the day-1 peak is not a scan.
 **Why this priority:** this is the main explanation for the deployed negatives; mechanism, hence P1.
-Refs: [`changes/1_literature_review/explore/q3/RESULTS.md#L291-L299`](../../changes/1_literature_review/explore/q3/RESULTS.md#L291-L299), [`changes/1_literature_review/explore/q3/RESULTS.md#L28-L35`](../../changes/1_literature_review/explore/q3/RESULTS.md#L28-L35), [`changes/1_literature_review/explore/q3/RESULTS.md#L94-L101`](../../changes/1_literature_review/explore/q3/RESULTS.md#L94-L101), [`changes/2_deployable_peak/wp2_deployed/RESULTS_dev.md#L207-L229`](../../changes/2_deployable_peak/wp2_deployed/RESULTS_dev.md#L207-L229), [`changes/2_deployable_peak/wp3_test/RESULTS_test.md#L42-L51`](../../changes/2_deployable_peak/wp3_test/RESULTS_test.md#L42-L51), [`changes/2_deployable_peak/wp9_region5/RESULTS_test.md#L19-L31`](../../changes/2_deployable_peak/wp9_region5/RESULTS_test.md#L19-L31), [`changes/3_autoresearch/result/FINAL_REPORT.md#L56-L58`](../../changes/3_autoresearch/result/FINAL_REPORT.md#L56-L58), [`changes/3_autoresearch/result/FINAL_REPORT.md#L71-L75`](../../changes/3_autoresearch/result/FINAL_REPORT.md#L71-L75)
+Refs: [`changes/2_deployable_peak/wp3_test/RESULTS_test.md#L26`](../../changes/2_deployable_peak/wp3_test/RESULTS_test.md#L26), [`changes/1_literature_review/explore/q3/RESULTS.md#L291-L299`](../../changes/1_literature_review/explore/q3/RESULTS.md#L291-L299), [`changes/1_literature_review/explore/q3/RESULTS.md#L28-L35`](../../changes/1_literature_review/explore/q3/RESULTS.md#L28-L35), [`changes/1_literature_review/explore/q3/RESULTS.md#L94-L101`](../../changes/1_literature_review/explore/q3/RESULTS.md#L94-L101), [`changes/2_deployable_peak/wp2_deployed/RESULTS_dev.md#L207-L229`](../../changes/2_deployable_peak/wp2_deployed/RESULTS_dev.md#L207-L229), [`changes/2_deployable_peak/wp3_test/RESULTS_test.md#L42-L51`](../../changes/2_deployable_peak/wp3_test/RESULTS_test.md#L42-L51), [`changes/2_deployable_peak/wp9_region5/RESULTS_test.md#L19-L31`](../../changes/2_deployable_peak/wp9_region5/RESULTS_test.md#L19-L31), [`changes/3_autoresearch/result/FINAL_REPORT.md#L56-L58`](../../changes/3_autoresearch/result/FINAL_REPORT.md#L56-L58), [`changes/3_autoresearch/result/FINAL_REPORT.md#L71-L75`](../../changes/3_autoresearch/result/FINAL_REPORT.md#L71-L75)
 
 <a id="F69"></a>
 ### F69 [P1] [TEST-POSTHOC] The load-adaptive threshold's evidence status, region by region: pre-registered YES on Region5, post-hoc on Regions 6/7 and 4, null on Region1
@@ -1456,7 +1489,7 @@ None of these arms uses Ising/QUBO.
 Refs: [`changes/2_deployable_peak/wp9_region5/RESULTS_test.md#L7-L31`](../../changes/2_deployable_peak/wp9_region5/RESULTS_test.md#L7-L31), [`changes/2_deployable_peak/wp3_test/RESULTS_test.md#L53-L60`](../../changes/2_deployable_peak/wp3_test/RESULTS_test.md#L53-L60), [`changes/3_autoresearch/work/t2u_region4/RESULTS_test.md#L23-L31`](../../changes/3_autoresearch/work/t2u_region4/RESULTS_test.md#L23-L31), [`changes/2_deployable_peak/wp10_schedule/RESULTS_test.md#L19-L36`](../../changes/2_deployable_peak/wp10_schedule/RESULTS_test.md#L19-L36), [`changes/3_autoresearch/work/t1u_region2/RESULTS_test.md#L57-L66`](../../changes/3_autoresearch/work/t1u_region2/RESULTS_test.md#L57-L66), [`changes/3_autoresearch/work/cls_table/trials_dev.csv`](../../changes/3_autoresearch/work/cls_table/trials_dev.csv), [`changes/3_autoresearch/result/LAB_NOTEBOOK.md#L167`](../../changes/3_autoresearch/result/LAB_NOTEBOOK.md#L167), [`changes/4_story/result/recompute_out.txt`](../../changes/4_story/result/recompute_out.txt)
 
 <a id="F70"></a>
-### F70 [P1] [OFFLINE] Ising and classical solvers: identical objectives where both reach the optimum, budget-dependent winners elsewhere, and a two-way record for deployed labels (no row beyond ≈2 instance-level SE)
+### F70 [P1] [OFFLINE] Ising and classical solvers: identical objectives where both reach the optimum, budget-dependent winners elsewhere, and a two-way record for deployed labels (at most ≈2.1 instance-level SE)
 **Exact ties.**
 - Phase 1: the floored Region7 s0.2 instance is reached (25.412) by CP-SAT, LS, PT and EIM at every budget.
 - H2′ test: the floored Region7 s0.4 (23.8766) and Region6 s0.5 (23.6721) are ties.
@@ -1467,28 +1500,28 @@ Refs: [`changes/2_deployable_peak/wp9_region5/RESULTS_test.md#L7-L31`](../../cha
 - Ising best at 10 s in Q2 and at 3 s in H2′.
 - Classical best at 60/300 s, at 1 s, and in rolling windows ([F30](#F30)).
 - On the label-size day-1 instances at 10 s (WP5-tuned configurations, 8-level nested objective), CP-SAT and LS beat EIM and PT ([F32](#F32)).
-- On Track C's anchored energy (10 s), PT's mean objective was lower than CP-SAT's (13.55 vs 14.31; PT lower on 11/24 cells; CP-SAT never proved optimality).
+- On Track C's anchored energy (10 s), PT's mean objective was lower than CP-SAT's (13.55 vs 14.31), but PT was lower on only 11/24 cells, and CP-SAT never proved optimality. The two sides did not run under the same conditions: the CP-SAT solves finished 11 days after the PT solves, while the foreign job was active (running since 10-10; ~15 of 24 CPUs when noted at 14:37 that day); the PT solves predate that job ([F100](#F100)).
 
-**Deployed label sets, PT vs CP-SAT, the full record.** No comparison had a pass/fail. None is beyond ≈2 *instance-level* SE. At the retrain level used by the project's pass rules, two rows exceed 2 SE, one in each direction: WP2 dev favours PT (2.7 retrain SE) and the H3′ test favours CP-SAT (2.5 retrain SE).
+**Deployed label sets, PT vs CP-SAT, the full record** (the finding's OFFLINE tag covers the objective comparisons; the evidence level of each deployed row is given in its Data column; the WP2 and union rows are recomputed from raw ledgers in Appendix D). No comparison had a pass/fail. Only the WP2 X1 row reaches ≈2.1 *instance-level* SE (recomputed 2.07); all others are below 2. At the retrain level used by the project's pass rules, three rows exceed 2 SE: WP2 dev (2.7) and the union on dev (2.1) favour PT, and the H3′ test (2.5) favours CP-SAT. The headline remains the instance-level reading: no row is clearly beyond 2 SE, and the two PT-favouring rows are dev.
 
 | Comparison | Data | Lower mean | Margin | Wins | SE / note |
 |---|---|---|---|---|---|
-| WP2 D:F1PT vs Dc:F1CPSAT | dev | PT | +0.37 | 3/8 | 0.42 / 0.54 |
-| WP2 X1 vs Ea-1.0:F1CPSAT | dev | PT | +1.26 | 5/8 | 0.47 / 0.61 |
-| H3′ X1 vs Dc+α | test | CP-SAT | 0.89 | 3/6 each way | 0.36 / 0.84; Region7 s0.5 carries it ([F48](#F48)) |
-| Track C E8:ANC10 vs E8:ANC10CP | dev, 1 retrain | CP-SAT | 38.32 vs 37.46 | — | no claim |
-| Union XA:F1PT vs XA:F1CPSAT | dev, n = 10 | PT | +0.77 | 6/10 | SE 0.36, "about 2.1 SE"; three high-variance instances carry it; neither CP-SAT union would qualify |
-| T2 Y vs control | test | PT | +1.20 | 2/5 | SE 1.05; carried by s0.2; "not significant" |
-| T1 Y vs control | test (descriptive) | tie | 10.246 vs 10.246 | 2/4 | — |
+| WP2 D:F1PT vs Dc:F1CPSAT | dev (DEV) | PT | +0.37 | 3/8 | 0.42 / 0.54 |
+| WP2 X1 vs Ea-1.0:F1CPSAT | dev (DEV) | PT | +1.26 | 5/8 | 0.47 / 0.61 |
+| H3′ X1 vs Dc+α | test (TEST-POSTHOC) | CP-SAT | 0.89 | 3/6 each way | 0.36 / 0.84; Region7 s0.5 carries it ([F48](#F48)) |
+| Track C E8:ANC10 vs E8:ANC10CP | dev, 1 retrain (DEV) | CP-SAT | 38.32 vs 37.46 | — | no claim |
+| Union XA:F1PT vs XA:F1CPSAT | dev, n = 10, completed after the T2 outcome; retrain 1 on the 8 Region6/7 instances ran before T1 (report only; DEV) | PT | +0.77 | 6/10 | 0.36 / 0.42 (2.1 / 1.8 SE); three high-variance instances carry it; neither CP-SAT union would qualify |
+| T2 Y vs control | test (TEST-POSTHOC) | PT | +1.20 | 2/5 | SE 1.05; carried by s0.2; "not significant" |
+| T1 Y vs control | test (descriptive; TEST-POSTHOC) | tie | 10.246 vs 10.246 | 2/4 | — |
 | H4 (Region5) | test | not measured: no CP-SAT twin of X1 was run | | | |
 
 **Reading.**
 - For the F1 rows the objectives tie, so the deployed differences come from *which* (near-)co-optimal label set each solver returns: PT's sets vary by seed, CP-SAT's barely do. The final report: "It is not evidence that the Ising solver optimizes the QUBO better."
-- On Track C's anchored energy the reverse occurred: PT had the better objective but its labels deployed worse (one retrain).
+- On Track C's anchored energy the reverse occurred: PT had the lower mean objective (lower on 11/24 cells) but its labels deployed worse (one retrain).
 
 **Timing caveat.** After H2′ the `TIMING_IDLE` flag, which releases the timing cores to other tracks, stayed in place, so the 10 s label, table and Track C solves ran on shared cores ([F100](#F100)).
 **Why this priority:** it answers plainly what Ising contributed as an optimiser: parity, not superiority.
-Refs: [`changes/4_story/result/recompute_out.txt`](../../changes/4_story/result/recompute_out.txt), [`changes/1_literature_review/explore/q2/RESULTS.md#L243-L252`](../../changes/1_literature_review/explore/q2/RESULTS.md#L243-L252), [`changes/2_deployable_peak/wp5_ising/RESULTS_test.md#L22-L24`](../../changes/2_deployable_peak/wp5_ising/RESULTS_test.md#L22-L24), [`changes/2_deployable_peak/wp5_ising/RESULTS_test.md#L41-L43`](../../changes/2_deployable_peak/wp5_ising/RESULTS_test.md#L41-L43), [`changes/2_deployable_peak/wp5_ising/RESULTS_test.md#L138-L165`](../../changes/2_deployable_peak/wp5_ising/RESULTS_test.md#L138-L165), [`changes/2_deployable_peak/wp5_ising/RESULTS_dev.md#L220-L239`](../../changes/2_deployable_peak/wp5_ising/RESULTS_dev.md#L220-L239), [`changes/2_deployable_peak/wp10_schedule/PROGRESS.md#L83-L84`](../../changes/2_deployable_peak/wp10_schedule/PROGRESS.md#L83-L84), [`changes/2_deployable_peak/wp10_schedule/PROGRESS.md#L115`](../../changes/2_deployable_peak/wp10_schedule/PROGRESS.md#L115), [`changes/2_deployable_peak/wp10_schedule/RESULTS_test.md#L15`](../../changes/2_deployable_peak/wp10_schedule/RESULTS_test.md#L15), [`changes/2_deployable_peak/wp2_deployed/RESULTS_dev.md#L172-L184`](../../changes/2_deployable_peak/wp2_deployed/RESULTS_dev.md#L172-L184), [`changes/2_deployable_peak/wp3_test/RESULTS_test.md#L14`](../../changes/2_deployable_peak/wp3_test/RESULTS_test.md#L14), [`changes/2_deployable_peak/wp8_trackC/RESULTS_dev.md#L20`](../../changes/2_deployable_peak/wp8_trackC/RESULTS_dev.md#L20), [`changes/2_deployable_peak/wp8_trackC/PROGRESS.md#L94-L96`](../../changes/2_deployable_peak/wp8_trackC/PROGRESS.md#L94-L96), [`changes/3_autoresearch/result/FINAL_REPORT.md#L77-L94`](../../changes/3_autoresearch/result/FINAL_REPORT.md#L77-L94), [`changes/3_autoresearch/work/t1u_region2/RESULTS_test.md#L57-L59`](../../changes/3_autoresearch/work/t1u_region2/RESULTS_test.md#L57-L59), [`changes/3_autoresearch/work/t2u_region4/RESULTS_test.md#L54-L56`](../../changes/3_autoresearch/work/t2u_region4/RESULTS_test.md#L54-L56), [`changes/2_deployable_peak/wp9_region5/PROTOCOL_v2_H4.md#L42-L51`](../../changes/2_deployable_peak/wp9_region5/PROTOCOL_v2_H4.md#L42-L51)
+Refs: [`changes/3_autoresearch/result/LAB_NOTEBOOK.md#L309-L322`](../../changes/3_autoresearch/result/LAB_NOTEBOOK.md#L309-L322), [`changes/3_autoresearch/result/LAB_NOTEBOOK.md#L435-L436`](../../changes/3_autoresearch/result/LAB_NOTEBOOK.md#L435-L436), [`changes/4_story/result/recompute_out.txt`](../../changes/4_story/result/recompute_out.txt), [`changes/1_literature_review/explore/q2/RESULTS.md#L243-L252`](../../changes/1_literature_review/explore/q2/RESULTS.md#L243-L252), [`changes/2_deployable_peak/wp5_ising/RESULTS_test.md#L22-L24`](../../changes/2_deployable_peak/wp5_ising/RESULTS_test.md#L22-L24), [`changes/2_deployable_peak/wp5_ising/RESULTS_test.md#L41-L43`](../../changes/2_deployable_peak/wp5_ising/RESULTS_test.md#L41-L43), [`changes/2_deployable_peak/wp5_ising/RESULTS_test.md#L138-L165`](../../changes/2_deployable_peak/wp5_ising/RESULTS_test.md#L138-L165), [`changes/2_deployable_peak/wp5_ising/RESULTS_dev.md#L220-L239`](../../changes/2_deployable_peak/wp5_ising/RESULTS_dev.md#L220-L239), [`changes/2_deployable_peak/wp10_schedule/PROGRESS.md#L83-L84`](../../changes/2_deployable_peak/wp10_schedule/PROGRESS.md#L83-L84), [`changes/2_deployable_peak/wp10_schedule/PROGRESS.md#L115`](../../changes/2_deployable_peak/wp10_schedule/PROGRESS.md#L115), [`changes/2_deployable_peak/wp10_schedule/RESULTS_test.md#L15`](../../changes/2_deployable_peak/wp10_schedule/RESULTS_test.md#L15), [`changes/2_deployable_peak/wp2_deployed/RESULTS_dev.md#L172-L184`](../../changes/2_deployable_peak/wp2_deployed/RESULTS_dev.md#L172-L184), [`changes/2_deployable_peak/wp3_test/RESULTS_test.md#L14`](../../changes/2_deployable_peak/wp3_test/RESULTS_test.md#L14), [`changes/2_deployable_peak/wp8_trackC/RESULTS_dev.md#L20`](../../changes/2_deployable_peak/wp8_trackC/RESULTS_dev.md#L20), [`changes/2_deployable_peak/wp8_trackC/PROGRESS.md#L94-L96`](../../changes/2_deployable_peak/wp8_trackC/PROGRESS.md#L94-L96), [`changes/3_autoresearch/result/FINAL_REPORT.md#L77-L94`](../../changes/3_autoresearch/result/FINAL_REPORT.md#L77-L94), [`changes/3_autoresearch/work/t1u_region2/RESULTS_test.md#L57-L59`](../../changes/3_autoresearch/work/t1u_region2/RESULTS_test.md#L57-L59), [`changes/3_autoresearch/work/t2u_region4/RESULTS_test.md#L54-L56`](../../changes/3_autoresearch/work/t2u_region4/RESULTS_test.md#L54-L56), [`changes/2_deployable_peak/wp9_region5/PROTOCOL_v2_H4.md#L42-L51`](../../changes/2_deployable_peak/wp9_region5/PROTOCOL_v2_H4.md#L42-L51)
 
 <a id="F71"></a>
 ### F71 [P1] [TEST-POSTHOC] Mean retention of the offline gain never approached the proposal's 60% target for any Ising-label configuration (pre-declared metric, no pass/fail; the 60% criterion comes only from the proposal)
@@ -1508,7 +1541,7 @@ Refs: [`documents/proposal_docx_compose/proposal.js#L201`](../../documents/propo
 
 <a id="F72"></a>
 ### F72 [P2] [DEV] First-access admission is the recurring lever on Region7 (mostly dev evidence)
-**Raising it helped on dev.** Phase-1 labels raised Region7 first-access admission from 6% to 15–28% via zero-value positives.
+**Raising it helped on dev.** Phase-1 labels raised Region7 first-access admission from 6% to 14–28% (the q3 report says 14–28% in its summary and 15–28% in its mechanism section). Zero-value positives account for the top of that range: P0, whose labels are 44% zero-value one-hit wonders, reached 28%, while T5c (zero-value additions removed) reached 14.8% and C2 14.3%. Across the 13 Region7 dev trials, corr(first-access admission, P100) = −0.79.
 
 **The F1 labels lower it, and Region7 suffers.**
 - WP2 dev: 2–3% (D:F1PT 2.4%, X1 2.8%) vs Baleen's 8.7%.
@@ -1522,7 +1555,7 @@ Refs: [`documents/proposal_docx_compose/proposal.js#L201`](../../documents/propo
 - ≤ 1.3% in every WP2 arm except D:P0, and in every Track C arm;
 - the phase-1 design D:P0 reaches more: 2.89% (max 5.61%). D:T2 (1.04%) sits above the WP2 F1 and Baleen arms (≤0.74%) but within the 1.3% bound (recomputed).
 **Why this priority:** a mechanism detail tying the phases together; secondary.
-Refs: [`changes/1_literature_review/explore/q3/RESULTS.md#L244-L251`](../../changes/1_literature_review/explore/q3/RESULTS.md#L244-L251), [`changes/2_deployable_peak/wp2_deployed/RESULTS_dev.md#L207-L229`](../../changes/2_deployable_peak/wp2_deployed/RESULTS_dev.md#L207-L229), [`changes/2_deployable_peak/wp3_test/RESULTS_test.md#L63-L73`](../../changes/2_deployable_peak/wp3_test/RESULTS_test.md#L63-L73), [`changes/2_deployable_peak/wp8_trackC/RESULTS_dev.md#L15-L19`](../../changes/2_deployable_peak/wp8_trackC/RESULTS_dev.md#L15-L19), [`changes/2_deployable_peak/wp8_trackC/RESULTS_dev.md#L85-L95`](../../changes/2_deployable_peak/wp8_trackC/RESULTS_dev.md#L85-L95), [`changes/3_autoresearch/result/FINAL_REPORT.md#L56-L58`](../../changes/3_autoresearch/result/FINAL_REPORT.md#L56-L58), [`changes/3_autoresearch/result/validator_integrity_stats_round_2.md#L176-L186`](../../changes/3_autoresearch/result/validator_integrity_stats_round_2.md#L176-L186), [`changes/2_deployable_peak/wp2_deployed/results/mechanism_by_region.txt`](../../changes/2_deployable_peak/wp2_deployed/results/mechanism_by_region.txt), [`changes/2_deployable_peak/wp2_deployed/trials.csv`](../../changes/2_deployable_peak/wp2_deployed/trials.csv), [`changes/4_story/result/recompute_out.txt`](../../changes/4_story/result/recompute_out.txt)
+Refs: [`changes/1_literature_review/explore/q3/RESULTS.md#L25-L28`](../../changes/1_literature_review/explore/q3/RESULTS.md#L25-L28), [`changes/1_literature_review/explore/q3/RESULTS.md#L244-L250`](../../changes/1_literature_review/explore/q3/RESULTS.md#L244-L250), [`changes/1_literature_review/explore/q3/PROGRESS.md#L99-L101`](../../changes/1_literature_review/explore/q3/PROGRESS.md#L99-L101), [`changes/1_literature_review/explore/q3/RESULTS.md#L244-L251`](../../changes/1_literature_review/explore/q3/RESULTS.md#L244-L251), [`changes/2_deployable_peak/wp2_deployed/RESULTS_dev.md#L207-L229`](../../changes/2_deployable_peak/wp2_deployed/RESULTS_dev.md#L207-L229), [`changes/2_deployable_peak/wp3_test/RESULTS_test.md#L63-L73`](../../changes/2_deployable_peak/wp3_test/RESULTS_test.md#L63-L73), [`changes/2_deployable_peak/wp8_trackC/RESULTS_dev.md#L15-L19`](../../changes/2_deployable_peak/wp8_trackC/RESULTS_dev.md#L15-L19), [`changes/2_deployable_peak/wp8_trackC/RESULTS_dev.md#L85-L95`](../../changes/2_deployable_peak/wp8_trackC/RESULTS_dev.md#L85-L95), [`changes/3_autoresearch/result/FINAL_REPORT.md#L56-L58`](../../changes/3_autoresearch/result/FINAL_REPORT.md#L56-L58), [`changes/3_autoresearch/result/validator_integrity_stats_round_2.md#L176-L186`](../../changes/3_autoresearch/result/validator_integrity_stats_round_2.md#L176-L186), [`changes/2_deployable_peak/wp2_deployed/results/mechanism_by_region.txt`](../../changes/2_deployable_peak/wp2_deployed/results/mechanism_by_region.txt), [`changes/2_deployable_peak/wp2_deployed/trials.csv`](../../changes/2_deployable_peak/wp2_deployed/trials.csv), [`changes/4_story/result/recompute_out.txt`](../../changes/4_story/result/recompute_out.txt)
 
 ## 7. Methodology and integrity
 
@@ -1554,9 +1587,13 @@ Commits from `git log`; run times from each report.
 
 The earlier cls_table T1 protocol (`9650674`) is void: it had no finalist and wrote no TEST_GO.
 
-**Firewall.** The H3′ outcome sat unevaluated for 11 days while Track C ran, and Track C records that `wp3_test` was never read.
+**H3′ timing and the Track C firewall.**
+- **Test and evaluation.** The H3′ test finished 10-05 17:41 (last ledger row). It was evaluated 10-16 12:33 (`evaluation.json` mtime), and the result was committed 12:40 (`46608e0`).
+- **Track C was not running in the gap.** It ran only 10-05 14:18 to ~15:05, at the same time as the H3′ test, and its session was down until 10-16.
+- **Its stage-2 rule came after the H3′ result.** The finalist rule and short-list were written on 10-16 and committed at 13:54:17 (`19d7992`), after the H3′ result commit and in the same minute as the coordinator's H4 addendum, which was written "based on the H3′ result".
+- **What the firewall actually is.** Track C's own processes never read `wp3_test`, and the coordinator records that Track C's design stayed blind to the H3′ outcome. That is a statement, not a mechanism. Track C's result was negative, so no claim depends on it.
 **Why this priority:** this is what makes the TEST-PREREG labels in this story auditable.
-Refs: [`changes/4_story/result/protocol_commits.txt`](../../changes/4_story/result/protocol_commits.txt), [`changes/4_story/result/git_timeline.txt`](../../changes/4_story/result/git_timeline.txt), [`changes/2_deployable_peak/wp5_ising/RESULTS_test.md#L3-L5`](../../changes/2_deployable_peak/wp5_ising/RESULTS_test.md#L3-L5), [`changes/2_deployable_peak/wp3_test/RESULTS_test.md#L4`](../../changes/2_deployable_peak/wp3_test/RESULTS_test.md#L4), [`changes/2_deployable_peak/wp8_trackC/PROGRESS.md#L132`](../../changes/2_deployable_peak/wp8_trackC/PROGRESS.md#L132), [`changes/2_deployable_peak/wp9_region5/RESULTS_test.md#L1-L4`](../../changes/2_deployable_peak/wp9_region5/RESULTS_test.md#L1-L4), [`changes/2_deployable_peak/wp10_schedule/RESULTS_test.md#L1-L5`](../../changes/2_deployable_peak/wp10_schedule/RESULTS_test.md#L1-L5), [`changes/3_autoresearch/result/FINAL_REPORT.md#L60-L69`](../../changes/3_autoresearch/result/FINAL_REPORT.md#L60-L69), [`changes/3_autoresearch/result/FINAL_REPORT.md#L147`](../../changes/3_autoresearch/result/FINAL_REPORT.md#L147), [`changes/2_deployable_peak/wp3_test/trials.csv`](../../changes/2_deployable_peak/wp3_test/trials.csv), [`changes/2_deployable_peak/wp8_trackC/PROGRESS.md#L109-L110`](../../changes/2_deployable_peak/wp8_trackC/PROGRESS.md#L109-L110), [`changes/2_deployable_peak/PLAN.md#L18-L19`](../../changes/2_deployable_peak/PLAN.md#L18-L19)
+Refs: [`changes/2_deployable_peak/wp8_trackC/PROGRESS.md#L16-L19`](../../changes/2_deployable_peak/wp8_trackC/PROGRESS.md#L16-L19), [`changes/4_story/result/protocol_commits.txt`](../../changes/4_story/result/protocol_commits.txt), [`changes/4_story/result/git_timeline.txt`](../../changes/4_story/result/git_timeline.txt), [`changes/2_deployable_peak/wp5_ising/RESULTS_test.md#L3-L5`](../../changes/2_deployable_peak/wp5_ising/RESULTS_test.md#L3-L5), [`changes/2_deployable_peak/wp3_test/RESULTS_test.md#L4`](../../changes/2_deployable_peak/wp3_test/RESULTS_test.md#L4), [`changes/2_deployable_peak/wp8_trackC/PROGRESS.md#L132`](../../changes/2_deployable_peak/wp8_trackC/PROGRESS.md#L132), [`changes/2_deployable_peak/wp9_region5/RESULTS_test.md#L1-L4`](../../changes/2_deployable_peak/wp9_region5/RESULTS_test.md#L1-L4), [`changes/2_deployable_peak/wp10_schedule/RESULTS_test.md#L1-L5`](../../changes/2_deployable_peak/wp10_schedule/RESULTS_test.md#L1-L5), [`changes/3_autoresearch/result/FINAL_REPORT.md#L60-L69`](../../changes/3_autoresearch/result/FINAL_REPORT.md#L60-L69), [`changes/3_autoresearch/result/FINAL_REPORT.md#L147`](../../changes/3_autoresearch/result/FINAL_REPORT.md#L147), [`changes/2_deployable_peak/wp3_test/trials.csv`](../../changes/2_deployable_peak/wp3_test/trials.csv), [`changes/2_deployable_peak/wp8_trackC/PROGRESS.md#L9`](../../changes/2_deployable_peak/wp8_trackC/PROGRESS.md#L9), [`changes/2_deployable_peak/wp8_trackC/PROGRESS.md#L82-L86`](../../changes/2_deployable_peak/wp8_trackC/PROGRESS.md#L82-L86), [`changes/2_deployable_peak/wp8_trackC/PROGRESS.md#L97`](../../changes/2_deployable_peak/wp8_trackC/PROGRESS.md#L97), [`changes/2_deployable_peak/wp8_trackC/PROGRESS.md#L105-L110`](../../changes/2_deployable_peak/wp8_trackC/PROGRESS.md#L105-L110), [`changes/2_deployable_peak/wp8_trackC/PLAN_C.md#L105-L108`](../../changes/2_deployable_peak/wp8_trackC/PLAN_C.md#L105-L108), [`changes/4_story/result/untracked_evidence.txt`](../../changes/4_story/result/untracked_evidence.txt), [`changes/2_deployable_peak/PLAN.md#L18-L19`](../../changes/2_deployable_peak/PLAN.md#L18-L19)
 
 <a id="F94"></a>
 ### F94 [P1] [INFRA] PLAN's pre-stated "dev signal" gate failed; instead of the pre-stated negative-and-pivot, H3′ was re-specified around PLAN's ablation arm E (labels + `load` + α)
@@ -1586,13 +1623,13 @@ Refs: [`changes/2_deployable_peak/PLAN.md#L49-L60`](../../changes/2_deployable_p
 
 <a id="F74"></a>
 ### F74 [P2] [INFRA] Each deployed test's evaluator was written and validated on earlier data before the test data existed, and the drivers refused to run without a go-file
-- **WP3.** `evaluate_test.py` was written at 16:50 on 2026-10-04, before any test data. Run on WP2's dev trials, it reproduces the dev comparisons exactly (X1 vs A +1.301 ± 0.251, 6/8). The test driver refused to start without the go-file `G3_SIGNED`. That file is untracked, and its content is the captain's *waiver* of G3, not a sign-off ([F76](#F76)).
+- **WP3.** `evaluate_test.py` was written at 16:50 on 2026-10-04, before any test data. Run on WP2's dev trials, it reproduces the dev comparisons exactly (X1 vs A +1.301 ± 0.251, 6/8). The test driver refused to start without the go-file G3_SIGNED. That file is untracked in git, and its one line is the captain's *waiver* of G3, not a sign-off: "G3 waived by captain Sixue Xing 2026-10-05 (SCOPE_v2 §1a, commit 84a0c1d); PATCH.diff sha256 2a914eb589bb" (copied into [`changes/4_story/result/untracked_evidence.txt`](../../changes/4_story/result/untracked_evidence.txt); [F76](#F76)).
 - **WP9.** Its evaluator, checked on WP3's published trials, reproduces the WP3 report (A+α vs A +0.965, 5/6, SE 0.160 / 0.391; X1 vs A −1.265). The driver required `TEST_GO`, created by the coordinator after the protocol commit.
 - **WP10.** Its evaluator, checked on WP9's trials, reproduces WP9 (A+α vs A 5/6, +1.155, SE 0.094 / 0.745; B+α vs B 6/6, +1.887).
 - **Auto-research T2.** The evaluator is identical to the contract's `validate.py`.
 
 **Why this priority:** it makes "the analysis was tuned to the outcome" unlikely as an explanation of a test verdict. Two exceptions, where rules were edited after non-outcome test-instance data or confirmation data existed, are disclosed in [F53](#F53) and [F83](#F83).
-Refs: [`changes/2_deployable_peak/wp3_test/PROGRESS.md#L1-L4`](../../changes/2_deployable_peak/wp3_test/PROGRESS.md#L1-L4), [`changes/2_deployable_peak/wp3_test/PROGRESS.md#L36-L39`](../../changes/2_deployable_peak/wp3_test/PROGRESS.md#L36-L39), [`changes/2_deployable_peak/wp3_test/PROGRESS.md#L81`](../../changes/2_deployable_peak/wp3_test/PROGRESS.md#L81), [`changes/2_deployable_peak/wp9_region5/PROTOCOL_v2_H4.md#L3`](../../changes/2_deployable_peak/wp9_region5/PROTOCOL_v2_H4.md#L3), [`changes/2_deployable_peak/wp9_region5/PROTOCOL_v2_H4.md#L82`](../../changes/2_deployable_peak/wp9_region5/PROTOCOL_v2_H4.md#L82), [`changes/2_deployable_peak/wp10_schedule/PROTOCOL_v2_H5.md#L67`](../../changes/2_deployable_peak/wp10_schedule/PROTOCOL_v2_H5.md#L67), [`changes/2_deployable_peak/wp3_test/G3_SIGNED`](../../changes/2_deployable_peak/wp3_test/G3_SIGNED), [`changes/3_autoresearch/work/t2u_region4/PROTOCOL.md#L44-L51`](../../changes/3_autoresearch/work/t2u_region4/PROTOCOL.md#L44-L51)
+Refs: [`changes/2_deployable_peak/wp3_test/PROGRESS.md#L1-L4`](../../changes/2_deployable_peak/wp3_test/PROGRESS.md#L1-L4), [`changes/2_deployable_peak/wp3_test/PROGRESS.md#L36-L39`](../../changes/2_deployable_peak/wp3_test/PROGRESS.md#L36-L39), [`changes/2_deployable_peak/wp3_test/PROGRESS.md#L81`](../../changes/2_deployable_peak/wp3_test/PROGRESS.md#L81), [`changes/2_deployable_peak/wp9_region5/PROTOCOL_v2_H4.md#L3`](../../changes/2_deployable_peak/wp9_region5/PROTOCOL_v2_H4.md#L3), [`changes/2_deployable_peak/wp9_region5/PROTOCOL_v2_H4.md#L82`](../../changes/2_deployable_peak/wp9_region5/PROTOCOL_v2_H4.md#L82), [`changes/2_deployable_peak/wp10_schedule/PROTOCOL_v2_H5.md#L67`](../../changes/2_deployable_peak/wp10_schedule/PROTOCOL_v2_H5.md#L67), [`changes/4_story/result/untracked_evidence.txt`](../../changes/4_story/result/untracked_evidence.txt), [`changes/3_autoresearch/work/t2u_region4/PROTOCOL.md#L44-L51`](../../changes/3_autoresearch/work/t2u_region4/PROTOCOL.md#L44-L51)
 
 <a id="F75"></a>
 ### F75 [P1] [INFRA] Phase-1 pre-registration (Q1–Q3) is file-dated, not git-attested
@@ -1609,11 +1646,12 @@ Refs: [`changes/2_deployable_peak/wp3_test/PROGRESS.md#L1-L4`](../../changes/2_d
 Refs: [`changes/1_literature_review/explore/PROTOCOL.md#L3`](../../changes/1_literature_review/explore/PROTOCOL.md#L3), [`changes/1_literature_review/explore/q3/RESULTS.md#L3`](../../changes/1_literature_review/explore/q3/RESULTS.md#L3), [`changes/1_literature_review/explore/q2/RESULTS.md#L77`](../../changes/1_literature_review/explore/q2/RESULTS.md#L77), [`changes/1_literature_review/explore/q2/RESULTS.md#L338-L341`](../../changes/1_literature_review/explore/q2/RESULTS.md#L338-L341), [`changes/1_literature_review/explore/q3/PROGRESS.md#L79`](../../changes/1_literature_review/explore/q3/PROGRESS.md#L79), [`changes/1_literature_review/explore/q2/PROGRESS.md#L38`](../../changes/1_literature_review/explore/q2/PROGRESS.md#L38), [`changes/4_story/result/protocol_commits.txt`](../../changes/4_story/result/protocol_commits.txt)
 
 <a id="F96"></a>
-### F96 [P2] [INFRA] Phase-1 forking paths and interim looks, all followed by negative verdicts
+### F96 [P2] [INFRA] Phase-1 forking paths and interim looks: the formulation switch also preceded Q1 (YES); all the others were followed by negative verdicts
 **The Q2 formulation switch.**
 - F2b (squared hinge) was first declared the primary Q1/Q2 formulation, "chosen because it is quadratic … and Ising-native".
 - After dev tuning, F1 was chosen instead because it put the "Ising ahead at 10 s on both dev instances; F2b favours the classical LS".
 - The choice used dev data only, before any held-out run. Q2 failed anyway ([F20](#F20)).
+- **It also fixed the formulation on which Q1 passed ([F18](#F18)).** It was decided on the solver race, not on the peak gain. F2b's own dev selections also simulated 6.0–7.3 points below Baleen's peak-blind OPT (recomputed): pgreedy / LS / PT 28.53 / 28.47 / 28.53 (Region7) and 28.26 / 28.28 / 28.24 (Region6), vs 34.52 / 35.56. So Q1 is unlikely to depend on the switch.
 
 **The Q3 finalist pool grew after the 19:35 rule.**
 - The rule named candidates T5, TK10, T2 and L5.
@@ -1625,8 +1663,8 @@ Refs: [`changes/1_literature_review/explore/PROTOCOL.md#L3`](../../changes/1_lit
 - Q3: a preliminary held-out evaluation at 27/54 runs ("Q3 is heading to NO").
 - No configuration or rule change followed either look.
 
-**Why this priority:** disclosed choices that favoured Ising on dev; none changed a held-out verdict, which was negative each time.
-Refs: [`changes/1_literature_review/explore/q2/PROGRESS.md#L31-L32`](../../changes/1_literature_review/explore/q2/PROGRESS.md#L31-L32), [`changes/1_literature_review/explore/q2/PROGRESS.md#L52-L53`](../../changes/1_literature_review/explore/q2/PROGRESS.md#L52-L53), [`changes/1_literature_review/explore/q2/PROGRESS.md#L95-L99`](../../changes/1_literature_review/explore/q2/PROGRESS.md#L95-L99), [`changes/1_literature_review/explore/q3/PROGRESS.md#L79-L96`](../../changes/1_literature_review/explore/q3/PROGRESS.md#L79-L96), [`changes/1_literature_review/explore/q3/PROGRESS.md#L126-L131`](../../changes/1_literature_review/explore/q3/PROGRESS.md#L126-L131)
+**Why this priority:** disclosed choices that favoured Ising on dev. None changed a held-out verdict, and the one positive verdict downstream of a switch (Q1) is unlikely to depend on it.
+Refs: [`changes/4_story/result/recompute_out.txt`](../../changes/4_story/result/recompute_out.txt), [`changes/1_literature_review/explore/q2/PROGRESS.md#L31-L32`](../../changes/1_literature_review/explore/q2/PROGRESS.md#L31-L32), [`changes/1_literature_review/explore/q2/PROGRESS.md#L50-L53`](../../changes/1_literature_review/explore/q2/PROGRESS.md#L50-L53), [`changes/1_literature_review/explore/q2/PROGRESS.md#L95-L99`](../../changes/1_literature_review/explore/q2/PROGRESS.md#L95-L99), [`changes/1_literature_review/explore/q3/PROGRESS.md#L79-L96`](../../changes/1_literature_review/explore/q3/PROGRESS.md#L79-L96), [`changes/1_literature_review/explore/q3/PROGRESS.md#L126-L131`](../../changes/1_literature_review/explore/q3/PROGRESS.md#L126-L131)
 
 <a id="F97"></a>
 ### F97 [P2] [INFRA] Deployed testing went beyond PLAN's instance plan, each time under its own protocol; the later G1 re-runs used one trace
@@ -1642,13 +1680,14 @@ Refs: [`changes/2_deployable_peak/PLAN.md#L27-L31`](../../changes/2_deployable_p
 <a id="F76"></a>
 ### F76 [P1] [INFRA] Gate G3 (a teammate review of the overlay patch) was waived by the captain; no teammate sign-off is recorded for scope v2
 Scope v2 required one teammate to review `PATCH.diff` before any held-out run (G3). G3 was also a WP0 exit criterion in PLAN and the first listed prerequisite of the H3′ protocol.
-- It was waived by the captain on 2026-10-05 (commit `84a0c1d`), recorded before the WP3 test. The driver's go-file `G3_SIGNED` contains that waiver text.
+- It was waived by the captain on 2026-10-05 (commit `84a0c1d`), recorded before the WP3 test. The driver's go-file G3_SIGNED (untracked) contains that waiver text, quoted in [F74](#F74).
 - The coordinator review at CP1, G1 and parity stand.
-- `PATCH.diff` sha256 `2a914eb589bb` was unchanged through WP9 and WP10.
+- `PATCH.diff` sha256 `2a914eb589bb` itself was unchanged through WP9 and WP10. But WP10 ran on a later overlay, `PATCH_v3.diff` = `PATCH.diff` + 4 files, +43/−1 lines, and the auto-research ran on overlays v4 and v5 built on top of that.
+- Those later overlays had only automated bit-exact equivalence gates (G1_v3/v4/v5 and their extra reproduction checks), no human review. None of the three amendments requires a teammate (G3-type) review, and none is recorded ([F04](#F04)).
 
 [`changes/SCOPE_v2.md`](../../changes/SCOPE_v2.md) still reads "pending confirmation by Ching-Hao Chiu and Jie Fu". The amendments were recorded by the coordinator under the captain's standing approval (1.2b) or not at all (1.2c, 1.2d; [F04](#F04)).
 **Why this priority:** it is a governance deviation that a reader must know about; it touches every scope-v2 result.
-Refs: [`changes/SCOPE_v2.md#L3`](../../changes/SCOPE_v2.md#L3), [`changes/SCOPE_v2.md#L40-L44`](../../changes/SCOPE_v2.md#L40-L44), [`changes/SCOPE_v2.md#L50`](../../changes/SCOPE_v2.md#L50), [`./RESEARCH.md#L76`](../../RESEARCH.md#L76), [`changes/2_deployable_peak/wp0_overlay/G3_REVIEW.md#L1-L5`](../../changes/2_deployable_peak/wp0_overlay/G3_REVIEW.md#L1-L5), [`changes/2_deployable_peak/PLAN.md#L41`](../../changes/2_deployable_peak/PLAN.md#L41), [`changes/2_deployable_peak/wp2_deployed/PROTOCOL_v2_H3.md#L123-L125`](../../changes/2_deployable_peak/wp2_deployed/PROTOCOL_v2_H3.md#L123-L125), [`changes/2_deployable_peak/wp3_test/G3_SIGNED`](../../changes/2_deployable_peak/wp3_test/G3_SIGNED), [`changes/2_deployable_peak/wp3_test/RESULTS_test.md#L4`](../../changes/2_deployable_peak/wp3_test/RESULTS_test.md#L4), [`changes/2_deployable_peak/wp9_region5/RESULTS_test.md#L52`](../../changes/2_deployable_peak/wp9_region5/RESULTS_test.md#L52), [`changes/2_deployable_peak/wp10_schedule/RESULTS_test.md#L41`](../../changes/2_deployable_peak/wp10_schedule/RESULTS_test.md#L41), [`changes/4_story/result/git_timeline.txt`](../../changes/4_story/result/git_timeline.txt)
+Refs: [`changes/2_deployable_peak/wp10_schedule/SCOPE_v2_1b.md#L15`](../../changes/2_deployable_peak/wp10_schedule/SCOPE_v2_1b.md#L15), [`changes/2_deployable_peak/wp10_schedule/SCOPE_v2_1b.md#L21`](../../changes/2_deployable_peak/wp10_schedule/SCOPE_v2_1b.md#L21), [`changes/2_deployable_peak/wp10_schedule/PROGRESS.md#L11`](../../changes/2_deployable_peak/wp10_schedule/PROGRESS.md#L11), [`changes/3_autoresearch/work/cls_table/SCOPE_AMENDMENT.md#L34-L37`](../../changes/3_autoresearch/work/cls_table/SCOPE_AMENDMENT.md#L34-L37), [`changes/3_autoresearch/work/union/SCOPE_AMENDMENT.md#L28-L31`](../../changes/3_autoresearch/work/union/SCOPE_AMENDMENT.md#L28-L31), [`changes/SCOPE_v2.md#L3`](../../changes/SCOPE_v2.md#L3), [`changes/SCOPE_v2.md#L40-L44`](../../changes/SCOPE_v2.md#L40-L44), [`changes/SCOPE_v2.md#L50`](../../changes/SCOPE_v2.md#L50), [`./RESEARCH.md#L76`](../../RESEARCH.md#L76), [`changes/2_deployable_peak/wp0_overlay/G3_REVIEW.md#L1-L5`](../../changes/2_deployable_peak/wp0_overlay/G3_REVIEW.md#L1-L5), [`changes/2_deployable_peak/PLAN.md#L41`](../../changes/2_deployable_peak/PLAN.md#L41), [`changes/2_deployable_peak/wp2_deployed/PROTOCOL_v2_H3.md#L123-L125`](../../changes/2_deployable_peak/wp2_deployed/PROTOCOL_v2_H3.md#L123-L125), [`changes/4_story/result/untracked_evidence.txt`](../../changes/4_story/result/untracked_evidence.txt), [`changes/2_deployable_peak/wp3_test/RESULTS_test.md#L4`](../../changes/2_deployable_peak/wp3_test/RESULTS_test.md#L4), [`changes/2_deployable_peak/wp9_region5/RESULTS_test.md#L52`](../../changes/2_deployable_peak/wp9_region5/RESULTS_test.md#L52), [`changes/2_deployable_peak/wp10_schedule/RESULTS_test.md#L41`](../../changes/2_deployable_peak/wp10_schedule/RESULTS_test.md#L41), [`changes/4_story/result/git_timeline.txt`](../../changes/4_story/result/git_timeline.txt)
 
 <a id="F77"></a>
 ### F77 [P3] [INFRA] Frozen-artifact checks always passed and sandboxing was the rule (with the exceptions in F78–F82); leak-check hits came from other tools and agents
@@ -1663,7 +1702,7 @@ Refs: [`changes/SCOPE_v2.md#L3`](../../changes/SCOPE_v2.md#L3), [`changes/SCOPE_
 **Leak-check hits outside the project** came from other tools and agents:
 - the editor, Copilot and desktop files;
 - an unrelated user project;
-- git activity by the coordinator or another agent: 25 [`.git/objects`](../../.git/objects) files at CP1, 101 at WP5 dev, 318 at H2′, and 371 files under `.git/` at WP2.
+- git activity by the coordinator or another agent: 25 .git/objects files at CP1, 101 at WP5 dev, 318 at H2′, and 371 files under `.git/` at WP2.
 
 **Why this priority:** routine hygiene; recorded for completeness.
 Refs: [`./RESEARCH.md#L96-L116`](../../RESEARCH.md#L96-L116), [`changes/0_reproduce/RESULTS.md#L69`](../../changes/0_reproduce/RESULTS.md#L69), [`changes/1_literature_review/explore/q2/RESULTS.md#L342`](../../changes/1_literature_review/explore/q2/RESULTS.md#L342), [`changes/1_literature_review/explore/q3/RESULTS.md#L318-L321`](../../changes/1_literature_review/explore/q3/RESULTS.md#L318-L321), [`changes/1_literature_review/harness_eval/RESULTS.md#L280`](../../changes/1_literature_review/harness_eval/RESULTS.md#L280), [`changes/2_deployable_peak/wp0_overlay/CP1.md#L141-L160`](../../changes/2_deployable_peak/wp0_overlay/CP1.md#L141-L160), [`changes/2_deployable_peak/wp5_ising/RESULTS_dev.md#L405`](../../changes/2_deployable_peak/wp5_ising/RESULTS_dev.md#L405), [`changes/2_deployable_peak/wp5_ising/RESULTS_dev.md#L430-L440`](../../changes/2_deployable_peak/wp5_ising/RESULTS_dev.md#L430-L440), [`changes/2_deployable_peak/wp5_ising/RESULTS_test.md#L189-L195`](../../changes/2_deployable_peak/wp5_ising/RESULTS_test.md#L189-L195), [`changes/2_deployable_peak/wp2_deployed/RESULTS_dev.md#L263-L281`](../../changes/2_deployable_peak/wp2_deployed/RESULTS_dev.md#L263-L281), [`changes/2_deployable_peak/wp3_test/RESULTS_test.md#L78`](../../changes/2_deployable_peak/wp3_test/RESULTS_test.md#L78), [`changes/2_deployable_peak/wp8_trackC/RESULTS_dev.md#L108`](../../changes/2_deployable_peak/wp8_trackC/RESULTS_dev.md#L108), [`changes/2_deployable_peak/wp9_region5/RESULTS_test.md#L52`](../../changes/2_deployable_peak/wp9_region5/RESULTS_test.md#L52), [`changes/2_deployable_peak/wp10_schedule/RESULTS_test.md#L39`](../../changes/2_deployable_peak/wp10_schedule/RESULTS_test.md#L39), [`changes/3_autoresearch/work/t1u_region2/RESULTS_test.md#L105`](../../changes/3_autoresearch/work/t1u_region2/RESULTS_test.md#L105), [`changes/3_autoresearch/work/t2u_region4/RESULTS_test.md#L61`](../../changes/3_autoresearch/work/t2u_region4/RESULTS_test.md#L61)
@@ -1723,7 +1762,7 @@ Refs: [`changes/2_deployable_peak/wp5_ising/PROGRESS.md#L50-L54`](../../changes/
 <a id="F100"></a>
 ### F100 [P3] [INFRA] The 10 s label and table solves outside WP5 ran without core isolation; after H2′ the timing cores were released to all tracks
 **The timing-isolation flag.**
-- Track B created `TIMING_IDLE` at 01:11 on Oct 3, once its timing runs were done.
+- Track B created the empty flag file TIMING_IDLE (untracked; mtime 2026-10-03 02:08:54, recorded in [`changes/4_story/result/untracked_evidence.txt`](../../changes/4_story/result/untracked_evidence.txt)) at 01:11 on Oct 3, once its timing runs were done.
 - The coordinator deleted it before the H2′ test (01:13:42), and it was re-created at 02:08:5x afterwards. It still exists.
 - While it exists, other tracks may use CPUs 0–23.
 
@@ -1737,9 +1776,18 @@ Some ran next to a foreign job holding ~15 of 24 CPUs ([F81](#F81)).
 
 **Which were not.** The WP5 day-1 label-timing table ([F32](#F32)) ran under the exclusive cores-0-7 lock.
 
-**How much it matters.** Contention matters only for the comparisons that were not exact optima: WP10's PT reached the exhaustive optimum, and the auto-research F1 objectives tie.
+**How much it matters.** Contention matters most where the solvers did not reach a common optimum.
+- WP10's PT reached the exhaustive optimum.
+- The auto-research F1 objectives tie on every test-pool solve and on Region1_s0; on Region5_s0 they differ by 0.16–0.31% (CP-SAT lower on 2 of 3 seeds).
+- No objective comparison is recorded for the WP3/WP9 shared-core label solves.
+
+**The main non-optimal 10 s comparison is Track C's anchored energy** ([F70](#F70)), and its two sides ran under different conditions (ledger completion times, recomputed in Appendix D):
+- the 24 PT solves (ANC10) finished on 2026-10-05 between 14:40:49 and 14:44:33, before the foreign job started (10-10);
+- the 24 CP-SAT solves (ANC10CP) finished on 2026-10-16 between 13:36:49 and 13:41:20, while the foreign job was running (Track C noted it at 14:37 that day).
+
+CP-SAT never proved optimality there, so it may have searched less under contention. How much was not measured.
 **Why this priority:** a timing caveat on secondary solver comparisons ([F70](#F70)).
-Refs: [`changes/2_deployable_peak/wp5_ising/PROGRESS.md#L86-L88`](../../changes/2_deployable_peak/wp5_ising/PROGRESS.md#L86-L88), [`changes/2_deployable_peak/wp5_ising/PROGRESS.md#L94`](../../changes/2_deployable_peak/wp5_ising/PROGRESS.md#L94), [`changes/2_deployable_peak/wp5_ising/PROGRESS.md#L103`](../../changes/2_deployable_peak/wp5_ising/PROGRESS.md#L103), [`changes/2_deployable_peak/wp5_ising/RESULTS_test.md#L186-L188`](../../changes/2_deployable_peak/wp5_ising/RESULTS_test.md#L186-L188), [`changes/2_deployable_peak/wp5_ising/RESULTS_dev.md#L401-L404`](../../changes/2_deployable_peak/wp5_ising/RESULTS_dev.md#L401-L404), [`changes/2_deployable_peak/wp2_deployed/RESULTS_dev.md#L8`](../../changes/2_deployable_peak/wp2_deployed/RESULTS_dev.md#L8), [`changes/2_deployable_peak/wp2_deployed/RESULTS_dev.md#L257`](../../changes/2_deployable_peak/wp2_deployed/RESULTS_dev.md#L257), [`changes/2_deployable_peak/wp10_schedule/PROGRESS.md#L10`](../../changes/2_deployable_peak/wp10_schedule/PROGRESS.md#L10), [`changes/2_deployable_peak/wp8_trackC/RESULTS_dev.md#L105-L107`](../../changes/2_deployable_peak/wp8_trackC/RESULTS_dev.md#L105-L107), [`changes/2_deployable_peak/TIMING_IDLE`](../../changes/2_deployable_peak/TIMING_IDLE), [`changes/2_deployable_peak/wp8_trackC/PROGRESS.md#L12-L16`](../../changes/2_deployable_peak/wp8_trackC/PROGRESS.md#L12-L16), [`changes/3_autoresearch/result/validator_integrity_stats_round_2.md#L44`](../../changes/3_autoresearch/result/validator_integrity_stats_round_2.md#L44)
+Refs: [`changes/3_autoresearch/result/FINAL_REPORT.md#L78`](../../changes/3_autoresearch/result/FINAL_REPORT.md#L78), [`changes/2_deployable_peak/wp8_trackC/results/ledger_labels.csv`](../../changes/2_deployable_peak/wp8_trackC/results/ledger_labels.csv), [`changes/2_deployable_peak/wp8_trackC/PROGRESS.md#L92-L96`](../../changes/2_deployable_peak/wp8_trackC/PROGRESS.md#L92-L96), [`changes/2_deployable_peak/wp8_trackC/PROGRESS.md#L141`](../../changes/2_deployable_peak/wp8_trackC/PROGRESS.md#L141), [`changes/4_story/result/recompute_out.txt`](../../changes/4_story/result/recompute_out.txt), [`changes/2_deployable_peak/wp5_ising/PROGRESS.md#L86-L88`](../../changes/2_deployable_peak/wp5_ising/PROGRESS.md#L86-L88), [`changes/2_deployable_peak/wp5_ising/PROGRESS.md#L94`](../../changes/2_deployable_peak/wp5_ising/PROGRESS.md#L94), [`changes/2_deployable_peak/wp5_ising/PROGRESS.md#L103`](../../changes/2_deployable_peak/wp5_ising/PROGRESS.md#L103), [`changes/2_deployable_peak/wp5_ising/RESULTS_test.md#L186-L188`](../../changes/2_deployable_peak/wp5_ising/RESULTS_test.md#L186-L188), [`changes/2_deployable_peak/wp5_ising/RESULTS_dev.md#L401-L404`](../../changes/2_deployable_peak/wp5_ising/RESULTS_dev.md#L401-L404), [`changes/2_deployable_peak/wp2_deployed/RESULTS_dev.md#L8`](../../changes/2_deployable_peak/wp2_deployed/RESULTS_dev.md#L8), [`changes/2_deployable_peak/wp2_deployed/RESULTS_dev.md#L257`](../../changes/2_deployable_peak/wp2_deployed/RESULTS_dev.md#L257), [`changes/2_deployable_peak/wp10_schedule/PROGRESS.md#L10`](../../changes/2_deployable_peak/wp10_schedule/PROGRESS.md#L10), [`changes/2_deployable_peak/wp8_trackC/RESULTS_dev.md#L105-L107`](../../changes/2_deployable_peak/wp8_trackC/RESULTS_dev.md#L105-L107), [`changes/4_story/result/untracked_evidence.txt`](../../changes/4_story/result/untracked_evidence.txt), [`changes/2_deployable_peak/wp8_trackC/PROGRESS.md#L12-L16`](../../changes/2_deployable_peak/wp8_trackC/PROGRESS.md#L12-L16), [`changes/3_autoresearch/result/validator_integrity_stats_round_2.md#L44`](../../changes/3_autoresearch/result/validator_integrity_stats_round_2.md#L44)
 
 <a id="F81"></a>
 ### F81 [P3] [INFRA] Track C, WP9 and WP10 operational deviations
@@ -1795,7 +1843,7 @@ Refs: [`changes/2_deployable_peak/wp10_schedule/RESULTS_test.md#L42`](../../chan
 
 <a id="F84"></a>
 ### F84 [P1] [INFRA] Auto-research integrity disclosures (final report §5)
-1. **DEV_RULES timing.** R0–R2 had no git attestation until `96506745` (02:23). Their headers were written with guessed times and rewritten in place with `sed`, contradicting the file's "never edited" line.
+1. **DEV_RULES timing.** R0–R2 had no git attestation until `96506745` (02:23). Their headers were written with guessed times and rewritten in place with `sed`, contradicting the file's "never edited" line. The final report adds that the worker transcript confirms each rule precedes its simulations; the transcript is not tracked in git, and the round-1 red-team validator checked those times against it.
 2. **Post-commit procedure changes.**
    - The T2 chain's T1 condition (`3fdba1b`) was changed after T1's outcomes had been seen. The validators required this change, and it was committed before T2's TEST_GO ([F85](#F85)).
    - `chain_dev2.py` ordering was changed.
@@ -1811,7 +1859,7 @@ Refs: [`changes/2_deployable_peak/wp10_schedule/RESULTS_test.md#L42`](../../chan
 11. **Ledgers rewritten.** The ledgers were rewritten in full rather than appended (red-team round 1, N7). Snapshots were committed, and round 2 verified that every rewrite is lossless.
 
 **Why this priority:** these bear on the credibility of the loop's process. The verdict is negative, so they cannot have inflated a claim.
-Refs: [`changes/3_autoresearch/result/FINAL_REPORT.md#L96-L134`](../../changes/3_autoresearch/result/FINAL_REPORT.md#L96-L134), [`changes/3_autoresearch/result/validator_red_team_round_1.md#L143`](../../changes/3_autoresearch/result/validator_red_team_round_1.md#L143), [`changes/3_autoresearch/result/validator_red_team_round_2.md#L34`](../../changes/3_autoresearch/result/validator_red_team_round_2.md#L34), [`changes/3_autoresearch/work/t2u_region4/ADDENDUM_T1_UNEVALUABLE.md#L1-L24`](../../changes/3_autoresearch/work/t2u_region4/ADDENDUM_T1_UNEVALUABLE.md#L1-L24)
+Refs: [`changes/3_autoresearch/.gitignore#L2`](../../changes/3_autoresearch/.gitignore#L2), [`changes/3_autoresearch/result/FINAL_REPORT.md#L100`](../../changes/3_autoresearch/result/FINAL_REPORT.md#L100), [`changes/3_autoresearch/result/validator_red_team_round_1.md#L24`](../../changes/3_autoresearch/result/validator_red_team_round_1.md#L24), [`changes/3_autoresearch/result/validator_red_team_round_1.md#L105-L106`](../../changes/3_autoresearch/result/validator_red_team_round_1.md#L105-L106), [`changes/3_autoresearch/result/FINAL_REPORT.md#L96-L134`](../../changes/3_autoresearch/result/FINAL_REPORT.md#L96-L134), [`changes/3_autoresearch/result/validator_red_team_round_1.md#L143`](../../changes/3_autoresearch/result/validator_red_team_round_1.md#L143), [`changes/3_autoresearch/result/validator_red_team_round_2.md#L34`](../../changes/3_autoresearch/result/validator_red_team_round_2.md#L34), [`changes/3_autoresearch/work/t2u_region4/ADDENDUM_T1_UNEVALUABLE.md#L1-L24`](../../changes/3_autoresearch/work/t2u_region4/ADDENDUM_T1_UNEVALUABLE.md#L1-L24)
 
 <a id="F85"></a>
 ### F85 [P3] [INFRA] The round-1 auto-research validators failed the run on two blocking findings; both were fixed before T2's TEST_GO
@@ -1906,9 +1954,11 @@ Refs: [`changes/SCOPE.md#L63`](../../changes/SCOPE.md#L63), [`documents/proposal
 
 **Mitigation.** WP1's offline results on samples ≥ 0.4 were not used for any WP5 choice.
 
+**[`./RESEARCH.md`](../../RESEARCH.md) also says** the reserve is "untouched". That is likewise true only of deployed runs.
+
 **Consequence.** A final deployed confirmation on the reserve is still uncontaminated by any deployed or tuning outcome. Their offline OPT peaks are known, though, so the reserve is not pristine.
 **Why this priority:** it qualifies the one remaining clean test set (section 9) and corrects the "untouched" wording in the protocols.
-Refs: [`changes/2_deployable_peak/PLAN.md#L19`](../../changes/2_deployable_peak/PLAN.md#L19), [`changes/2_deployable_peak/PLAN.md#L27-L31`](../../changes/2_deployable_peak/PLAN.md#L27-L31), [`changes/2_deployable_peak/PLAN.md#L44`](../../changes/2_deployable_peak/PLAN.md#L44), [`changes/2_deployable_peak/.gitignore#L10`](../../changes/2_deployable_peak/.gitignore#L10), [`changes/2_deployable_peak/wp1_offline/RESULTS.md#L1-L3`](../../changes/2_deployable_peak/wp1_offline/RESULTS.md#L1-L3), [`changes/2_deployable_peak/wp1_offline/RESULTS.md#L111-L113`](../../changes/2_deployable_peak/wp1_offline/RESULTS.md#L111-L113), [`changes/2_deployable_peak/wp1_offline/results/wp1_table.csv`](../../changes/2_deployable_peak/wp1_offline/results/wp1_table.csv), [`changes/2_deployable_peak/wp2_deployed/PROTOCOL_v2_H3.md#L29`](../../changes/2_deployable_peak/wp2_deployed/PROTOCOL_v2_H3.md#L29), [`changes/2_deployable_peak/wp9_region5/PROTOCOL_v2_H4.md#L23`](../../changes/2_deployable_peak/wp9_region5/PROTOCOL_v2_H4.md#L23), [`changes/2_deployable_peak/wp10_schedule/PROTOCOL_v2_H5.md#L27`](../../changes/2_deployable_peak/wp10_schedule/PROTOCOL_v2_H5.md#L27), [`changes/3_autoresearch/documents/GOOD_RESULT.md#L34-L35`](../../changes/3_autoresearch/documents/GOOD_RESULT.md#L34-L35), [`changes/3_autoresearch/result/FINAL_REPORT.md#L116-L120`](../../changes/3_autoresearch/result/FINAL_REPORT.md#L116-L120), [`changes/4_story/result/git_timeline.txt`](../../changes/4_story/result/git_timeline.txt)
+Refs: [`./RESEARCH.md#L121-L124`](../../RESEARCH.md#L121-L124), [`changes/2_deployable_peak/PLAN.md#L19`](../../changes/2_deployable_peak/PLAN.md#L19), [`changes/2_deployable_peak/PLAN.md#L27-L31`](../../changes/2_deployable_peak/PLAN.md#L27-L31), [`changes/2_deployable_peak/PLAN.md#L44`](../../changes/2_deployable_peak/PLAN.md#L44), [`changes/2_deployable_peak/.gitignore#L10`](../../changes/2_deployable_peak/.gitignore#L10), [`changes/2_deployable_peak/wp1_offline/RESULTS.md#L1-L3`](../../changes/2_deployable_peak/wp1_offline/RESULTS.md#L1-L3), [`changes/2_deployable_peak/wp1_offline/RESULTS.md#L111-L113`](../../changes/2_deployable_peak/wp1_offline/RESULTS.md#L111-L113), [`changes/2_deployable_peak/wp1_offline/results/wp1_table.csv`](../../changes/2_deployable_peak/wp1_offline/results/wp1_table.csv), [`changes/2_deployable_peak/wp2_deployed/PROTOCOL_v2_H3.md#L29`](../../changes/2_deployable_peak/wp2_deployed/PROTOCOL_v2_H3.md#L29), [`changes/2_deployable_peak/wp9_region5/PROTOCOL_v2_H4.md#L23`](../../changes/2_deployable_peak/wp9_region5/PROTOCOL_v2_H4.md#L23), [`changes/2_deployable_peak/wp10_schedule/PROTOCOL_v2_H5.md#L27`](../../changes/2_deployable_peak/wp10_schedule/PROTOCOL_v2_H5.md#L27), [`changes/3_autoresearch/documents/GOOD_RESULT.md#L34-L35`](../../changes/3_autoresearch/documents/GOOD_RESULT.md#L34-L35), [`changes/3_autoresearch/result/FINAL_REPORT.md#L116-L120`](../../changes/3_autoresearch/result/FINAL_REPORT.md#L116-L120), [`changes/4_story/result/git_timeline.txt`](../../changes/4_story/result/git_timeline.txt)
 
 <a id="F93"></a>
 ### F93 [P1] [INFRA] "Fresh" test pools were fresh only in deployed mode: WP1 had simulated the offline OPT of the H2′/H3′, H4 and T2 test instances before those tests
@@ -1952,28 +2002,28 @@ Status words (closed list; only these are used):
 | 5 | Ising beats classical solvers on the same formulation (10/60/300 s) | **Refuted** (Q2; phase-1 git caveat) | NEGATIVE-TEST | [F20](#F20) | [`changes/1_literature_review/explore/q2/RESULTS.md#L12-L31`](../../changes/1_literature_review/explore/q2/RESULTS.md#L12-L31) |
 | 6 | Ising beats classical solvers at tight 1/3/10 s budgets | **Refuted** (H2′) | NEGATIVE-TEST | [F28](#F28) | [`changes/2_deployable_peak/wp5_ising/RESULTS_test.md#L7-L24`](../../changes/2_deployable_peak/wp5_ising/RESULTS_test.md#L7-L24) |
 | 7 | Ising samplers are the best family at one short budget | **Post-hoc** (10 s in Q2, 3 s in H2′; not a pass). Rolling re-solves reverse it: on dev at 1 and 3 s, on test at 1 s | TEST-POSTHOC | [F20](#F20), [F28](#F28), [F30](#F30) | [`changes/2_deployable_peak/wp5_ising/RESULTS_test.md#L138-L165`](../../changes/2_deployable_peak/wp5_ising/RESULTS_test.md#L138-L165) |
-| 8 | Matrix-free SB scales to real 0.4% unions on CPU where the dense SB package does not | **Supported** (reported contribution, no pass/fail); SB itself is the weakest Ising solver by quality | OFFLINE | [F31](#F31), [F21](#F21) | [`changes/2_deployable_peak/wp5_ising/RESULTS_dev.md#L333-L392`](../../changes/2_deployable_peak/wp5_ising/RESULTS_dev.md#L333-L392) |
+| 8 | Matrix-free SB scales to real 0.4% unions on CPU where the dense SB package does not | **Supported** (reported contribution, no pass/fail). SB itself was the weakest Ising solver in phase-1 dev tuning and by the WP5 rule; in harness_eval, C4 beat C5 analytically | OFFLINE | [F31](#F31), [F21](#F21) | [`changes/2_deployable_peak/wp5_ising/RESULTS_dev.md#L333-L392`](../../changes/2_deployable_peak/wp5_ising/RESULTS_dev.md#L333-L392), [`changes/1_literature_review/harness_eval/RESULTS.md#L164-L167`](../../changes/1_literature_review/harness_eval/RESULTS.md#L164-L167) |
 | 9 | Ising peak labels survive distillation into Baleen's unchanged GBM | **Refuted** (Q3; phase-1 git caveat) | NEGATIVE-TEST | [F33](#F33) | [`changes/1_literature_review/explore/q3/RESULTS.md#L6-L23`](../../changes/1_literature_review/explore/q3/RESULTS.md#L6-L23) |
 | 10 | With the causal `load` feature the GBM can fit peak-aware labels | **Supported** on dev (learnability gate) | DEV | [F37](#F37) | [`changes/2_deployable_peak/wp2_deployed/RESULTS_dev.md#L96-L112`](../../changes/2_deployable_peak/wp2_deployed/RESULTS_dev.md#L96-L112) |
 | 11 | Ising labels + `load` (+ α) beat Baleen deployed | **Refuted** (H3′). X1 also fails on Region5, where the rule was reported without a pass/fail | NEGATIVE-TEST | [F44](#F44), [F54](#F54) | [`changes/2_deployable_peak/wp3_test/RESULTS_test.md#L6-L16`](../../changes/2_deployable_peak/wp3_test/RESULTS_test.md#L6-L16), [`changes/2_deployable_peak/wp9_region5/RESULTS_test.md#L13`](../../changes/2_deployable_peak/wp9_region5/RESULTS_test.md#L13) |
 | 12 | Ising labels add deployed value beyond the load-adaptive threshold | **Refuted** (H3′-labels; auto-research T2 vs A+α) | NEGATIVE-TEST | [F45](#F45), [F65](#F65) | [`changes/2_deployable_peak/wp3_test/RESULTS_test.md#L30-L38`](../../changes/2_deployable_peak/wp3_test/RESULTS_test.md#L30-L38), [`changes/3_autoresearch/work/t2u_region4/RESULTS_test.md#L14-L21`](../../changes/3_autoresearch/work/t2u_region4/RESULTS_test.md#L14-L21) |
-| 13 | An Ising-fitted threshold table beats Baleen deployed | **Refuted** (H5, Region1) | NEGATIVE-TEST | [F59](#F59) | [`changes/2_deployable_peak/wp10_schedule/RESULTS_test.md#L9-L17`](../../changes/2_deployable_peak/wp10_schedule/RESULTS_test.md#L9-L17) |
+| 13 | An Ising-fitted threshold table beats Baleen deployed | **Refuted** (H5, Region1). The table was neutral on 10/18 test retrains and PT = exhaustive optimum, so this refutes day-1 table fitting, not Ising solving specifically | NEGATIVE-TEST | [F59](#F59) | [`changes/2_deployable_peak/wp10_schedule/RESULTS_test.md#L9-L17`](../../changes/2_deployable_peak/wp10_schedule/RESULTS_test.md#L9-L17) |
 | 14 | Deployment-aware Ising labels (anchored, top-k, student) help | **Not supported** on dev (no finalist); never tested | DEV | [F50](#F50) | [`changes/2_deployable_peak/wp8_trackC/RESULTS_dev.md#L6-L20`](../../changes/2_deployable_peak/wp8_trackC/RESULTS_dev.md#L6-L20) |
 | 15 | The load-adaptive threshold on Baleen's own models beats Baleen deployed on a fresh region | **Supported** on Region5 (H4) by the pre-registered rule, which uses the retrain-level SE. At instance level: +1.16 ± 0.75 (≈1.5 SE); s0.5 gives 69% of the gain. "Fresh" = never run deployed ([F93](#F93)). Earlier load-based attempts in Baleen and the thesis did not cut, or barely cut (1.4%), the peak ([F95](#F95)) | TEST-PREREG | [F52](#F52), [F53](#F53), [F93](#F93), [F95](#F95) | [`changes/2_deployable_peak/wp9_region5/RESULTS_test.md#L7-L19`](../../changes/2_deployable_peak/wp9_region5/RESULTS_test.md#L7-L19) |
 | 16 | …and on other regions | **Post-hoc**: yes on Regions 6/7 and Region4 (Region4 also concentrated); no on Region1; uninformative on Region2 | TEST-POSTHOC | [F47](#F47), [F60](#F60), [F66](#F66), [F69](#F69) | [`changes/2_deployable_peak/wp3_test/RESULTS_test.md#L53-L60`](../../changes/2_deployable_peak/wp3_test/RESULTS_test.md#L53-L60), [`changes/3_autoresearch/work/t2u_region4/RESULTS_test.md#L50-L52`](../../changes/3_autoresearch/work/t2u_region4/RESULTS_test.md#L50-L52), [`changes/2_deployable_peak/wp10_schedule/RESULTS_test.md#L19`](../../changes/2_deployable_peak/wp10_schedule/RESULTS_test.md#L19) |
 | 17 | The threshold's benefit depends on the load level | **Hypothesis** (WP4); dev Region1_s0 cuts against it | TEST-POSTHOC | [F60](#F60), [F69](#F69) | [`changes/2_deployable_peak/wp10_schedule/RESULTS_test.md#L33-L36`](../../changes/2_deployable_peak/wp10_schedule/RESULTS_test.md#L33-L36) |
 | 18 | Proposal H1 (≥ 5% vs stock Baleen, averaged over 7 traces) | **Partly supported**: offline vs Baleen's own peak-blind oracle, the per-trace mean over the 4 traces measured is 12.8–13.5% (per-region means averaged; recomputed), but Region4 alone gives 3.0–5.4% and Regions 1–3 were not measured. Deployed (Ising labels vs stock Baleen): refuted (H3′) | OFFLINE / NEGATIVE-TEST | [F25](#F25), [F44](#F44), [F91](#F91) | [`documents/proposal_docx_compose/proposal.js#L199`](../../documents/proposal_docx_compose/proposal.js#L199), [`changes/4_story/result/recompute_out.txt`](../../changes/4_story/result/recompute_out.txt) |
-| 19 | Proposal H2 (an Ising solver on a sum-of-squares surrogate beats the artifact's greedy peak policy and a greedy warm start by ≥ 3%) | **Partly supported**: the SoS-surrogate SB beat the peak-aware greedy on dev (−13.217% at 10 s), and the LP-started PT/EIM samplers beat Baleen-order greedy by far (context). The artifact's peak policy is **not measured**. SB was the weakest Ising solver ([F21](#F21)), and no Ising solver passed a pre-registered comparison with the classical solvers | OFFLINE | [F20](#F20), [F21](#F21), [F91](#F91) | [`documents/proposal_docx_compose/proposal.js#L200`](../../documents/proposal_docx_compose/proposal.js#L200), [`changes/1_literature_review/explore/q2/RESULTS.md#L200-L211`](../../changes/1_literature_review/explore/q2/RESULTS.md#L200-L211) |
+| 19 | Proposal H2 (an Ising solver on a sum-of-squares surrogate beats the artifact's greedy peak policy and a greedy warm start by ≥ 3% Peak DT) | **Not supported**. (a) The artifact's peak policy is **not measured**. (b) The analytic ≥ 3% over the peak-aware greedy holds on dev for every solver, LP included (SB −13.217%, LP −13.172%), so it does not distinguish Ising. On the proposal's simulated Peak DT, SB-on-SoS (harness_eval C4: 27.97 / 27.87) is level with LP + repair (R1: 28.10 / 27.77) and only 1.38–1.96% below the dev peak-aware greedy (28.53 / 28.26; cross-campaign; recomputed in [`changes/4_story/result/recompute_out.txt`](../../changes/4_story/result/recompute_out.txt)). The surrogate route was the weakest Ising solver in phase-1 dev tuning and by the WP5 rule ([F21](#F21)) | DEV | [F20](#F20), [F21](#F21), [F91](#F91) | [`documents/proposal_docx_compose/proposal.js#L199-L200`](../../documents/proposal_docx_compose/proposal.js#L199-L200), [`changes/1_literature_review/explore/q2/RESULTS.md#L132-L143`](../../changes/1_literature_review/explore/q2/RESULTS.md#L132-L143), [`changes/1_literature_review/harness_eval/RESULTS.md#L128-L160`](../../changes/1_literature_review/harness_eval/RESULTS.md#L128-L160), [`changes/1_literature_review/explore/q2/PROGRESS.md#L50-L51`](../../changes/1_literature_review/explore/q2/PROGRESS.md#L50-L51) |
 | 20 | Proposal H3 (≥ 60% retention online) | **Not supported**: test retention is X1 −0.28 (H3′) and −0.54 (H4), and X2 −0.33; pre-declared metric, no pass/fail | TEST-POSTHOC | [F71](#F71) | [`changes/2_deployable_peak/wp3_test/RESULTS_test.md#L75`](../../changes/2_deployable_peak/wp3_test/RESULTS_test.md#L75), [`changes/2_deployable_peak/wp9_region5/RESULTS_test.md#L49`](../../changes/2_deployable_peak/wp9_region5/RESULTS_test.md#L49) |
 | 21 | An Ising/QUBO-centric component beats deployed Baleen and the threshold arm (auto-research contract) | **Refuted**: T1 unevaluable, T2 failed vs A+α; budget exhausted | NEGATIVE-TEST | [F64](#F64), [F65](#F65) | [`changes/3_autoresearch/result/FINAL_REPORT.md#L1-L7`](../../changes/3_autoresearch/result/FINAL_REPORT.md#L1-L7) |
 | 22 | Ising and classical solvers return the same objective where both reach the optimum | **Supported** (exact ties on floored instances, WP10 tables, auto-research F1 labels) | OFFLINE | [F57](#F57), [F70](#F70) | [`changes/3_autoresearch/result/FINAL_REPORT.md#L77-L94`](../../changes/3_autoresearch/result/FINAL_REPORT.md#L77-L94), [`changes/2_deployable_peak/wp10_schedule/PROGRESS.md#L82-L86`](../../changes/2_deployable_peak/wp10_schedule/PROGRESS.md#L82-L86) |
-| 23 | The deployed P100 of PT- vs CP-SAT-label arms differs systematically | **Not supported**: a two-way record, none beyond ≈2 SE, with exactly tied objectives | DEV + TEST-POSTHOC | [F70](#F70) | [`changes/2_deployable_peak/wp3_test/RESULTS_test.md#L14`](../../changes/2_deployable_peak/wp3_test/RESULTS_test.md#L14), [`changes/3_autoresearch/result/FINAL_REPORT.md#L80-L89`](../../changes/3_autoresearch/result/FINAL_REPORT.md#L80-L89) |
+| 23 | The deployed P100 of PT- vs CP-SAT-label arms differs systematically | **Not supported**: a two-way record. Only WP2's X1 row reaches ≈2.1 instance-level SE; at retrain level three rows exceed 2 SE (two dev rows favouring PT, one test row favouring CP-SAT). The F1 objectives tie where compared (exactly in the auto-research test-pool solves); Track C's anchored-energy row does not | DEV + TEST-POSTHOC | [F70](#F70) | [`changes/2_deployable_peak/wp3_test/RESULTS_test.md#L14`](../../changes/2_deployable_peak/wp3_test/RESULTS_test.md#L14), [`changes/3_autoresearch/result/FINAL_REPORT.md#L80-L89`](../../changes/3_autoresearch/result/FINAL_REPORT.md#L80-L89) |
 
 **Summary for a paper:**
 - The min–max *formulation* is a robust offline win: ≈16% pooled over Regions 5–7 (13.0–17.7% per region), little on Region4.
 - Ising/QUBO solvers tie classical solvers where both reach the optimum. They win only at one short budget per test (10 s; 3 s) and lose at 1 s, at 60/300 s and in rolling re-solves; no pre-registered solver test passed.
 - The Ising peak labels did not survive deployment in any pre-registered test.
-- The only pre-registered deployed gain, −3.2% on Region5, comes from a load-adaptive admission threshold on Baleen's own models. It passed on the retrain-level SE, but at instance level it is ≈1.5 SE and one instance carries 69% of it.
+- The only pre-registered deployed gain, −3.2% on fresh Region5 (fresh = never run deployed; prior load-based attempts: [F95](#F95)), comes from a load-adaptive admission threshold on Baleen's own models. It passed on the retrain-level SE, but at instance level it is ≈1.5 SE and one instance carries 69% of it.
 
 ## 9. Open questions and next steps
 
@@ -2009,9 +2059,9 @@ Status words (closed list; only these are used):
    - the convergence search stalls on write-rate plateaus;
    - `validate.py` trusts `matched` and averages unmatched static rows ([`changes/3_autoresearch/result/validator_integrity_stats_round_2.md#L204-L214`](../../changes/3_autoresearch/result/validator_integrity_stats_round_2.md#L204-L214));
    - the auto-research notebook lacks the interim-look entry ([F86](#F86));
-   - `TIMING_IDLE` left solver comparisons without core isolation ([F100](#F100)).
+   - `TIMING_IDLE` left solver comparisons without core isolation ([F100](#F100)); Track C's PT vs CP-SAT anchored comparison would need both sides re-solved under the same conditions before it can count.
 8. **Governance:**
-   - teammate confirmation of scope v2 and G3 ([F76](#F76));
+   - teammate confirmation of scope v2 and G3 ([F76](#F76)), and a review of the later overlays `PATCH_v3`–v5 on which H5 and the auto-research tests ran ([F04](#F04));
    - PLAN's dev-signal gate decision, recorded after the fact ([F94](#F94));
    - recording amendments 1.2c/1.2d in [`changes/SCOPE_v2.md`](../../changes/SCOPE_v2.md) if any of their results is ever cited as more than a negative;
    - the privacy decision ([F87](#F87)): a history rewrite alone is not enough, because the redaction tool in the current tree still contains the patterns.
@@ -2221,7 +2271,7 @@ Commit times come from [`changes/4_story/result/git_timeline.txt`](../../changes
 
 | Date (2026) | Event | Record |
 |---|---|---|
-| 09-14 | Literature-review pipeline and top-8 feasibility report (`2264e66`) | git |
+| 09-14 | Literature-review pipeline and top-8 feasibility report (`2264e66`); its Baleen audit proposes peak-aware scoring plus load-adaptive gating | git, [F104](#F104) |
 | 09-26 | Proposal documents (`527f8bc`); reproduction starts | [`changes/0_reproduce/RESULTS.md#L5`](../../changes/0_reproduce/RESULTS.md#L5) |
 | 09-27 | Scope v1 frozen | [`changes/SCOPE.md#L3`](../../changes/SCOPE.md#L3) |
 | 09-28 00:17 | Reproduction and QUBO literature review committed (`0981c50`) | git |
@@ -2236,6 +2286,8 @@ Commit times come from [`changes/4_story/result/git_timeline.txt`](../../changes
 | 10-04 09:16 | H3′ protocol + WP2 dev results (`cba9970`) | [F39](#F39), [F44](#F44) |
 | 10-04 17:30 | Privacy redaction (`55a125b`) | [F87](#F87) |
 | 10-05 14:13 | G3 waived (`84a0c1d`); H3′ test ledger rows 14:23:12 → 17:41:42; Track C stage 1 starts (14:18) | [F76](#F76), [F44](#F44) |
+| 10-05 ~15:05 → 10-16 | Track C session down (stage 1 had run 14:18–15:05 on 10-05) | [F73](#F73) |
+| 10-16 12:33 | H3′ evaluated (`evaluation.json` mtime) | [F73](#F73) |
 | 10-16 12:40 | H3′ result: FAIL (`46608e0`) | [F44](#F44) |
 | 10-16 13:54 | Track C stage-1 results and finalist rule (`19d7992`); H4 pre-registered (`d10e572`) | [F49](#F49), [F50](#F50), [F52](#F52) |
 | 10-16 20:27 | Track C stage 2 negative (`4ba4bcc`) | [F50](#F50) |
@@ -2258,7 +2310,7 @@ Commit times come from [`changes/4_story/result/git_timeline.txt`](../../changes
 | Topic | Primary files |
 |---|---|
 | Index, ledger, decisions | [`./RESEARCH.md`](../../RESEARCH.md), [`changes/SCOPE.md`](../../changes/SCOPE.md), [`changes/SCOPE_v2.md`](../../changes/SCOPE_v2.md), [`changes/2_deployable_peak/PLAN.md`](../../changes/2_deployable_peak/PLAN.md) |
-| Proposal, spec, paper, paper selection | [`documents/PeakBaleen_Proposal.pdf`](../../documents/PeakBaleen_Proposal.pdf) (text: [`documents/proposal_docx_compose/proposal.js`](../../documents/proposal_docx_compose/proposal.js)), [`documents/CourseProject-Fall2026.pdf`](../../documents/CourseProject-Fall2026.pdf), [`documents/Baleen_FAST24_Wong.pdf`](../../documents/Baleen_FAST24_Wong.pdf), [`documents/top_doable_papers_filtered.md`](../../documents/top_doable_papers_filtered.md), [`lit_review/README.md`](../../lit_review/README.md) |
+| Proposal, spec, paper, paper selection | [`documents/PeakBaleen_Proposal.pdf`](../../documents/PeakBaleen_Proposal.pdf) (text: [`documents/proposal_docx_compose/proposal.js`](../../documents/proposal_docx_compose/proposal.js)), [`documents/CourseProject-Fall2026.pdf`](../../documents/CourseProject-Fall2026.pdf), [`documents/Baleen_FAST24_Wong.pdf`](../../documents/Baleen_FAST24_Wong.pdf), [`documents/top_doable_papers_filtered.md`](../../documents/top_doable_papers_filtered.md), [`lit_review/README.md`](../../lit_review/README.md), documents/OS Final Project Proposal.pdf (the proposal slides) |
 | Reproduction | [`changes/0_reproduce/README.md`](../../changes/0_reproduce/README.md), [`changes/0_reproduce/REPRODUCE_PLAN.md`](../../changes/0_reproduce/REPRODUCE_PLAN.md), [`changes/0_reproduce/RESULTS.md`](../../changes/0_reproduce/RESULTS.md), [`changes/0_reproduce/work/results/fig9_summary.md`](../../changes/0_reproduce/work/results/fig9_summary.md), [`changes/0_reproduce/work/results/fig9_jobs.csv`](../../changes/0_reproduce/work/results/fig9_jobs.csv), [`changes/0_reproduce/work/results/retrain_dist.csv`](../../changes/0_reproduce/work/results/retrain_dist.csv) |
 | Literature review | [`changes/1_literature_review/lit_review_qubo/REPORT.md`](../../changes/1_literature_review/lit_review_qubo/REPORT.md), [`changes/1_literature_review/SWAPPABLE_QUBO_ISING_REPORT.md`](../../changes/1_literature_review/SWAPPABLE_QUBO_ISING_REPORT.md), [`changes/1_literature_review/ising_followup/survey.md`](../../changes/1_literature_review/ising_followup/survey.md), [`changes/1_literature_review/ising_followup/audit/AUDIT.md`](../../changes/1_literature_review/ising_followup/audit/AUDIT.md) |
 | Phase-1 real harness | [`changes/1_literature_review/harness_eval/RESULTS.md`](../../changes/1_literature_review/harness_eval/RESULTS.md), [`changes/1_literature_review/harness_eval/PROGRESS.md`](../../changes/1_literature_review/harness_eval/PROGRESS.md), [`changes/1_literature_review/harness_eval/results/tables.md`](../../changes/1_literature_review/harness_eval/results/tables.md) |
@@ -2269,20 +2321,20 @@ Commit times come from [`changes/4_story/result/git_timeline.txt`](../../changes
 | WP2 deployed dev | [`changes/2_deployable_peak/wp2_deployed/RESULTS_dev.md`](../../changes/2_deployable_peak/wp2_deployed/RESULTS_dev.md), [`changes/2_deployable_peak/wp2_deployed/PROGRESS.md`](../../changes/2_deployable_peak/wp2_deployed/PROGRESS.md), [`changes/2_deployable_peak/wp2_deployed/PROTOCOL_v2_H3.md`](../../changes/2_deployable_peak/wp2_deployed/PROTOCOL_v2_H3.md), [`changes/2_deployable_peak/wp2_deployed/trials.csv`](../../changes/2_deployable_peak/wp2_deployed/trials.csv), [`changes/2_deployable_peak/wp2_deployed/results/summary.md`](../../changes/2_deployable_peak/wp2_deployed/results/summary.md), [`changes/2_deployable_peak/wp2_deployed/results/mechanism_by_region.txt`](../../changes/2_deployable_peak/wp2_deployed/results/mechanism_by_region.txt) |
 | WP3 H3′ test | [`changes/2_deployable_peak/wp3_test/RESULTS_test.md`](../../changes/2_deployable_peak/wp3_test/RESULTS_test.md), [`changes/2_deployable_peak/wp3_test/PROGRESS.md`](../../changes/2_deployable_peak/wp3_test/PROGRESS.md), [`changes/2_deployable_peak/wp3_test/INSTANCES.md`](../../changes/2_deployable_peak/wp3_test/INSTANCES.md), [`changes/2_deployable_peak/wp3_test/trials.csv`](../../changes/2_deployable_peak/wp3_test/trials.csv), [`changes/2_deployable_peak/wp3_test/results/evaluation.json`](../../changes/2_deployable_peak/wp3_test/results/evaluation.json) |
 | WP8 Track C | [`changes/2_deployable_peak/wp8_trackC/PLAN_C.md`](../../changes/2_deployable_peak/wp8_trackC/PLAN_C.md), [`changes/2_deployable_peak/wp8_trackC/PROGRESS.md`](../../changes/2_deployable_peak/wp8_trackC/PROGRESS.md), [`changes/2_deployable_peak/wp8_trackC/RESULTS_dev.md`](../../changes/2_deployable_peak/wp8_trackC/RESULTS_dev.md), [`changes/2_deployable_peak/wp8_trackC/results/stage1_table.md`](../../changes/2_deployable_peak/wp8_trackC/results/stage1_table.md), [`changes/2_deployable_peak/wp8_trackC/results/stage2_summary.md`](../../changes/2_deployable_peak/wp8_trackC/results/stage2_summary.md), [`changes/2_deployable_peak/wp8_trackC/results/proxy_validation.md`](../../changes/2_deployable_peak/wp8_trackC/results/proxy_validation.md), [`changes/2_deployable_peak/wp8_trackC/trials.csv`](../../changes/2_deployable_peak/wp8_trackC/trials.csv) |
-| WP9 H4 test | [`changes/2_deployable_peak/wp9_region5/PROTOCOL_v2_H4.md`](../../changes/2_deployable_peak/wp9_region5/PROTOCOL_v2_H4.md), [`changes/2_deployable_peak/wp9_region5/PROGRESS.md`](../../changes/2_deployable_peak/wp9_region5/PROGRESS.md), [`changes/2_deployable_peak/wp9_region5/RESULTS_test.md`](../../changes/2_deployable_peak/wp9_region5/RESULTS_test.md), [`changes/2_deployable_peak/wp9_region5/trials.csv`](../../changes/2_deployable_peak/wp9_region5/trials.csv), [`changes/2_deployable_peak/wp9_region5/results/evaluation.json`](../../changes/2_deployable_peak/wp9_region5/results/evaluation.json) |
+| WP9 H4 test | [`changes/2_deployable_peak/wp9_region5/PROTOCOL_v2_H4.md`](../../changes/2_deployable_peak/wp9_region5/PROTOCOL_v2_H4.md), [`changes/2_deployable_peak/wp9_region5/PROGRESS.md`](../../changes/2_deployable_peak/wp9_region5/PROGRESS.md), [`changes/2_deployable_peak/wp9_region5/RESULTS_test.md`](../../changes/2_deployable_peak/wp9_region5/RESULTS_test.md), [`changes/2_deployable_peak/wp9_region5/trials.csv`](../../changes/2_deployable_peak/wp9_region5/trials.csv), [`changes/2_deployable_peak/wp9_region5/results/evaluation.json`](../../changes/2_deployable_peak/wp9_region5/results/evaluation.json), [`changes/2_deployable_peak/wp9_region5/INSTANCES.md`](../../changes/2_deployable_peak/wp9_region5/INSTANCES.md) (instance build and label statistics) |
 | WP10 H5 test | [`changes/2_deployable_peak/wp10_schedule/SCOPE_v2_1b.md`](../../changes/2_deployable_peak/wp10_schedule/SCOPE_v2_1b.md), [`changes/2_deployable_peak/wp10_schedule/G1_v3.md`](../../changes/2_deployable_peak/wp10_schedule/G1_v3.md), [`changes/2_deployable_peak/wp10_schedule/PROTOCOL_v2_H5.md`](../../changes/2_deployable_peak/wp10_schedule/PROTOCOL_v2_H5.md), [`changes/2_deployable_peak/wp10_schedule/PROGRESS.md`](../../changes/2_deployable_peak/wp10_schedule/PROGRESS.md), [`changes/2_deployable_peak/wp10_schedule/RESULTS_test.md`](../../changes/2_deployable_peak/wp10_schedule/RESULTS_test.md), [`changes/2_deployable_peak/wp10_schedule/trials_test.csv`](../../changes/2_deployable_peak/wp10_schedule/trials_test.csv), [`changes/2_deployable_peak/wp10_schedule/results/e3_tables.md`](../../changes/2_deployable_peak/wp10_schedule/results/e3_tables.md) |
-| Auto-research: contract, rules, notes | [`changes/3_autoresearch/README.md`](../../changes/3_autoresearch/README.md), [`changes/3_autoresearch/autoscript/run_auto.sh`](../../changes/3_autoresearch/autoscript/run_auto.sh), [`changes/3_autoresearch/documents/GOOD_RESULT.md`](../../changes/3_autoresearch/documents/GOOD_RESULT.md), [`changes/3_autoresearch/result/DEV_RULES.md`](../../changes/3_autoresearch/result/DEV_RULES.md), [`changes/3_autoresearch/result/LAB_NOTEBOOK.md`](../../changes/3_autoresearch/result/LAB_NOTEBOOK.md), [`changes/3_autoresearch/result/STATUS.md`](../../changes/3_autoresearch/result/STATUS.md), [`changes/3_autoresearch/result/FINAL_REPORT.md`](../../changes/3_autoresearch/result/FINAL_REPORT.md) |
+| Auto-research: contract, rules, notes | [`changes/3_autoresearch/README.md`](../../changes/3_autoresearch/README.md), [`changes/3_autoresearch/autoscript/run_auto.sh`](../../changes/3_autoresearch/autoscript/run_auto.sh), [`changes/3_autoresearch/documents/GOOD_RESULT.md`](../../changes/3_autoresearch/documents/GOOD_RESULT.md), [`changes/3_autoresearch/result/DEV_RULES.md`](../../changes/3_autoresearch/result/DEV_RULES.md), [`changes/3_autoresearch/result/LAB_NOTEBOOK.md`](../../changes/3_autoresearch/result/LAB_NOTEBOOK.md), [`changes/3_autoresearch/result/STATUS.md`](../../changes/3_autoresearch/result/STATUS.md), [`changes/3_autoresearch/result/FINAL_REPORT.md`](../../changes/3_autoresearch/result/FINAL_REPORT.md), [`changes/3_autoresearch/code/validate.py`](../../changes/3_autoresearch/code/validate.py) (the deterministic fail-closed validator) |
 | Auto-research: scope and gates | [`changes/3_autoresearch/work/cls_table/SCOPE_AMENDMENT.md`](../../changes/3_autoresearch/work/cls_table/SCOPE_AMENDMENT.md), [`changes/3_autoresearch/work/cls_table/G1_v4.md`](../../changes/3_autoresearch/work/cls_table/G1_v4.md), [`changes/3_autoresearch/work/union/SCOPE_AMENDMENT.md`](../../changes/3_autoresearch/work/union/SCOPE_AMENDMENT.md), [`changes/3_autoresearch/work/union/G1_v5.md`](../../changes/3_autoresearch/work/union/G1_v5.md) |
-| Auto-research: protocols and tests | [`changes/3_autoresearch/work/t1_region2/PROTOCOL.md`](../../changes/3_autoresearch/work/t1_region2/PROTOCOL.md) (void), [`changes/3_autoresearch/work/t1u_region2/PROTOCOL.md`](../../changes/3_autoresearch/work/t1u_region2/PROTOCOL.md), [`changes/3_autoresearch/work/t1u_region2/ADDENDUM_R4.md`](../../changes/3_autoresearch/work/t1u_region2/ADDENDUM_R4.md), [`changes/3_autoresearch/work/t1u_region2/RESULTS_test.md`](../../changes/3_autoresearch/work/t1u_region2/RESULTS_test.md), [`changes/3_autoresearch/work/t2u_region4/PROTOCOL.md`](../../changes/3_autoresearch/work/t2u_region4/PROTOCOL.md), [`changes/3_autoresearch/work/t2u_region4/ADDENDUM_T1_UNEVALUABLE.md`](../../changes/3_autoresearch/work/t2u_region4/ADDENDUM_T1_UNEVALUABLE.md), [`changes/3_autoresearch/work/t2u_region4/RESULTS_test.md`](../../changes/3_autoresearch/work/t2u_region4/RESULTS_test.md), [`changes/3_autoresearch/work/t2u_region4/trials_test.csv`](../../changes/3_autoresearch/work/t2u_region4/trials_test.csv) |
+| Auto-research: protocols and tests | [`changes/3_autoresearch/work/t1_region2/PROTOCOL.md`](../../changes/3_autoresearch/work/t1_region2/PROTOCOL.md) (void), [`changes/3_autoresearch/work/t1u_region2/PROTOCOL.md`](../../changes/3_autoresearch/work/t1u_region2/PROTOCOL.md), [`changes/3_autoresearch/work/t1u_region2/ADDENDUM_R4.md`](../../changes/3_autoresearch/work/t1u_region2/ADDENDUM_R4.md), [`changes/3_autoresearch/work/t1u_region2/RESULTS_test.md`](../../changes/3_autoresearch/work/t1u_region2/RESULTS_test.md), [`changes/3_autoresearch/work/t2u_region4/PROTOCOL.md`](../../changes/3_autoresearch/work/t2u_region4/PROTOCOL.md), [`changes/3_autoresearch/work/t2u_region4/ADDENDUM_T1_UNEVALUABLE.md`](../../changes/3_autoresearch/work/t2u_region4/ADDENDUM_T1_UNEVALUABLE.md), [`changes/3_autoresearch/work/t2u_region4/RESULTS_test.md`](../../changes/3_autoresearch/work/t2u_region4/RESULTS_test.md), [`changes/3_autoresearch/work/t2u_region4/trials_test.csv`](../../changes/3_autoresearch/work/t2u_region4/trials_test.csv), `changes/3_autoresearch/work/union_t2/` (the T2 code and overlay copy) |
 | Auto-research: dev ledgers | [`changes/3_autoresearch/work/cls_table/trials_dev.csv`](../../changes/3_autoresearch/work/cls_table/trials_dev.csv), [`changes/3_autoresearch/work/union/trials_dev.csv`](../../changes/3_autoresearch/work/union/trials_dev.csv), [`changes/3_autoresearch/work/union/results/dev_finalist.json`](../../changes/3_autoresearch/work/union/results/dev_finalist.json) |
 | Auto-research: validators | [`changes/3_autoresearch/result/validator_red_team_round_1.md`](../../changes/3_autoresearch/result/validator_red_team_round_1.md), [`changes/3_autoresearch/result/validator_red_team_round_2.md`](../../changes/3_autoresearch/result/validator_red_team_round_2.md), [`changes/3_autoresearch/result/validator_integrity_stats_round_1.md`](../../changes/3_autoresearch/result/validator_integrity_stats_round_1.md), [`changes/3_autoresearch/result/validator_integrity_stats_round_2.md`](../../changes/3_autoresearch/result/validator_integrity_stats_round_2.md) |
 | Privacy | [`tools/privacy_scrub.py`](../../tools/privacy_scrub.py) |
 | This story | [`changes/4_story/code/check_story.py`](../../changes/4_story/code/check_story.py), [`changes/4_story/code/recompute.py`](../../changes/4_story/code/recompute.py), [`changes/4_story/code/make_index.py`](../../changes/4_story/code/make_index.py), [`changes/4_story/code/linkify.py`](../../changes/4_story/code/linkify.py), [`changes/4_story/result/recompute_out.txt`](../../changes/4_story/result/recompute_out.txt), [`changes/4_story/result/git_timeline.txt`](../../changes/4_story/result/git_timeline.txt), [`changes/4_story/result/protocol_commits.txt`](../../changes/4_story/result/protocol_commits.txt), [`changes/4_story/result/WRITER_NOTES.md`](../../changes/4_story/result/WRITER_NOTES.md) |
 
-## Appendix D. Recomputation one-liners (read-only, except that items 1 and 2 write their own output files under `changes/4_story/result/`)
+## Appendix D. Recomputation one-liners (read-only, except that items 1, 2 and 9 write their own output files under `changes/4_story/result/`)
 
 1. **Test-arm means, paired pass-rule quantities, and the round-2 derived numbers.**
-   - **Used by:** [F21](#F21), [F24](#F24), [F25](#F25), [F44](#F44), [F46](#F46), [F47](#F47), [F48](#F48), [F52](#F52)–[F54](#F54), [F59](#F59), [F60](#F60), [F65](#F65), [F66](#F66), [F69](#F69), [F72](#F72) and §8 row 18.
+   - **Used by:** [F21](#F21), [F24](#F24), [F25](#F25), [F36](#F36), [F44](#F44), [F46](#F46), [F47](#F47), [F48](#F48), [F52](#F52)–[F54](#F54), [F59](#F59), [F60](#F60), [F65](#F65), [F66](#F66), [F69](#F69), [F70](#F70), [F72](#F72), [F96](#F96), [F100](#F100), [F101](#F101) and §8 rows 18 and 19.
    - **Raw inputs:** [`changes/2_deployable_peak/wp3_test/trials.csv`](../../changes/2_deployable_peak/wp3_test/trials.csv), [`changes/2_deployable_peak/wp9_region5/trials.csv`](../../changes/2_deployable_peak/wp9_region5/trials.csv), [`changes/2_deployable_peak/wp10_schedule/trials_test.csv`](../../changes/2_deployable_peak/wp10_schedule/trials_test.csv), [`changes/3_autoresearch/work/t2u_region4/trials_test.csv`](../../changes/3_autoresearch/work/t2u_region4/trials_test.csv), [`changes/2_deployable_peak/wp2_deployed/trials.csv`](../../changes/2_deployable_peak/wp2_deployed/trials.csv), [`changes/2_deployable_peak/wp8_trackC/trials.csv`](../../changes/2_deployable_peak/wp8_trackC/trials.csv), [`changes/3_autoresearch/work/cls_table/trials_dev.csv`](../../changes/3_autoresearch/work/cls_table/trials_dev.csv), [`changes/2_deployable_peak/wp1_offline/results/wp1_table.csv`](../../changes/2_deployable_peak/wp1_offline/results/wp1_table.csv), and the §8.1 table of [`changes/1_literature_review/explore/q2/RESULTS.md`](../../changes/1_literature_review/explore/q2/RESULTS.md).
    - **Script:** [`changes/4_story/code/recompute.py`](../../changes/4_story/code/recompute.py); **output:** [`changes/4_story/result/recompute_out.txt`](../../changes/4_story/result/recompute_out.txt):
      ```
@@ -2292,6 +2344,7 @@ Commit times come from [`changes/4_story/result/git_timeline.txt`](../../changes
      - Only `matched == True` rows count.
      - A configuration's mean is the mean over instances of the per-instance mean over retrains.
      - SE_retrain = sqrt(Σ_i s²_X,i/n_X,i + s²_R,i/n_R,i)/n; SE_inst = sd(d_i)/√n.
+     - **WP2 dev merge.** For WP2 dev comparisons, the widened-search re-runs are merged into their arms before averaging: Ax-1.0 → Aa-1.0, Bx-1.0 → Ba-1.0, Bx-0.5 → Ba-0.5, Ex-1.0 → Ea-1.0 (`cells_merged` in the script). WP2's own report merges them the same way ([`changes/2_deployable_peak/wp2_deployed/RESULTS_dev.md#L241`](../../changes/2_deployable_peak/wp2_deployed/RESULTS_dev.md#L241)), and so does Track C's proxy validation ([`changes/2_deployable_peak/wp8_trackC/PROGRESS.md#L61-L63`](../../changes/2_deployable_peak/wp8_trackC/PROGRESS.md#L61-L63)). The WP2 and union rows of [F70](#F70) are computed from the raw ledgers this way, not copied from a report.
    - **Agreement.** Every recomputed value agrees with its source report to the source's rounding. One source rounds differently from raw: WP9's −0.24 / +1.19 vs raw −0.246 / +1.183, noted in [F53](#F53).
    - **Round-2 additions:**
      - the LP-start share: (31.816 − 23.039)/(31.816 − 22.524);
@@ -2302,6 +2355,13 @@ Commit times come from [`changes/4_story/result/git_timeline.txt`](../../changes
      - dev Region1_s0 means;
      - WP1 per-region means;
      - the Region5 s0.6 peak windows.
+   - **Round-3 additions:**
+     - PT vs CP-SAT label arms on WP2 dev (merged as above) and on the union dev ledger ([F70](#F70));
+     - WP10's test table fits: neutral tables, and PT equal to the exhaustive and CD tables ([F59](#F59));
+     - WP1 R0 minus the authors' OPT-AP P100 ([F101](#F101));
+     - when Track C's ANC10 and ANC10CP solves finished ([F100](#F100));
+     - the added/removed line counts of `PATCH.diff` ([F36](#F36));
+     - differences between values quoted in reports: harness C4 vs the F2b dev greedy (§8 row 19) and Baleen's peak-blind OPT minus the F2b dev sims ([F96](#F96)).
 2. **Git timeline and protocol commit times** ([F73](#F73), [F75](#F75), [F76](#F76), [F89](#F89), [F93](#F93)):
    ```
    git log --all --reverse --date=format:'%Y-%m-%d %H:%M:%S' --format='%h %ad %s' > changes/4_story/result/git_timeline.txt
@@ -2336,3 +2396,13 @@ Commit times come from [`changes/4_story/result/git_timeline.txt`](../../changes
    ls changes/2_deployable_peak/wp1_offline/inst | grep -c "s0\.[789]\.npz"
    ```
    Output: `12`. They are git-ignored by [`changes/2_deployable_peak/.gitignore#L10`](../../changes/2_deployable_peak/.gitignore#L10).
+9. **Untracked files and file times** ([F73](#F73), [F74](#F74), [F76](#F76), [F100](#F100)). The go-file G3_SIGNED and the flag file TIMING_IDLE are not in git, so their content and modification times are copied into [`changes/4_story/result/untracked_evidence.txt`](../../changes/4_story/result/untracked_evidence.txt) by:
+   ```
+   P=changes/2_deployable_peak; { echo "# Evidence from untracked files and filesystem metadata (this working tree; not in git). Generated by Appendix D item 9."; for f in $P/wp3_test/G3_SIGNED $P/TIMING_IDLE; do echo "## content of $f (untracked)"; cat $f; echo; done; echo "## mtimes (stat -c '%y %n')"; stat -c '%y %n' $P/wp3_test/G3_SIGNED $P/TIMING_IDLE $P/wp3_test/trials.csv $P/wp3_test/results/evaluation.json; } > changes/4_story/result/untracked_evidence.txt
+   ```
+   File times can change if the files are copied or touched; they are evidence about this working tree only.
+10. **When the Baleen paper audit and the ranking table entered git** ([F104](#F104)):
+   ```
+   for f in lit_review/papers/fast24-baleen-ml-admission-and-prefetching-for/audit/report.md lit_review/ranking.md; do echo "$f: added $(git log --diff-filter=A --date=format:'%Y-%m-%d %H:%M:%S' --format='%h %ad' -- $f); commits $(git log --format=%h -- $f | tr '\n' ' ')"; done
+   ```
+   Output: the audit report was added in `2264e66` 2026-09-14 10:53:49 (its only commit); [`lit_review/ranking.md`](../../lit_review/ranking.md) in `527f8bc` 2026-09-26 14:02:59 (its only commit).

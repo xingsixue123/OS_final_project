@@ -1,5 +1,115 @@
 # Story writer notes
 
+## Round 3 (run 20261020_154140, started 2026-10-20 17:41)
+
+### Validator feedback: how each blocking item was resolved
+**Citation validator, round 2** (6 blocking):
+
+| Item | Resolution |
+|---|---|
+| R2-B1 | The LP-start claim is scoped. The LP start applies to Q1/Q2, harness_eval C2 and every deployed F1PT/F1EIM label set. The Q3 PT started from Baleen's selection (`q3solve.py#L282-L286`). Track C's ANC started from Baleen's set and STU from the previous round (`labels_c.py#L1-L11`, `#L126-L131`). Fixed in F21, F14 and the legend. |
+| R2-B2 | F31: harness C4 was deployed on dev only (harness RESULTS L197–198, L231–233, L250). |
+| R2-B3 | §8 rows 8 and 19 reworded. |
+| R2-B4 | F70: three rows exceed 2 retrain SE. The union row shows 0.36/0.42 SE (2.1/1.8) and is marked "run after the T2 outcome". §8 row 23 reworded. |
+| R2-B5 | F95 cites `PROTOCOL_v2_H5.md#L24` and `3_autoresearch/README.md#L7` for Region3. |
+| R2-B6 | F101: Region6 s0.9 carries the 4.81 gap (recomputed: largest \|d\| 4.814; Region4 s0.3 −4.014). |
+
+**Grill validator, round 2** (4 blocking):
+
+| Item | Resolution |
+|---|---|
+| 1 | F73's firewall timing is rewritten from wp8 PROGRESS L9, L82–86, L97, L105–110, PLAN_C L105–108 and `untracked_evidence.txt`. F44 and F50 edited; Appendix B rows added for the Track C gap and the H3′ evaluation. |
+| 2 | F96's title, bullet and priority line name the Q1 forking path (q2 PROGRESS L50–53). F18 points to it. |
+| 3 | H5's neutral tables: F59 gets a bullet and a new priority line (10/18 test retrains neutral; PT = exhaustive optimum on 18/18, recomputed). F57's timing, §8 row 13 and the abstract's H5 bullet updated. |
+| 4 | §8 row 19 is now "Not supported / DEV" (`proposal.js#L199-L200`, q2 RESULTS L132–143, harness L128–137, q2 PROGRESS L50–51). |
+
+### Non-blocking items
+**Citation N1–N28** (N14, N18, N23–N26 were already done or needed nothing):
+- N1: F03's `tod` sentence names D2 as the only deployed arm and cites the learnability gate and the WP0 parity test.
+- N2: F13 says "held-out Q1/Q2".
+- N3: F15 and F19 exclude C3/C3L (28.9–29.6).
+- N4: F36 gives the exclusions (wall-clock/RAM, `realtime_elapsed`). It adds that CP1's +217/−6 equals the non-blank added lines, while all added lines give +256/−6 (recomputed).
+- N5: F41: 2–3% (D:F1PT 2.4%, X1 2.8%) vs 8–10% (A 8.7%).
+- N6: F44's title carries its numbers; F38 cites `PLAN.md#L107`.
+- N7: F28's title says "fail the pre-registered criteria (better only at 3 s)".
+- N8: F31: memory is extra above the loaded instance (~355–410 MB, WP5 RESULTS_dev L343).
+- N9: F32's qualifiers (8-instance rows; seed-1 means rounded to 0.1).
+- N10: F102 is retagged TEST-POSTHOC and cites `PROTOCOL_v2_H2.md#L79-L80`.
+- N11: F24 notes that the `lp` row is a proxy for PT's start.
+- N12: F35 gives both ranges, 18–42% (table) and 25–42% (text).
+- N13: F53's decomposition is marked post hoc.
+- N15: F60's title, the abstract and F59 say "worse than Baleen" (A+α 1/6, −0.49; TB:pt −0.314, ≈2.2 instance SE).
+- N16: F67 is "the final report's interpretation".
+- N17: F70 says "lower on only 11/24 cells", and its Data column carries evidence tags.
+- N19: F68 cites `wp3_test/RESULTS_test.md#L26`.
+- N20: F92 notes that RESEARCH.md L121/L124 also says "untouched".
+- N21: F72's first-access sentence is rewritten from q3 RESULTS L25–28 and L244–250 and PROGRESS L99–101. The two q3 ranges (14–28% vs 15–28%) are both given. The suggested "mostly via zero-value positives" is too strong: T5c, with no zero-value additions, still reached 14.8%.
+- N22: Appendix D documents the WP2 Ax/Bx/Ex merge and lists the round-3 additions.
+- N27: G3_SIGNED and TIMING_IDLE are no longer linked. Their content and mtimes are in the new `result/untracked_evidence.txt` (Appendix D item 9; the command reproduces the file byte-identically).
+- N28: `.git/objects` is no longer backticked.
+
+**Grill non-blocking 1–9:**
+1. The P0 titles carry key numbers: F20, F28, F33, F44, F59.
+2. F76 and F04: the later overlays (PATCH_v3 = PATCH.diff + 43/−1, then v4 and v5) had only G1 gates. No teammate review was required or recorded, and H5 and both auto-research tests ran on them.
+3. F65: the T2 prerequisites were built 04:57–05:04, before the 05:19 protocol commit. This is disclosed and unread (red-team round 2, L44).
+4. Done in the blocking round.
+5. The header names the story loop's own round-2 incidents.
+6. The §8 summary says "fresh Region5 (fresh = never run deployed; prior load-based attempts: F95)".
+7. Appendix C adds `work/union_t2/`, `code/validate.py` and the proposal slides PDF.
+8. F84 item 1 adds the transcript confirmation. The transcript is untracked; the red-team round-1 report checked it (L24, L105–106).
+9. F100: Track C's anchored-energy comparison is the main non-optimal 10 s comparison. Its PT side finished 2026-10-05 14:40–14:44, before the foreign job. Its CP-SAT side finished 2026-10-16 13:36–13:41, during it. This is recomputed from the Track C label ledger. F70's Track C row is corrected to match: the round-2 wording said both sides ran next to the foreign job.
+
+### Other changes
+- **New finding F104** (P2, INFRA). The founding 2026-09-14 paper audit already proposed "peak-aware episode scoring and load-adaptive gating", including the load-adaptive *admission threshold*. It targeted ≥ 5%, made no QUBO/Ising mention, and its scoop check was two queries. So the one deployed gain predates the Ising work. It is referenced from the abstract, from Appendix B (09-14) and from Appendix D item 10.
+- **Other coverage:**
+  - F54: Region5's F1PT labels did cut the day-1 label peak on every instance (`wp9_region5/INSTANCES.md`).
+  - §9 items 7–8 gain two entries: the Track C re-solve and the review of PATCH_v3–v5.
+  - Appendix C lists `wp9_region5/INSTANCES.md`.
+- **`recompute.py`:**
+  - Round-2 items are back under their heading (the round-3 heading had been printed above them).
+  - New this round: the Track C ANC10/ANC10CP finish times, the `PATCH.diff` line counts, and the arithmetic on quoted values (§8 row 19's 1.38–1.96%; F96's 6.0–7.3 points).
+  - The output is regenerated; only the additions and the order changed.
+- **New file `result/untracked_evidence.txt`.**
+- **Files outside 4_story.** These were already modified in the working tree before this story run and were not touched by the writer: `changes/3_autoresearch/result/LOOP_STATUS.txt` (mtime 11:44, STATUS=EXHAUSTED) and `deterministic_validation.json` (mtime 15:34).
+- **Privacy.** `python3 -B tools/privacy_scrub.py --check` is clean; nothing was imported this round.
+
+### Self-audit after the validator fixes
+Two independent read-only fact-check agents checked every added line of this round's diff (about 175 claims). All their findings were applied.
+
+**Blocking:**
+- **F104.** The ranking table is from 09-26 (`527f8bc`). The 09-14 table is `documents/top_doable_papers_filtered.md#L72`.
+- **F104 and F03.** The prefetch `load` gate was *not* part of X1. Every Ea row has an empty `pf_subset`; only WP2's Epf:F1PT dev screen used it.
+- **F04.** The G1 gates also check that degenerate settings reproduce the α run. They do not review the new code.
+- **F100.** "The *main* non-optimal comparison": the auto-research Region5_s0 dev solves also differ (0.16–0.31%), and the WP3/WP9 shared-core solves have no recorded objective comparison.
+
+**Minor:**
+- **F70:**
+  - only WP2 X1 reaches ≈2.1 instance SE (title updated);
+  - the union CP-SAT twin's retrain 1 on the 8 Region6/7 instances ran before T1;
+  - the foreign-job CPU figure is dated 14:37.
+- **§8 rows:**
+  - row 8: "C4 beat C5 analytically";
+  - row 19: 1.38–1.96% (recomputed) with the right harness anchor;
+  - row 23: Track C's objectives do not tie.
+- **F76:** "automated bit-exact gates, no human review", and wider anchors.
+- **F96:** 6.0–7.3 points (recomputed); "unlikely to depend on it".
+- **Wording:**
+  - F31: five Ising solvers in phase-1 tuning; only SB/PT memory is extra memory;
+  - F21 and the legend: C2's own start; WP2's D:P0/D:T2 reuse the Q3 PT start;
+  - F95: the Region3 pool cites F61/F64/F65;
+  - F104: "on Region1 (the H5 test pool) A+α was worse".
+- **Refs added:**
+  - F84: `3_autoresearch/.gitignore#L2` (the transcript is untracked);
+  - F73: Track C PROGRESS L16–19;
+  - F44: `untracked_evidence.txt` and PROGRESS L81–86;
+  - F50: `git_timeline.txt`;
+  - F24: `q2/trials.csv`.
+- **Appendix D:** item 1's "Used by" list and item 9's list (adds F73) updated.
+
+### Still open
+- Anchors in rarely cited long files may still be off by a few lines.
+- The validator reports printed absolute paths in round 1. If they do so again, the next round's privacy check will fail on committed files (see round 2).
+
 ## Round 2 (run 20261020_154140, started 2026-10-20 16:55)
 
 ### Validator feedback: how each blocking item was resolved

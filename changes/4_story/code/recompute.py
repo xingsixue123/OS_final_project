@@ -7,6 +7,7 @@ SE_retrain = sqrt(sum_i s2_X,i/n_X,i + s2_R,i/n_R,i)/n  (PROTOCOL_v2_H3 section 
 """
 import collections
 import csv
+import json
 import math
 import os
 import re
@@ -117,6 +118,75 @@ def wp1_region_means():
               + f"; mean of the 4 per-region means {st.mean(rm.values()):.2f}%")
 
 
+def cells_merged(path, merge, keyfn):
+    """Like cells(), with an arm-name merge map (e.g. WP2's widened-search re-runs Ax/Bx/Ex merged into Aa/Ba/Ea,
+    as wp2_deployed/RESULTS_dev.md section 8 does) and a custom configuration key."""
+    d = collections.defaultdict(list)
+    for r in csv.DictReader(open(path)):
+        if r["matched"] != "True":
+            continue
+        r = dict(r)
+        r["arm"] = merge.get(r["arm"], r["arm"])
+        d[(keyfn(r), r["inst"])].append(float(r["p100"]))
+    out = collections.defaultdict(dict)
+    for (a, i), v in d.items():
+        out[a][i] = v
+    return out
+
+
+def wp10_tables():
+    rows = list(csv.DictReader(open(os.path.join(P2, "wp10_schedule", "results", "solves_test.csv"))))
+    by = collections.defaultdict(dict)
+    for r in rows:
+        by[(r["inst"], r["arm"], r["rep"])][r["solver"]] = [round(float(x), 6) for x in json.loads(r["mult"])]
+    pt = {k: v["pt"] for k, v in by.items() if "pt" in v}
+    neutral = sorted(k for k, m in pt.items() if all(x == 1.0 for x in m))
+    same_ex = sum(1 for k in pt if by[k].get("ex") == pt[k])
+    same_cd = sum(1 for k in pt if by[k].get("cd") == pt[k])
+    print(f"WP10 test table fits (solves_test.csv): {len(pt)} PT fits; neutral (all multipliers 1.0) on {len(neutral)}: "
+          + ", ".join(f"{i} {a} r{r}" for i, a, r in neutral)
+          + f"; PT table == exhaustive (ex) table on {same_ex}/{len(pt)}; == CD table on {same_cd}/{len(pt)}")
+
+
+def trackc_anc_times():
+    """When Track C's anchored-energy solves finished (ledger `ts` = completion time), PT (ANC10) vs CP-SAT (ANC10CP)."""
+    rows = list(csv.DictReader(open(os.path.join(P2, "wp8_trackC", "results", "ledger_labels.csv"))))
+    for d in ("ANC10", "ANC10CP"):
+        ts = sorted(r["ts"] for r in rows if r["design"] == d)
+        print(f"Track C {d} solves: {len(ts)} ledger rows, finished {ts[0]} .. {ts[-1]}")
+
+
+def patch_counts():
+    """Added/removed lines in wp0_overlay/PATCH.diff: all '+'/'-' lines (as git numstat counts) and non-blank '+' lines."""
+    lines = open(os.path.join(P2, "wp0_overlay", "PATCH.diff"), encoding="utf-8").read().split("\n")
+    add = [x for x in lines if x.startswith("+") and not x.startswith("+++")]
+    rem = [x for x in lines if x.startswith("-") and not x.startswith("---")]
+    print(f"wp0 PATCH.diff: +{len(add)}/-{len(rem)} lines; non-blank added lines {sum(1 for x in add if x[1:].strip())}; "
+          f"files {sum(1 for x in lines if x.startswith('diff '))}")
+
+
+def quoted_arithmetic():
+    """Differences between values quoted in reports (the inputs are copied from the cited lines)."""
+    # harness_eval/RESULTS.md: C4 sim P100 Region7 27.97 (L137), Region6 27.87 (L156); q2/PROGRESS.md L50-51: F2b dev sims
+    c4 = {"Region7": 27.97, "Region6": 27.87}
+    f2b = {"pgreedy": {"Region7": 28.53, "Region6": 28.26}, "ls": {"Region7": 28.47, "Region6": 28.28},
+           "pt": {"Region7": 28.53, "Region6": 28.24}}
+    r0 = {"Region7": 34.52, "Region6": 35.56}
+    print("harness C4 below F2b dev pgreedy: " + ", ".join(
+        f"{r} {(f2b['pgreedy'][r] - c4[r]) / f2b['pgreedy'][r] * 100:.2f}%" for r in c4))
+    print("Baleen peak-blind OPT minus F2b dev sims (points): " + ", ".join(
+        f"{m} {r} {r0[r] - f2b[m][r]:.2f}" for m in f2b for r in r0))
+
+
+def wp1_r0_vs_author():
+    rows = list(csv.DictReader(open(os.path.join(P2, "wp1_offline", "results", "wp1_table.csv"))))
+    d = {r["instance"]: float(r["R0"]) - float(r["author_opt_p100"]) for r in rows}
+    worst = max(d, key=lambda k: abs(d[k]))
+    print(f"WP1 R0 - authors' OPT-AP P100 over {len(d)} instances: mean {st.mean(d.values()):+.3f}, "
+          f"mean |d| {st.mean(abs(v) for v in d.values()):.3f}, largest |d| {abs(d[worst]):.3f} on {worst}; "
+          f"Region4_s0.3 {d['Region4_s0.3']:+.3f} (|d| {abs(d['Region4_s0.3']):.3f})")
+
+
 def main():
     print("## Test-set arm means (matched retrains; mean of per-instance means)")
     tests = {
@@ -172,8 +242,9 @@ def main():
         f"{i} {st.mean(c3['Ea-1.0:F1PT'][i]) - st.mean(c3['Ea-1.0:F1CPSAT'][i]):+.3f}" for i in sorted(c3["A"])))
     concentration(c3, "Ea-1.0:F1PT", "Ea-1.0:F1CPSAT", "WP3 X1 - Dc+alpha")
     print("WP3", compare(c3, "Ea-1.0:F1CPSAT", "Ea-1.0:F1PT"))
-    print(f"WP2 dev X1 vs Ea-1.0:F1CPSAT (reported +1.26, SE 0.47 / 0.61; RESULTS_dev L180): "
-          f"{1.26 / 0.47:.3f} retrain SE, {1.26 / 0.61:.3f} instance SE")
+    merge = {"Ax-1.0": "Aa-1.0", "Bx-1.0": "Ba-1.0", "Bx-0.5": "Ba-0.5", "Ex-1.0": "Ea-1.0"}
+    w2 = cells_merged(os.path.join(P2, "wp2_deployed", "trials.csv"), merge,
+                      lambda r: r["arm"] + (":" + r["design"] if r["design"] not in ("", "baleen") else ""))
     n378 = [(r["arm"], r["rep"], r["argmax"]) for r in csv.DictReader(open(os.path.join(P2, "wp3_test", "trials.csv")))
             if r["matched"] == "True" and r["inst"] == "Region7_s0.5"]
     print(f"WP3 Region7_s0.5: {sum(a == '378' for _, _, a in n378)} of {len(n378)} matched retrains peak in window 378; "
@@ -190,6 +261,18 @@ def main():
         rr = [r for r in rows if r["arm"] == arm]
         print(f"WP9 Region5_s0.6 {arm}: P100 per retrain {[round(float(r['p100']), 2) for r in rr]}, peak windows "
               f"{[r['argmax'] for r in rr]}, big-offset share {[round(float(r['peak_bigoff_share']), 2) for r in rr]}")
+
+    print("\n## Round-3 additions")
+    print("WP2 dev (Ax/Bx/Ex merged into Aa/Ba/Ea):", compare(w2, "Ea-1.0:F1CPSAT", "Ea-1.0:F1PT"))
+    print("WP2 dev:", compare(w2, "D:F1CPSAT", "D:F1PT"))
+    un = cells_merged(os.path.join(AR, "union", "trials_dev.csv"), {}, lambda r: r["arm"])
+    print("Union dev:", compare(un, "XA-F1CPSAT", "XA-F1PT"))
+    print("Union dev:", compare(un, "XG-F1CPSAT", "XG-F1PT"))
+    wp10_tables()
+    wp1_r0_vs_author()
+    trackc_anc_times()
+    patch_counts()
+    quoted_arithmetic()
 
 
 if __name__ == "__main__":
