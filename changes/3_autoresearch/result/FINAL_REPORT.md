@@ -54,8 +54,8 @@ A table m[class, load bucket] (class = end offset > 8 MiB) is fitted per retrain
 | XG:F1PT | 35.53 | 10/10 | 8/10 | 7/10, +0.63, worst −1.58 |
 
 **Dev mechanism:**
-- The gain came from X admitting big-offset scans in Region6 peak windows (peak big-offset share 0.10 vs 0.33 for A+α; Region6 P100 36.7 vs 38.7).
-- The union did *not* restore Baleen's first-access admission on Region7 (2.9% vs 8.4%): the extra X admissions raise the shared base θ.
+- The gain came mainly from Region6, where X admits big-offset scans in peak windows. With all 3 retrains on DEV8: Region6 P100 36.77 vs A+α 38.65, and peak big-offset share 0.20 vs 0.33. Region7 is nearly level: 37.01 vs 37.11.
+- The union did *not* restore Baleen's first-access admission on Region7 (3.0% vs 8.4%): the extra X admissions raise the shared base θ.
 
 ## 3. Tests
 | | T1: Region2 s0.1–0.6 (`work/t1u_region2/`) | T2: Region4 s0.2–0.6 (`work/t2u_region4/`) |

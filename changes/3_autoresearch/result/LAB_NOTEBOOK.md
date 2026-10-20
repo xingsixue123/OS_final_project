@@ -443,3 +443,4 @@ While checking the first T1 minutes for crashes (trainings and sims run normally
   - The F1 objectives tie, so this is a solution-selection effect among co-optimal label sets, not better optimization.
 - `result/FINAL_REPORT.md` is complete: NEGATIVE, budget exhausted.
 - `result/STOP_EXHAUSTED` written.
+- 2026-10-20 11:26 correction (appended): FINAL_REPORT §2.2 mechanism numbers recomputed with all 3 DEV8 retrains. XA:F1PT Region6 P100 36.77 vs A+α 38.65; peak big-offset share 0.20 vs 0.33 (the 05:41 partial table had 0.10 with 7 runs); Region7 first-access admission 3.0% vs 8.4%.
