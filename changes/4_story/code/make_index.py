@@ -27,9 +27,11 @@ def main():
     ev = collections.Counter(r[2] for r in rows)
     out = [f"{len(rows)} findings: " + ", ".join(f"{p} {count[p]}" for p in ("P0", "P1", "P2", "P3"))
            + ". Evidence: " + ", ".join(f"{k} {v}" for k, v in sorted(ev.items())) + ".", "",
-           "**P0 findings (headline results and decisive negatives):** "
-           + ", ".join(r[0] for r in rows if r[1] == "P0") + ".", "",
-           "| ID | Priority | Evidence | Claim | Section |", "|---|---|---|---|---|"]
+           "**Headlines at a glance (the P0 findings):**", "",
+           "| ID | Evidence | Verdict and key number |", "|---|---|---|"]
+    out += [f"| {r[0]} | {r[2]} | {r[3].replace('|', '/')} |" for r in rows if r[1] == "P0"]
+    out += ["", "**All findings, in document order:**", "",
+            "| ID | Priority | Evidence | Claim | Section |", "|---|---|---|---|---|"]
     for fid, p, e, title, sec in rows:
         out.append(f"| {fid} | {p} | {e} | {title.replace('|', '/')} | {sec} |")
     new = "<!-- INDEX:BEGIN -->\n" + "\n".join(out) + "\n<!-- INDEX:END -->"

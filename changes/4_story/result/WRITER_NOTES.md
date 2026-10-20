@@ -1,66 +1,126 @@
 # Story writer notes
 
-## Round 1 (run 20261020_154140, started 2026-10-20 15:41)
+## Round 2 (run 20261020_154140, started 2026-10-20 16:55)
 
-### What was done
-**Sources read:**
-- `RESEARCH.md`, both SCOPE files and PLAN.md;
-- the proposal text (`documents/proposal_docx_compose/proposal.js`) and the paper-selection report;
-- the reproduction reports;
-- the phase-1 lit reviews, the synthetic audit, harness_eval, Q2 and Q3;
-- every phase-2 WP report, protocol and progress log (WP0, 1, 5, 2, 3, 8, 9, 10);
-- the auto-research contract, dev rules, final report, T1/T2 reports, scope amendments, G1_v4/v5 and all four validator reports;
-- `git log --all`.
+### Validator feedback: how each blocking item was resolved
+**Citation validator** (14 blocking):
 
-**Wrote `changes/4_story/STORY.md`:**
-- 92 findings: P0 9, P1 39, P2 29, P3 15.
-- Sections: abstract, legend, an auto-generated index, sections 1–9, a claims table (section 8), open questions (section 9), and appendices A (per-experiment tables), B (timeline), C (file map) and D (one-liners).
+| Item | Resolution |
+|---|---|
+| B1 | Abstract cites `explore/q3/RESULTS.md#L6-L15` for Q3. |
+| B2 | Abstract cites WP3 L53–60, FINAL_REPORT L75 and WP10 L19, plus (F69). |
+| B3 | F13 cites WP1, PROTOCOL_v2_H2 and PROTOCOL_v2_H3 for F1's use. |
+| B4 | F21: SB's V = −11.64% is the *worst (highest)* V. |
+| B5 | F21's title is scoped to phase-1 dev and WP5. The harness_eval exception is stated: C4 beat C5 analytically and was the best Ising arm in simulation and retention. |
+| B6 | F44 now says "touched once in deployed mode". The new F93 lists every test pool WP1 simulated offline. F92 is updated too. |
+| B7 | F48 (title and body) gives the per-instance differences, ≈1 instance SE, and Region7 s0.5 carrying the result. F40 and F70 are reworded. |
+| B8 | F60 retagged TEST-POSTHOC; "in tension with" instead of "contradicts". |
+| B9 | F71 retagged TEST-POSTHOC; "mean retention"; dev range −0.23 to +0.74; 60% shown to come from the proposal only. |
+| B10 | F64's priority line follows the T1 report: unevaluable because of a design defect, and the descriptive numbers do not favour Y. |
+| B11 | F72: ≤1.3% for the F1/Baleen-label WP2 arms and every Track C arm; P0 2.89% (max 5.61%) and T2 1.04%, recomputed. |
+| B12 | F77 cites all 12 frozen-check sources and the 16:22 line. |
+| B13 | F80: "same pinning; per-family sibling exposure not measured". WP5's unequal exposure is noted. |
+| B14 | F89 cites LAB_NOTEBOOK L1–8. |
 
-**Read-only helpers under `changes/4_story/`:**
-- `code/recompute.py` → `result/recompute_out.txt`: recomputes test-arm means, pass-rule statistics and mechanism splits from the raw `trials*.csv` and `wp1_table.csv`. Every value matches the reports.
-- `result/git_timeline.txt` and `result/protocol_commits.txt`: commit times for the pre-registration timeline.
-- `code/make_index.py`: regenerates the index from the finding headers.
-- `code/renumber.py`: renumbers findings in document order. Used once this round; **do not use again**, because validators reference these ids.
+**Citation validator, non-blocking items** (N-TAG and N1–N33): all addressed.
+- **Tags.** The legend now defines that pre-declared "reported, no pass/fail" comparisons are tagged TEST-POSTHOC. F30, F48, F54, F60 and F71 were retagged to match. `check_story.py`'s tag set is fixed, so a new tag was not possible.
+- **Header.** It now says what the checker does *not* check.
+- **Abstract.** It gives the 36–37/39 wins and the Q2 ref, and adds "or its pre-registered dev gate".
+- **Anchors.** Fixed across F12, F14, F32, F49, F50, F52, F59, F63, F65, F70, F73 and F74.
+- **Wording.** F11 (median; comparable at 1k), F26 (±10 min), F27 (03:20), F30 (LP row, seed 0, editor burst), F33 (T2 had 2 retrains), F35 (3/6), F37 (F1 labels), F46 (20/21 retrains; "diagnosis"), F54 (second loss on s0.6), F57 (46/48), F72 (2–3%), F73 (H1′ row), F79, F84, F86 and F90.
+- **Other findings.** F87 privacy gap; F92 (planned use; dumps on disk); §8 statuses closed; §9 WP4 ref; A.1 and A.8 notes; Appendix B times; Appendix D grep and "to the source's rounding".
 
-**Self-fact-check.** Four independent read-only fact-check agents audited every finding, the tables and the timeline against the sources. All their findings were applied. The main corrections:
-- **F92 (reserve):** WP1 *did* simulate samples 0.7–0.9 offline, including the Region6/7 reserve. The earlier "never built or simulated" was wrong and was corrected in F92, the abstract and §9.
-- **F71:** dev retention now quotes the Ising arm C4, not the classical R2.
-- **F46:** the first-access numbers are labelled pooled vs Region7-only (recomputed from `trials.csv`).
-- **F54 and F60:** retagged TEST-PREREG (reported comparisons with no pass/fail).
-- **F72:** retagged DEV.
-- **Wording:** about fifteen scope and overclaim fixes (titles and claims tightened to match their sources).
-- **New disclosure findings** for the incidents the first draft missed: F80 (SMT siblings, seed reuse, lost session), F82 (smaller disclosures), F86 (six round-2 validator items) and F85 (round-1 validator failures).
+**Grill validator** (9 blocking):
 
-`check_story.py`: 0 problems. `python3 tools/privacy_scrub.py --check`: clean.
+| Item | Resolution |
+|---|---|
+| G1 | The legend's "Solver names" bullet says PT/EIM are LP-started CPU replica-exchange samplers. F24 (now P1) quantifies it: the LP start reaches 94.5% of the greedy→PT analytic reduction, recomputed from q2 §8.1. F21, F32, F39 and the abstract say "LP-started". |
+| G2 | H4's caveat is in the abstract, in F52's title and first lines, in §8 row 15 and in the summary: instance level ≈1.5 SE, and s0.5 is 69% of the gain while the other five average +0.43. F66 adds Region4's s0.3 concentration (69%). |
+| G3 | §8 summary rewritten (tie / win at one budget / lose elsewhere). F65 retitled "= FAIL …". |
+| G4 | F70 now carries the full PT vs CP-SAT label-set table: dev and test, wins, SE, the T1 tie, the T2 control, and the fact that H4 had no twin. F32 adds the day-1 label-instance objectives, where CP-SAT and LS beat EIM and PT and PT was worst. F64 and F65 add the control rows. |
+| G5 | New F95 covers prior art and novelty (Baleen §5.6, thesis §7.4.1/7.4.2/7.4.3, novelty table, outstanding search). The abstract, §8 row 15 and §9 item 3 reference it. |
+| G6 | F87 says that the tracked scrub tool still contains the patterns and excludes itself from the check, without quoting any pattern. §9 item 8 repeats it. |
+| G7 | F61 discloses that the worker ran with `--dangerously-skip-permissions`, together with the validators' mitigations (no out-of-scope files, 1,529 sandboxed sub-process logs, no subagents). The story's own loop is disclosed in the header. |
+| G8 | Every ref is now a relative markdown link with its line anchor, and every finding has an `<a id>` anchor. All (Fxx) mentions, the index, §8 and Appendix B are linked. `make_index.py` emits a P0 headline table. `code/linkify.py` is new. `check_story.py` gained *stricter* checks: line anchors within the file, link targets exist, anchors exist. §8 "Main refs" have line anchors. Appendix C lists the progress logs, the auto-research protocols and amendments, G1_v4/v5 and the validator reports. |
+| G9 | New F94 covers PLAN's dev-signal gate: it failed, its pivot was not taken, and the sequence was rep-1 screen 00:10, rule 00:20, D fails 01:35, X1 queued 02:15. It is cross-referenced from F38, F39 and F44, and the events are in Appendix B. |
 
-### Judgement calls a validator may want to challenge
-1. **Phase-1 Q1–Q3 are tagged TEST-PREREG / NEGATIVE-TEST** (F18, F20, F33). The protocol is file-dated, but its first git commit (`be284a3`) postdates the held-out runs. This is stated in the legend, F18, F20, F33 and F75. TEST-POSTHOC would misdescribe hypotheses that *were* pre-specified on held-out data.
-2. **Cross-cutting findings in §6 are tagged by the evidence their main claim rests on**, with dev items marked inline:
-   - F68 and F69: TEST-POSTHOC;
-   - F70: OFFLINE;
-   - F72: DEV;
-   - F71: TEST-PREREG, because retention was a pre-declared reported metric.
-3. **H4 (F52) is P0 TEST-PREREG.** Its caveats are in F53 (P1): retrain-level SE, the s0.5 concentration, and a margin under twice the instance-level SE.
-4. **F54 (X1 on Region5) and F60 (α arms on Region1) are tagged TEST-PREREG** because their protocols listed them as reported comparisons with no pass/fail. F60 notes that WP10's results report calls it "not pre-registered", contradicting its protocol.
+**Grill non-blocking 1–17:** all addressed.
+- The H3′ run window comes from the ledger's `ts` column (F44, F73, Appendix B; one-liner D.7).
+- `G3_SIGNED` holds a waiver (F74, F76).
+- `TIMING_IDLE` gets its own finding (F100).
+- Post-data rule edits are covered in F53 (WP9's RejectX rule) and F83 (WP10's tie-break), and F74 is softened.
+- Phase-1 forking paths and interim looks: F96.
+- Omitted secondaries:
+  - WP1 P99/top-5 in F25;
+  - H3′ P99/top-5 in F44;
+  - B+α instance SEs and transfer caveats in F53;
+  - WP10's omitted reported items in F59;
+  - the hl-split in F29;
+  - the 3-s rolling arms added after the fact in F30.
+- Mechanism and region notes:
+  - the trainer nuance in F68;
+  - dev Region1_s0 in F69;
+  - the value of the SB scaling result in F31.
+- New findings:
+  - reproduction scope in F98;
+  - harness_eval deviations in F99 (the classical R2 note is in F15);
+  - plan coverage deviations in F97.
+- Smaller items:
+  - the sibling-load source conflict in F80;
+  - the auto-research smaller items in F63 and F84.
+- Priorities: F75 raised to P1, and the new F94/F95 are P1.
 
-### Discrepancies found in the sources (reported in the story, not fixed in the sources)
-- **≈11.3% (RESEARCH.md):** no derivation anywhere (F08, Appendix D).
-- **Dense SB limit:** RESEARCH.md's "≈70k" vs the observed OOM at 62.5k under a 64 GB cap (F31).
-- **Amendments 1.2c/1.2d** are not recorded in SCOPE_v2 §1a (F04, F88).
-- **SCOPE_v2** is still "pending confirmation" by the teammates (F03, F76).
-- **Timestamps:**
-  - the PROTOCOL_v2_H5 header time 19:25 is later than its commit at 19:23:04 (F83);
-  - Track C's progress log says "~23:xx", but its results commit is 20:27 (F81).
-- **The "untouched" reserve:** PROTOCOL_v2_H3 calls the reserve "untouched", yet WP1 simulated it offline (F92).
-- **First-access labels:** WP3's RESULTS labels the pooled first-access numbers as "the known Region7 failure mode" (F46).
-- **Round-2 auto-research validators:** six non-blocking items are not reflected in the notebook or final report (F86).
+### Other changes
+- **Recomputations.** `code/recompute.py` adds:
+  - the LP-start share;
+  - the H4 and Region4 concentration;
+  - per-instance X1 − Dc+α;
+  - Region7 s0.5 peak windows;
+  - Region6 first-access admission by arm (WP2, Track C);
+  - dev Region1_s0 means;
+  - WP1 per-region means;
+  - Region5 s0.6 peak windows.
+- **New findings:** F93–F103 (11).
+- **Privacy.**
+  - The round-1 citation validator's report contained an absolute `/tmp` path of its own scratchpad. It was committed in round 1 and then failed `privacy_scrub.py --check`, because the check looks only at tracked files.
+  - I redacted that one line in `result/validator_citation_round_1.md` with the repo's own `scrub_text`. The path became `<tmp file>`; nothing else changed.
+  - **Launcher owner: validator reports that print absolute paths will keep tripping the next round's check.**
+- **Incident (mine, disclosed here).** Importing `tools/privacy_scrub.py` to scrub that file created `tools/__pycache__/privacy_scrub.cpython-312.pyc` at 17:09. It is outside the write area and git-ignored. I deleted it immediately and `git status tools` is clean.
 
-### Still open for later rounds
-- **Unseen anchors.** The anchors were checked by the four fact-check agents; remaining off-by-a-few anchors in rarely cited files are possible.
-- **Coverage could deepen:**
-  - the WP5 hl-split and day-1 label timing tables (dev);
-  - the Track C stage-1 per-design table (only summarised in F49);
-  - the WP10 E1 per-proxy cell table;
-  - the H-CLS per-candidate dev rows beyond the final report;
-  - per-instance retention values.
-- **WP3 timing.** The H3′ test ran from its 2026-10-05 launch to the 2026-10-16 result commit, but no source states when it finished. The story gives only the launch and the commit.
+### Self-audit after the validator fixes
+Three independent read-only fact-check agents audited every rewritten or new part. All their findings were applied. The main corrections:
+- **F70:** "no row beyond ≈2 *instance-level* SE"; at retrain level, two rows exceed 2 SE, one each way (2.68, 2.50; recomputed). Both SE levels are shown, the Track C reverse case is stated, and the wrong anchor is fixed.
+- **F48:** retrain SE 0.36 added; Region7 s0.5 = 4.81 of 5.33 summed (90%).
+- **F32:** the day-1 objective table measures the WP5-tuned PT. The deployed phase-1 PT labels have the same day-1 peak as CP-SAT's (21.5), and the title is reworded.
+- **F21, F24, legend:** in H2′ the finalists used the *greedy* start at 1 s and LP at 3/10 s.
+- **Abstract:** the threshold was first seen as a WP2 dev control.
+- **Header:** says what the checker does and does not check, and that "writes only in 4_story" is an instruction, not enforced.
+- **F94:** the sequence is corrected (X1 named at 08:25, not 06:50; the gate failure is the story's reading once both D arms were negative). It also states that α was already allowed by scope v2 and PLAN, and that the fork made it part of the *tested hypothesis*.
+- **F100:** WP2's label solves predate H2′.
+- **§8:** rows 3, 8/22 (definition of Supported), 15, 19, 20 and 23 reworded; summary heading renamed.
+- **§9 item 1** scoped to the offline-known pools.
+- **Appendix B:** X1 timeline corrected.
+- **Appendix D:** protocol file list written out, with `--all`.
+- **Wording:** smaller fixes in F12, F15, F30, F49, F53, F57, F59, F63, F65, F72, F95 and F98.
+
+`protocol_commits.txt` and `git_timeline.txt` were regenerated with `--all`; the content is identical apart from the header line and the newer story commit.
+
+**Added for coverage:**
+- F101 (WP1 R0 vs the authors' OPT rows);
+- F102 (H2′ per-level mechanism);
+- F103 (harness_eval's untried levers, including simulator-in-the-loop reweighting);
+- appendix tables A.8b (Track C stage-1 designs), A.10b (WP10 E1 proxies) and A.10c (H-CLS screen).
+
+Total 103 findings.
+
+### Still open
+- Rarely cited long files may still have a few anchors that are off by a few lines.
+- Possible deepening:
+  - per-design Track C stage-1 rows (F49 summarises them);
+  - the WP10 E1 per-proxy table;
+  - the H-CLS per-candidate dev rows.
+
+## Round 1 (summary)
+- Wrote the first STORY.md (92 findings) and the helper scripts (`recompute.py`, `make_index.py`, `renumber.py`), plus the git timeline files.
+- Four fact-check agents audited round 1, and every correction was applied.
+- Finding IDs were renumbered once in round 1, before any validator referenced them. They are stable from round 2 on: new findings are appended as F93+, and `renumber.py` must not be used again.

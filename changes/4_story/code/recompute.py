@@ -9,6 +9,7 @@ import collections
 import csv
 import math
 import os
+import re
 import statistics as st
 
 REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
@@ -39,7 +40,8 @@ def compare(c, x, ref):
     se_r = math.sqrt(var) / n
     se_i = st.stdev(d) / math.sqrt(n)
     wins = sum(v > 0 for v in d)
-    return f"{x} vs {ref}: wins {wins}/{n}, mean(ref-X) {st.mean(d):+.3f}, SE_retrain {se_r:.3f}, SE_inst {se_i:.3f}, worst {min(d):+.3f}"
+    return (f"{x} vs {ref}: wins {wins}/{n}, mean(ref-X) {st.mean(d):+.3f}, SE_retrain {se_r:.3f}, SE_inst {se_i:.3f}, "
+            f"worst {min(d):+.3f}; |mean|/SE_retrain {abs(st.mean(d)) / se_r:.3f}, |mean|/SE_inst {abs(st.mean(d)) / se_i:.3f}")
 
 
 def arm_means(label, c):
@@ -66,6 +68,53 @@ def wp2_wide_theta():
     th = [float(r["threshold"]) for r in rows]
     cnt = collections.Counter(r["arm"] for r in rows)
     print(f"WP2 widened-search re-runs (Ax/Bx/Ex): {len(rows)} matched rows {dict(cnt)}; theta min {min(th):.4f} max {max(th):.4f}")
+
+
+def concentration(c, ref, x, label):
+    insts = sorted(c[ref])
+    d = {i: st.mean(c[ref][i]) - st.mean(c[x][i]) for i in insts}
+    tot = sum(d.values())
+    top = max(d, key=d.get)
+    rest = [v for i, v in d.items() if i != top]
+    se_i = st.stdev(list(d.values())) / math.sqrt(len(d))
+    print(f"{label}: per-instance {ref} - {x}: " + ", ".join(f"{i} {v:+.3f}" for i, v in d.items())
+          + f"; sum {tot:.3f}; largest {top} {d[top]:+.3f} = {100 * d[top] / tot:.0f}% of the sum; "
+          f"mean of the other {len(rest)} {st.mean(rest):+.3f} ({100 * st.mean(rest) / st.mean(st.mean(v) for v in c[ref].values()):.1f}% of {ref}'s mean); "
+          f"mean/SE_inst = {st.mean(d.values()) / se_i:.2f}")
+
+
+def lp_start_share():
+    q2 = os.path.join(REPO, "changes", "1_literature_review", "explore", "q2", "RESULTS.md")
+    rows = {}
+    for ln in open(q2):
+        m = re.match(r"\| (pt|lp|greedy)[^|]*\| [^|]*\| \**([\d.]+)\**", ln)
+        if m and m.group(1) not in rows:
+            rows[m.group(1)] = float(m.group(2))
+    g, lp, pt = rows["greedy"], rows["lp"], rows["pt"]
+    print(f"Q2 held-out, 10 s analytic objective (q2 RESULTS 8.1): greedy {g}, LP+round+repair {lp}, PT {pt}; "
+          f"share of the greedy->PT reduction already reached by the LP start = {100 * (g - lp) / (g - pt):.1f}%; "
+          f"PT's own improvement over its LP start = {lp - pt:.3f}")
+
+
+def k0_by_arm(path, region, label):
+    d = collections.defaultdict(list)
+    for r in csv.DictReader(open(path)):
+        if r["matched"] == "True" and r["region"] == region and r.get("k0_adm"):
+            arm = r["arm"] + (":" + r["design"] if r.get("design") not in (None, "", "baleen") else "")
+            d[arm].append(float(r["k0_adm"]))
+    print(f"{label} {region} first-access admission by arm (mean / max over matched rows): " + "; ".join(
+        f"{a} {100 * st.mean(v):.2f}%/{100 * max(v):.2f}% (n={len(v)})" for a, v in sorted(d.items())))
+
+
+def wp1_region_means():
+    rows = list(csv.DictReader(open(os.path.join(P2, "wp1_offline", "results", "wp1_table.csv"))))
+    for m in ("lp", "cpsat", "pt"):
+        per = collections.defaultdict(list)
+        for r in rows:
+            per[r["region"]].append((float(r["R0"]) - float(r[m])) / float(r["R0"]) * 100)
+        rm = {k: st.mean(v) for k, v in per.items()}
+        print(f"WP1 {m}: per-region mean reduction " + ", ".join(f"{k} {v:.2f}%" for k, v in sorted(rm.items()))
+              + f"; mean of the 4 per-region means {st.mean(rm.values()):.2f}%")
 
 
 def main():
@@ -113,6 +162,34 @@ def main():
         f"{i} {st.mean(c['A'][i]) - st.mean(c['Aa-1.0'][i]):+.3f}" for i in sorted(c["A"])))
     print("\n## WP2 dev bookkeeping")
     wp2_wide_theta()
+
+    print("\n## Round-2 additions")
+    lp_start_share()
+    concentration(cells(os.path.join(P2, "wp9_region5", "trials.csv")), "A", "Aa-1.0", "WP9 H4")
+    concentration(cells(os.path.join(AR, "t2u_region4", "trials_test.csv")), "A", "Aa-1.0", "T2 Region4")
+    c3 = cells(os.path.join(P2, "wp3_test", "trials.csv"))
+    print("WP3 per-instance X1 - Dc+alpha (positive = CP-SAT labels lower): " + ", ".join(
+        f"{i} {st.mean(c3['Ea-1.0:F1PT'][i]) - st.mean(c3['Ea-1.0:F1CPSAT'][i]):+.3f}" for i in sorted(c3["A"])))
+    concentration(c3, "Ea-1.0:F1PT", "Ea-1.0:F1CPSAT", "WP3 X1 - Dc+alpha")
+    print("WP3", compare(c3, "Ea-1.0:F1CPSAT", "Ea-1.0:F1PT"))
+    print(f"WP2 dev X1 vs Ea-1.0:F1CPSAT (reported +1.26, SE 0.47 / 0.61; RESULTS_dev L180): "
+          f"{1.26 / 0.47:.3f} retrain SE, {1.26 / 0.61:.3f} instance SE")
+    n378 = [(r["arm"], r["rep"], r["argmax"]) for r in csv.DictReader(open(os.path.join(P2, "wp3_test", "trials.csv")))
+            if r["matched"] == "True" and r["inst"] == "Region7_s0.5"]
+    print(f"WP3 Region7_s0.5: {sum(a == '378' for _, _, a in n378)} of {len(n378)} matched retrains peak in window 378; "
+          f"others: {[x for x in n378 if x[2] != '378']}")
+    k0_by_arm(os.path.join(P2, "wp2_deployed", "trials.csv"), "Region6", "WP2 dev")
+    k0_by_arm(os.path.join(P2, "wp8_trackC", "trials.csv"), "Region6", "Track C dev")
+    cc = cells(os.path.join(AR, "cls_table", "trials_dev.csv"))
+    print("3_autoresearch dev Region1_s0 (cls_table ledger): " + ", ".join(
+        f"{a} {st.mean(cc[a]['Region1_s0']):.2f} (n={len(cc[a]['Region1_s0'])})" for a in ("A", "Aa-1.0", "B", "Ba-1.0")))
+    wp1_region_means()
+    rows = [r for r in csv.DictReader(open(os.path.join(P2, "wp9_region5", "trials.csv")))
+            if r["matched"] == "True" and r["inst"] == "Region5_s0.6" and r["arm"] in ("A", "Ea-1.0")]
+    for arm in ("A", "Ea-1.0"):
+        rr = [r for r in rows if r["arm"] == arm]
+        print(f"WP9 Region5_s0.6 {arm}: P100 per retrain {[round(float(r['p100']), 2) for r in rr]}, peak windows "
+              f"{[r['argmax'] for r in rr]}, big-offset share {[round(float(r['peak_bigoff_share']), 2) for r in rr]}")
 
 
 if __name__ == "__main__":

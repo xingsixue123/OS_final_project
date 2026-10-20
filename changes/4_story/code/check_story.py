@@ -54,6 +54,32 @@ def file_numbers(paths, cache={}):
     return out
 
 
+def link_problems(text):
+    """Stricter checks added in story round 2: line anchors within the file, link targets exist."""
+    probs = []
+    nlines = {}
+    for m in re.finditer(r"`([A-Za-z0-9_.\-]+(?:/[A-Za-z0-9_.\-]+)+)#L(\d+)(?:-L?(\d+))?`", text):
+        p, a, b = m.group(1), int(m.group(2)), int(m.group(3) or m.group(2))
+        full = os.path.join(REPO, p)
+        if not os.path.isfile(full) or p.endswith((".pdf", ".npz", ".gz")):
+            continue
+        if p not in nlines:
+            nlines[p] = sum(1 for _ in open(full, errors="ignore"))
+        if a > b or b > nlines[p]:
+            probs.append(f"line anchor out of range: {p}#L{a}-L{b} (file has {nlines[p]} lines)")
+    anchors = set(re.findall(r'<a id="(F[\w.-]+)"></a>', text))
+    for m in re.finditer(r"\]\(([^)\s]+)\)", text):
+        t = m.group(1)
+        if t.startswith("#"):
+            if t[1:] not in anchors:
+                probs.append(f"link to missing anchor: {t}")
+        elif not t.startswith("http"):
+            path = t.split("#")[0]
+            if not os.path.exists(os.path.normpath(os.path.join(HERE, path))):
+                probs.append(f"link target does not exist: {t}")
+    return sorted(set(probs))
+
+
 def main():
     problems, warnings, findings = [], [], []
     if not os.path.exists(STORY):
@@ -64,6 +90,7 @@ def main():
         p = m.group(1)
         if "/" in p and not os.path.exists(os.path.join(REPO, p)):
             problems.append(f"referenced path does not exist: {p}")
+    problems.extend(link_problems("\n".join(lines)))
     cur = None
     blocks = []
     for ln in lines:

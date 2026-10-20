@@ -96,7 +96,7 @@ Checked and found correct (no problem): F01, F02, F04, F05, F07, F08, F10, F15, 
 
 ## Spot checks (my own recomputation from raw CSVs, matched rows only)
 
-Script: `/tmp/claude-243161/-home-sxing-project-OS-final-project/4452541b-7597-4a41-ac0b-cce0073915a0/scratchpad/spot.py` and `/tmp/claude-243161/-home-sxing-project-OS-final-project/4452541b-7597-4a41-ac0b-cce0073915a0/scratchpad/wp1.py`. They are independent of `recompute.py`. The configuration mean is the mean over instances of the per-instance retrain mean. SE_inst = sd(d_i)/√n; SE_retrain = √(Σ_i s²_X,i/n_X,i + s²_R,i/n_R,i)/n.
+Script: `<tmp file>` and `<tmp file>`. They are independent of `recompute.py`. The configuration mean is the mean over instances of the per-instance retrain mean. SE_inst = sd(d_i)/√n; SE_retrain = √(Σ_i s²_X,i/n_X,i + s²_R,i/n_R,i)/n.
 
 | # | Story claim | Raw source | Recomputed | Verdict |
 |---|---|---|---|---|

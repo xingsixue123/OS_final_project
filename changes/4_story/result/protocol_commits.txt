@@ -1,4 +1,4 @@
-# First commit that added each protocol / scope file (git log --diff-filter=A), and its last commit
+# First commit that added each protocol / scope file (git log --all --diff-filter=A), and its last commit
 changes/SCOPE.md | added 0981c50 2026-09-28 00:17:16 | last 0981c50 2026-09-28 00:17:16
 changes/SCOPE_v2.md | added 27fb6f0 2026-09-29 15:06:02 | last be4f48b 2026-10-19 19:25:30
 changes/1_literature_review/explore/PROTOCOL.md | added be284a3 2026-09-29 15:02:03 | last be284a3 2026-09-29 15:02:03
