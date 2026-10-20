@@ -1,0 +1,66 @@
+2264e66 2026-09-14 10:53:49 Literature-review pipeline and top-8 feasibility report
+527f8bc 2026-09-26 14:02:59 Add proposal documents and expand literature review
+0981c50 2026-09-28 00:17:16 Reproduce Baleen (FAST'24) and add QUBO literature review
+be284a3 2026-09-29 15:02:03 Add real-harness QUBO/Ising evaluation and deep-explore campaign
+27fb6f0 2026-09-29 15:06:02 Add phase-2 plan and scope v2 (deployable peak-aware admission)
+5e49299 2026-10-01 14:30:39 Plan: restore Ising/QUBO as required arms (H3' Ising labels, H2' tight-budget, scaling) and add checkpoints
+f79808f 2026-10-01 16:20:51 CP1: scope-v2 overlay with causal demand-load features (WP0)
+08ad0d2 2026-10-03 00:11:36 WP1: H1' offline breadth passes on Regions 4-7 x 10 samples
+fd54e76 2026-10-03 01:13:51 CP2 (Track B): pre-register H2' test protocol; WP5 Ising dev results
+b6f44e2 2026-10-03 02:10:35 H2' test (pre-registered, fd54e76): not supported
+bd01de8 2026-10-04 05:18:29 Add RESEARCH.md: master index (status, hypothesis ledger, decisions, checkpoints, file map, resume procedure)
+cba9970 2026-10-04 09:16:01 CP2 (Track A): pre-register H3' test protocol; WP2 deployed dev results
+a6ea34d 2026-10-04 09:16:15 RESEARCH.md: record CP2-A (H3' protocol, WP2 dev results, G3 blocker)
+b9e81af 2026-10-04 16:19:45 WP1: final progress note and load-audit rows from Track B
+a5a6d75 2026-10-04 16:21:35 Add G3 review guide for the phase-2 overlay patch (teammate sign-off before the H3' test)
+bd30c76 2026-10-04 17:00:03 WP3: H3' test prerequisites ready (blocked only on G3)
+55a125b 2026-10-04 17:30:51 Privacy: redact non-project paths and process names from committed records
+d8cd039 2026-10-04 17:31:04 privacy_scrub: flag a file only if scrubbing would change it (no false positives)
+84a0c1d 2026-10-05 14:13:01 G3 waived by the captain (2026-10-05) before the H3' test; recorded in SCOPE_v2 §1a
+84ef4f9 2026-10-05 14:18:06 RESEARCH: H3' test running (G3 waived); WP8 Track C started (dev only)
+46608e0 2026-10-16 12:40:27 WP3: H3' test result (FAIL; H3'-labels FAIL); one catastrophic scan-peak instance; post-hoc A+alpha best
+19d7992 2026-10-16 13:54:17 WP8 Track C stage 1 (dev only): proxy NOT valid; anchored/student Ising designs; finalist rule + Region5 test plan fixed before stage 2
+d10e572 2026-10-16 13:54:30 PLAN_C addendum: pre-register H4 (load-adaptive threshold A+alpha) for the Region5 test
+afa8cbc 2026-10-16 13:54:47 RESEARCH: Track C stage 1 done, stage 2 running; H4 pre-registered
+4ba4bcc 2026-10-16 20:27:07 WP8 Track C stage 2 (dev): negative, no finalist (screen gate failed for ANC3/ANC10/STU10R1)
+c8f655a 2026-10-16 21:30:11 WP9 Region5: PROTOCOL_v2_H4 (H4 = load-adaptive threshold on Baleen models; X1 Ising record) + prerequisites, committed before any test run
+bccec20 2026-10-16 21:30:55 RESEARCH: Region5 H4 test running
+cad1603 2026-10-19 16:14:37 WP9 Region5 test: H4 YES (load-adaptive threshold beats Baleen); X1 (Ising labels) fails again
+c1ea949 2026-10-19 17:01:06 RESEARCH: WP10 Track E (Ising threshold schedule) started
+2738cba 2026-10-19 19:23:04 WP10 (Track E): PROTOCOL_v2_H5 conditional pre-registration + prerequisites
+be4f48b 2026-10-19 19:25:30 WP10 Track E: dev finalist TB:pt; scope amendment 1.2b recorded; Region1 H5 test running
+b4c4a95 2026-10-19 20:50:11 WP10 Region1 test: H5 NO (Ising threshold table does not beat Baleen on low-load Region1)
+3a79daf 2026-10-19 23:34:26 3_autoresearch: 24h unattended Codex worker/validator loop with a fixed GOOD_RESULT contract
+ebce785 2026-10-19 23:35:47 3_autoresearch: fix pipefail exit in round counter
+74577ee 2026-10-19 23:35:56 3_autoresearch: round 1 (20261019_233548) [auto]
+f4d758e 2026-10-19 23:37:04 3_autoresearch: round 2 (20261019_233548) [auto]
+204bce2 2026-10-20 00:43:50 3_autoresearch: headless Claude Opus 5.5 (1M, xhigh) launcher; codex removed
+ced04f2 2026-10-20 00:46:32 3_autoresearch: rename launcher env vars (CLAUDE_EFFORT collided with the session env)
+7516dab 2026-10-20 00:48:00 3_autoresearch: 24h watchdog script
+9650674 2026-10-20 02:23:37 3_autoresearch: cls_table dev work + T1 conditional PROTOCOL (Region2 s0.1-0.6); finalist fixed mechanically by DEV_RULES R0-R2
+76cf5c8 2026-10-20 04:36:45 3_autoresearch: union family (overlay v5) + T1 conditional union PROTOCOL; cls_table screen/confirmation records
+4e25e7e 2026-10-20 04:48:58 3_autoresearch: DEV_RULES R4 (dev extra seeds) + ADDENDUM_R4 to the union T1 protocol, before any union confirmation run; cls_table no finalist
+6d4a7a3 2026-10-20 04:56:46 3_autoresearch: G1_v5 PASS; union screen (XA/XG:F1PT pass R0 gate); second-spend pool rule
+1cda6af 2026-10-20 05:19:24 3_autoresearch: T2 conditional union PROTOCOL (Region4 s0.2-0.6; runs only if the union finalist fails T1) + T2 prerequisites code
+86e85ab 2026-10-20 06:02:00 3_autoresearch: round-1 end state (union confirmation in progress; mechanism notes; claim helper)
+f74bf8b 2026-10-20 06:27:32 3_autoresearch: union finalist XA:F1PT (mechanical, dev n=10); T1 TEST_GO written, test running
+daee3fb 2026-10-20 06:30:21 3_autoresearch: T1 RejectX replay diagnosis (protocol knob ineffective for Region2 rows)
+b822b47 2026-10-20 06:30:55 3_autoresearch: round-1 close (T1 running; supplementary RejectX job)
+8491a94 2026-10-20 07:02:01 3_autoresearch: round 1 (20261020_004634) [auto]
+539f39e 2026-10-20 07:04:06 3_autoresearch: T1 closed as spent and FAILED (unevaluable as pre-registered); fail-closed decision before reading evaluation.json
+e45a7fd 2026-10-20 07:04:24 3_autoresearch: G1_v5 report under its cited name (B2); report scripts fixed; notebook corrections
+3fdba1b 2026-10-20 07:04:57 3_autoresearch: T2 addendum - T1 unevaluable counts as not passed (only change); before any T2 TEST_GO
+f27cdc2 2026-10-20 07:05:27 3_autoresearch: T1 ledger/outputs snapshot (closed, unevaluable); T2 TEST_GO (commit 1cda6af, POOL=T2), test running
+80756ce 2026-10-20 07:06:45 3_autoresearch: T1 results report (spent, failed, unevaluable; all rows, descriptive only)
+198c76d 2026-10-20 07:07:44 3_autoresearch: T2 operational incident (missing cache dir) disclosed; failed rows kept
+fff7da2 2026-10-20 07:16:44 3_autoresearch: T2 incident count correction (8 failed rows, all pre-simulation)
+2409528 2026-10-20 07:17:03 3_autoresearch: round-2 STATUS (T1 closed, T2 running); claim helper copied to union_t2
+80233a6 2026-10-20 10:01:13 3_autoresearch: T2 result FAILED (Y = A+alpha level on Region4; 1/5 wins vs best alpha); ledger snapshot
+f742ef9 2026-10-20 10:02:04 3_autoresearch: T2 results report (FAILED vs best alpha; budget exhausted)
+b0d6e2b 2026-10-20 10:03:31 3_autoresearch: FINAL_REPORT (negative; budget exhausted); dev control confirmation pending
+2a9b3dd 2026-10-20 10:03:44 3_autoresearch: STATUS final (budget exhausted)
+4fe0688 2026-10-20 11:26:33 3_autoresearch: final - dev control confirmation, FINAL_REPORT complete (negative), STOP_EXHAUSTED
+e964491 2026-10-20 11:26:53 3_autoresearch: FINAL_REPORT mechanism numbers from complete dev data
+943802c 2026-10-20 11:44:10 3_autoresearch: round 2 (20261020_004634) [auto]
+c81f075 2026-10-20 15:34:09 RESEARCH: auto-research loop result (negative; budget exhausted)
+87049d5 2026-10-20 15:41:39 4_story: 5-round story writer + self-grill validator loop (claims must cite repo files; numbers checked)

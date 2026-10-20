@@ -1,0 +1,18 @@
+# First commit that added each protocol / scope file (git log --diff-filter=A), and its last commit
+changes/SCOPE.md | added 0981c50 2026-09-28 00:17:16 | last 0981c50 2026-09-28 00:17:16
+changes/SCOPE_v2.md | added 27fb6f0 2026-09-29 15:06:02 | last be4f48b 2026-10-19 19:25:30
+changes/1_literature_review/explore/PROTOCOL.md | added be284a3 2026-09-29 15:02:03 | last be284a3 2026-09-29 15:02:03
+changes/2_deployable_peak/PLAN.md | added 27fb6f0 2026-09-29 15:06:02 | last 5e49299 2026-10-01 14:30:39
+changes/2_deployable_peak/wp5_ising/PROTOCOL_v2_H2.md | added fd54e76 2026-10-03 01:13:51 | last fd54e76 2026-10-03 01:13:51
+changes/2_deployable_peak/wp2_deployed/PROTOCOL_v2_H3.md | added cba9970 2026-10-04 09:16:01 | last cba9970 2026-10-04 09:16:01
+changes/2_deployable_peak/wp8_trackC/PLAN_C.md | added 19d7992 2026-10-16 13:54:17 | last d10e572 2026-10-16 13:54:30
+changes/2_deployable_peak/wp9_region5/PROTOCOL_v2_H4.md | added c8f655a 2026-10-16 21:30:11 | last c8f655a 2026-10-16 21:30:11
+changes/2_deployable_peak/wp10_schedule/PROTOCOL_v2_H5.md | added 2738cba 2026-10-19 19:23:04 | last 2738cba 2026-10-19 19:23:04
+changes/2_deployable_peak/wp10_schedule/SCOPE_v2_1b.md | added 2738cba 2026-10-19 19:23:04 | last 2738cba 2026-10-19 19:23:04
+changes/3_autoresearch/documents/GOOD_RESULT.md | added 3a79daf 2026-10-19 23:34:26 | last 3a79daf 2026-10-19 23:34:26
+changes/3_autoresearch/result/DEV_RULES.md | added 9650674 2026-10-20 02:23:37 | last 4e25e7e 2026-10-20 04:48:58
+changes/3_autoresearch/work/t1_region2/PROTOCOL.md | added 9650674 2026-10-20 02:23:37 | last 9650674 2026-10-20 02:23:37
+changes/3_autoresearch/work/t1u_region2/PROTOCOL.md | added 76cf5c8 2026-10-20 04:36:45 | last 76cf5c8 2026-10-20 04:36:45
+changes/3_autoresearch/work/t1u_region2/ADDENDUM_R4.md | added 4e25e7e 2026-10-20 04:48:58 | last 6d4a7a3 2026-10-20 04:56:46
+changes/3_autoresearch/work/t2u_region4/PROTOCOL.md | added 1cda6af 2026-10-20 05:19:24 | last 1cda6af 2026-10-20 05:19:24
+changes/3_autoresearch/work/t2u_region4/ADDENDUM_T1_UNEVALUABLE.md | added 3fdba1b 2026-10-20 07:04:57 | last 3fdba1b 2026-10-20 07:04:57

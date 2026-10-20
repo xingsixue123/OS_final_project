@@ -1,0 +1,651 @@
+{
+ "problems": [],
+ "warnings": [],
+ "n_findings": 92,
+ "findings": [
+  {
+   "id": "F01",
+   "prio": "P1",
+   "evid": "INFRA",
+   "refs": 4,
+   "unsourced": []
+  },
+  {
+   "id": "F02",
+   "prio": "P1",
+   "evid": "INFRA",
+   "refs": 3,
+   "unsourced": []
+  },
+  {
+   "id": "F03",
+   "prio": "P1",
+   "evid": "INFRA",
+   "refs": 2,
+   "unsourced": []
+  },
+  {
+   "id": "F04",
+   "prio": "P2",
+   "evid": "INFRA",
+   "refs": 9,
+   "unsourced": []
+  },
+  {
+   "id": "F05",
+   "prio": "P2",
+   "evid": "INFRA",
+   "refs": 7,
+   "unsourced": []
+  },
+  {
+   "id": "F06",
+   "prio": "P3",
+   "evid": "INFRA",
+   "refs": 3,
+   "unsourced": []
+  },
+  {
+   "id": "F07",
+   "prio": "P1",
+   "evid": "REPRO",
+   "refs": 3,
+   "unsourced": []
+  },
+  {
+   "id": "F08",
+   "prio": "P1",
+   "evid": "REPRO",
+   "refs": 4,
+   "unsourced": []
+  },
+  {
+   "id": "F09",
+   "prio": "P2",
+   "evid": "REPRO",
+   "refs": 3,
+   "unsourced": []
+  },
+  {
+   "id": "F10",
+   "prio": "P2",
+   "evid": "REPRO",
+   "refs": 3,
+   "unsourced": []
+  },
+  {
+   "id": "F11",
+   "prio": "P1",
+   "evid": "OFFLINE",
+   "refs": 4,
+   "unsourced": []
+  },
+  {
+   "id": "F12",
+   "prio": "P2",
+   "evid": "OFFLINE",
+   "refs": 1,
+   "unsourced": []
+  },
+  {
+   "id": "F13",
+   "prio": "P1",
+   "evid": "INFRA",
+   "refs": 3,
+   "unsourced": []
+  },
+  {
+   "id": "F14",
+   "prio": "P2",
+   "evid": "INFRA",
+   "refs": 1,
+   "unsourced": []
+  },
+  {
+   "id": "F15",
+   "prio": "P1",
+   "evid": "DEV",
+   "refs": 2,
+   "unsourced": []
+  },
+  {
+   "id": "F16",
+   "prio": "P2",
+   "evid": "OFFLINE",
+   "refs": 2,
+   "unsourced": []
+  },
+  {
+   "id": "F17",
+   "prio": "P2",
+   "evid": "OFFLINE",
+   "refs": 1,
+   "unsourced": []
+  },
+  {
+   "id": "F18",
+   "prio": "P0",
+   "evid": "TEST-PREREG",
+   "refs": 5,
+   "unsourced": []
+  },
+  {
+   "id": "F19",
+   "prio": "P1",
+   "evid": "OFFLINE",
+   "refs": 4,
+   "unsourced": []
+  },
+  {
+   "id": "F20",
+   "prio": "P0",
+   "evid": "NEGATIVE-TEST",
+   "refs": 3,
+   "unsourced": []
+  },
+  {
+   "id": "F21",
+   "prio": "P1",
+   "evid": "DEV",
+   "refs": 6,
+   "unsourced": []
+  },
+  {
+   "id": "F22",
+   "prio": "P3",
+   "evid": "DEV",
+   "refs": 1,
+   "unsourced": []
+  },
+  {
+   "id": "F23",
+   "prio": "P3",
+   "evid": "DEV",
+   "refs": 1,
+   "unsourced": []
+  },
+  {
+   "id": "F24",
+   "prio": "P3",
+   "evid": "OFFLINE",
+   "refs": 2,
+   "unsourced": []
+  },
+  {
+   "id": "F25",
+   "prio": "P0",
+   "evid": "OFFLINE",
+   "refs": 8,
+   "unsourced": []
+  },
+  {
+   "id": "F26",
+   "prio": "P1",
+   "evid": "OFFLINE",
+   "refs": 1,
+   "unsourced": []
+  },
+  {
+   "id": "F27",
+   "prio": "P1",
+   "evid": "OFFLINE",
+   "refs": 3,
+   "unsourced": []
+  },
+  {
+   "id": "F28",
+   "prio": "P0",
+   "evid": "NEGATIVE-TEST",
+   "refs": 5,
+   "unsourced": []
+  },
+  {
+   "id": "F29",
+   "prio": "P2",
+   "evid": "DEV",
+   "refs": 3,
+   "unsourced": []
+  },
+  {
+   "id": "F30",
+   "prio": "P2",
+   "evid": "TEST-PREREG",
+   "refs": 3,
+   "unsourced": []
+  },
+  {
+   "id": "F31",
+   "prio": "P1",
+   "evid": "OFFLINE",
+   "refs": 5,
+   "unsourced": []
+  },
+  {
+   "id": "F32",
+   "prio": "P2",
+   "evid": "DEV",
+   "refs": 4,
+   "unsourced": []
+  },
+  {
+   "id": "F33",
+   "prio": "P0",
+   "evid": "NEGATIVE-TEST",
+   "refs": 2,
+   "unsourced": []
+  },
+  {
+   "id": "F34",
+   "prio": "P1",
+   "evid": "DEV",
+   "refs": 1,
+   "unsourced": []
+  },
+  {
+   "id": "F35",
+   "prio": "P1",
+   "evid": "TEST-POSTHOC",
+   "refs": 1,
+   "unsourced": []
+  },
+  {
+   "id": "F36",
+   "prio": "P1",
+   "evid": "INFRA",
+   "refs": 3,
+   "unsourced": []
+  },
+  {
+   "id": "F37",
+   "prio": "P1",
+   "evid": "DEV",
+   "refs": 2,
+   "unsourced": []
+  },
+  {
+   "id": "F38",
+   "prio": "P1",
+   "evid": "DEV",
+   "refs": 3,
+   "unsourced": []
+  },
+  {
+   "id": "F39",
+   "prio": "P1",
+   "evid": "DEV",
+   "refs": 5,
+   "unsourced": []
+  },
+  {
+   "id": "F40",
+   "prio": "P2",
+   "evid": "DEV",
+   "refs": 1,
+   "unsourced": []
+  },
+  {
+   "id": "F41",
+   "prio": "P1",
+   "evid": "DEV",
+   "refs": 2,
+   "unsourced": []
+  },
+  {
+   "id": "F42",
+   "prio": "P2",
+   "evid": "DEV",
+   "refs": 4,
+   "unsourced": []
+  },
+  {
+   "id": "F43",
+   "prio": "P3",
+   "evid": "INFRA",
+   "refs": 3,
+   "unsourced": []
+  },
+  {
+   "id": "F44",
+   "prio": "P0",
+   "evid": "NEGATIVE-TEST",
+   "refs": 5,
+   "unsourced": []
+  },
+  {
+   "id": "F45",
+   "prio": "P1",
+   "evid": "NEGATIVE-TEST",
+   "refs": 4,
+   "unsourced": []
+  },
+  {
+   "id": "F46",
+   "prio": "P1",
+   "evid": "TEST-POSTHOC",
+   "refs": 6,
+   "unsourced": []
+  },
+  {
+   "id": "F47",
+   "prio": "P1",
+   "evid": "TEST-POSTHOC",
+   "refs": 2,
+   "unsourced": []
+  },
+  {
+   "id": "F48",
+   "prio": "P2",
+   "evid": "TEST-PREREG",
+   "refs": 4,
+   "unsourced": []
+  },
+  {
+   "id": "F49",
+   "prio": "P2",
+   "evid": "DEV",
+   "refs": 5,
+   "unsourced": []
+  },
+  {
+   "id": "F50",
+   "prio": "P1",
+   "evid": "DEV",
+   "refs": 4,
+   "unsourced": []
+  },
+  {
+   "id": "F51",
+   "prio": "P3",
+   "evid": "DEV",
+   "refs": 2,
+   "unsourced": []
+  },
+  {
+   "id": "F52",
+   "prio": "P0",
+   "evid": "TEST-PREREG",
+   "refs": 7,
+   "unsourced": []
+  },
+  {
+   "id": "F53",
+   "prio": "P1",
+   "evid": "TEST-PREREG",
+   "refs": 6,
+   "unsourced": []
+  },
+  {
+   "id": "F54",
+   "prio": "P1",
+   "evid": "TEST-PREREG",
+   "refs": 7,
+   "unsourced": []
+  },
+  {
+   "id": "F55",
+   "prio": "P3",
+   "evid": "INFRA",
+   "refs": 2,
+   "unsourced": []
+  },
+  {
+   "id": "F56",
+   "prio": "P2",
+   "evid": "DEV",
+   "refs": 2,
+   "unsourced": []
+  },
+  {
+   "id": "F57",
+   "prio": "P1",
+   "evid": "OFFLINE",
+   "refs": 4,
+   "unsourced": []
+  },
+  {
+   "id": "F58",
+   "prio": "P2",
+   "evid": "DEV",
+   "refs": 3,
+   "unsourced": []
+  },
+  {
+   "id": "F59",
+   "prio": "P0",
+   "evid": "NEGATIVE-TEST",
+   "refs": 6,
+   "unsourced": []
+  },
+  {
+   "id": "F60",
+   "prio": "P1",
+   "evid": "TEST-PREREG",
+   "refs": 3,
+   "unsourced": []
+  },
+  {
+   "id": "F61",
+   "prio": "P2",
+   "evid": "INFRA",
+   "refs": 3,
+   "unsourced": []
+  },
+  {
+   "id": "F62",
+   "prio": "P2",
+   "evid": "DEV",
+   "refs": 1,
+   "unsourced": []
+  },
+  {
+   "id": "F63",
+   "prio": "P2",
+   "evid": "DEV",
+   "refs": 3,
+   "unsourced": []
+  },
+  {
+   "id": "F64",
+   "prio": "P1",
+   "evid": "NEGATIVE-TEST",
+   "refs": 3,
+   "unsourced": []
+  },
+  {
+   "id": "F65",
+   "prio": "P0",
+   "evid": "NEGATIVE-TEST",
+   "refs": 5,
+   "unsourced": []
+  },
+  {
+   "id": "F66",
+   "prio": "P1",
+   "evid": "TEST-POSTHOC",
+   "refs": 3,
+   "unsourced": []
+  },
+  {
+   "id": "F67",
+   "prio": "P1",
+   "evid": "TEST-POSTHOC",
+   "refs": 3,
+   "unsourced": []
+  },
+  {
+   "id": "F68",
+   "prio": "P1",
+   "evid": "TEST-POSTHOC",
+   "refs": 6,
+   "unsourced": []
+  },
+  {
+   "id": "F69",
+   "prio": "P1",
+   "evid": "TEST-POSTHOC",
+   "refs": 6,
+   "unsourced": []
+  },
+  {
+   "id": "F70",
+   "prio": "P1",
+   "evid": "OFFLINE",
+   "refs": 8,
+   "unsourced": []
+  },
+  {
+   "id": "F71",
+   "prio": "P1",
+   "evid": "TEST-PREREG",
+   "refs": 7,
+   "unsourced": []
+  },
+  {
+   "id": "F72",
+   "prio": "P2",
+   "evid": "DEV",
+   "refs": 7,
+   "unsourced": []
+  },
+  {
+   "id": "F73",
+   "prio": "P1",
+   "evid": "INFRA",
+   "refs": 8,
+   "unsourced": []
+  },
+  {
+   "id": "F74",
+   "prio": "P2",
+   "evid": "INFRA",
+   "refs": 6,
+   "unsourced": []
+  },
+  {
+   "id": "F75",
+   "prio": "P2",
+   "evid": "INFRA",
+   "refs": 8,
+   "unsourced": []
+  },
+  {
+   "id": "F76",
+   "prio": "P1",
+   "evid": "INFRA",
+   "refs": 10,
+   "unsourced": []
+  },
+  {
+   "id": "F77",
+   "prio": "P3",
+   "evid": "INFRA",
+   "refs": 6,
+   "unsourced": []
+  },
+  {
+   "id": "F78",
+   "prio": "P3",
+   "evid": "INFRA",
+   "refs": 5,
+   "unsourced": []
+  },
+  {
+   "id": "F79",
+   "prio": "P3",
+   "evid": "INFRA",
+   "refs": 4,
+   "unsourced": []
+  },
+  {
+   "id": "F80",
+   "prio": "P2",
+   "evid": "INFRA",
+   "refs": 5,
+   "unsourced": []
+  },
+  {
+   "id": "F81",
+   "prio": "P3",
+   "evid": "INFRA",
+   "refs": 9,
+   "unsourced": []
+  },
+  {
+   "id": "F82",
+   "prio": "P3",
+   "evid": "INFRA",
+   "refs": 4,
+   "unsourced": []
+  },
+  {
+   "id": "F83",
+   "prio": "P2",
+   "evid": "INFRA",
+   "refs": 4,
+   "unsourced": []
+  },
+  {
+   "id": "F84",
+   "prio": "P1",
+   "evid": "INFRA",
+   "refs": 1,
+   "unsourced": []
+  },
+  {
+   "id": "F85",
+   "prio": "P3",
+   "evid": "INFRA",
+   "refs": 7,
+   "unsourced": []
+  },
+  {
+   "id": "F86",
+   "prio": "P2",
+   "evid": "INFRA",
+   "refs": 4,
+   "unsourced": []
+  },
+  {
+   "id": "F87",
+   "prio": "P2",
+   "evid": "INFRA",
+   "refs": 5,
+   "unsourced": []
+  },
+  {
+   "id": "F88",
+   "prio": "P3",
+   "evid": "INFRA",
+   "refs": 8,
+   "unsourced": []
+  },
+  {
+   "id": "F89",
+   "prio": "P3",
+   "evid": "INFRA",
+   "refs": 2,
+   "unsourced": []
+  },
+  {
+   "id": "F90",
+   "prio": "P2",
+   "evid": "INFRA",
+   "refs": 4,
+   "unsourced": []
+  },
+  {
+   "id": "F91",
+   "prio": "P2",
+   "evid": "INFRA",
+   "refs": 6,
+   "unsourced": []
+  },
+  {
+   "id": "F92",
+   "prio": "P1",
+   "evid": "INFRA",
+   "refs": 10,
+   "unsourced": []
+  }
+ ]
+}

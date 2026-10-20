@@ -1,0 +1,85 @@
+## Test-set arm means (matched retrains; mean of per-instance means)
+WP3 H3' (Region6/7 s0.4-0.6): A mean P100 39.27 over 6 instances; matched retrains per cell [3, 3, 3, 3, 3, 3]
+WP3 H3' (Region6/7 s0.4-0.6): Aa-1.0 mean P100 38.30 over 6 instances; matched retrains per cell [3, 3, 3, 3, 3, 3]
+WP3 H3' (Region6/7 s0.4-0.6): B mean P100 39.17 over 6 instances; matched retrains per cell [3, 3, 3, 3, 3, 3]
+WP3 H3' (Region6/7 s0.4-0.6): Ba-1.0 mean P100 38.38 over 6 instances; matched retrains per cell [3, 3, 3, 3, 3, 3]
+WP3 H3' (Region6/7 s0.4-0.6): Ea-0.5:F1PT mean P100 40.88 over 6 instances; matched retrains per cell [3, 3, 3, 3, 3, 3]
+WP3 H3' (Region6/7 s0.4-0.6): Ea-1.0:F1CPSAT mean P100 39.64 over 6 instances; matched retrains per cell [3, 3, 3, 3, 3, 3]
+WP3 H3' (Region6/7 s0.4-0.6): Ea-1.0:F1PT mean P100 40.53 over 6 instances; matched retrains per cell [3, 3, 3, 3, 3, 3]
+WP9 H4 (Region5 s0.1-0.6): A mean P100 36.17 over 6 instances; matched retrains per cell [3, 3, 3, 3, 3, 3]
+WP9 H4 (Region5 s0.1-0.6): Aa-1.0 mean P100 35.02 over 6 instances; matched retrains per cell [3, 3, 3, 3, 3, 3]
+WP9 H4 (Region5 s0.1-0.6): B mean P100 36.37 over 6 instances; matched retrains per cell [3, 3, 3, 3, 3, 3]
+WP9 H4 (Region5 s0.1-0.6): Ba-1.0 mean P100 34.48 over 6 instances; matched retrains per cell [3, 3, 3, 3, 3, 3]
+WP9 H4 (Region5 s0.1-0.6): Ea-1.0:F1PT mean P100 38.09 over 6 instances; matched retrains per cell [3, 3, 3, 3, 3, 3]
+WP10 H5 (Region1 s0.1-0.6): A mean P100 24.14 over 6 instances; matched retrains per cell [3, 3, 3, 3, 3, 3]
+WP10 H5 (Region1 s0.1-0.6): Aa-1.0 mean P100 24.62 over 6 instances; matched retrains per cell [3, 3, 3, 3, 3, 3]
+WP10 H5 (Region1 s0.1-0.6): B mean P100 24.54 over 6 instances; matched retrains per cell [3, 3, 3, 3, 3, 3]
+WP10 H5 (Region1 s0.1-0.6): Ba-1.0 mean P100 24.48 over 6 instances; matched retrains per cell [3, 3, 3, 3, 3, 3]
+WP10 H5 (Region1 s0.1-0.6): TB-cd mean P100 24.45 over 6 instances; matched retrains per cell [3, 3, 3, 3, 3, 3]
+WP10 H5 (Region1 s0.1-0.6): TB-pt mean P100 24.45 over 6 instances; matched retrains per cell [3, 3, 3, 3, 3, 3]
+3_autoresearch T2 (Region4 s0.2-0.6): A mean P100 50.72 over 5 instances; matched retrains per cell [3, 3, 3, 3, 3]
+3_autoresearch T2 (Region4 s0.2-0.6): Aa-1.0 mean P100 42.87 over 5 instances; matched retrains per cell [3, 3, 3, 3, 3]
+3_autoresearch T2 (Region4 s0.2-0.6): B mean P100 56.71 over 5 instances; matched retrains per cell [3, 3, 3, 3, 3]
+3_autoresearch T2 (Region4 s0.2-0.6): Ba-1.0 mean P100 43.87 over 5 instances; matched retrains per cell [3, 3, 3, 3, 3]
+3_autoresearch T2 (Region4 s0.2-0.6): XA-F1CPSAT mean P100 44.37 over 5 instances; matched retrains per cell [3, 3, 3, 3, 3]
+3_autoresearch T2 (Region4 s0.2-0.6): XA-F1PT mean P100 43.17 over 5 instances; matched retrains per cell [3, 3, 3, 3, 3]
+
+## Paired comparisons (pass rule quantities)
+WP3 Ea-1.0:F1PT vs A: wins 5/6, mean(ref-X) -1.265, SE_retrain 0.154, SE_inst 2.413, worst -13.233
+WP3 Ea-1.0:F1PT vs B: wins 5/6, mean(ref-X) -1.359, SE_retrain 0.167, SE_inst 2.554, worst -13.988
+WP3 Ea-1.0:F1PT vs Aa-1.0: wins 3/6, mean(ref-X) -2.230, SE_retrain 0.207, SE_inst 2.660, worst -15.351
+WP3 Ea-1.0:F1PT vs Ba-1.0: wins 3/6, mean(ref-X) -2.151, SE_retrain 0.268, SE_inst 2.637, worst -15.244
+WP3 Aa-1.0 vs A: wins 5/6, mean(ref-X) +0.965, SE_retrain 0.160, SE_inst 0.391, worst -0.741
+WP3 Aa-1.0 vs B: wins 5/6, mean(ref-X) +0.871, SE_retrain 0.173, SE_inst 0.357, worst -0.841
+WP3 Ba-1.0 vs B: wins 6/6, mean(ref-X) +0.793, SE_retrain 0.243, SE_inst 0.159, worst +0.223
+WP9 Aa-1.0 vs A: wins 5/6, mean(ref-X) +1.155, SE_retrain 0.094, SE_inst 0.745, worst -0.246
+WP9 Aa-1.0 vs B: wins 5/6, mean(ref-X) +1.346, SE_retrain 0.081, SE_inst 0.943, worst -0.379
+WP9 Ba-1.0 vs A: wins 6/6, mean(ref-X) +1.696, SE_retrain 0.221, SE_inst 1.194, worst +0.373
+WP9 Ba-1.0 vs B: wins 6/6, mean(ref-X) +1.887, SE_retrain 0.216, SE_inst 1.395, worst +0.232
+WP9 Ea-1.0:F1PT vs A: wins 3/6, mean(ref-X) -1.919, SE_retrain 0.436, SE_inst 1.613, worst -8.737
+WP9 Ea-1.0:F1PT vs Aa-1.0: wins 2/6, mean(ref-X) -3.074, SE_retrain 0.433, SE_inst 2.325, worst -13.495
+WP10 TB-pt vs A: wins 1/6, mean(ref-X) -0.314, SE_retrain 0.092, SE_inst 0.142, worst -0.877
+WP10 TB-pt vs B: wins 3/6, mean(ref-X) +0.088, SE_retrain 0.138, SE_inst 0.091, worst -0.104
+WP10 TB-pt vs Ba-1.0: wins 3/6, mean(ref-X) +0.024, SE_retrain 0.091, SE_inst 0.243, worst -0.730
+WP10 Aa-1.0 vs A: wins 1/6, mean(ref-X) -0.487, SE_retrain 0.061, SE_inst 0.179, worst -1.136
+WP10 Aa-1.0 vs B: wins 3/6, mean(ref-X) -0.084, SE_retrain 0.120, SE_inst 0.323, worst -1.166
+WP10 Ba-1.0 vs A: wins 1/6, mean(ref-X) -0.338, SE_retrain 0.053, SE_inst 0.159, worst -0.858
+WP10 Ba-1.0 vs B: wins 3/6, mean(ref-X) +0.064, SE_retrain 0.116, SE_inst 0.287, worst -0.888
+T2 XA-F1PT vs A: wins 4/5, mean(ref-X) +7.547, SE_retrain 1.028, SE_inst 5.113, worst -0.078
+T2 XA-F1PT vs B: wins 5/5, mean(ref-X) +13.541, SE_retrain 1.691, SE_inst 4.729, worst +1.121
+T2 XA-F1PT vs Aa-1.0: wins 1/5, mean(ref-X) -0.300, SE_retrain 1.117, SE_inst 0.219, worst -0.909
+T2 XA-F1CPSAT vs XA-F1PT: wins 3/5, mean(ref-X) -1.196, SE_retrain 1.047, SE_inst 1.154, worst -5.442
+T2 Aa-1.0 vs A: wins 5/5, mean(ref-X) +7.847, SE_retrain 0.446, SE_inst 5.125, worst +0.120
+T2 Aa-1.0 vs B: wins 5/5, mean(ref-X) +13.841, SE_retrain 1.415, SE_inst 4.740, worst +2.031
+
+## WP1 H1' (offline, matched OPT sims): wins vs R0 and mean P100 reduction
+lp    all        n=39 wins=36 mean reduction 13.03%
+lp    Region4    n=9 wins=6 mean reduction 4.59%
+lp    Regions5-7 n=30 wins=30 mean reduction 15.57%
+cpsat all        n=39 wins=36 mean reduction 13.15%
+cpsat Region4    n=9 wins=6 mean reduction 3.04%
+cpsat Regions5-7 n=30 wins=30 mean reduction 16.19%
+pt    all        n=39 wins=37 mean reduction 13.69%
+pt    Region4    n=9 wins=7 mean reduction 5.37%
+pt    Regions5-7 n=30 wins=30 mean reduction 16.18%
+
+## Mechanism statistics by region (matched retrains; k0_adm = first-access admission)
+WP3 Region6 A: first-access adm 0.4%, peak-window adm 0.35 (n=9)
+WP3 Region6 Aa-1.0: first-access adm 1.0%, peak-window adm 0.41 (n=9)
+WP3 Region6 B: first-access adm 0.2%, peak-window adm 0.28 (n=9)
+WP3 Region6 Ba-1.0: first-access adm 0.7%, peak-window adm 0.36 (n=9)
+WP3 Region6 Ea-0.5:F1PT: first-access adm 0.3%, peak-window adm 0.36 (n=9)
+WP3 Region6 Ea-1.0:F1CPSAT: first-access adm 0.3%, peak-window adm 0.27 (n=9)
+WP3 Region6 Ea-1.0:F1PT: first-access adm 0.3%, peak-window adm 0.36 (n=9)
+WP3 Region7 A: first-access adm 7.8%, peak-window adm 0.42 (n=9)
+WP3 Region7 Aa-1.0: first-access adm 7.6%, peak-window adm 0.50 (n=9)
+WP3 Region7 B: first-access adm 9.4%, peak-window adm 0.42 (n=9)
+WP3 Region7 Ba-1.0: first-access adm 8.1%, peak-window adm 0.47 (n=9)
+WP3 Region7 Ea-0.5:F1PT: first-access adm 3.3%, peak-window adm 0.31 (n=9)
+WP3 Region7 Ea-1.0:F1CPSAT: first-access adm 3.3%, peak-window adm 0.40 (n=9)
+WP3 Region7 Ea-1.0:F1PT: first-access adm 3.6%, peak-window adm 0.33 (n=9)
+
+WP9 per-instance A - A+alpha: Region5_s0.1 +0.607, Region5_s0.2 -0.246, Region5_s0.3 +0.251, Region5_s0.4 +0.374, Region5_s0.5 +4.758, Region5_s0.6 +1.183
+
+## WP2 dev bookkeeping
+WP2 widened-search re-runs (Ax/Bx/Ex): 28 matched rows {'Bx-1.0': 12, 'Ax-1.0': 12, 'Bx-0.5': 3, 'Ex-1.0': 1}; theta min 1.0046 max 1.2916
