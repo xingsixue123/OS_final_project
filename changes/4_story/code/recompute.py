@@ -187,6 +187,88 @@ def wp1_r0_vs_author():
           f"Region4_s0.3 {d['Region4_s0.3']:+.3f} (|d| {abs(d['Region4_s0.3']):.3f})")
 
 
+def label_objectives(d, label):
+    """Day-1 F1 objective (label_peak_util) of seed-matched PT vs CP-SAT label sets in one labels/ directory."""
+    obj = {}
+    for f in sorted(os.listdir(d)):
+        m = re.match(r"(.+)_(F1PT|F1CPSAT)_s(\d+)\.json$", f)
+        if m:
+            obj[(m.group(1), m.group(3), m.group(2))] = json.load(open(os.path.join(d, f)))["label_peak_util"]
+    pairs = sorted({(i, k) for i, k, _ in obj if (i, k, "F1PT") in obj and (i, k, "F1CPSAT") in obj})
+    diff = [obj[(i, k, "F1PT")] - obj[(i, k, "F1CPSAT")] for i, k in pairs]
+    rel = [100 * x / obj[(i, k, "F1CPSAT")] for x, (i, k) in zip(diff, pairs)]
+    print(f"{label} day-1 F1 objective, {len(pairs)} seed-matched pairs: CP-SAT lower {sum(x > 0 for x in diff)}, "
+          f"PT lower {sum(x < 0 for x in diff)}, equal {sum(x == 0 for x in diff)}; PT - CP-SAT {min(diff):+.3f} .. "
+          f"{max(diff):+.3f} ({min(rel):+.2f}% .. {max(rel):+.2f}%); means PT {st.mean(obj[(i, k, 'F1PT')] for i, k in pairs):.3f}"
+          f" CP-SAT {st.mean(obj[(i, k, 'F1CPSAT')] for i, k in pairs):.3f}")
+
+
+def per_retrain(path, inst, arms):
+    rows = [r for r in csv.DictReader(open(path)) if r["matched"] == "True" and r["inst"] == inst and r["arm"] in arms]
+    return {a: [round(float(r["p100"]), 2) for r in sorted(rows, key=lambda r: r["rep"]) if r["arm"] == a] for a in arms}
+
+
+def ledger_window(path, flt=lambda r: True):
+    """Earliest start (ts - wall_secs) and last completion (ts) of the rows that pass flt."""
+    import datetime as dt
+    rows = [r for r in csv.DictReader(open(path)) if flt(r) and r.get("ts")]
+    t = [dt.datetime.fromisoformat(r["ts"]) for r in rows]
+    s = [dt.datetime.fromisoformat(r["ts"]) - dt.timedelta(seconds=float(r["wall_secs"] or 0)) for r in rows]
+    return f"{len(rows)} rows, earliest start {min(s):%Y-%m-%d %H:%M:%S}, first row {min(t):%H:%M:%S}, last row {max(t):%Y-%m-%d %H:%M:%S}"
+
+
+def round4():
+    print("\n## Round-4 additions")
+    label_objectives(os.path.join(P2, "wp3_test", "labels"), "WP3 H3' test labels")
+    label_objectives(os.path.join(P2, "wp2_deployed", "labels"), "WP2 dev labels")
+    tests = [("WP2 dev", os.path.join(P2, "wp2_deployed", "trials.csv")),
+             ("WP3 H3'", os.path.join(P2, "wp3_test", "trials.csv")),
+             ("WP9 H4", os.path.join(P2, "wp9_region5", "trials.csv")),
+             ("WP10 H5", os.path.join(P2, "wp10_schedule", "trials_test.csv")),
+             ("T2 Region4", os.path.join(AR, "t2u_region4", "trials_test.csv")),
+             ("T1 Region2 (descriptive)", os.path.join(AR, "t1u_region2", "trials_test.csv"))]
+    for name, path in tests:
+        c = cells(path)
+        ma, mb = (st.mean(st.mean(v) for v in c[a].values()) for a in ("A", "B"))
+        both = sorted(set(c["A"]) & set(c["B"]))
+        paired = st.mean(st.mean(c["B"][i]) - st.mean(c["A"][i]) for i in both)
+        print(f"arm B vs A, {name}: A {ma:.3f} (n={len(c['A'])}), B {mb:.3f} (n={len(c['B'])}), "
+              f"paired B - A {paired:+.3f} over {len(both)} instances;", compare(c, "B", "A"))
+    t2 = os.path.join(AR, "t2u_region4", "trials_test.csv")
+    for inst in ("Region4_s0.4", "Region4_s0.5"):
+        print(f"T2 {inst} per retrain: {per_retrain(t2, inst, ('A', 'B'))}")
+    c = cells(t2)
+    d = {i: st.mean(c["A"][i]) - st.mean(c["Aa-1.0"][i]) for i in c["A"]}
+    two = d["Region4_s0.2"] + d["Region4_s0.3"]
+    print(f"T2 A - A+alpha: s0.2 + s0.3 = {two:.3f} of {sum(d.values()):.3f} ({100 * two / sum(d.values()):.1f}%)")
+    for f in ("solves_dev.csv", "solves_test.csv"):
+        w = [float(r["wall_s"]) for r in csv.DictReader(open(os.path.join(P2, "wp10_schedule", "results", f)))
+             if r["solver"] == "ex"]
+        print(f"WP10 {f} exhaustive (ex) wall_s: n={len(w)}, {min(w):.2f} .. {max(w):.2f} s, above 2.35 s: {sum(x > 2.35 for x in w)}")
+    rows = list(csv.DictReader(open(os.path.join(P2, "wp10_schedule", "trials_test.csv"))))
+    p = {(r["inst"], r["arm"], r["rep"]): float(r["p100"]) for r in rows if r["matched"] == "True"}
+    neutral = [(r["inst"], r["rep"]) for r in rows if r["arm"] == "TB-pt" and r["matched"] == "True"
+               and all(float(x) == 1.0 for x in json.loads(r["table_mult"] or "[]") or [0])]
+    same = [k for k in neutral if (k[0], "B", k[1]) in p and abs(p[(k[0], "TB-pt", k[1])] - p[(k[0], "B", k[1])]) < 1e-9]
+    print(f"WP10 TB-pt neutral-table retrains: {len(neutral)}; P100 equal to arm B's same retrain on {len(same)}; others: "
+          + ", ".join(f"{i} r{k} TB-pt {p[(i, 'TB-pt', k)]:.3f} vs B {p[(i, 'B', k)]:.3f}" for i, k in neutral if (i, k) not in same))
+    tc = os.path.join(P2, "wp8_trackC", "results")
+    for f in ("ledger_labels.csv", "proxy_ledger.csv"):
+        ts = sorted(r["ts"] for r in csv.DictReader(open(os.path.join(tc, f))) if r["ts"].startswith("2026-10-05"))
+        print(f"Track C {f} rows on 2026-10-05: {len(ts)}, {ts[0]} .. {ts[-1]}; after 15:06: {sum(t > '2026-10-05T15:06' for t in ts)}")
+    for name, path, flt in (("H3' test", os.path.join(P2, "wp3_test", "trials.csv"), lambda r: True),
+                            ("H4 test", os.path.join(P2, "wp9_region5", "trials.csv"), lambda r: r["stage"] != "dry"),
+                            ("H5 test", os.path.join(P2, "wp10_schedule", "trials_test.csv"), lambda r: True)):
+        print(f"{name} ledger: {ledger_window(path, flt)}")
+    for r in csv.DictReader(open(os.path.join(P2, "wp1_offline", "results", "wp1_table.csv"))):
+        if r["region"] == "Region4":
+            print(f"WP1 {r['instance']} reduction vs R0 % (simulated argmax / planned argmax): " + ", ".join(
+                f"{m} {(float(r['R0']) - float(r[m])) / float(r['R0']) * 100:+.1f} ({r[m + '_argmax']}/{r[m + '_plan_argmax']})"
+                for m in ("lp", "cpsat", "pt")))
+    w1 = [r for r in csv.DictReader(open(os.path.join(P2, "wp1_offline", "trials.csv"))) if r["phase"] == "wp1_reused_phase1_heldout"]
+    print(f"WP1 reused phase-1 held-out rows: {len(w1)} rows, {len({r['instance'] for r in w1})} instances, ts {min(r['ts'] for r in w1)} .. {max(r['ts'] for r in w1)}")
+
+
 def main():
     print("## Test-set arm means (matched retrains; mean of per-instance means)")
     tests = {
@@ -273,6 +355,7 @@ def main():
     trackc_anc_times()
     patch_counts()
     quoted_arithmetic()
+    round4()
 
 
 if __name__ == "__main__":

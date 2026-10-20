@@ -1,5 +1,120 @@
 # Story writer notes
 
+## Round 4 (run 20261020_154140, started 2026-10-20 18:31)
+
+### Validator feedback: how each blocking item was resolved
+**Citation validator, round 3** (6 blocking):
+
+| Item | Resolution |
+|---|---|
+| R3-B1 | F70's tie/stability sentence is split three ways (recomputed from the label JSONs). The auto-research test pools tie exactly. WP2 dev is near-ties either way: 10/10/4 of 24 pairs, within ±0.56%, Jaccard 0.74 vs 0.76. On the H3′ test labels CP-SAT is lower on 36/36, by 0.040–0.198 (0.20–0.89%). The WP3 result is added under "winners", and §8 rows 22 and 23 and F32's title are scoped. |
+| R3-B2 | F21 and F24 cite `PROTOCOL_v2_H3.md#L70`, `PROTOCOL_v2_H4.md#L55`, `wp9_region5/INSTANCES.md#L29` and `t1u_region2/PROTOCOL.md#L41`. |
+| R3-B3 | Track C ran to ~15:26 on 10-05: 15:25:55 is the last label-ledger row and 15:18:51 the last proxy row; the log says ~15:05 (recomputed). Fixed in F73, F44 and Appendix B, which also notes that stage 1 resumed and finished on 10-16. |
+| R3-B4 | F100 reports WP3 as a non-optimal shared-core comparison (CP-SAT lower on 36/36; `taskset -c 0-23`, 16:26–16:40) next to Track C, and drops "main". "No comparison" is now restricted to WP9. |
+| R3-B5 | F103 is retitled "never adopted or confirmed". The C3/C3L occupancy model was implemented in harness_eval but never confirmed. Samples 1–9 are scoped to harness_eval's arms. |
+| R3-B6 | The header says "two absolute scratchpad paths (on one line)". |
+
+**Grill validator, round 3** (2 blocking):
+
+| Item | Resolution |
+|---|---|
+| 1 | **New finding F105** (P1, TEST-POSTHOC): arm B (Baleen's labels + `load`) never improved Baleen on test. B − A ranges from −0.094 to +5.994; on Region4 s0.5, B scored 55.31/55.12/55.31 vs A 32.86. Also: §8 row 24, F03's priority line, the abstract and the §8 summary. F53 notes that α did nothing on B's models on dev (`attribution.txt#L17`). |
+| 2 | The abstract, §8 row 7 and §8 summary bullet 2 add the day-1 label-instance losses. F32 shows the 1/3/10 s day-1 table: classical solvers are best at every budget. |
+
+### Non-blocking items
+**Citation N1–N46:** all addressed except N22, which is only noted (its inherited roundings are listed under Appendix D "Agreement"), and N46, which needs no action.
+- N1 and N2: F04 notes the G1 skip keys and cites GOOD_RESULT L13.
+- N3–N5: F104 now says where the threshold appears, adds §5.6, the `pf_subset=None` drivers, and the audit → proposal → SCOPE_v2 chain.
+- N6: F13 (labels use day-1 windows at f = 1.0).
+- N7: 27.5–28.3 in F15, F17 and F19.
+- N8: F16 is scoped to R1.
+- N9 and N11: the legend lists F102 and adds an OFFLINE vs TEST-POSTHOC precedence rule.
+- N10: F24's move shares now include the start.
+- N12: F31 says "+214 MB / +165 MB above the loaded instance".
+- N13: F27's two qualifications are recomputed per instance.
+- N14 and N15: the F25 and F28 titles.
+- N16: F28's first ledger row.
+- N17: F29 cites L395.
+- N18: F21's duplicate ref is removed.
+- N19: the §5 intro.
+- N20 and N21: F44 and F73 launch times are recomputed.
+- N23: F40.
+- N24: F52's title marks the 69% as post hoc.
+- N25: WP9's +1.16 vs raw +1.155 is listed under Appendix D "Agreement".
+- N26–N28: the WP10 ex wall times (1.50–2.41 s dev, 0.69–0.88 s test) and TB:pt = B on 9/10 neutral retrains.
+- N29: F61's sandbox scope.
+- N30: F73's H1′ row (6 instances reused).
+- N31: F70 and F100 (the PT side ran during the H3′ test).
+- N32: F100 (WP2's 144 main sets).
+- N33: F76 ("no recorded review").
+- N34: F70 adds the XG row (1.97 instance SE).
+- N35: F74 ("test-arm data").
+- N36: F92 and F93 (39 instances).
+- N37: §8 row 23.
+- N38: §8 row 19 (F1; F2b greedy).
+- N39: §8 row 18 (operating point).
+- N40: §8 row 1 (Region1 smoke test).
+- N41: Appendix B.
+- N42: A.8b note.
+- N43: Appendix C (the union_t2 overlay is git-ignored).
+- N44: Appendix D raw inputs, and a note that the timeline is a snapshot.
+- N45: F32's title.
+
+**Grill non-blocking 1–7:**
+1. The P0 titles of F18 and F52 carry their numbers.
+2. F66 and F69: Baleen ≈ RejectX on the two Region4 instances that carry 93.5% of the gain (recomputed). The priority line is softened.
+3. F59's title says what it refutes.
+4. The F73 table gives launch times. The H4 row notes the static replays before the protocol commit.
+5. The Appendix B row records the 15:34 re-run of `deterministic_validation.json`.
+6. The chain, as in N5.
+7. §8 row 16 carries the Region4 caveat.
+
+### Other changes
+- **`recompute.py` "Round-4 additions":**
+  - PT vs CP-SAT label objectives (WP3, WP2);
+  - B vs A on six ledgers, with T2's per-retrain values;
+  - T2's 93.5% share;
+  - the WP10 ex wall times, and TB:pt vs B on the neutral retrains;
+  - Track C's 10-05 ledger times;
+  - the test launch windows;
+  - WP1's reused rows;
+  - Region4 per-instance WP1 rows.
+- The output is regenerated, and stdout matches the file.
+
+### Self-audit after the validator fixes
+Two read-only fact-check agents checked every added line, about 175 claims. All their findings were applied.
+
+**Blocking:**
+- **F104's chain.** SCOPE_v2 credits the proposal with items 1.1 and 1.3 only; the threshold (1.2) carries no attribution there.
+- **"Never improved/helped" (F105 title, abstract, F03, §8 summary) overstated F105's own table.** It now reads "never … beyond noise"; B was at most 0.094 better.
+- **F73's H2′ first-row time** cites `wp5_ising/trials.csv` and notes that the report says 01:24:38.
+- **F53.** Before H4, B+α's only support was H3′'s post-hoc +0.79 (6/6). Track C's PLAN_C already listed B+α as an arm, so the H3′ result was not the reason it was included.
+- **Solver summaries were too broad.** The §8 summary, F70's title and the abstract are scoped to the WP5 dev day-1 instances (tuned configurations, nested objective) and the 36 H3′ test pairs. They now add that the WP2 dev pairs are near-ties and that the auto-research pools tie.
+
+**Minor:**
+- "36 pairs", not 36 solves.
+- §8 row 23: Track C favours PT "on the mean (11/24)".
+- §8 row 18: "400 GB-equivalent".
+- F100: four later WP2 sets, and "the two with deployed rows".
+- F61: unsandboxed report scripts.
+- F66: "within ~1 point of RejectX".
+- F27's title: 2 of 4 losses are migration by F26's rule.
+- The legend keeps the test tags of F20 and F28.
+- F04: the G1 skip keys described exactly; cites g1v5.
+- F104: the §5.6 quote is exact.
+- F44: cites PROGRESS L109–110.
+- Duplicate refs removed (F24).
+- F16: R1 and R1_L6 bundled as in the source.
+- F59's title: "failed its pre-registered test there (TB ≈ B)".
+- F103: intro scoped; cites F33.
+- The abstract's double negative is fixed.
+- Appendix D "Agreement" names the files behind the inherited roundings.
+- F32 and §8 row 23 cite `recompute_out.txt`.
+
+### Still open
+- Anchors in rarely cited long files may still be off by a few lines.
+- If validator reports print absolute paths again, the next round's privacy check will fail on committed files (see round 2).
+
 ## Round 3 (run 20261020_154140, started 2026-10-20 17:41)
 
 ### Validator feedback: how each blocking item was resolved
