@@ -13,3 +13,15 @@ work/**/*.txt.gz
 *.pyc
 *.lock
 autoscript/.leak_marker
+# cls_table: rebuildable overlays (PATCH_*.diff are tracked), G1 dumps, train records, instance links, slot locks
+work/**/overlay/
+work/**/overlay_v3/
+work/**/work_v3/
+work/**/results/g1v4/
+work/**/results/train/
+work/**/results_test/train/
+work/**/inst/
+work/**/.sim_slots.d/
+work/**/*.pkl
+work/**/*.model
+work/**/*.pkl.bz

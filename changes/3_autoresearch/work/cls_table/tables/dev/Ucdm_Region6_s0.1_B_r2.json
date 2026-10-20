@@ -1,0 +1,64 @@
+{
+ "name": "Ucdm_Region6_s0.1_B_r2",
+ "window_min": 10,
+ "edges": [
+  26.622588060088052,
+  30.37765475265475,
+  34.345571095571096,
+  40.43673918673918,
+  57.10956487956488
+ ],
+ "class_dims": [
+  {
+   "feat": "endoff",
+   "edges": [
+    8388608.0
+   ]
+  }
+ ],
+ "mult": [
+  [
+   1.4,
+   1.0,
+   1.0,
+   0.7,
+   0.7,
+   0.25
+  ],
+  [
+   1.0,
+   1.0,
+   1.0,
+   0.7,
+   0.7,
+   0.25
+  ]
+ ],
+ "fit": {
+  "source": "tables/dev/pool_loo_Region6_s0.1_B_cdm.json",
+  "pooled_packs": [
+   "Region7_s0_B_r1",
+   "Region7_s0_B_r2",
+   "Region7_s0_B_r3",
+   "Region7_s0.1_B_r1",
+   "Region7_s0.1_B_r2",
+   "Region7_s0.1_B_r3",
+   "Region7_s0.2_B_r1",
+   "Region7_s0.2_B_r2",
+   "Region7_s0.2_B_r3",
+   "Region7_s0.3_B_r1",
+   "Region7_s0.3_B_r2",
+   "Region7_s0.3_B_r3",
+   "Region6_s0_B_r1",
+   "Region6_s0_B_r2",
+   "Region6_s0_B_r3",
+   "Region6_s0.2_B_r1",
+   "Region6_s0.2_B_r2",
+   "Region6_s0.2_B_r3",
+   "Region6_s0.3_B_r1",
+   "Region6_s0.3_B_r2",
+   "Region6_s0.3_B_r3"
+  ],
+  "solver": "cdm"
+ }
+}

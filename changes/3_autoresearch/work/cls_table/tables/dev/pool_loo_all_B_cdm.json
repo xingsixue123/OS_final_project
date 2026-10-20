@@ -1,0 +1,87 @@
+{
+ "name": "pool_loo_all_B_cdm",
+ "window_min": 10,
+ "class_dims": [
+  {
+   "feat": "endoff",
+   "edges": [
+    8388608.0
+   ]
+  }
+ ],
+ "mult": [
+  [
+   2.8,
+   1.4,
+   1.4,
+   1.0,
+   1.0,
+   0.35
+  ],
+  [
+   1.4,
+   1.4,
+   1.0,
+   1.0,
+   1.0,
+   0.35
+  ]
+ ],
+ "packs": [
+  "Region7_s0_B_r1",
+  "Region7_s0_B_r2",
+  "Region7_s0_B_r3",
+  "Region7_s0.1_B_r1",
+  "Region7_s0.1_B_r2",
+  "Region7_s0.1_B_r3",
+  "Region7_s0.2_B_r1",
+  "Region7_s0.2_B_r2",
+  "Region7_s0.2_B_r3",
+  "Region7_s0.3_B_r1",
+  "Region7_s0.3_B_r2",
+  "Region7_s0.3_B_r3",
+  "Region6_s0_B_r1",
+  "Region6_s0_B_r2",
+  "Region6_s0_B_r3",
+  "Region6_s0.1_B_r1",
+  "Region6_s0.1_B_r2",
+  "Region6_s0.1_B_r3",
+  "Region6_s0.2_B_r1",
+  "Region6_s0.2_B_r2",
+  "Region6_s0.2_B_r3",
+  "Region6_s0.3_B_r1",
+  "Region6_s0.3_B_r2",
+  "Region6_s0.3_B_r3"
+ ],
+ "fit": {
+  "solver": "cdm",
+  "E": 33.44116254501243,
+  "mean_peak_day1": 30.366039535310367,
+  "mean_top5_day1": 29.162888635284485,
+  "viol": 0,
+  "E_ones": 33.81715424814382,
+  "mean_peak_ones": 30.88948985042734,
+  "budget_s": 180.0,
+  "n_evals": 8251,
+  "info": {
+   "passes": 142,
+   "restarts": 45
+  },
+  "grid": [
+   0.25,
+   0.35,
+   0.5,
+   0.7,
+   1.0,
+   1.4,
+   2.0,
+   2.8,
+   4.0
+  ],
+  "lam": 0.02,
+  "mu": 0.02,
+  "pmono": 50.0,
+  "top5w": 0.1,
+  "class_monotone": true
+ }
+}

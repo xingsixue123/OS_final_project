@@ -1,0 +1,95 @@
+diff -ruN '--exclude=__pycache__' overlay_v3/BCacheSim/cachesim/admission_policies.py overlay/BCacheSim/cachesim/admission_policies.py
+--- overlay_v3/BCacheSim/cachesim/admission_policies.py	2026-10-20 00:52:16.068863660 -0400
++++ overlay/BCacheSim/cachesim/admission_policies.py	2026-10-20 00:54:37.647415172 -0400
+@@ -363,9 +363,13 @@
+         predictions = self._predict(batch, ts)
+         ts_items = (metadata or {}).get('ts', {})
+         decisions = {}
++        per_item = getattr(self.load_adapt, 'per_item', False)  # PeakBaleen overlay v4 (1.2c): class table
+         for k, pred in zip(batch.keys(), predictions):
+             t = ts_items.get(k, ts)  # the item's own access time
+-            decisions[k] = pred > self.threshold * self.load_adapt.g(t.physical)
++            if per_item:
++                decisions[k] = pred > self.threshold * self.load_adapt.g_item(t.physical, batch[k])
++            else:
++                decisions[k] = pred > self.threshold * self.load_adapt.g(t.physical)
+         if not check_only:
+             self.count_decisions(decisions)
+         return decisions
+diff -ruN '--exclude=__pycache__' overlay_v3/BCacheSim/cachesim/load_features.py overlay/BCacheSim/cachesim/load_features.py
+--- overlay_v3/BCacheSim/cachesim/load_features.py	2026-10-20 00:52:16.068863660 -0400
++++ overlay/BCacheSim/cachesim/load_features.py	2026-10-20 00:54:37.647415172 -0400
+@@ -174,6 +174,10 @@
+     @classmethod
+     def from_json(cls, demand, path):
+         d = json.load(open(path))
++        if "class_dims" in d:
++            # PeakBaleen overlay v4 (3_autoresearch SCOPE amendment 1.2c): load bucket x access-class table
++            return LoadClassTableThreshold(demand, d["edges"], d["mult"], d["class_dims"], window_min=d.get("window_min", 10),
++                                           name=d.get("name", os.path.basename(path)))
+         return cls(demand, d["edges"], d["mult"], window_min=d.get("window_min", 10),
+                    tod_edges_h=d.get("tod_edges_h"), name=d.get("name", os.path.basename(path)))
+ 
+@@ -185,3 +189,62 @@
+     def __repr__(self):
+         return (f"LoadTableThreshold(name={self.name}, window={self.window_min}m, K={len(self.edges) + 1}, "
+                 f"tod={'none' if self.tod_edges_h is None else len(self.tod_edges_h) + 1})")
++
++
++# PeakBaleen overlay v4 (3_autoresearch SCOPE amendment 1.2c): access-class functions of the admission feature vector x
++# (feature subsets that start with meta+block+chunk: x[0:6] = op, namespace, user, offset, offset+size, size
++# (legacy_utils.KeyFeatures.toList(with_size=True)); x[6:12] = the 6 hourly block-access counts (DynamicFeatures)).
++CLASS_FEATURES = {
++    "endoff": lambda x: x[4],                 # end offset of the access (bytes)
++    "size": lambda x: x[5],                   # access size (bytes)
++    "blkcount": lambda x: sum(x[6:12]),       # block accesses in the trailing 6 hourly buckets
++}
++
++
++class LoadClassTableThreshold(LoadTableThreshold):
++    """PeakBaleen overlay v4 (SCOPE amendment 1.2c): theta_t = theta * g(load_t, class(x)), a piecewise-constant table
++    over K load buckets (as LoadTableThreshold) x J access classes. JSON: {"window_min": 10, "edges": [K-1 load edges],
++    "class_dims": [{"feat": "endoff" | "size" | "blkcount", "edges": [...]}, ...], "mult": J lists of K values}, with
++    J = prod(len(dim edges) + 1); class index j = mixed-radix (first dim most significant) of
++    bisect_right(dim edges, CLASS_FEATURES[feat](x)). x is the access's own admission feature vector (the same values
++    the GBM scores), so the class is causal and identical in training-window replays and in serving."""
++    per_item = True
++
++    def __init__(self, demand, edges, mult, class_dims, window_min=10, name=None):
++        self.class_dims = [dict(feat=c["feat"], edges=[float(e) for e in c["edges"]]) for c in class_dims]
++        assert all(c["feat"] in CLASS_FEATURES for c in self.class_dims), class_dims
++        assert all(all(a < b for a, b in zip(c["edges"], c["edges"][1:])) for c in self.class_dims), "class edges must increase"
++        self.radix = [len(c["edges"]) + 1 for c in self.class_dims]
++        J = 1
++        for r in self.radix:
++            J *= r
++        assert len(mult) == J, "one row of multipliers per access class"
++        assert window_min * 60 in LOAD_WINDOWS_S, window_min
++        self.demand = demand
++        self.edges = [float(e) for e in edges]
++        assert all(a < b for a, b in zip(self.edges, self.edges[1:])), "edges must increase"
++        self.tod_edges_h = None
++        self.mult = [list(map(float, r)) for r in mult]
++        assert all(len(r) == len(self.edges) + 1 for r in self.mult), "one multiplier per load bucket"
++        assert all(m > 0 for r in self.mult for m in r), "multipliers must be positive"
++        self.idx = LOAD_WINDOWS_S.index(window_min * 60)
++        self.window_min = window_min
++        self.name = name
++        self._fns = [CLASS_FEATURES[c["feat"]] for c in self.class_dims]
++
++    def class_of(self, x):
++        j = 0
++        for c, fn, r in zip(self.class_dims, self._fns, self.radix):
++            j = j * r + bisect.bisect_right(c["edges"], fn(x))
++        return j
++
++    def g(self, t):
++        raise AssertionError("LoadClassTableThreshold needs the access's features: use g_item(t, x)")
++
++    def g_item(self, t, x):
++        b = bisect.bisect_right(self.edges, self.demand.load(t)[self.idx])
++        return self.mult[self.class_of(x)][b]
++
++    def __repr__(self):
++        return (f"LoadClassTableThreshold(name={self.name}, window={self.window_min}m, K={len(self.edges) + 1}, "
++                f"classes={[(c['feat'], len(c['edges']) + 1) for c in self.class_dims]})")

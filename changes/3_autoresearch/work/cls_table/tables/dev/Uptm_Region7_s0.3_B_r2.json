@@ -1,0 +1,64 @@
+{
+ "name": "Uptm_Region7_s0.3_B_r2",
+ "window_min": 10,
+ "edges": [
+  25.226123413623412,
+  29.053289303289297,
+  34.07859039109038,
+  39.21573426573427,
+  106.84811253561254
+ ],
+ "class_dims": [
+  {
+   "feat": "endoff",
+   "edges": [
+    8388608.0
+   ]
+  }
+ ],
+ "mult": [
+  [
+   2.8,
+   1.4,
+   1.4,
+   1.0,
+   1.0,
+   0.35
+  ],
+  [
+   1.4,
+   1.4,
+   1.0,
+   1.0,
+   1.0,
+   0.35
+  ]
+ ],
+ "fit": {
+  "source": "tables/dev/pool_loo_Region7_s0.3_B_ptm.json",
+  "pooled_packs": [
+   "Region7_s0_B_r1",
+   "Region7_s0_B_r2",
+   "Region7_s0_B_r3",
+   "Region7_s0.1_B_r1",
+   "Region7_s0.1_B_r2",
+   "Region7_s0.1_B_r3",
+   "Region7_s0.2_B_r1",
+   "Region7_s0.2_B_r2",
+   "Region7_s0.2_B_r3",
+   "Region6_s0_B_r1",
+   "Region6_s0_B_r2",
+   "Region6_s0_B_r3",
+   "Region6_s0.1_B_r1",
+   "Region6_s0.1_B_r2",
+   "Region6_s0.1_B_r3",
+   "Region6_s0.2_B_r1",
+   "Region6_s0.2_B_r2",
+   "Region6_s0.2_B_r3",
+   "Region6_s0.3_B_r1",
+   "Region6_s0.3_B_r2",
+   "Region6_s0.3_B_r3"
+  ],
+  "solver": "ptm"
+ }
+}
