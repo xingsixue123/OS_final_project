@@ -1,0 +1,7 @@
+2026-10-19 20:47:02
+frozen OK (94 files)
+files under 0_reproduce/1_literature_review newer than .leak_marker:
+0
+known foreign cpython-312/313 pyc (dated):
+    125 2026-10-10
+PATCH_v3.diff sha256: 03f1523e688d; wp0 PATCH.diff: 2a914eb589bb

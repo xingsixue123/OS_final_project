@@ -1,7 +1,7 @@
 # PeakBaleen: research index
 
 **Single source of truth for the project.**
-- **Last updated:** 2026-10-16 (H3′ FAIL; Track C negative on dev, no finalist; Region5 H4 PASS; X1 fails again).
+- **Last updated:** 2026-10-16 (H3′ FAIL; Track C negative on dev, no finalist; H4 PASS on Region5; H5 FAIL on Region1).
 - **Team:** Ching-Hao Chiu, Jie Fu, Sixue Xing (captain).
 - **Branch:** `phase2-deployable-peak`. Phase 1 lives on `phase1-reproduce-and-litreview`.
 
@@ -24,7 +24,7 @@ Baleen (FAST '24) chooses which blocks to admit to a flash cache. It optimises *
 | 2 · WP3 | H3′ test on samples 0.4–0.6 | **done: H3′ NO, H3′-labels NO** (`wp3_test/RESULTS_test.md`) |
 | 2 · WP8 (Track C) | Deployment-aware Ising objectives on dev | **done, negative** (`wp8_trackC/RESULTS_dev.md`). Stage 1: cheap proxy NOT valid. Stage 2 (64 full-sim evaluations): no config passed the pre-registered screen gate (S1: STU10R1 −0.26, ANC3 −0.84, ANC10 −1.80). Mechanism: Baleen anchoring fixes Region7 (first-access admission back, best Region7 P100 36.46) but gives back Region6's scan gain. No Track C arm in Stage 3. |
 | 2 · WP9 (Region5) | Fresh deployed test: H4 = load-adaptive threshold on Baleen models (A+α) vs A, B; X1 as Ising record | **done: H4 YES** (A+α 35.02 vs A 36.17, 5/6; B+α 34.48, 6/6); X1 fails again (s0.5 51.46). `wp9_region5/RESULTS_test.md` |
-| 2 · WP10 (Track E) | Ising-optimized admission-threshold table (one-hot spins over load buckets, PT) on Baleen's models | G1_v3 PASS; proxy NOT valid (0.63 < 0.70); PT = exhaustive optimum 48/48 (classical CD 46/48, so no Ising-vs-classical claim). Dev finalist **TB:pt** (B models + PT table): 37.54 vs A+α 37.88 / B+α 38.43, 6/8 and 7/8 wins. Protocol `PROTOCOL_v2_H5.md` committed `2738cba`; **Region1 test running unattended** (`wp10_schedule/src/chain.sh`, log `logs/chain.out`) |
+| 2 · WP10 (Track E) | Ising-optimized admission-threshold table on Baleen's models | **done: H5 NO** on Region1 (TB:pt 24.45 vs A 24.14; 1/6 vs A). Region1 is low-load: the α arms do not help there either (A+α 24.62). PT tables = classical tables. `wp10_schedule/RESULTS_test.md` |
 | 2 · WP4/6/7 | Mechanism analysis, mid-term report, paper | to do |
 
 ## 3. Hypothesis ledger
@@ -41,6 +41,7 @@ Only valid results are listed: held-out or test data, matched write rate within 
 | Q3 | Peak labels survive distillation with frozen features | **No** | 2/6 wins; 0.4–1.1 points worse than Baleen online on average | `explore/q3/RESULTS.md` |
 | H3′ | Ising peak labels + causal `load` signal beat Baleen and Baleen + `load` (deployed) | **No** (test) | X1 40.53 vs A 39.27 / B 39.17; wins 5/6 but one catastrophic instance (Region7 s0.5: 52.3; its peak is a big-offset scan the F1-label models do not admit). H3′-labels also NO (3/6 vs A+α). Post-hoc, not pre-registered: the load-adaptive threshold on Baleen's own models is best (A+α 38.30, 5/6 vs A, −2.5%). | `wp3_test/RESULTS_test.md` |
 | H4 | Load-adaptive admission threshold on Baleen's own models beats Baleen (deployed, fresh Region5) | **Yes** (pre-registered) | A+α 35.02 vs A 36.17 / B 36.37 (5/6, +1.16, retrain SE 0.09); B+α 34.48 (6/6). Gain concentrated on s0.5 (instance SE 0.75) | `wp9_region5/RESULTS_test.md` |
+| H5 | Ising-optimized load-bucket threshold table beats Baleen and the best α arm (deployed, fresh Region1) | **No** | 24.45 vs A 24.14 / B+α 24.48; low-load region where load-adaptive admission does not help | `wp10_schedule/RESULTS_test.md` |
 
 **What the evidence says so far:**
 - The **min-max formulation** is the source of the gain, and it is robust offline.
