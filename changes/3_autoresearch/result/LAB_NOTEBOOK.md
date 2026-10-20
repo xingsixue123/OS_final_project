@@ -354,3 +354,26 @@ While checking the first T1 minutes for crashes (trainings and sims run normally
 2. The protocol's RejectX mean includes s0.2's 240.6, so the contract condition "Y below RejectX" is uninformative on T1. It will be reported as such and not leaned on.
 3. A **supplementary, non-protocol** RejectX (the same commands, the window factor bisected in its effective range) will be reported separately, clearly labelled. It does not enter the pass rule. The pass/fail verdict is the protocol's.
 4. s0.2 (a constructed row; the authors have no Baleen or RejectX row for it) looks degenerate for RejectX (almost no re-accesses at X = 1). Every arm runs on it as pre-registered.
+
+## 2026-10-20 07:05 T1 CLOSED: spent and FAILED (unevaluable as pre-registered); written before evaluation.json was opened
+**Validator findings B1** (red team and integrity/statistics, round 1):
+- Region2_s0.2 cannot reach the target write rate for any arm: every row ends at the search floor θ = 1e-4 (admit everything) with WR 11.51 MB/s and P100 189.07.
+- Reference arm A is also short of 3 matched retrains on s0.1 and s0.5 after the pre-registered seeds 4–6 (write-rate cliffs).
+- The T1 chain finished at 07:03:10. Its `evaluation.json` has no `good_result` (the `missing` branch). The T2 chain stopped at 07:03:24 ("T1 evaluation incomplete (None)").
+
+**Decision, fixed now, fail-closed, before reading `evaluation.json`:**
+1. **T1 is spent and FAILED (closed as unevaluable).**
+   - Region2_s0.2 stays in the pool.
+   - The `matched` rule is not relaxed.
+   - No seed beyond 6 is run.
+   - T1 is not re-registered or re-spent.
+   - No 5-instance or subset reading is ever called a pass.
+2. **The T1 report will show every row**, the matched/total table per (arm, instance), and the unmatched static baselines. Any subset summary is labelled descriptive and non-confirmatory.
+3. **T2 runs exactly as pre-registered** (`work/t2u_region4/PROTOCOL.md`, `1cda6af`): the same Y = XA-F1PT, control XA-F1CPSAT, the same arms and pool.
+   - The only change is the T2 chain's T1 condition: a missing/None `good_result` (with T1 TEST_GO and CHAIN_DONE present) counts as "T1 not passed".
+   - This is recorded in `work/t2u_region4/ADDENDUM_T1_UNEVALUABLE.md` and committed before any T2 TEST_GO.
+4. **Root cause, disclosed:**
+   - The constructed Region2_s0.2 row was not checked for feasibility at the operating point. The authors' release has no s0.2 row at DWPD 7.5 / 366.47 GB for any policy; the s0.2 dumps and day-1 label statistics were much smaller than the others.
+   - I noticed s0.2 was degenerate for RejectX (06:30) but did not check whether it was degenerate for every arm.
+
+**Process note (validator N3):** from now on every rule and dated note is committed immediately, times come from `date`, and no dated header is rewritten; corrections are appended.

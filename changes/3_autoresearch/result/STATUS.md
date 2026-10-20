@@ -1,15 +1,9 @@
 # STATUS (3_autoresearch, run 20261020_004634)
 
-**Updated:** 2026-10-20 06:32, end of round 1.
-- **T1 SPENT (test running).** The union finalist XA:F1PT (control XA:F1CPSAT) was chosen mechanically at 06:26:49; TEST_GO was written at 06:26:50 (commit `76cf5c8d`, POOL=T1). The test runs detached in `chain_test_t1u` (`work/union/logs/test_t1u.out`), then `eval_test.py` writes `work/t1u_region2/results_test/evaluation.json` and `CHAIN_DONE`.
-- **Next round:**
-  - (1) If `work/t1u_region2/CHAIN_DONE` exists, read `evaluation.json`.
-  - (2) If `good_result` is true: `cd work/union && python3 src/write_claim.py --test-dir ../t1u_region2`, then `python3 code/validate.py`.
-  - (3) If false: write the T1 negative result. `chain_test_t2u` (`work/union_t2/`) then spends T2 automatically with the same Y; afterwards write FINAL_REPORT.md + STOP_EXHAUSTED if T2 also fails.
-  - (4) If the chain died, relaunch it (idempotent; the drivers re-use finished trains and sims).
-  - (5) RejectX on T1 cannot be WR-matched by the protocol's knob (see LAB_NOTEBOOK 06:36). Report the protocol's RejectX as uninformative, and add the labelled supplementary matched RejectX (window factor bisected in its effective range) to the T1 report.
+**Updated:** 2026-10-20 07:05, round 2.
+- **T1: SPENT and FAILED (unevaluable as pre-registered; LAB_NOTEBOOK 07:05).** Region2_s0.2 cannot reach the target WR for any arm, and arm A lacks 3 matched retrains on s0.1/s0.5 after seeds 4–6. Nothing is relaxed, re-run or re-spent. **T2 is locked** to the pre-registered Y = XA-F1PT and control XA-F1CPSAT (validator N5): no change to Y, the arms or the pool is allowed, because T1 outcomes have been seen.
 
-- **Test spends:** 1 of 2 (T1, union). Two conditional T1 protocols were committed; only the union one wrote a TEST_GO.
+- **Test spends:** 1 of 2 used (T1, union: failed / unevaluable); T2 pending. Two conditional T1 protocols were committed; only the union one wrote a TEST_GO.
   - `work/t1_region2/PROTOCOL.md` (`96506745`, cls_table family): **void.** No finalist; CHAIN_DONE 04:42 without TEST_GO.
   - `work/t1u_region2/PROTOCOL.md` (`76cf5c8d`, union family): Y is the finalist of `chain_union_dev.py` (DEV_RULES R3).
 - **Families:**
