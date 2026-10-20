@@ -114,7 +114,7 @@ status() { printf 'STATUS=%s\nROUND=%s\nRUN_ID=%s\nTIME=%s\n' "$1" "$2" "$RUN_ID
 run_loop() {
   preflight
   [[ -s "$RUN_DIR/deadline.epoch" ]] || echo $(( $(date +%s) + DEADLINE_HOURS * 3600 )) > "$RUN_DIR/deadline.epoch"
-  local round; round=$(( $(ls "$RUN_DIR"/worker_prompt_round_*.md 2>/dev/null | wc -l) + 1 ))
+  local round; round=$(( $(find "$RUN_DIR" -maxdepth 1 -name "worker_prompt_round_*.md" | wc -l) + 1 ))
   while true; do
     local rem; rem="$(remaining)"
     (( rem > 600 )) || { status DEADLINE "$round"; log "deadline reached"; sync_git "$round"; exit 3; }
