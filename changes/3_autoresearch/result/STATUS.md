@@ -1,6 +1,12 @@
 # STATUS (3_autoresearch, run 20261020_004634)
 
-**Updated:** 2026-10-20 05:08, round 1. G1_v5 PASS. Union screen: XA:F1PT, XG:F1PT pass the R0 gate; confirmation running (44 evals + R4 extra seeds). T2 (Region4) prerequisites built in `work/union_t2/` (jobs, dumps, 60 label sets; nothing read).
+**Updated:** 2026-10-20 06:05, end of round 1.
+- **Where we are:** the union family (XA/XG:F1PT) is in confirmation (24 of 44 + R4 extras). XA:F1PT is at 7/10 wins vs A+α (the minimum) with a large mean margin. Everything after this is automatic:
+  - `chain_union_dev` → finalist;
+  - `chain_test_t1u` → T1 test, only if there is a finalist;
+  - `eval_test.py` → `work/t1u_region2/results_test/evaluation.json`;
+  - `chain_test_t2u` → T2, only if the finalist fails T1.
+- **Next round (manual):** if `evaluation.json` has `good_result` true, run `cd work/union && python3 src/write_claim.py --test-dir ../t1u_region2` and then `python3 code/validate.py`. Otherwise write the T1 negative result, and wait for or inspect T2.
 
 - **Test spends:** 0 of 2. Two conditional T1 protocols are committed; at most one can write a TEST_GO.
   - `work/t1_region2/PROTOCOL.md` (`96506745`, cls_table family): **void.** No finalist; CHAIN_DONE 04:42 without TEST_GO.
@@ -8,6 +14,7 @@
 - **Families:**
   - H-CLS (`work/cls_table/`, overlay v4, G1_v4 PASS): screened; only CB:pt passed the screen gate; finalist rule failed.
   - **H-UX union** (`work/union/`, overlay v5 = v4 + union 1.2d, **G1_v5 PASS**): screen passed (XA +1.46, XG +1.07 mean d); confirmation running. ADDENDUM_R4 (`4e25e7e4`) adds dev extra seeds.
+  - `work/t2u_region4/PROTOCOL.md` (`1cda6af`): the T2 conditional protocol (same Y; runs only if Y fails T1). T2 prerequisites are in `work/union_t2/`.
 - **T1 prerequisites (no outcome read):**
   - jobs `work/*/jobs_test.json`;
   - fullml dumps `work/cls_table/inst_test/`;
@@ -22,7 +29,8 @@
 | union chain_union_dev | `work/union/logs/chain_union_dev.out` | R0 gate → confirmation `queue_dev2.txt` (r2–3 DEV8, r1–3 Region5_s0/Region1_s0) → finalist → `work/union/results/dev_finalist.json` |
 | union chain_test_t1u | `work/union/logs/chain_test_t1u.out` | finalist? → G1_v5? → TEST_GO (`work/t1u_region2/`) → static + test + `eval_test.py` |
 | G1_v5 | `work/union/logs/g1v5.out` | `work/union/results/g1v5_summary.json` |
-| X pretrain | `work/union/logs/pretrain_x.out` | F1-label models for Region5_s0/Region1_s0 (done or finishing) |
+| X pretrain | `work/union/logs/pretrain_x.out` | F1-label models for Region5_s0/Region1_s0 (done) |
+| union chain_test_t2u | `work/union_t2/logs/chain_test_t2u.out` | dormant; spends T2 only if the union finalist fails T1 |
 
 All sims share one 14-slot pool (`work/cls_table/.sim_slots.d`); every train holds `2_deployable_peak/.train.lock`.
 
@@ -36,6 +44,7 @@ setsid nohup src/sbx.sh src/union.py --mode dev --arms XA:F1PT XG:F1PT XA:F1CPSA
 setsid nohup src/sbx.sh src/chain_union_dev.py >> logs/chain_union_dev.out 2>&1 < /dev/null &   # if no results/dev_finalist.json
 setsid nohup bash src/chain_test_t1u.sh >> logs/chain_test_t1u.out 2>&1 < /dev/null &
 setsid nohup src/sbx.sh src/g1v5.py >> logs/g1v5.out 2>&1 < /dev/null &                         # if no results/g1v5_summary.json
+cd ../union_t2 && source env.sh && setsid nohup bash src/chain_test_t2u.sh >> logs/chain_test_t2u.out 2>&1 < /dev/null &
 # later, report only: cd ../cls_table && setsid nohup src/sbx.sh src/cls.py --mode dev --queue queue_report.txt -j 14 >> logs/queue_report.out 2>&1 < /dev/null &
 # running?  ps -eo pid,etimes,args | grep 3_autoresearch/work | grep -v grep
 ```

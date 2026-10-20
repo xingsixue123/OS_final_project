@@ -273,8 +273,54 @@ T3 is used only if T2's prerequisites cannot be built. The configuration for a s
 Nothing here is simulated or read. A T2 protocol would be a separate pre-registration, committed before any T2 test run.
 - 05:04 T2 prerequisites done: fullml + day-1 dumps for Region4 s0.2–0.6, 60 label sets (all rc = 0).
 
-## 2026-10-20 05:22 T2 conditional pre-registration (before any T1 test run)
+## 2026-10-20 05:19 T2 conditional pre-registration (before any T1 test run)
 `work/t2u_region4/PROTOCOL.md` + `work/union_t2/src/chain_test_t2u.sh`.
 - **Condition:** if the union dev finalist is tested on T1 and does not pass, the *same* Y (fixed now, before any T1 outcome) is tested on T2 = Region4 0.2–0.6.
 - Only the decision to spend depends on T1's pass/fail; nothing about Y does.
 - T2 prerequisites were built at 04:57–05:04, none read.
+
+## 2026-10-20 05:41 Union confirmation in progress; mechanism check (dev; partial)
+**XA:F1PT vs A+α** (means over the retrains done so far):
+- **wins:** Region6 s0 +3.81, s0.1 +2.21, s0.2 +2.43, s0.3 +0.68; Region7 s0.1 +0.82, s0.2 +0.20; Region5_s0 +0.41;
+- **losses:** Region7 s0.3 −0.82, Region1_s0 −0.16, Region7 s0 −0.13.
+
+That is 7/10 at the moment, exactly the required count. Large retrain variance: Region6 s0.1 34.66 / 38.84; Region7 s0.3 35.84 / 38.79 / 35.86.
+
+**Mechanism by region** (DEV8, matched rows so far; WP2 rows for A+α and X1):
+| region | config | P100 | mean DT | first-access adm | peak-window adm | peak big-offset share |
+|---|---|---|---|---|---|---|
+| Region6 | A+α | 38.65 | 21.55 | 0.7% | 0.29 | 0.33 |
+| Region6 | X1 | 36.73 | 21.72 | 0.4% | 0.41 | 0.10 |
+| Region6 | XA:F1PT | 36.72 | 21.54 | 0.5% | 0.42 | 0.10 |
+| Region6 | XG:F1PT | 36.58 | 21.76 | 0.6% | 0.40 | 0.13 |
+| Region7 | A+α | 37.11 | 21.29 | 8.4% | 0.38 | 0.13 |
+| Region7 | X1 | 37.67 | 22.02 | 2.8% | 0.38 | 0.19 |
+| Region7 | XA:F1PT | 37.58 | 21.82 | 2.9% | 0.41 | 0.14 |
+| Region7 | XG:F1PT | 36.71 | 21.67 | 3.6% | 0.44 | 0.12 |
+
+**Reading (against my 03:59 hypothesis):**
+- The Region6 scan gain is reproduced: peaks move off big-offset windows (share 0.10 vs 0.33).
+- But the union does **not** restore Baleen's first-access admission on Region7 (2.9% vs 8.4%). Matching the write rate with the extra X admissions raises the shared base θ (≈ 1.2–1.7 vs ≈ 0.9 for A+α), which thins out model A's admissions.
+- So XA behaves much like X1 on dev. The "Baleen floor" against unadmitted scan peaks is weaker than designed; whether it suffices on a fresh pool is exactly what a test measures.
+- XG (X only at load ≥ day-1 q75) keeps more of A's budget at low load and looks better on Region7 so far (4 instances).
+
+No rule is changed by this reading.
+
+## 2026-10-20 06:01 Round 1 end-state (union confirmation 24/44; finalist pending)
+**Per-instance means so far** (dev; best α on n = 10 is A+α):
+| instance | A+α | XA:F1PT | XG:F1PT | XA:F1CPSAT (r1) | XG:F1CPSAT (r1) |
+|---|---|---|---|---|---|
+| Region7 s0 | 39.65 | 39.78 | 39.74 | 39.88 | 39.91 |
+| Region7 s0.1 | 35.89 | 34.71 | 34.55 | 34.31 | 34.32 |
+| Region7 s0.2 | 36.87 | 36.71 | 36.68 | 36.76 | 36.69 |
+| Region7 s0.3 | 36.01 | 36.83 | 35.87 | 39.32 | 39.00 |
+| Region6 s0 | 42.90 | 39.33 | 38.84 | 42.73 | 42.45 |
+| Region6 s0.1 | 38.96 | 37.40 | 37.86 | 43.69 | 43.13 |
+| Region6 s0.2 | 36.30 | 34.47 | 34.03 | 35.46 | 34.45 |
+| Region6 s0.3 | 36.43 | 35.75 | 35.60 | 36.09 | 36.18 |
+| Region5_s0 | 32.37 | 32.11 | 32.07 | | |
+| Region1_s0 | 26.23 | 26.36 | 26.46 | | |
+
+- XA:F1PT currently wins 7/10 vs A+α (the minimum). XG:F1PT has fewer retrains yet.
+- **Ising vs classical labels inside the union** (controls are r1 only; report, no claim): the CP-SAT-label union does not get the Region6 s0 / s0.1 gains (42.73 / 43.69 vs 39.33 / 37.40) and is worse on Region7 s0.3. The same F1 formulation, solved by PT, deploys much better here; WP2 saw the same direction for X1 vs Dc+α.
+- **Next, automatic:** `chain_union_dev` finishes XG, applies R4 extra seeds and then the finalist rule. `chain_test_t1u` spends T1 only if there is a finalist (and G1_v5 PASS, protocol unchanged). `chain_test_t2u` spends T2 only if the finalist fails T1.
