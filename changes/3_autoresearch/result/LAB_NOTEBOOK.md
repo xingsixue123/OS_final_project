@@ -408,3 +408,8 @@ While checking the first T1 minutes for crashes (trainings and sims run normally
   - set aside 1 partial train log (B r1 Region4_s0.2, `.killed`);
   - relaunched `chain_test_t2u.sh` (idempotent).
 - **Effect:** TEST_GO is unchanged (07:05:04). The relaunched driver re-runs the failed evaluations under their original keys with the **same trained retrain-1 models** (train records are reused), so no seed is added or chosen. No T2 result had been read.
+
+## 2026-10-20 07:16 Correction to the T2 incident entry (appended)
+- The incident left **8** `__FAILED_` rows, not 6: A and A+α retrain 1 on Region4 s0.2, s0.3, s0.4 and s0.6.
+- The last two (s0.6, 07:07:07 / 07:07:12) were written by the old driver just before it was stopped at ≈07:07:15. The relaunched chain started at 07:07:25 and has produced no failure.
+- By 07:16 its sims run normally, and the emulator feature caches exist for all 5 Region4 instances.
