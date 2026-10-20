@@ -1,0 +1,62 @@
+{
+ "pool": "T1",
+ "insts": [
+  "Region2_s0.1",
+  "Region2_s0.2",
+  "Region2_s0.3",
+  "Region2_s0.4",
+  "Region2_s0.5",
+  "Region2_s0.6"
+ ],
+ "arms": {
+  "Y": "XA-F1PT",
+  "A": "A",
+  "B": "B",
+  "A+alpha": "Aa-1.0",
+  "B+alpha": "Ba-1.0",
+  "control": "XA-F1CPSAT"
+ },
+ "missing": [
+  [
+   "Y",
+   "Region2_s0.2",
+   0
+  ],
+  [
+   "A",
+   "Region2_s0.1",
+   0
+  ],
+  [
+   "A",
+   "Region2_s0.2",
+   0
+  ],
+  [
+   "A",
+   "Region2_s0.5",
+   2
+  ],
+  [
+   "B",
+   "Region2_s0.2",
+   0
+  ],
+  [
+   "A+alpha",
+   "Region2_s0.2",
+   0
+  ],
+  [
+   "B+alpha",
+   "Region2_s0.2",
+   0
+  ],
+  [
+   "control",
+   "Region2_s0.2",
+   0
+  ]
+ ],
+ "n_rows": 132
+}

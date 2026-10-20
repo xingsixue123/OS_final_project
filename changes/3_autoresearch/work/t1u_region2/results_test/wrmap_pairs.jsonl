@@ -489,3 +489,6 @@
 {"region": "Region2", "kind": "baleen", "emu_wr": 43.89924733991001, "sim_wr": 35.49519360907461, "key": "A_baleen_Region2_s0.5_r6"}
 {"region": "Region2", "kind": "baleen", "emu_wr": 43.601411430436954, "sim_wr": 41.81006422813369, "key": "A_baleen_Region2_s0.1_r6"}
 {"region": "Region2", "kind": "baleen", "emu_wr": 43.01668408165764, "sim_wr": 34.90085859340141, "key": "A_baleen_Region2_s0.1_r6"}
+{"region": "Region2", "kind": "baleen", "emu_wr": 43.09840063661126, "sim_wr": 34.94262471240867, "key": "A_baleen_Region2_s0.1_r6"}
+{"region": "Region2", "kind": "baleen", "emu_wr": 43.15759974086656, "sim_wr": 34.98112217862407, "key": "A_baleen_Region2_s0.1_r6"}
+{"region": "Region2", "kind": "baleen", "emu_wr": 43.181206745630945, "sim_wr": 35.198305997461844, "key": "A_baleen_Region2_s0.1_r6"}
