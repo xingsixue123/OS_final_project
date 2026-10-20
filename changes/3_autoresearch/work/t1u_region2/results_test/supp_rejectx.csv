@@ -1,0 +1,7 @@
+instance,method,window_factor,n_sims,matched,wr,p100,result_file
+Region2_s0.1,RejectX_supp,1778.279421,14,False,21.184865111415522,15.00853082104688,work_frozen/runs/prep/prep_rejectx_static_Region2_s0.1_supp/sim/p_1778.279421/rejectx-ap-1_1778.28_lru_366.475GB/full_0.1_0.1_cache_perf.txt.lzma
+Region2_s0.2,RejectX_supp,31.622777,14,False,1.9991185083603784,240.63770720020594,work_frozen/runs/prep/prep_rejectx_static_Region2_s0.2_supp/sim/p_31.622777/rejectx-ap-1_31.6228_lru_366.475GB/full_0.2_0.1_cache_perf.txt.lzma
+Region2_s0.3,RejectX_supp,81.312302,8,True,35.77869833922791,16.350314037833293,work_frozen/runs/prep/prep_rejectx_static_Region2_s0.3_supp/sim/p_81.312302/rejectx-ap-1_81.3123_lru_366.475GB/full_0.3_0.1_cache_perf.txt.lzma
+Region2_s0.4,RejectX_supp,1778.279421,14,False,31.683598876571242,15.831342268839554,work_frozen/runs/prep/prep_rejectx_static_Region2_s0.4_supp/sim/p_1778.279421/rejectx-ap-1_1778.28_lru_366.475GB/full_0.4_0.1_cache_perf.txt.lzma
+Region2_s0.5,RejectX_supp,1778.279421,14,False,25.361024937102325,12.70804195805284,work_frozen/runs/prep/prep_rejectx_static_Region2_s0.5_supp/sim/p_1778.279421/rejectx-ap-1_1778.28_lru_366.475GB/full_0.5_0.1_cache_perf.txt.lzma
+Region2_s0.6,RejectX_supp,1778.279421,14,False,29.31690535158079,21.380600880630084,work_frozen/runs/prep/prep_rejectx_static_Region2_s0.6_supp/sim/p_1778.279421/rejectx-ap-1_1778.28_lru_366.475GB/full_0.6_0.1_cache_perf.txt.lzma

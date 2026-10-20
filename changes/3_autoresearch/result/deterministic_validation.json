@@ -1,9 +1,15 @@
 {
  "problems": [],
- "notes": [
-  "no claim file yet"
+ "notes": [],
+ "tests": [
+  {
+   "dir": "changes/3_autoresearch/work/t1u_region2",
+   "go_mtime": 1792492010.4435446,
+   "commit": "76cf5c8d4532583b19f701ddab677a8144cb19d4",
+   "pool": "T1",
+   "commit_time": 1792485405
+  }
  ],
- "tests": [],
  "claim": null,
  "integrity_ok": true,
  "good_result": false
