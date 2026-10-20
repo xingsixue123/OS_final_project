@@ -258,9 +258,23 @@ These are the largest dev effects of the whole project, as hypothesised. Still r
   - XG:F1PT: mean +1.072, worst −0.228, 7/8 wins, mean P100 36.65.
   - Both are confirmed: DEV8 r2–3, Region5_s0 / Region1_s0 r1–3, then R4 extra seeds, then the finalist rule. The finalist goes to `chain_test_t1u` (T1).
 
-## 2026-10-20 04:57 Second-spend pool rule (written before any T1 test run or outcome)
+## 2026-10-20 04:56 Second-spend pool rule (written before any T1 test run or outcome)
 If a second test spend happens, it goes to **T2** (Region4 0.2–0.6):
 - whatever the T1 outcome;
 - with the authors' Fig 9 Baleen rows and the authors' RejectX/CoinFlip rows of experiment `20230412_XX_rerun2` (the only static rows Region4 has).
 
 T3 is used only if T2's prerequisites cannot be built. The configuration for a second spend is chosen on dev only, never from T1 outcomes (contract §3).
+
+## 2026-10-20 04:57 T2 prerequisites started (no outcome read; for a possible second spend)
+`work/union_t2/` is a copy of the union code with its own `jobs_test.json` (Region4 s0.2–0.6, `src/make_jobs_t2.py`).
+- Rows: Fig 9 "All on Partial Hit" Baleen rows (experiment `20230412_XX_rerun2`) and the authors' RejectX/CoinFlip rows of the same experiment. No constructed rows.
+- `src/prep_t2_all.sh` builds the frozen fullml + day-1 dumps and 60 F1 label sets (F1PT/F1CPSAT × seeds 1–6).
+
+Nothing here is simulated or read. A T2 protocol would be a separate pre-registration, committed before any T2 test run.
+- 05:04 T2 prerequisites done: fullml + day-1 dumps for Region4 s0.2–0.6, 60 label sets (all rc = 0).
+
+## 2026-10-20 05:22 T2 conditional pre-registration (before any T1 test run)
+`work/t2u_region4/PROTOCOL.md` + `work/union_t2/src/chain_test_t2u.sh`.
+- **Condition:** if the union dev finalist is tested on T1 and does not pass, the *same* Y (fixed now, before any T1 outcome) is tested on T2 = Region4 0.2–0.6.
+- Only the decision to spend depends on T1's pass/fail; nothing about Y does.
+- T2 prerequisites were built at 04:57–05:04, none read.

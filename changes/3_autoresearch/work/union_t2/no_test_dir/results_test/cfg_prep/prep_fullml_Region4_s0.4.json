@@ -1,0 +1,8 @@
+{
+ "mode": "baleen",
+ "name": "pb3_fullml_Region4_s0.4",
+ "target_wr": 35.599,
+ "skip_windows": 144,
+ "inst_path": "/home/sxing/project/OS_final_project/changes/3_autoresearch/work/union_t2/inst_test/fullml_Region4_s0.4.npz",
+ "dump_access": true
+}

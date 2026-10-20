@@ -1,13 +1,13 @@
 # STATUS (3_autoresearch, run 20261020_004634)
 
-**Updated:** 2026-10-20 04:38, round 1.
+**Updated:** 2026-10-20 05:08, round 1. G1_v5 PASS. Union screen: XA:F1PT, XG:F1PT pass the R0 gate; confirmation running (44 evals + R4 extra seeds). T2 (Region4) prerequisites built in `work/union_t2/` (jobs, dumps, 60 label sets; nothing read).
 
 - **Test spends:** 0 of 2. Two conditional T1 protocols are committed; at most one can write a TEST_GO.
-  - `work/t1_region2/PROTOCOL.md` (`96506745`, cls_table family): its only confirmed candidate, CB:pt, fails the finalist rule (6/10 wins vs A+α), so no TEST_GO is expected.
+  - `work/t1_region2/PROTOCOL.md` (`96506745`, cls_table family): **void.** No finalist; CHAIN_DONE 04:42 without TEST_GO.
   - `work/t1u_region2/PROTOCOL.md` (`76cf5c8d`, union family): Y is the finalist of `chain_union_dev.py` (DEV_RULES R3).
 - **Families:**
   - H-CLS (`work/cls_table/`, overlay v4, G1_v4 PASS): screened; only CB:pt passed the screen gate; finalist rule failed.
-  - **H-UX union** (`work/union/`, overlay v5 = v4 + union 1.2d): screen running; retrain-1 effects are large. G1_v5 is running.
+  - **H-UX union** (`work/union/`, overlay v5 = v4 + union 1.2d, **G1_v5 PASS**): screen passed (XA +1.46, XG +1.07 mean d); confirmation running. ADDENDUM_R4 (`4e25e7e4`) adds dev extra seeds.
 - **T1 prerequisites (no outcome read):**
   - jobs `work/*/jobs_test.json`;
   - fullml dumps `work/cls_table/inst_test/`;
