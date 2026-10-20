@@ -7,6 +7,7 @@
   - (2) If `good_result` is true: `cd work/union && python3 src/write_claim.py --test-dir ../t1u_region2`, then `python3 code/validate.py`.
   - (3) If false: write the T1 negative result. `chain_test_t2u` (`work/union_t2/`) then spends T2 automatically with the same Y; afterwards write FINAL_REPORT.md + STOP_EXHAUSTED if T2 also fails.
   - (4) If the chain died, relaunch it (idempotent; the drivers re-use finished trains and sims).
+  - (5) RejectX on T1 cannot be WR-matched by the protocol's knob (see LAB_NOTEBOOK 06:36). Report the protocol's RejectX as uninformative, and add the labelled supplementary matched RejectX (window factor bisected in its effective range) to the T1 report.
 
 - **Test spends:** 1 of 2 (T1, union). Two conditional T1 protocols were committed; only the union one wrote a TEST_GO.
   - `work/t1_region2/PROTOCOL.md` (`96506745`, cls_table family): **void.** No finalist; CHAIN_DONE 04:42 without TEST_GO.
