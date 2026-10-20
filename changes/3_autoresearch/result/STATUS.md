@@ -1,14 +1,14 @@
 # STATUS (3_autoresearch, run 20261020_004634)
 
-**Updated:** 2026-10-20 06:05, end of round 1.
-- **Where we are:** the union family (XA/XG:F1PT) is in confirmation (24 of 44 + R4 extras). XA:F1PT is at 7/10 wins vs A+α (the minimum) with a large mean margin. Everything after this is automatic:
-  - `chain_union_dev` → finalist;
-  - `chain_test_t1u` → T1 test, only if there is a finalist;
-  - `eval_test.py` → `work/t1u_region2/results_test/evaluation.json`;
-  - `chain_test_t2u` → T2, only if the finalist fails T1.
-- **Next round (manual):** if `evaluation.json` has `good_result` true, run `cd work/union && python3 src/write_claim.py --test-dir ../t1u_region2` and then `python3 code/validate.py`. Otherwise write the T1 negative result, and wait for or inspect T2.
+**Updated:** 2026-10-20 06:28, end of round 1.
+- **T1 SPENT (test running).** The union finalist XA:F1PT (control XA:F1CPSAT) was chosen mechanically at 06:26:49; TEST_GO was written at 06:26:50 (commit `76cf5c8d`, POOL=T1). The test runs detached in `chain_test_t1u` (`work/union/logs/test_t1u.out`), then `eval_test.py` writes `work/t1u_region2/results_test/evaluation.json` and `CHAIN_DONE`.
+- **Next round:**
+  - (1) If `work/t1u_region2/CHAIN_DONE` exists, read `evaluation.json`.
+  - (2) If `good_result` is true: `cd work/union && python3 src/write_claim.py --test-dir ../t1u_region2`, then `python3 code/validate.py`.
+  - (3) If false: write the T1 negative result. `chain_test_t2u` (`work/union_t2/`) then spends T2 automatically with the same Y; afterwards write FINAL_REPORT.md + STOP_EXHAUSTED if T2 also fails.
+  - (4) If the chain died, relaunch it (idempotent; the drivers re-use finished trains and sims).
 
-- **Test spends:** 0 of 2. Two conditional T1 protocols are committed; at most one can write a TEST_GO.
+- **Test spends:** 1 of 2 (T1, union). Two conditional T1 protocols were committed; only the union one wrote a TEST_GO.
   - `work/t1_region2/PROTOCOL.md` (`96506745`, cls_table family): **void.** No finalist; CHAIN_DONE 04:42 without TEST_GO.
   - `work/t1u_region2/PROTOCOL.md` (`76cf5c8d`, union family): Y is the finalist of `chain_union_dev.py` (DEV_RULES R3).
 - **Families:**

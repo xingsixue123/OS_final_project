@@ -324,3 +324,19 @@ No rule is changed by this reading.
 - XA:F1PT currently wins 7/10 vs A+α (the minimum). XG:F1PT has fewer retrains yet.
 - **Ising vs classical labels inside the union** (controls are r1 only; report, no claim): the CP-SAT-label union does not get the Region6 s0 / s0.1 gains (42.73 / 43.69 vs 39.33 / 37.40) and is worse on Region7 s0.3. The same F1 formulation, solved by PT, deploys much better here; WP2 saw the same direction for X1 vs Dc+α.
 - **Next, automatic:** `chain_union_dev` finishes XG, applies R4 extra seeds and then the finalist rule. `chain_test_t1u` spends T1 only if there is a finalist (and G1_v5 PASS, protocol unchanged). `chain_test_t2u` spends T2 only if the finalist fails T1.
+
+## 2026-10-20 06:27 Union finalist XA:F1PT (mechanical) → T1 spent (TEST_GO 06:26:50)
+**`work/union/results/dev_finalist.json`** (DEV_RULES R3 + R0 finalist rule, n = 10 dev instances, best α = A+α; no R4 extra seed was needed since every cell matched):
+| config | mean P100 | vs A (wins, mean, SE, worst) | vs B | vs A+α |
+|---|---|---|---|---|
+| **XA:F1PT** | 35.36 | 10/10, +1.42, 0.19, +0.02 | 9/10, +1.41, 0.19, −0.28 | **7/10, +0.80, 0.18 (2.5 SE = 0.46), −0.82** |
+| XG:F1PT | 35.53 | 10/10, +1.25, 0.15, +0.07 | 8/10, +1.24, 0.16, −0.19 | 7/10, +0.63, 0.15, −1.58 |
+
+Both qualify. The tie-break (larger min over R of mean(R − X)) picks XA:F1PT; its control is XA:F1CPSAT.
+
+**T1 test running** (`work/t1u_region2/`):
+- TEST_GO = commit `76cf5c8d`, POOL=T1, written by `chain_test_t1u.sh` at 06:26:50 (protocol committed 04:36:45, unchanged).
+- Arms A, B, Aa-1.0, Ba-1.0, XA-F1PT, XA-F1CPSAT × retrains 1–3 (108 evaluations, plus extra seeds if unmatched); static replays in parallel.
+- `validate.py --integrity-only`: clean, test registered.
+
+**Test spends: 1 of 2.** The second spend (T2, same Y) is pre-registered and runs only if this one fails.
