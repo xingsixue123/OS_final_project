@@ -386,3 +386,14 @@ While checking the first T1 minutes for crashes (trainings and sims run normally
   - The 04:56 entry above ("`work/union/G1_v5.md`: PASS on every check") was true of the content, but that file name did not exist until now.
   - The canonical v4 report is `work/cls_table/G1_v4.md` (heading "G1_v4").
 - **Time of the 07:05 entry:** it was written at 07:04:05 and committed at 07:04:06 (`539f39e`). Its header time was typed before `date` ran.
+
+## 2026-10-20 07:06 T1 report written (`work/t1u_region2/RESULTS_test.md`); T2 running
+**T1 verdict: spent, FAILED, unevaluable.**
+- **Matched/total:** every arm is 0/6 on s0.2 (admit-all WR 11.51); A is 0/6 on s0.1 and 2/6 on s0.5. All other cells are 3/3.
+- **Descriptive only:** on s0.3–s0.6 (every arm has a matched row), Y 10.246 vs A 10.255, B 10.201, A+α 10.188, B+α 10.135, control 10.246. Y wins 2/4 vs A, 2/4 vs B, 1/4 vs A+α, 0/4 vs B+α. No reading favours Y.
+- **Region2 is very low-load:** peaks ≈ 10 util-%, and the peak window's big-offset share is ≈ 0.01. The union's scan mechanism has nothing to act on.
+- **Static baselines:** RejectX is unmatched on 6/6 (window factor ≈ 1e5, knob inert; X = 1 caps WR); CoinFlip is unmatched on s0.2. Both are uninformative on T1. The supplementary RejectX matches only s0.3.
+- **PT vs CP-SAT:** identical F1 objective on all 36 Region2 solves; the label sets differ only among co-optimal solutions.
+- **Race audit (N2):** all 27 A_baleen train logs used meta+block+chunk.
+
+**T2 (Region4 s0.2–0.6):** TEST_GO 07:05:04 (commit `1cda6af`, POOL=T2), same Y/control/arms. The only change is the chain's T1 condition (`ADDENDUM_T1_UNEVALUABLE.md`, `3fdba1b`). Running in `work/union_t2/logs/test_t2u.out`.
