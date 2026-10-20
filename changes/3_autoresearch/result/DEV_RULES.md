@@ -62,3 +62,20 @@ The R0 screen gate and finalist rule apply unchanged. The candidate set for the 
 **Procedure:**
 - The R0 screen gate and finalist rule apply unchanged. The screen candidate set becomes {CA:pt, CB:pt, CA:ptm, CB:ptm, UB:ptm}; at most 2 (largest mean d) are confirmed.
 - To save wall-clock, retrains 2 and 3 of UB:ptm / UB:cdm run together with retrain 1. They count toward the finalist rule only if UB:ptm passes the screen gate and is among the 2 confirmed candidates; otherwise they are reported only.
+
+## R3 — 2026-10-20 03:56 (file time 03:56:47; union screen launched 03:56:50; before any simulation of the union family; G1_v5 is running)
+**New family "union"** (`work/union/`, overlay v5, `work/union/SCOPE_AMENDMENT.md` item 1.2d). Admit iff Baleen's model A admits OR the F1 peak-label model X admits, both under α = −1:
+- s_A > θ·g OR s_X > κ·θ·g [AND load_10m ≥ G];
+- κ = θ_X*/θ_A* (day-1 emulated thresholds at the same day-1 budget);
+- G = the day-1 q75 of load_10m.
+
+**Arms:**
+- **Candidates (Ising labels: phase-1/WP2 F1 min–max day-1 selection solved by parallel tempering):** `XA:F1PT` (no gate) and `XG:F1PT` (X gated to load ≥ G).
+- **Classical controls (same formulation solved by CP-SAT):** `XA:F1CPSAT`, `XG:F1CPSAT`. Reported, never candidates.
+- **Dev models:** WP2's retrains, read-only. Model A = `A_baleen_<inst>_r<k>`; model X = `D_<labels>_<inst>_r<k>` (`meta+block+chunk+load`).
+
+**Rules:**
+- **Screen:** the R0 gate on DEV8, retrain 1. At most 2 candidates (largest mean d) go to confirmation.
+- **Confirmation:** retrains 2–3 on DEV8, plus retrains 1–3 on Region5_s0 and Region1_s0 if the F1-label pipeline (day-1 dump, label solve, X training, as WP9) is built for them. Otherwise the finalist rule runs on DEV8 only (n = 8, wins ≥ 6).
+- **Finalist rule:** R0's, unchanged.
+- The test protocol for a union finalist will be a new conditional pre-registration (pool by the 01:08 rule), committed before any of its test runs.

@@ -1,0 +1,120 @@
+diff -ruN '--exclude=__pycache__' overlay_v4/BCacheSim/cachesim/admission_policies.py overlay/BCacheSim/cachesim/admission_policies.py
+--- overlay_v4/BCacheSim/cachesim/admission_policies.py	2026-10-20 03:53:12.285894875 -0400
++++ overlay/BCacheSim/cachesim/admission_policies.py	2026-10-20 03:54:01.765795679 -0400
+@@ -346,18 +346,70 @@
+ 
+ 
+ class NewMLAP(LearnedAP):
+-    def __init__(self, *args, feat_subset='meta+block+chunk', load_adapt=None, **kwargs):
++    def __init__(self, *args, feat_subset='meta+block+chunk', load_adapt=None, union=None, **kwargs):
+         super().__init__(*args, **kwargs)
+         self.features = feat_subset
+         self.num_features = count_feat(feat_subset)
+-        assert len(self.gbm.feature_name()) == self.num_features, (self.gbm.feature_name(), self.num_features)
+-        # PeakBaleen overlay (SCOPE_v2 1.1/1.2): column-order guard for load/tod models; optional load-adaptive
+-        # threshold theta_t = theta * g(load_t) (None = off = original behaviour).
+-        if load_features.extra_groups(feat_subset):
+-            load_features.check_admission_feature_names(self.gbm.feature_name(), feat_subset)
++        self.union = None
++        if union is not None:
++            # PeakBaleen overlay v5 (1.2d): union of two admission models (off by default)
++            self._init_union(union)
++        else:
++            assert len(self.gbm.feature_name()) == self.num_features, (self.gbm.feature_name(), self.num_features)
++            # PeakBaleen overlay (SCOPE_v2 1.1/1.2): column-order guard for load/tod models; optional load-adaptive
++            # threshold theta_t = theta * g(load_t) (None = off = original behaviour).
++            if load_features.extra_groups(feat_subset):
++                load_features.check_admission_feature_names(self.gbm.feature_name(), feat_subset)
+         self.load_adapt = load_adapt
+ 
++    def _init_union(self, u):
++        """PeakBaleen overlay v5 (1.2d): the collected feature vector (self.features) is the longer of the two models'
++        subsets; each model scores its own prefix of it (both subsets are canonical-order prefixes)."""
++        n_main, n_u = count_feat(u['main_feat_subset']), count_feat(u['feat_subset'])
++        assert self.features.startswith(u['main_feat_subset']) and self.features.startswith(u['feat_subset']), (self.features, u)
++        assert self.num_features == max(n_main, n_u), (self.num_features, n_main, n_u)
++        assert len(self.gbm.feature_name()) == n_main, (self.gbm.feature_name(), n_main)
++        if load_features.extra_groups(u['main_feat_subset']):
++            load_features.check_admission_feature_names(self.gbm.feature_name(), u['main_feat_subset'])
++        gbm2 = lgb.Booster(model_file=u['model_path'])
++        assert len(gbm2.feature_name()) == n_u, (gbm2.feature_name(), n_u)
++        if load_features.extra_groups(u['feat_subset']):
++            load_features.check_admission_feature_names(gbm2.feature_name(), u['feat_subset'])
++        assert u['kappa'] > 0
++        self.union = dict(gbm=gbm2, n_main=n_main, n=n_u, kappa=float(u['kappa']), gate=u.get('gate_load'),
++                          demand=u.get('demand'), model_path=u['model_path'])
++        assert self.union['gate'] is None or self.union['demand'] is not None
++
++    def _union_accept(self, batch, ts, *, metadata=None, check_only=False):
++        """admit iff score_main > theta * g  OR  (score_2 > kappa * theta * g  [AND load_10m >= gate])."""
++        U = self.union
++        X = np.array(list(batch.values()))
++        ods.bump("ml_batches")
++        ods.bump("ml_predictions", v=len(X))
++        p1 = self.gbm.predict(X[:, :U['n_main']])
++        p2 = U['gbm'].predict(X[:, :U['n']])
++        ts_items = (metadata or {}).get('ts', {})
++        per_item = getattr(self.load_adapt, 'per_item', False)
++        decisions = {}
++        for (k, x), a, b in zip(batch.items(), p1, p2):
++            t = ts_items.get(k, ts)  # the item's own access time
++            if self.load_adapt is None:
++                th = self.threshold
++            elif per_item:
++                th = self.threshold * self.load_adapt.g_item(t.physical, x)
++            else:
++                th = self.threshold * self.load_adapt.g(t.physical)
++            second = b > U['kappa'] * th
++            if second and U['gate'] is not None:
++                second = U['demand'].load(t.physical)[0] >= U['gate']
++            decisions[k] = (a > th) or second
++        if not check_only:
++            self.count_decisions(decisions)
++        return decisions
++
+     def batchAccept(self, batch, ts, *, metadata=None, check_only=False):
++        if self.union is not None:
++            return self._union_accept(batch, ts, metadata=metadata, check_only=check_only)
+         if self.load_adapt is None:
+             return super().batchAccept(batch, ts, metadata=metadata, check_only=check_only)
+         predictions = self._predict(batch, ts)
+@@ -388,6 +440,9 @@
+             raise
+ 
+     def __repr__(self):
++        if self.union is not None:
++            return (f"{self.name}(th={self.threshold}, fs={self.features}, {self.load_adapt}, union={self.union['model_path']}, "
++                    f"kappa={self.union['kappa']}, gate={self.union['gate']})")
+         if self.load_adapt is not None:
+             return f"{self.name}(th={self.threshold}, fs={self.features}, {self.load_adapt})"
+         return f"{self.name}(th={self.threshold}, fs={self.features})"
+@@ -1006,6 +1061,11 @@
+             assert getattr(options, 'ap_load_adapt_alpha', None) is None, "--ap-load-adapt-alpha and --ap-load-adapt-table are exclusive"
+             kwargs_['load_adapt'] = load_features.LoadTableThreshold.from_json(
+                 kwargs['demand_load'], options.ap_load_adapt_table)
++        if getattr(options, 'ap_union_model', None):
++            # PeakBaleen overlay v5 (1.2d): union of two admission models (off by default)
++            kwargs_['union'] = dict(model_path=options.ap_union_model, feat_subset=options.ap_union_feat_subset,
++                                    main_feat_subset=options.ap_main_feat_subset, kappa=options.ap_union_kappa,
++                                    gate_load=options.ap_union_gate_load, demand=kwargs.get('demand_load'))
+         ap = NewMLAP(threshold, model_path=options.learned_ap_model_path, **kwargs_)
+         print(f"{ap.name} with model: {options.learned_ap_model_path} threshold: {threshold}")
+     elif ap_id == "mlonline":
+diff -ruN '--exclude=__pycache__' overlay_v4/BCacheSim/cachesim/simulate_ap.py overlay/BCacheSim/cachesim/simulate_ap.py
+--- overlay_v4/BCacheSim/cachesim/simulate_ap.py	2026-10-20 03:53:12.286894893 -0400
++++ overlay/BCacheSim/cachesim/simulate_ap.py	2026-10-20 03:54:01.765795679 -0400
+@@ -59,6 +59,14 @@
+                         help="Trailing window (minutes: 10, 30 or 60) of load_t for the load-adaptive threshold")
+     parser.add_argument("--ap-load-adapt-table",
+                         help="JSON file of a piecewise-constant threshold multiplier table g (load buckets [x tod buckets]); off if unset")
++    parser.add_argument("--ap-union-model",
++                        help="PeakBaleen v5 (1.2d): a second admission GBM; admit if either model admits; off if unset")
++    parser.add_argument("--ap-union-feat-subset", help="feature subset of --ap-union-model (canonical order)")
++    parser.add_argument("--ap-main-feat-subset", help="feature subset of --learned-ap-model-path when --ap-union-model is set")
++    parser.add_argument("--ap-union-kappa", type=float, default=1.0,
++                        help="the second model admits if its score > kappa * theta * g")
++    parser.add_argument("--ap-union-gate-load", type=float, default=None,
++                        help="the second model admits only where load_10m >= this value (utilisation %%)")
+     parser.add_argument("--ap-chunk-threshold",
+                         help="Set the admission policy's threshold",
+                         type=int)

@@ -1,6 +1,7 @@
 """AR mechanical dev step 2 (DEV_RULES R0-R2): wait for the retrain-1 screen of the candidates on DEV8, apply the
 R0 screen gate, confirm at most 2 candidates (largest mean d): retrains 2-3 on DEV8 and 1-3 on Region1_s0/Region5_s0
-for the candidate and its classical control; then apply the finalist rule -> results/dev_finalist.json.
+for the candidate; then apply the finalist rule -> results/dev_finalist.json. The classical controls' confirmation
+(report only; R0: controls are never candidates) is written to queue_dev2_controls.txt and run after the decision.
 
   source env.sh && setsid nohup src/sbx.sh src/chain_dev2.py > logs/chain_dev2.out 2>&1 &
 """
@@ -65,11 +66,15 @@ def main():
                   open(os.path.join(H, "results", "dev_finalist.json"), "w"), indent=1)
         log("NO FINALIST (screen)")
         return
-    q = []
-    for c in passed:
-        for x in (c, CANDS[c]):
-            q += [(x, i, r) for r in (2, 3) for i in D8]
-            q += [(x, i, r) for r in (1, 2, 3) for i in ("Region1_s0", "Region5_s0")]
+    q, qc = [], []
+    for c in passed:                     # candidates first (finalist rule); controls (report only) afterwards
+        q += [(c, i, r) for r in (1, 2, 3) for i in ("Region5_s0", "Region1_s0")]
+        q += [(c, i, r) for r in (2, 3) for i in D8]
+        x = CANDS[c]
+        qc += [(x, i, r) for r in (2, 3) for i in D8] + [(x, i, r) for r in (1, 2, 3) for i in ("Region1_s0", "Region5_s0")]
+    open(os.path.join(H, "queue_dev2_controls.txt"), "w").write(
+        f"# control confirmation (report only; run after the finalist decision) {time.strftime('%F %T')}\n" +
+        "\n".join(f"{a} {i} {r}" for a, i, r in qc) + "\n")
     qp = os.path.join(H, "queue_dev2.txt")
     open(qp, "w").write(f"# confirmation queue written by chain_dev2 {time.strftime('%F %T')}\n" +
                         "\n".join(f"{a} {i} {r}" for a, i, r in q) + "\n")

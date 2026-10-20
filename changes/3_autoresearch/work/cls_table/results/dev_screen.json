@@ -1,0 +1,50 @@
+{
+ "screen": [
+  {
+   "cand": "CB:pt",
+   "complete": true,
+   "mean_d": 0.31330330548966145,
+   "min_d": -0.15125615125503344,
+   "wins": 6,
+   "gate": true,
+   "mean_p100": 37.405952554391924
+  },
+  {
+   "cand": "CB:ptm",
+   "complete": true,
+   "mean_d": -0.09745694121550397,
+   "min_d": -1.6828379953503259,
+   "wins": 4,
+   "gate": false,
+   "mean_p100": 37.81671280109709
+  },
+  {
+   "cand": "CA:pt",
+   "complete": true,
+   "mean_d": -0.15078671328346616,
+   "min_d": -1.131345506345717,
+   "wins": 4,
+   "gate": false,
+   "mean_p100": 37.87004257316505
+  },
+  {
+   "cand": "UB:ptm",
+   "complete": true,
+   "mean_d": -0.7315158799711412,
+   "min_d": -4.516268453864271,
+   "wins": 2,
+   "gate": false,
+   "mean_p100": 38.450771739852726
+  },
+  {
+   "cand": "CA:ptm",
+   "complete": false,
+   "gate": false
+  }
+ ],
+ "confirmed": [
+  "CB:pt"
+ ],
+ "ref_min_alpha_mean": 37.719255859881585,
+ "ts": "2026-10-20 03:22:01"
+}

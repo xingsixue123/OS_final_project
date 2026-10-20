@@ -88,7 +88,7 @@ The check reads row *existence* only, from `results_release.csv.gz`, never a met
   - the control-twin race produced one `__FAILED_` row (UB-cdm Region7 s0.1 r2);
   - the PT/CD reuse mapping was generalised to cd→pt, cdm→ptm, Ucdm→Uptm.
 
-## 2026-10-20 02:21 UB:ptm (pooled table) fails the R0 screen gate; queue trimmed
+## 2026-10-20 02:20 UB:ptm (pooled table) fails the R0 screen gate; queue trimmed
 **UB:ptm retrain 1** (leave-one-instance-out pooled table, B models). d = min(A+α, B+α) r1 − X:
 | instance | Region7 s0 | Region7 s0.1 | Region7 s0.2 | Region6 s0 | Region6 s0.1 | Region6 s0.3 |
 |---|---|---|---|---|---|---|
@@ -109,7 +109,7 @@ The same adaptivity appears in WP10's Region1 test tables (published background)
 - The queue driver was restarted at 02:20 with `queue_dev1b.txt`: queue_dev1 minus UB:ptm r2–3 and UB:cdm (32 evaluations no longer able to affect any decision). 13 partial sims deleted; finished sims are re-used.
 - `chain_dev2` was restarted with a refs-driver check matching both queue files.
 
-## 2026-10-20 02:25 T1 protocol (conditional) and chains
+## 2026-10-20 02:23 T1 protocol (conditional) and chains
 - **`work/t1_region2/PROTOCOL.md`:** a conditional pre-registration, committed before the dev finalist exists and before any T1 simulation.
   - Y is FINALIST from `work/cls_table/results/dev_finalist.json`, computed mechanically by `src/chain_dev2.py` (DEV_RULES R0–R2).
   - **No finalist → no TEST_GO and no spend.**
@@ -120,3 +120,117 @@ The same adaptivity appears in WP10's Region1 test tables (published background)
   - PATCH_v4.diff (9 files, `6dc6ef935e6f`) rebuilds the overlay byte-identically (`rebuild_overlay_v4.sh`).
 - `.gitignore` now also excludes the overlay copies, `work_v3/`, the G1 dumps, train records, instance links and model/pickle files.
 - `validate.py --integrity-only`: clean. `privacy_scrub --check`: clean.
+
+## 2026-10-20 02:35 Disclosed change after the protocol commit (`chain_dev2.py`, ordering only)
+`src/chain_dev2.py` was edited at 02:35, after commit `96506745`. The edit is ordering only:
+- **Before:** the confirmation queue ran each confirmed candidate *and* its classical control before the finalist rule.
+- **After:** the candidates run first (Region5_s0 / Region1_s0 r1–3 first, then DEV8 r2–3). The controls' dev confirmation goes to `queue_dev2_controls.txt`, report only, to run after the decision.
+
+Rationale: R0 says the controls are reported, never candidates, so they cannot affect the finalist. Running them first would have delayed the decision by about 2 h. The R0 gate, the finalist rule, the candidate set and PROTOCOL.md are unchanged. The test still runs the finalist's control arm on T1 (protocol §2).
+
+**Screen status at 02:34 (retrain 1):**
+| candidate | instances done | mean d | wins | worst d |
+|---|---|---|---|---|
+| CB:pt | 7/8 | +0.36 | 6 | −0.15 |
+| CB:ptm | 4/8 | +0.44 | | |
+| CA:pt | 2/8 | −0.40 | | |
+| CA:ptm | 1/8 | −0.54 | | |
+| UB:ptm | 7/8 | −0.64 | | −4.52 (gate failed) |
+
+## 2026-10-20 02:36 G1_v4 PASS (`work/cls_table/G1_v4.md`)
+Every check is bit-identical (all result keys, per-window series, histograms and counters; byte-identical model files):
+- RejectX and CoinFlip, frozen vs v4; both also equal phase 1's published runs.
+- Pinned Baleen training, frozen vs v4; the models also equal CP1's.
+- The Baleen pipeline, and the same models through both simulators.
+- α = −1, v3 vs v4; the exact power-law table, v3 vs v4.
+- **A class table with identical class rows == the 1.2b table** (P100 39.5715164464613, the same value as G1_v3's table check).
+
+Class-table results now count under the contract §2.
+
+## 2026-10-20 02:47 Screen nearly complete; queue restricted to decision-relevant work
+**Retrain-1 screen** (mean d vs the better α arm per instance):
+| candidate | instances | mean d | worst d | gate |
+|---|---|---|---|---|
+| CB:pt | 7/8 | +0.36 | −0.15 | pending |
+| CB:ptm | 8/8 | −0.10 | −1.68 | fails |
+| CA:pt | 7/8 | −0.16 | −1.13 | fails unless its last instance is large |
+| CA:ptm | 3/8 | −0.35 | | |
+| UB:ptm | 8/8 | −0.73 | −4.52 | fails |
+
+**Calibration from published data:** WP10's TB:pt (3 dev retrains) under my dev finalist rule:
+- passes vs A (+0.97, 6/8 wins, SE 0.16) and vs B (+0.91, 7/8);
+- misses vs the best α (A+α) only on margin: +0.34 with 6/8 wins, but 2.5 × SE = 0.37;
+- its worst instance is Region7 s0.3 (−1.31), where B's models are poor (B 38.60, B+α 37.61, A+α 36.01).
+
+**Operational:** the queue was restarted at 02:47 (`queue_dev1c.txt`) with only the remaining candidate r1 runs and the Region5_s0 / Region1_s0 references. The report-only controls r1 and probe went to `queue_report.txt`. 14 partial sims were deleted.
+
+**Region1_s0 references so far** (dev): A 27.00 (2 retrains), A+α 26.21 (1). So α helps on this dev sample, unlike on WP10's Region1 test.
+
+## 2026-10-20 02:59 Can the training-day fit choose between A's and B's models? No (published dev data only)
+Analysis of WP10's dev ledgers (`solves_dev.csv` + `trials_dev.csv`, 3 retrains × 8 instances), per (instance, retrain):
+- An oracle choosing TA:pt or TB:pt per instance would give 37.32, beating A+α on 7/8 instances.
+- A training-day selector does not get there:
+  - picking the lower fitted energy: mean 37.97, vs A+α −0.10 (4/8 wins);
+  - picking the larger fitted day-1 gain: 37.83, vs A+α +0.05 (6/8 wins, worst −1.71);
+  - both are worse than always using TB:pt (37.54, +0.34, worst −1.31).
+
+This confirms E1 for model choice too. No new candidate is derived from it.
+
+## 2026-10-20 03:22 R0 screen decision (mechanical, `work/cls_table/results/dev_screen.json`)
+| candidate | complete | mean d | worst d | wins /8 | mean P100 | gate |
+|---|---|---|---|---|---|---|
+| **CB:pt** | yes | **+0.313** | −0.151 | 6 | 37.41 | **PASS** |
+| CB:ptm | yes | −0.097 | −1.683 | 4 | 37.82 | fail |
+| CA:pt | yes | −0.151 | −1.131 | 4 | 37.87 | fail |
+| UB:ptm | yes | −0.732 | −4.516 | 2 | 38.45 | fail |
+| CA:ptm | no (Region7 s0.1 r1 unmatched: WR step 34.92 / 37.2 MB/s) | | | | | fail |
+
+(d = min(A+α, B+α) r1 − X r1.)
+
+- **Confirmation (CB:pt only):** Region5_s0 and Region1_s0 retrains 1–3, then DEV8 retrains 2–3 (`queue_dev2.txt`, 22 evaluations). Then the finalist rule (contract §4 on dev, n = 10 if every reference is complete).
+- **Reading:** the class-monotone constraint (ptm) did *not* help: CB:ptm < CB:pt. CB:pt's retrain-1 mean (37.41) is close to WP10's TB:pt r1 (37.31), but per instance they differ.
+  - **Corrected 03:24:** only 1 of the 8 retrain-1 B tables has identical class rows (Region6 s0.1, bit-identical to TB:pt r1 at 38.2008). An earlier sentence here said "several"; that was wrong.
+  - CB:pt r1 − TB:pt r1: Region7 s0.3 −1.36, s0.2 −0.38, Region6 s0.3 −0.15 (CB better); Region6 s0.2 +2.29, Region7 s0.1 +0.19, Region6 s0 +0.11, Region7 s0 +0.03 (CB worse).
+
+## 2026-10-20 03:59 New family "union" (H-UX): Baleen's model OR the Ising peak-label model (DEV_RULES R3)
+**Motivation** (published dev/test data only):
+- X1 (WP2 Ea-1.0:F1PT, Ising F1 labels + load + α) has the best dev mean of any configuration (37.20 vs A+α 37.88). It wins large on Region6, where peaks are scans (+3.6, +1.4, +2.1, +0.6 vs A+α).
+- It loses on Region7: its labels have no zero-value positives, so first-access admission falls (2.8% vs 8.4%).
+- On test it failed by catastrophes (Region7 s0.5, Region5 s0.5), where its model did not admit a scan peak that Baleen's model admits (56–69%).
+
+**Hypothesis.** A union "admit iff s_A > θg OR s_X > κθg" keeps Baleen's first-access and scan admissions as a floor (fixing both failure modes) and adds the peak-label model's Region6 admissions.
+
+**Design** (`work/union/`, overlay v5 = v4 + `PATCH_v5_delta.diff`, 2 files; `SCOPE_AMENDMENT.md` 1.2d; G1_v5 running):
+- κ = θ_X*/θ_A* from the training day (≈ 0.66–0.68 on the instances checked);
+- `XG` gates X to load ≥ the day-1 q75.
+- The Ising component is the label selection: the F1 min–max QUBO solved by PT. The classical control is the same F1 solved by CP-SAT.
+
+**Pipeline for non-WP2 instances** (WP9 code, copied; also what a test would use): `prep_day1.py` (frozen day-1 dump) → `labels.py` → X training with `PolicyPeakBaleen4`.
+- Region5_s0's day-1 dump is WP9's.
+- Region1_s0's was built here (4 s).
+- 12 label sets were solved (F1PT / F1CPSAT × seeds 1–3 × 2 instances, all rc = 0). The X models are training in the background.
+
+**Operational:** the union dir's SimSlot now points at `work/cls_table/.sim_slots.d`, so all drivers share one 14-slot cap.
+
+## 2026-10-20 04:24 Union T1 prerequisites (no outcome read)
+For a possible union test on T1 (allowed before TEST_GO; nothing below is read for any choice):
+- frozen day-1 dumps `work/union/inst_test/day1_Region2_s0.{1..6}.npz` (`src/prep_day1.py --mode test`);
+- 72 F1 label sets: F1PT / F1CPSAT × seeds 1–6 × 6 instances, all rc = 0. Seeds 4–6 cover the extra-seed rule for unmatched cells. Their statistics files were not opened.
+
+The union driver gained test mode (TEST_GO required; extra seeds 4–6 for cells with < 3 matched retrains, as WP9/WP10).
+
+## 2026-10-20 04:37 CB:pt fails the finalist rule (anticipated; mechanical file pending), union protocol for T1
+**CB:pt under the finalist rule** (21 of 22 confirmation evaluations; the last one is Region7 s0.3 r3, already a loss):
+- **Against A+α** (best α on dev, n = 10): 6/10 wins, need 7. Losses on Region7 s0.3 (37.29 vs 36.01), Region6 s0.1 (40.48 vs 38.96: r2 collapsed to 43.36), Region5_s0 (32.62 vs 32.37) and Region1_s0 (26.37 vs 26.23).
+- The cls_table chain will write `dev_finalist.json` with FINALIST null. `chain_test_t1` then stops without TEST_GO, and **T1 is not spent**.
+
+**Union screen (retrain 1, 9 of 16 at 04:34)**, d vs the better α arm:
+- **XA:F1PT:** Region6 s0 +4.03, s0.1 +4.32, s0.2 +2.20, s0.3 +0.82; Region7 s0.2 +0.24.
+- **XG:F1PT:** Region6 s0 +3.93; Region7 s0.1 +0.35, s0.2 +0.21, s0 −0.23.
+
+These are the largest dev effects of the whole project, as hypothesised. Still retrain 1 only.
+
+**`work/t1u_region2/PROTOCOL.md`:** a new conditional pre-registration on T1 for the union family, committed before the union finalist is known; the screen is still running.
+- Y is the finalist of `chain_union_dev.py` (R3); the control is its F1CPSAT twin.
+- The chain refuses to run if `work/t1_region2/TEST_GO` exists, so T1 can be spent only once.
+- All union T1 prerequisites (day-1 dumps, 72 label sets) were built before the commit; none was read.

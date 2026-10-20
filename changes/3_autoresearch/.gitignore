@@ -25,3 +25,7 @@ work/**/.sim_slots.d/
 work/**/*.pkl
 work/**/*.model
 work/**/*.pkl.bz
+# union: v4 work copy and G1_v5 dumps
+work/**/work_v4/
+work/**/overlay_v4/
+work/**/results/g1v5/
