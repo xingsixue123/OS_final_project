@@ -377,3 +377,12 @@ While checking the first T1 minutes for crashes (trainings and sims run normally
    - I noticed s0.2 was degenerate for RejectX (06:30) but did not check whether it was degenerate for every arm.
 
 **Process note (validator N3):** from now on every rule and dated note is committed immediately, times come from `date`, and no dated header is rewritten; corrections are appended.
+
+## 2026-10-20 07:04 Corrections (validator B2, N3), appended; no earlier text is rewritten
+- **B2:** the G1_v5 report was written as `work/union/G1_v4.md`. `g1v5_report.py` was copied from `g1v4_report.py` and kept its output path. That file was always the v5 report: its heading is "G1_v5: …", and the evidence in `results/g1v5_summary.json` is unchanged.
+  - It is now `work/union/G1_v5.md` (git mv; regenerating from the unchanged summary gives a byte-identical file).
+  - Both copies of `g1v5_report.py` now write `G1_v5.md`.
+  - The citations in `t1u_region2/PROTOCOL.md` and `union/SCOPE_AMENDMENT.md` now resolve.
+  - The 04:56 entry above ("`work/union/G1_v5.md`: PASS on every check") was true of the content, but that file name did not exist until now.
+  - The canonical v4 report is `work/cls_table/G1_v4.md` (heading "G1_v4").
+- **Time of the 07:05 entry:** it was written at 07:04:05 and committed at 07:04:06 (`539f39e`). Its header time was typed before `date` ran.

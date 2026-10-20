@@ -56,5 +56,5 @@ L = ["# G1_v5: default equivalence of overlay v5 + the union checks (Region7 s0,
      "- The union path (`NewMLAP._union_accept`) is the single-model mechanism when the second clause cannot fire "
      "(kappa = 1e9, with the longer collected feature vector) and when both clauses are the same model: both reproduce "
      "the A+alpha run bit-for-bit. Union runs differ from single-model runs only through the second model's admissions."]
-open(os.path.join(H, "G1_v4.md"), "w").write("\n".join(L) + "\n")
+open(os.path.join(H, "G1_v5.md"), "w").write("\n".join(L) + "\n")
 print("\n".join(L[:12]))
