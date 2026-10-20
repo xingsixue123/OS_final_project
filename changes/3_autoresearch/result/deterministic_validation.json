@@ -1,6 +1,8 @@
 {
  "problems": [],
- "notes": [],
+ "notes": [
+  "no claim file yet"
+ ],
  "tests": [
   {
    "dir": "changes/3_autoresearch/work/t1u_region2",
@@ -8,6 +10,13 @@
    "commit": "76cf5c8d4532583b19f701ddab677a8144cb19d4",
    "pool": "T1",
    "commit_time": 1792485405
+  },
+  {
+   "dir": "changes/3_autoresearch/work/t2u_region4",
+   "go_mtime": 1792494304.3947496,
+   "commit": "1cda6afb60f757badfdbacf3678765b3b8f6585e",
+   "pool": "T2",
+   "commit_time": 1792487964
   }
  ],
  "claim": null,
