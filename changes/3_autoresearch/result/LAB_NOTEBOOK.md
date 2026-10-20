@@ -397,3 +397,14 @@ While checking the first T1 minutes for crashes (trainings and sims run normally
 - **Race audit (N2):** all 27 A_baleen train logs used meta+block+chunk.
 
 **T2 (Region4 s0.2–0.6):** TEST_GO 07:05:04 (commit `1cda6af`, POOL=T2), same Y/control/arms. The only change is the chain's T1 condition (`ADDENDUM_T1_UNEVALUABLE.md`, `3fdba1b`). Running in `work/union_t2/logs/test_t2u.out`.
+
+## 2026-10-20 07:07 T2 operational incident: missing emulator cache dir (fixed; no code or protocol change; disclosed)
+- **What happened:** at 07:05–07:07 the first T2 evaluations failed with `FileNotFoundError`. `work/union_t2/work/cache/` (where `q3lib.sim_features` caches the per-instance simulator features) was never created in the T2 work dir. In `work/union/` I had created it by hand at 03:53, and the copy did not include it.
+- **Ledger:** 6 rows `*__FAILED_*`, all A or A+α retrain-1 evaluations. Each failed at the emulator step **after its training and before any simulation**, so no T2 outcome was produced. The rows stay in the ledger.
+- **Fix (07:07):**
+  - stopped the chain's process group;
+  - `mkdir work/union_t2/work/cache`;
+  - deleted 4 partial static-replay sim dirs (no result file);
+  - set aside 1 partial train log (B r1 Region4_s0.2, `.killed`);
+  - relaunched `chain_test_t2u.sh` (idempotent).
+- **Effect:** TEST_GO is unchanged (07:05:04). The relaunched driver re-runs the failed evaluations under their original keys with the **same trained retrain-1 models** (train records are reused), so no seed is added or chosen. No T2 result had been read.

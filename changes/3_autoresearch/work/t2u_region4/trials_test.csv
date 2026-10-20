@@ -1,0 +1,9 @@
+trial_key,stage,arm,design,inst,rep,ap_subset,alpha,solver,region,sample,matched,error,wall_secs,ts
+A_baleen_Region4_s0.3_r1__FAILED_1792494341,test,A,baleen,Region4_s0.3,1,meta+block+chunk,,,Region4,0.3,False,"FileNotFoundError(2, 'No such file or directory')",36.48126196861267,2026-10-20T07:05:41
+Aa-1.0_baleen_Region4_s0.3_r1__FAILED_1792494345,test,Aa-1.0,baleen,Region4_s0.3,1,meta+block+chunk,-1.0,,Region4,0.3,False,"FileNotFoundError(2, 'No such file or directory')",41.01665806770325,2026-10-20T07:05:45
+A_baleen_Region4_s0.2_r1__FAILED_1792494385,test,A,baleen,Region4_s0.2,1,meta+block+chunk,,,Region4,0.2,False,"FileNotFoundError(2, 'No such file or directory')",81.00758576393127,2026-10-20T07:06:25
+Aa-1.0_baleen_Region4_s0.2_r1__FAILED_1792494400,test,Aa-1.0,baleen,Region4_s0.2,1,meta+block+chunk,-1.0,,Region4,0.2,False,"FileNotFoundError(2, 'No such file or directory')",96.29592204093933,2026-10-20T07:06:40
+A_baleen_Region4_s0.4_r1__FAILED_1792494405,test,A,baleen,Region4_s0.4,1,meta+block+chunk,,,Region4,0.4,False,"FileNotFoundError(2, 'No such file or directory')",101.41984605789185,2026-10-20T07:06:45
+Aa-1.0_baleen_Region4_s0.4_r1__FAILED_1792494410,test,Aa-1.0,baleen,Region4_s0.4,1,meta+block+chunk,-1.0,,Region4,0.4,False,"FileNotFoundError(2, 'No such file or directory')",106.38285446166992,2026-10-20T07:06:50
+A_baleen_Region4_s0.6_r1__FAILED_1792494427,test,A,baleen,Region4_s0.6,1,meta+block+chunk,,,Region4,0.6,False,"FileNotFoundError(2, 'No such file or directory')",122.85839462280273,2026-10-20T07:07:07
+Aa-1.0_baleen_Region4_s0.6_r1__FAILED_1792494432,test,Aa-1.0,baleen,Region4_s0.6,1,meta+block+chunk,-1.0,,Region4,0.6,False,"FileNotFoundError(2, 'No such file or directory')",91.0494294166565,2026-10-20T07:07:12
