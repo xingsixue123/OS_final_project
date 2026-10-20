@@ -77,7 +77,20 @@ Where there was peak pressure (Region4), the load-adaptive threshold alone (A+α
 ## 4. Ising vs classical
 - **The objective ties.** The F1 objective is **identical for PT and CP-SAT on every test-pool label solve:** 36/36 on Region2 and 30/30 on Region4, all seeds. On Region5_s0 the two are within 0.16–0.31% (CP-SAT lower on 2 of 3 seeds); on Region1_s0 they are identical on all 3 seeds.
 - **The label sets** differ only among co-optimal or near-optimal solutions: PT varies with the seed, CP-SAT barely does.
-- **Deployed differences:** T1 (descriptive), Y ≈ control. T2: Y is lower than the control by 1.20 on average, but wins only 2/5 instances (s0.2 carries it; SE 1.05), so it is not significant. Dev control confirmation (XA:F1CPSAT / XG:F1CPSAT, retrains 2–3 on DEV8 and 1–3 on Region5_s0/Region1_s0, report only) is running as of 10:05. Until it is added here, the dev control evidence is **retrain 1 only, n = 8** (validator N4).
+- **Deployed differences:** T1 (descriptive), Y ≈ control. T2: Y is lower than the control by 1.20 on average, but wins only 2/5 instances (s0.2 carries it; SE 1.05), so it is not significant.
+- **Dev, the same union with CP-SAT labels.** Confirmed with 3 retrains on all 10 dev instances (11:24; report only; every cell 3/3 matched).
+
+  | Ising arm vs CP-SAT twin | wins | mean(control − Ising) | SE_retrain | worst | best | mean P100 (Ising / CP-SAT) |
+  |---|---|---|---|---|---|---|
+  | XA:F1PT vs XA:F1CPSAT | 6/10 | +0.77 | 0.36 | −0.29 | +3.79 | 35.36 / 36.13 |
+  | XG:F1PT vs XG:F1CPSAT | 6/10 | +0.44 | 0.28 | −0.29 | +1.80 | 35.53 / 35.97 |
+
+  - For XA the gain comes from three instances with high retrain variance: Region6 s0.1 (+3.79), Region7 s0.3 (+2.11) and Region6 s0 (+1.33). It is about 2.1 SE, from one test of two label solvers.
+  - Neither CP-SAT union would qualify on dev: vs A+α, +0.03 / +0.20 with worst −2.94 / −2.49.
+- **Interpretation.** With equal objectives, the PT/CP-SAT difference is a property of *which* co-optimal label set each solver returns:
+  - PT's sets vary by seed and lie further from Baleen's labels (Jaccard 0.2–0.9 on the pools);
+  - CP-SAT returns (nearly) one set per instance, closer to Baleen's (0.6–0.9).
+  - It is not evidence that the Ising solver optimizes the QUBO better.
 - **No gain is attributed to better optimization by the Ising solver.** Contract §1 is met only literally: Y's labels come from PT, and the CP-SAT twin was run and reported.
 
 ## 5. Integrity and disclosures
@@ -114,7 +127,7 @@ Everything below is in `result/LAB_NOTEBOOK.md` with its time, and was reviewed 
     | ledger | rows | matched | unmatched | `__FAILED_` |
     |---|---|---|---|---|
     | `work/cls_table/trials_dev.csv` | 105 | 102 | 2 (CB-pt Region1_s0 r2, CA-ptm Region7_s0.1 r1) | 1 (UB-cdm Region7_s0.1 r2: the control-twin race; not re-run, because UB:ptm was dropped after failing the gate) |
-    | `work/union/trials_dev.csv` | 76 at 10:01 (+ the control confirmation) | 76 | 0 | 0 |
+    | `work/union/trials_dev.csv` | 120 | 120 | 0 | 0 |
     | `work/t1u_region2/trials_test.csv` | 132 | 86 | 46 | 0 |
     | `work/t2u_region4/trials_test.csv` | 98 | 90 | 0 | 8 |
 

@@ -1,0 +1,3 @@
+threshold,wr,peak,result_file,emu_wr
+0.769626,35.722379090416396,26.30325692826811,/home/sxing/project/OS_final_project/changes/3_autoresearch/work/union/work/runs/dev/XG-F1CPSAT_baleen_Region1_s0_r3/converge/th_0.769626/ml-ap-0.769626_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma,39.05104679524033
+0.782722,34.64818969869097,26.453622766134092,/home/sxing/project/OS_final_project/changes/3_autoresearch/work/union/work/runs/dev/XG-F1CPSAT_baleen_Region1_s0_r3/converge/th_0.782722/ml-ap-0.782722_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma,38.0078662868691

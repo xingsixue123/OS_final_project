@@ -431,3 +431,15 @@ While checking the first T1 minutes for crashes (trainings and sims run normally
 - Region4 peak windows have a big-offset share ≈ 0.03 (no scan peaks), so the union's second model has nothing to add.
 - F1 objective PT = CP-SAT on all 30 Region4 solves.
 - Race audit: 15/15 A trainings used meta+block+chunk.
+
+## 2026-10-20 11:26 Dev control confirmation done (report only); run closed (STOP_EXHAUSTED)
+- **Controls:** XA:F1CPSAT and XG:F1CPSAT, retrains 2–3 on DEV8 and 1–3 on Region5_s0/Region1_s0. 44 evaluations; the union dev ledger now has 120 rows, all matched.
+
+  | Ising arm vs its CP-SAT twin (n = 10) | wins | mean(control − Ising) | SE | best instance |
+  |---|---|---|---|---|
+  | XA:F1PT | 6/10 | +0.77 | 0.36 | Region6 s0.1 +3.79 |
+  | XG:F1PT | 6/10 | +0.44 | 0.28 | |
+
+  - The F1 objectives tie, so this is a solution-selection effect among co-optimal label sets, not better optimization.
+- `result/FINAL_REPORT.md` is complete: NEGATIVE, budget exhausted.
+- `result/STOP_EXHAUSTED` written.

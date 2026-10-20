@@ -1,0 +1,4 @@
+Test budget exhausted (2026-10-20T11:26:21-04:00).
+T1 (Region2 s0.1-0.6; commit 76cf5c8d): spent, FAILED (unevaluable as pre-registered).
+T2 (Region4 s0.2-0.6; commit 1cda6af): spent, FAILED (XA-F1PT 43.17 vs best alpha A+alpha 42.87; 1/5 wins).
+No GOOD_RESULT_CLAIM.json. See result/FINAL_REPORT.md.

@@ -1,10 +1,10 @@
 # STATUS (3_autoresearch, run 20261020_004634)
 
-**Updated:** 2026-10-20 10:05, round 2.
+**Updated:** 2026-10-20 11:26, round 2 (final).
 - **FINAL: NEGATIVE. The test budget is exhausted (2 of 2); no claim.** See `result/FINAL_REPORT.md`.
   - **T1** (Region2): spent, FAILED, unevaluable (`work/t1u_region2/RESULTS_test.md`).
   - **T2** (Region4): spent, FAILED. Y = XA-F1PT 43.17 vs A+α 42.87 (best α), 1/5 wins (`work/t2u_region4/RESULTS_test.md`).
-- **Running (report only):** the dev control confirmation `work/union/queue_dev2_controls.txt` (XA/XG:F1CPSAT; log `work/union/logs/controls_confirm.out`). Its numbers go into FINAL_REPORT §4. Then `result/STOP_EXHAUSTED` is written.
+- **Dev control confirmation:** done at 11:24 (FINAL_REPORT §4). `result/STOP_EXHAUSTED` is written. **No detached job is running.**
 
 - **Test spends:** 2 of 2 used (T1 failed / unevaluable; T2 failed). Two conditional T1 protocols were committed; only the union one wrote a TEST_GO.
   - `work/t1_region2/PROTOCOL.md` (`96506745`, cls_table family): **void.** No finalist; CHAIN_DONE 04:42 without TEST_GO.
