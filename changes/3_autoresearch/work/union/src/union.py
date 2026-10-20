@@ -49,7 +49,7 @@ def x_model(sp):
     exactly as WP9/WP3 arm D (labels.py F1 solve with seed = retrain k on day1_<inst>.npz, then the overlay trainer with
     --policy PolicyPeakBaleen4 and --ap-feat-subset meta+block+chunk+load)."""
     key = f"D_{sp['solver']}_{sp['inst']}_r{sp['rep']}"
-    if C.MODE == "dev" and sp["inst"] in C.DEV8:
+    if C.MODE == "dev" and sp["inst"] in C.DEV8 and sp["rep"] <= 3:
         return B.wp2_model_out(key)
     with B._TL:
         lk = B._TRAIN_LOCKS.setdefault(key, threading.Lock())

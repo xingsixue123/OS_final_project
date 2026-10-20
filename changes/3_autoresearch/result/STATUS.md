@@ -1,33 +1,41 @@
 # STATUS (3_autoresearch, run 20261020_004634)
 
-**Updated:** 2026-10-20 03:25, round 1. G1_v4 PASS (`work/cls_table/G1_v4.md`).
-- **Screen decided (03:22):** CB:pt is the only candidate through the R0 gate. Its confirmation (`queue_dev2.txt`, 22 evaluations) is running inside `chain_dev2`. The finalist rule follows automatically; then `chain_test_t1` either spends T1 or stops.
-- **Test spends:** 0 of 2. The T1 PROTOCOL (conditional) is committed: `96506745`.
-- **T1 prerequisites (no outcome read):** jobs (`work/cls_table/jobs_test.json`) and instance dumps (`work/cls_table/inst_test/`) are built. Static replays are blocked in code until TEST_GO.
-- **Families under study:** H-CLS (`work/cls_table/`):
-  - per-retrain Ising class tables CA/CB:pt|ptm;
-  - pooled leave-one-out Ising class table UB:ptm (plan B, DEV_RULES R2).
-- **Overlay v4** = v3 + `PATCH_v4_delta.diff` (`SCOPE_AMENDMENT.md`, item 1.2c); G1_v4 PASS.
+**Updated:** 2026-10-20 04:38, round 1.
 
-## Detached jobs (dev; resumable; finished sims are re-used; ledger `work/cls_table/trials_dev.csv`)
+- **Test spends:** 0 of 2. Two conditional T1 protocols are committed; at most one can write a TEST_GO.
+  - `work/t1_region2/PROTOCOL.md` (`96506745`, cls_table family): its only confirmed candidate, CB:pt, fails the finalist rule (6/10 wins vs A+α), so no TEST_GO is expected.
+  - `work/t1u_region2/PROTOCOL.md` (`76cf5c8d`, union family): Y is the finalist of `chain_union_dev.py` (DEV_RULES R3).
+- **Families:**
+  - H-CLS (`work/cls_table/`, overlay v4, G1_v4 PASS): screened; only CB:pt passed the screen gate; finalist rule failed.
+  - **H-UX union** (`work/union/`, overlay v5 = v4 + union 1.2d): screen running; retrain-1 effects are large. G1_v5 is running.
+- **T1 prerequisites (no outcome read):**
+  - jobs `work/*/jobs_test.json`;
+  - fullml dumps `work/cls_table/inst_test/`;
+  - day-1 dumps and 72 F1 label sets `work/union/inst_test/`, `work/union/labels/`.
+
+## Detached jobs (all resumable; finished sims are re-used)
 | job | log | what |
 |---|---|---|
-| dev queue | `work/cls_table/logs/queue_dev1c.out` | `queue_dev1c.txt` (02:47): the remaining candidate r1 screen + Region5_s0 / Region1_s0 refs (A, B, Aa, Ba × r1–3). Report-only work (controls r1, probe) is in `queue_report.txt`, to run after the decision/test |
-| chain_dev2 | `work/cls_table/logs/chain_dev2.out` | waits for the r1 screen → R0 gate → confirmation queue `queue_dev2.txt` (≤ 2 candidates + controls: r2–3 DEV8, r1–3 Region1_s0/Region5_s0) → finalist rule → `results/dev_finalist.json` |
-| chain_test_t1 | `work/cls_table/logs/chain_test_t1.out` | waits for `dev_finalist.json`; no finalist → `work/t1_region2/CHAIN_DONE`, no spend; else G1_v4 check → TEST_GO → static + test + `eval_test.py` |
-| G1_v4 | `work/cls_table/logs/g1v4.out` | `results/g1v4_summary.json` when done |
+| cls_table chain_dev2 | `work/cls_table/logs/chain_dev2.out` | last CB:pt confirmation run → `results/dev_finalist.json` (expected FINALIST null) |
+| cls_table chain_test_t1 | `work/cls_table/logs/chain_test_t1.out` | stops with `work/t1_region2/CHAIN_DONE` if no finalist |
+| union screen | `work/union/logs/screen_x_r1.out` | XA/XG × F1PT/F1CPSAT × DEV8 × retrain 1 |
+| union chain_union_dev | `work/union/logs/chain_union_dev.out` | R0 gate → confirmation `queue_dev2.txt` (r2–3 DEV8, r1–3 Region5_s0/Region1_s0) → finalist → `work/union/results/dev_finalist.json` |
+| union chain_test_t1u | `work/union/logs/chain_test_t1u.out` | finalist? → G1_v5? → TEST_GO (`work/t1u_region2/`) → static + test + `eval_test.py` |
+| G1_v5 | `work/union/logs/g1v5.out` | `work/union/results/g1v5_summary.json` |
+| X pretrain | `work/union/logs/pretrain_x.out` | F1-label models for Region5_s0/Region1_s0 (done or finishing) |
 
-The earlier per-arm drivers (probe, screen, screen_m, extra refs, UB) were stopped at 01:56 so that one driver works through the evaluations in priority order. Their 14 partial sims were deleted; finished sims are re-used.
+All sims share one 14-slot pool (`work/cls_table/.sim_slots.d`); every train holds `2_deployable_peak/.train.lock`.
 
-## RESUME (from the repo root; idempotent)
+## RESUME (from the repo root; idempotent; delete partial `work/*/work/runs/*/*/converge/th_*` dirs without `*_cache_perf.txt.lzma` first)
 ```
 cd changes/3_autoresearch/work/cls_table && source env.sh
-setsid nohup src/sbx.sh src/cls.py --mode dev --queue queue_dev1c.txt -j 14 >> logs/queue_dev1c.out 2>&1 < /dev/null &
-# later (report only): setsid nohup src/sbx.sh src/cls.py --mode dev --queue queue_report.txt -j 14 >> logs/queue_report.out 2>&1 < /dev/null &
-setsid nohup src/sbx.sh src/chain_dev2.py >> logs/chain_dev2.out 2>&1 < /dev/null &          # if no results/dev_finalist.json yet
-setsid nohup bash src/chain_test_t1.sh >> logs/chain_test_t1.out 2>&1 < /dev/null &       # idempotent (CHAIN_DONE)
-setsid nohup src/sbx.sh src/g1v4.py >> logs/g1v4.out 2>&1 < /dev/null &
+setsid nohup src/sbx.sh src/chain_dev2.py >> logs/chain_dev2.out 2>&1 < /dev/null &          # if no results/dev_finalist.json
+setsid nohup bash src/chain_test_t1.sh >> logs/chain_test_t1.out 2>&1 < /dev/null &
+cd ../union && source env.sh
+setsid nohup src/sbx.sh src/union.py --mode dev --arms XA:F1PT XG:F1PT XA:F1CPSAT XG:F1CPSAT --reps 1 -j 14 >> logs/screen_x_r1.out 2>&1 < /dev/null &
+setsid nohup src/sbx.sh src/chain_union_dev.py >> logs/chain_union_dev.out 2>&1 < /dev/null &   # if no results/dev_finalist.json
+setsid nohup bash src/chain_test_t1u.sh >> logs/chain_test_t1u.out 2>&1 < /dev/null &
+setsid nohup src/sbx.sh src/g1v5.py >> logs/g1v5.out 2>&1 < /dev/null &                         # if no results/g1v5_summary.json
+# later, report only: cd ../cls_table && setsid nohup src/sbx.sh src/cls.py --mode dev --queue queue_report.txt -j 14 >> logs/queue_report.out 2>&1 < /dev/null &
 # running?  ps -eo pid,etimes,args | grep 3_autoresearch/work | grep -v grep
-# screen table: python3 src/dev_eval.py screen ; finalist rule: python3 src/dev_eval.py final --arms <cfg>
 ```
-Before relaunching after a kill, delete partial `work/runs/dev/*/converge/th_*` dirs (no `*_cache_perf.txt.lzma`).

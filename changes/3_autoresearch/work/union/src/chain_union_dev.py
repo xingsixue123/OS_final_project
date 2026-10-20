@@ -86,6 +86,24 @@ def main():
     log(f"confirmation queue: {len(q)} evaluations")
     rc = subprocess.call([sys.executable, "-B", os.path.join(H, "src", "union.py"), "--mode", "dev", "--queue", qp, "-j", "14"])
     log("confirmation driver rc", rc)
+    # DEV_RULES R4: cells with < 3 matched retrains get retrains 4, 5, 6 (as the test protocols), candidates only
+    for _ in range(3):
+        t = pd.read_csv(os.path.join(H, "trials_dev.csv"))
+        t = t[~t.trial_key.astype(str).str.contains("__FAILED_")]
+        extra = []
+        for c in passed:
+            for i in D8 + EXTRA:
+                x = t[(t.arm == arm_of(c)) & (t.inst == i)]
+                n_ok = int((x.matched.astype(str) == "True").sum())
+                reps = set(x.rep.astype(int))
+                if n_ok < 3 and reps and max(reps) < 6:
+                    extra.append((c, i, max(reps) + 1))
+        if not extra:
+            break
+        qe = os.path.join(H, f"queue_dev2_extra_{_}.txt")
+        open(qe, "w").write("# R4 extra seeds\n" + "\n".join(f"{a} {i} {r}" for a, i, r in extra) + "\n")
+        log("R4 extra seeds:", extra)
+        subprocess.call([sys.executable, "-B", os.path.join(H, "src", "union.py"), "--mode", "dev", "--queue", qe, "-j", "14"])
     # the Region1_s0 / Region5_s0 references come from queue_dev1; wait until its driver has finished them
     while True:
         t = DE.load()

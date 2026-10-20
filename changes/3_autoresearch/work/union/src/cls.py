@@ -136,8 +136,8 @@ def wp2_model_out(key):
 
 def train(sp):
     key = sp["base_key"]
-    if C.MODE == "dev" and sp["inst"] in C.DEV8:               # AR: the 8 Region6/7 dev instances re-use WP2's retrains
-        return wp2_model_out(key)
+    if C.MODE == "dev" and sp["inst"] in C.DEV8 and sp["rep"] <= 3:   # AR: DEV8 retrains 1-3 re-use WP2's retrains
+        return wp2_model_out(key)                                       # (extra seeds 4-6 are trained here, DEV_RULES R4)
     with _TL:
         lk = _TRAIN_LOCKS.setdefault(key, threading.Lock())
     with lk:

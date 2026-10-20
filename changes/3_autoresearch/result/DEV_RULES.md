@@ -79,3 +79,11 @@ The R0 screen gate and finalist rule apply unchanged. The candidate set for the 
 - **Confirmation:** retrains 2–3 on DEV8, plus retrains 1–3 on Region5_s0 and Region1_s0 if the F1-label pipeline (day-1 dump, label solve, X training, as WP9) is built for them. Otherwise the finalist rule runs on DEV8 only (n = 8, wins ≥ 6).
 - **Finalist rule:** R0's, unchanged.
 - The test protocol for a union finalist will be a new conditional pre-registration (pool by the 01:08 rule), committed before any of its test runs.
+
+## R4 — 2026-10-20 04:48 (file time; before any union confirmation simulation; the union retrain-1 screen is still running)
+**Extra seeds on dev for the union family:**
+- During confirmation, a candidate cell (candidate, instance) with fewer than 3 matched retrains gets retrains 4, 5, 6, in order, until it has 3 matched. This is the rule of every test protocol (WP9/WP10/T1).
+- On DEV8 the extra retrains are trained here: a new Baleen A training, plus F1 labels with seed k on the published day-1 instance `explore/common/inst/day1_<inst>.npz` and a new X training. WP2 has retrains 1–3 only.
+- The reference arms are unchanged (all complete).
+
+**Reason (procedural, not outcome-based):** CB:pt was ineligible because one cell (Region1_s0 r2) ended unmatched on a write-rate step (36.14 MB/s after 7 sims). A rule without the test's extra-seed provision can reject any candidate on such a step. No union confirmation result exists yet. The screen gate and the finalist rule are unchanged.

@@ -219,7 +219,7 @@ For a possible union test on T1 (allowed before TEST_GO; nothing below is read f
 
 The union driver gained test mode (TEST_GO required; extra seeds 4–6 for cells with < 3 matched retrains, as WP9/WP10).
 
-## 2026-10-20 04:37 CB:pt fails the finalist rule (anticipated; mechanical file pending), union protocol for T1
+## 2026-10-20 04:36 CB:pt fails the finalist rule (anticipated; mechanical file pending), union protocol for T1
 **CB:pt under the finalist rule** (21 of 22 confirmation evaluations; the last one is Region7 s0.3 r3, already a loss):
 - **Against A+α** (best α on dev, n = 10): 6/10 wins, need 7. Losses on Region7 s0.3 (37.29 vs 36.01), Region6 s0.1 (40.48 vs 38.96: r2 collapsed to 43.36), Region5_s0 (32.62 vs 32.37) and Region1_s0 (26.37 vs 26.23).
 - The cls_table chain will write `dev_finalist.json` with FINALIST null. `chain_test_t1` then stops without TEST_GO, and **T1 is not spent**.
@@ -234,3 +234,15 @@ These are the largest dev effects of the whole project, as hypothesised. Still r
 - Y is the finalist of `chain_union_dev.py` (R3); the control is its F1CPSAT twin.
 - The chain refuses to run if `work/t1_region2/TEST_GO` exists, so T1 can be spent only once.
 - All union T1 prerequisites (day-1 dumps, 72 label sets) were built before the commit; none was read.
+
+## 2026-10-20 04:50 cls_table: no finalist (mechanical); R4 extra seeds for the union confirmation
+- **`work/cls_table/results/dev_finalist.json`:** FINALIST null.
+  - CB:pt is *ineligible*: Region1_s0 r2 ended unmatched (WR 36.14 after 7 sims), so that cell has 2 matched retrains.
+  - It would have failed anyway: 6/10 wins vs A+α (need 7).
+  - `chain_test_t1` stopped at 04:42:40: `work/t1_region2/CHAIN_DONE`, **no TEST_GO; T1 not spent.**
+- **DEV_RULES R4 (04:48)** and `work/t1u_region2/ADDENDUM_R4.md`, committed before any union confirmation simulation: unmatched candidate cells get retrains 4–6, as in the test protocols.
+- **Code changes after the union protocol commit, dev only:**
+  - `chain_union_dev.py`: the R4 step;
+  - `cls.py` / `union.py`: DEV8 retrains above 3 are trained here.
+- `union/results/train/` now holds copies of cls_table's A/B train records for Region1_s0/Region5_s0, so the union arm re-uses the same A_k as the reference arm A (paired by retrain).
+- All 12 F1-label X models for Region1_s0/Region5_s0 were trained (labels.py + PolicyPeakBaleen4; every log shows `[PB4] call`).

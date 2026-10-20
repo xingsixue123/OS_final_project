@@ -1,0 +1,14 @@
+{
+ "FINALIST": null,
+ "CONTROL": null,
+ "rule": [
+  {
+   "cfg": "CB-pt",
+   "eligible": false
+  }
+ ],
+ "confirmed": [
+  "CB:pt"
+ ],
+ "ts": "2026-10-20 04:42:38"
+}

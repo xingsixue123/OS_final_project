@@ -362,3 +362,4 @@
 {"region": "Region1", "kind": "baleen", "emu_wr": 44.68413884678595, "sim_wr": 36.137294045996256, "key": "CB-pt_baleen_Region1_s0_r2"}
 {"region": "Region7", "kind": "baleen", "emu_wr": 62.860507347022704, "sim_wr": 34.231155358487406, "key": "CB-pt_baleen_Region7_s0.3_r3"}
 {"region": "Region7", "kind": "baleen", "emu_wr": 64.33336747451602, "sim_wr": 36.34526897013302, "key": "CB-pt_baleen_Region7_s0.3_r3"}
+{"region": "Region7", "kind": "baleen", "emu_wr": 63.878039940072256, "sim_wr": 35.60089517275998, "key": "CB-pt_baleen_Region7_s0.3_r3"}
