@@ -413,3 +413,21 @@ While checking the first T1 minutes for crashes (trainings and sims run normally
 - The incident left **8** `__FAILED_` rows, not 6: A and A+α retrain 1 on Region4 s0.2, s0.3, s0.4 and s0.6.
 - The last two (s0.6, 07:07:07 / 07:07:12) were written by the old driver just before it was stopped at ≈07:07:15. The relaunched chain started at 07:07:25 and has produced no failure.
 - By 07:16 its sims run normally, and the emulator feature caches exist for all 5 Region4 instances.
+
+## 2026-10-20 10:01 T2 result: FAILED (test budget exhausted)
+`work/t2u_region4/results_test/evaluation.json` (`eval_test.py`, identical to `validate.py`): **good_result = false.**
+- Every cell has 3/3 matched retrains; no extra seed was needed. The 8 `__FAILED_` incident rows are kept.
+- **Means (n = 5):** Y = XA-F1PT 43.17; A 50.72; B 56.71; **A+α 42.87 (best α)**; B+α 43.87; control XA-F1CPSAT 44.37; RejectX 65.84 and CoinFlip 68.84 (all static rows matched).
+
+| Y vs | wins (need 4) | mean(R − Y) | SE | 2.5 SE | worst | rule |
+|---|---|---|---|---|---|---|
+| A | 4/5 | +7.547 | 1.028 | 2.569 | −0.078 | ok |
+| B | 5/5 | +13.541 | 1.691 | 4.227 | +1.121 | ok |
+| **A+α** | **1/5** | **−0.300** | 1.117 | 2.791 | −0.909 | **fails** |
+| control (report only) | 2/5 | +1.196 | 1.047 | | −0.722 | |
+
+**Reading:**
+- Region4 peaks are large (A 50.7) and the load-adaptive threshold removes most of the excess (A+α 42.9). Y is as good as A+α but not better: its gain over Baleen is the α mechanism's.
+- Region4 peak windows have a big-offset share ≈ 0.03 (no scan peaks), so the union's second model has nothing to add.
+- F1 objective PT = CP-SAT on all 30 Region4 solves.
+- Race audit: 15/15 A trainings used meta+block+chunk.

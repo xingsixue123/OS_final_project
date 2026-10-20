@@ -1,0 +1,3 @@
+threshold,wr,peak,result_file,emu_wr
+1.568344,35.869257909634406,50.754370629255796,/home/sxing/project/OS_final_project/changes/3_autoresearch/work/union_t2/work/runs/test/Ba-1.0_baleen_Region4_s0.4_r3/converge/th_1.568344/ml-ap-1.56834_6_lru_366.475GB/full_0.4_0.1_cache_perf.txt.lzma,36.13944031674707
+1.582791,34.90184051108407,50.754370629255796,/home/sxing/project/OS_final_project/changes/3_autoresearch/work/union_t2/work/runs/test/Ba-1.0_baleen_Region4_s0.4_r3/converge/th_1.582791/ml-ap-1.58279_6_lru_366.475GB/full_0.4_0.1_cache_perf.txt.lzma,35.4119642498447
