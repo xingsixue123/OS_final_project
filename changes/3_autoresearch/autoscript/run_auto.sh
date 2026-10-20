@@ -17,8 +17,8 @@ RUN_DIR="$RUNS_DIR/$RUN_ID"
 DEADLINE_HOURS="${DEADLINE_HOURS:-24}"
 ROUND_HOURS="${ROUND_HOURS:-6}"
 SLEEP_SECONDS="${SLEEP_SECONDS:-60}"
-CLAUDE_MODEL="${CLAUDE_MODEL:-claude-opus-5-5[1m]}"
-CLAUDE_EFFORT="${CLAUDE_EFFORT:-xhigh}"
+PB_MODEL="${PB_MODEL:-claude-opus-5-5[1m]}"
+PB_EFFORT="${PB_EFFORT:-xhigh}"
 PUSH_URL="${PUSH_URL:-git@github.com:xingsixue123/OS_final_project.git}"
 BRANCH="${BRANCH:-phase2-deployable-peak}"
 VALIDATORS=(red_team integrity_stats)
@@ -35,7 +35,7 @@ remaining() { echo $(( $(cat "$RUN_DIR/deadline.epoch") - $(date +%s) )); }
 
 claude_run() {  # claude_run <prompt file> <events file> <stderr file> <timeout s> [extra args...]
   local prompt="$1" ev="$2" er="$3" tmo="$4"; shift 4
-  ( cd "$REPO" && timeout --signal=TERM "$tmo" claude -p --model "$CLAUDE_MODEL" --effort "$CLAUDE_EFFORT" \
+  ( cd "$REPO" && timeout --signal=TERM "$tmo" claude -p --model "$PB_MODEL" --effort "$PB_EFFORT" \
       --dangerously-skip-permissions --output-format stream-json --verbose "$@" < "$prompt" ) > "$ev" 2> "$er"
 }
 
@@ -153,7 +153,7 @@ case "${1:-}" in
   --detach)
     preflight
     setsid nohup env RUN_ID="$RUN_ID" DEADLINE_HOURS="$DEADLINE_HOURS" ROUND_HOURS="$ROUND_HOURS" \
-      CLAUDE_MODEL="$CLAUDE_MODEL" CLAUDE_EFFORT="$CLAUDE_EFFORT" \
+      PB_MODEL="$PB_MODEL" PB_EFFORT="$PB_EFFORT" \
       "$AUTOSCRIPT_DIR/run_auto.sh" --foreground > "$RUN_DIR/nohup.out" 2>&1 < /dev/null &
     echo "$!" > "$RUN_DIR/launcher.pid"; echo "$RUN_ID" > "$CHANGE_ROOT/output/latest_run_id"
     echo "detached: run $RUN_ID pid $(cat "$RUN_DIR/launcher.pid")" ;;
