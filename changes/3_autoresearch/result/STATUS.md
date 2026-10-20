@@ -1,19 +1,12 @@
 # STATUS (3_autoresearch, run 20261020_004634)
 
-**Updated:** 2026-10-20 07:17, round 2.
-- **T1: SPENT and FAILED (unevaluable as pre-registered).** Report: `work/t1u_region2/RESULTS_test.md`. Fail-closed decision `539f39e` (LAB_NOTEBOOK 07:05).
-- **T2: SPENT, test running.**
-  - TEST_GO 07:05:04 (commit `1cda6af`, POOL=T2): Y = XA-F1PT, control XA-F1CPSAT, arms A, B, Aa-1.0, Ba-1.0, Region4 s0.2–0.6. **Locked:** nothing may change, because T1 outcomes have been seen.
-  - Only the chain's T1 condition changed (`work/t2u_region4/ADDENDUM_T1_UNEVALUABLE.md`, `3fdba1b`).
-  - Incident: a missing cache dir gave 8 pre-simulation `__FAILED_` rows; fixed and relaunched at 07:07 (LAB_NOTEBOOK).
-- **When T2 finishes** (`work/t2u_region4/CHAIN_DONE`):
-  - read `results_test/evaluation.json`;
-  - if `good_result` is true: `cd work/union_t2 && python3 src/write_claim.py --test-dir ../t2u_region4`, then `python3 code/validate.py`;
-  - otherwise: write `work/t2u_region4/RESULTS_test.md`, `result/FINAL_REPORT.md` and `result/STOP_EXHAUSTED` (budget exhausted);
-  - also audit `work/union_t2/logs/test/A_baleen_*/train.log` (meta+block+chunk) and report per-cell n_sims and unmatched counts.
-- **Optional, after T2** (report only, validator N4): dev control confirmations `work/union/queue_dev2_controls.txt` and `work/cls_table/queue_report.txt`.
+**Updated:** 2026-10-20 10:05, round 2.
+- **FINAL: NEGATIVE. The test budget is exhausted (2 of 2); no claim.** See `result/FINAL_REPORT.md`.
+  - **T1** (Region2): spent, FAILED, unevaluable (`work/t1u_region2/RESULTS_test.md`).
+  - **T2** (Region4): spent, FAILED. Y = XA-F1PT 43.17 vs A+α 42.87 (best α), 1/5 wins (`work/t2u_region4/RESULTS_test.md`).
+- **Running (report only):** the dev control confirmation `work/union/queue_dev2_controls.txt` (XA/XG:F1CPSAT; log `work/union/logs/controls_confirm.out`). Its numbers go into FINAL_REPORT §4. Then `result/STOP_EXHAUSTED` is written.
 
-- **Test spends:** 2 of 2 used (T1 failed / unevaluable; T2 running). Two conditional T1 protocols were committed; only the union one wrote a TEST_GO.
+- **Test spends:** 2 of 2 used (T1 failed / unevaluable; T2 failed). Two conditional T1 protocols were committed; only the union one wrote a TEST_GO.
   - `work/t1_region2/PROTOCOL.md` (`96506745`, cls_table family): **void.** No finalist; CHAIN_DONE 04:42 without TEST_GO.
   - `work/t1u_region2/PROTOCOL.md` (`76cf5c8d`, union family): Y is the finalist of `chain_union_dev.py` (DEV_RULES R3).
 - **Families:**
@@ -35,7 +28,7 @@
 | union chain_test_t1u | `work/union/logs/chain_test_t1u.out` | finalist? → G1_v5? → TEST_GO (`work/t1u_region2/`) → static + test + `eval_test.py` |
 | G1_v5 | `work/union/logs/g1v5.out` | `work/union/results/g1v5_summary.json` |
 | X pretrain | `work/union/logs/pretrain_x.out` | F1-label models for Region5_s0/Region1_s0 (done) |
-| union chain_test_t2u | `work/union_t2/logs/chain_test_t2u.out` | **T2 running** (TEST_GO 07:05:04); driver log `work/union_t2/logs/test_t2u.out`, static `logs/prep_static_t2u.out` → `work/t2u_region4/` |
+| union chain_test_t2u | `work/union_t2/logs/chain_test_t2u.out` | **T2 done** (TEST_GO 07:05:04, CHAIN_DONE 10:00:33); driver log `work/union_t2/logs/test_t2u.out`, static `logs/prep_static_t2u.out` → `work/t2u_region4/` |
 | T1 test (inside chain_test_t1u) | `work/union/logs/test_t1u.out`, `logs/prep_static_t1u.out` | 108 evaluations + static replays → `work/t1u_region2/trials_test.csv`, `results_test/static_baselines.csv` |
 | T1 supplementary RejectX (non-protocol) | `work/union/logs/supp_rejectx_t1.out` | → `work/t1u_region2/results_test/supp_rejectx.csv` (report only) |
 
