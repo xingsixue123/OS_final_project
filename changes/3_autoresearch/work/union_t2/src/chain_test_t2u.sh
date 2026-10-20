@@ -29,7 +29,8 @@ if [ ! -f "$T1/TEST_GO" ]; then echo "T1 not spent; T2 not spent. $(date +%F' '%
 GOOD=$(python3 -c "import json;print(json.load(open('$T1/results_test/evaluation.json')).get('good_result'))")
 log "T1 good_result=$GOOD"
 if [ "$GOOD" = "True" ]; then echo "T1 passed; T2 not needed. $(date +%F' '%T)" > "$AR_TEST_DIR/CHAIN_DONE"; exit 0; fi
-if [ "$GOOD" != "False" ]; then log "T1 evaluation incomplete ($GOOD) -> stop for inspection"; exit 1; fi
+# ADDENDUM_T1_UNEVALUABLE.md (2026-10-20): a missing/None good_result (T1 TEST_GO + CHAIN_DONE present) = T1 not passed
+if [ "$GOOD" != "False" ]; then log "T1 evaluation has no good_result ($GOOD): T1 closed as spent and failed (unevaluable) -> T2 proceeds as pre-registered"; fi
 
 # 3. G1_v5, protocol committed and unchanged -> TEST_GO
 python3 -c "import json,sys;v=json.load(open('$U/results/g1v5_summary.json'))['verdict'];sys.exit(0 if v['G1_v5_pass'] and v['v5_paths_pass'] else 1)" \
