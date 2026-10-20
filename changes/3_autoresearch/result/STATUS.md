@@ -1,6 +1,6 @@
 # STATUS (3_autoresearch, run 20261020_004634)
 
-**Updated:** 2026-10-20 06:28, end of round 1.
+**Updated:** 2026-10-20 06:32, end of round 1.
 - **T1 SPENT (test running).** The union finalist XA:F1PT (control XA:F1CPSAT) was chosen mechanically at 06:26:49; TEST_GO was written at 06:26:50 (commit `76cf5c8d`, POOL=T1). The test runs detached in `chain_test_t1u` (`work/union/logs/test_t1u.out`), then `eval_test.py` writes `work/t1u_region2/results_test/evaluation.json` and `CHAIN_DONE`.
 - **Next round:**
   - (1) If `work/t1u_region2/CHAIN_DONE` exists, read `evaluation.json`.
@@ -32,6 +32,8 @@
 | G1_v5 | `work/union/logs/g1v5.out` | `work/union/results/g1v5_summary.json` |
 | X pretrain | `work/union/logs/pretrain_x.out` | F1-label models for Region5_s0/Region1_s0 (done) |
 | union chain_test_t2u | `work/union_t2/logs/chain_test_t2u.out` | dormant; spends T2 only if the union finalist fails T1 |
+| T1 test (inside chain_test_t1u) | `work/union/logs/test_t1u.out`, `logs/prep_static_t1u.out` | 108 evaluations + static replays → `work/t1u_region2/trials_test.csv`, `results_test/static_baselines.csv` |
+| T1 supplementary RejectX (non-protocol) | `work/union/logs/supp_rejectx_t1.out` | → `work/t1u_region2/results_test/supp_rejectx.csv` (report only) |
 
 All sims share one 14-slot pool (`work/cls_table/.sim_slots.d`); every train holds `2_deployable_peak/.train.lock`.
 
@@ -45,6 +47,7 @@ setsid nohup src/sbx.sh src/union.py --mode dev --arms XA:F1PT XG:F1PT XA:F1CPSA
 setsid nohup src/sbx.sh src/chain_union_dev.py >> logs/chain_union_dev.out 2>&1 < /dev/null &   # if no results/dev_finalist.json
 setsid nohup bash src/chain_test_t1u.sh >> logs/chain_test_t1u.out 2>&1 < /dev/null &
 setsid nohup src/sbx.sh src/g1v5.py >> logs/g1v5.out 2>&1 < /dev/null &                         # if no results/g1v5_summary.json
+AR_TEST_DIR=$(cd ../t1u_region2 && pwd) setsid nohup src/sbx.sh src/supp_rejectx.py >> logs/supp_rejectx_t1.out 2>&1 < /dev/null &   # report only
 cd ../union_t2 && source env.sh && setsid nohup bash src/chain_test_t2u.sh >> logs/chain_test_t2u.out 2>&1 < /dev/null &
 # later, report only: cd ../cls_table && setsid nohup src/sbx.sh src/cls.py --mode dev --queue queue_report.txt -j 14 >> logs/queue_report.out 2>&1 < /dev/null &
 # running?  ps -eo pid,etimes,args | grep 3_autoresearch/work | grep -v grep

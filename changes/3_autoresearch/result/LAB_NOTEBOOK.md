@@ -341,7 +341,7 @@ Both qualify. The tie-break (larger min over R of mean(R − X)) picks XA:F1PT; 
 
 **Test spends: 1 of 2.** The second spend (T2, same Y) is pre-registered and runs only if this one fails.
 
-## 2026-10-20 06:36 T1 pipeline check: the RejectX static replays cannot be matched (pipeline diagnosis, no outcome used)
+## 2026-10-20 06:30 T1 pipeline check: the RejectX static replays cannot be matched (pipeline diagnosis, no outcome used)
 While checking the first T1 minutes for crashes (trainings and sims run normally), the RejectX replay for Region2 s0.2 ended unmatched after 15 sims (WR 2.0, P100 240.6).
 
 **Diagnosis** (frozen code, `admission_policies.construct('rejectx')`):
