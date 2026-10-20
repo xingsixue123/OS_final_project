@@ -25,6 +25,7 @@ Baleen (FAST '24) chooses which blocks to admit to a flash cache. It optimises *
 | 2 · WP8 (Track C) | Deployment-aware Ising objectives on dev | **done, negative** (`wp8_trackC/RESULTS_dev.md`). Stage 1: cheap proxy NOT valid. Stage 2 (64 full-sim evaluations): no config passed the pre-registered screen gate (S1: STU10R1 −0.26, ANC3 −0.84, ANC10 −1.80). Mechanism: Baleen anchoring fixes Region7 (first-access admission back, best Region7 P100 36.46) but gives back Region6's scan gain. No Track C arm in Stage 3. |
 | 2 · WP9 (Region5) | Fresh deployed test: H4 = load-adaptive threshold on Baleen models (A+α) vs A, B; X1 as Ising record | **done: H4 YES** (A+α 35.02 vs A 36.17, 5/6; B+α 34.48, 6/6); X1 fails again (s0.5 51.46). `wp9_region5/RESULTS_test.md` |
 | 2 · WP10 (Track E) | Ising-optimized admission-threshold table on Baleen's models | **done: H5 NO** on Region1 (TB:pt 24.45 vs A 24.14; 1/6 vs A). Region1 is low-load: the α arms do not help there either (A+α 24.62). PT tables = classical tables. `wp10_schedule/RESULTS_test.md` |
+| 3 · Auto-research | Unattended 24 h Codex worker + validator loop searching for an Ising/QUBO method that beats deployed Baleen; contract `changes/3_autoresearch/documents/GOOD_RESULT.md` (2 fresh test pools max, Bonferroni 2.5 SE, tail guard, must beat the best α arm) | **running** from 2026-10-19 (`changes/3_autoresearch/README.md`) |
 | 2 · WP4/6/7 | Mechanism analysis, mid-term report, paper | to do |
 
 ## 3. Hypothesis ledger

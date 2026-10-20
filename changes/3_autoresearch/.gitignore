@@ -1,0 +1,15 @@
+# only small text records go to git
+output/
+work/**/work/
+work/**/work_frozen/
+work/**/.home/
+work/**/.cache/
+work/**/logs/
+work/**/systmp/
+work/**/*.npz
+work/**/*.lzma
+work/**/*.txt.gz
+**/__pycache__/
+*.pyc
+*.lock
+autoscript/.leak_marker
