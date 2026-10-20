@@ -1,6 +1,6 @@
 # Addendum to PROTOCOL.md (commit `76cf5c8d`): dev extra seeds (DEV_RULES R4)
 
-**Written:** 2026-10-20 ≈04:50.
+**Written:** 2026-10-20 ≈04:48 (committed 04:48:58 in `4e25e7e4`).
 - After the protocol commit; before any union confirmation simulation; while the retrain-1 screen was still running.
 - Committed before the union finalist exists.
 - PROTOCOL.md itself is unchanged.

@@ -235,7 +235,7 @@ These are the largest dev effects of the whole project, as hypothesised. Still r
 - The chain refuses to run if `work/t1_region2/TEST_GO` exists, so T1 can be spent only once.
 - All union T1 prerequisites (day-1 dumps, 72 label sets) were built before the commit; none was read.
 
-## 2026-10-20 04:50 cls_table: no finalist (mechanical); R4 extra seeds for the union confirmation
+## 2026-10-20 04:48 cls_table: no finalist (mechanical); R4 extra seeds for the union confirmation
 - **`work/cls_table/results/dev_finalist.json`:** FINALIST null.
   - CB:pt is *ineligible*: Region1_s0 r2 ended unmatched (WR 36.14 after 7 sims), so that cell has 2 matched retrains.
   - It would have failed anyway: 6/10 wins vs A+α (need 7).
@@ -246,3 +246,21 @@ These are the largest dev effects of the whole project, as hypothesised. Still r
   - `cls.py` / `union.py`: DEV8 retrains above 3 are trained here.
 - `union/results/train/` now holds copies of cls_table's A/B train records for Region1_s0/Region5_s0, so the union arm re-uses the same A_k as the reference arm A (paired by retrain).
 - All 12 F1-label X models for Region1_s0/Region5_s0 were trained (labels.py + PolicyPeakBaleen4; every log shows `[PB4] call`).
+
+## 2026-10-20 04:56 G1_v5 PASS; union screen: both candidates pass the R0 gate
+- **`work/union/G1_v5.md`: PASS on every check.**
+  - RejectX / CoinFlip frozen vs v5, pinned training (models byte-identical, equal to CP1's), the pipeline, the same models: all bit-identical.
+  - α and class-table paths: v5 == v4.
+  - Union with a second model that can never admit (κ = 1e9) == A+α on v4, bit-identical (P100 39.5715164464613).
+  - Union of A with itself (κ = 1) == A+α on v4, bit-identical.
+- **R0 screen** (`work/union/results/dev_screen.json`, DEV8 r1, d = min(A+α, B+α) − X):
+  - XA:F1PT: mean +1.460, worst −0.276, 6/8 wins, mean P100 36.26 (better-α mean 37.72);
+  - XG:F1PT: mean +1.072, worst −0.228, 7/8 wins, mean P100 36.65.
+  - Both are confirmed: DEV8 r2–3, Region5_s0 / Region1_s0 r1–3, then R4 extra seeds, then the finalist rule. The finalist goes to `chain_test_t1u` (T1).
+
+## 2026-10-20 04:57 Second-spend pool rule (written before any T1 test run or outcome)
+If a second test spend happens, it goes to **T2** (Region4 0.2–0.6):
+- whatever the T1 outcome;
+- with the authors' Fig 9 Baleen rows and the authors' RejectX/CoinFlip rows of experiment `20230412_XX_rerun2` (the only static rows Region4 has).
+
+T3 is used only if T2's prerequisites cannot be built. The configuration for a second spend is chosen on dev only, never from T1 outcomes (contract §3).

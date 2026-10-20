@@ -1,0 +1,367 @@
+{
+ "verdict": {
+  "rejectx_identical": true,
+  "coinflip_identical": true,
+  "static_equal_phase1_published": true,
+  "pinned_dumps_identical": true,
+  "pinned_models_identical": true,
+  "pinned_models_equal_CP1": true,
+  "pinned_pipeline_identical": true,
+  "same_models_identical": true,
+  "alpha_v5_equals_v4": true,
+  "classtable_v5_equals_v4": true,
+  "union_never_equals_alpha": true,
+  "union_self_equals_alpha": true,
+  "p100": {
+   "rejectx": 42.455387205313436,
+   "coinflip": 48.96095571100894,
+   "pinned": 40.130989380934864,
+   "same_model": 39.97936091680761,
+   "alpha_v4": 39.5715164464613,
+   "alpha_v5": 39.5715164464613,
+   "classtable_v5": 39.701016575964715,
+   "union_never": 39.5715164464613,
+   "union_self": 39.5715164464613
+  },
+  "G1_v5_pass": true,
+  "v5_paths_pass": true
+ },
+ "summary": {
+  "rejectx": {
+   "a": "work_frozen/runs/g1v5/static_rejectx_frozen/sim/rejectx-ap-1_0.092777_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma",
+   "b": "work/runs/g1v5/static_rejectx_overlay/sim/rejectx-ap-1_0.092777_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma",
+   "p100_a": 42.455387205313436,
+   "p100_b": 42.455387205313436,
+   "wr_a": 36.000468505550955,
+   "wr_b": 36.000468505550955,
+   "n_result_keys": 425,
+   "result_keys_differing": [],
+   "counters_differing": [],
+   "n_batches": 399,
+   "batches_differing": [],
+   "n_freq": 13,
+   "freq_differing": [],
+   "options_only_in_b": [
+    "ap_load_adapt_alpha",
+    "ap_load_adapt_ref",
+    "ap_load_adapt_table",
+    "ap_load_adapt_window",
+    "ap_main_feat_subset",
+    "ap_union_feat_subset",
+    "ap_union_gate_load",
+    "ap_union_kappa",
+    "ap_union_model",
+    "pf_feat_subset"
+   ],
+   "options_only_in_a": [],
+   "options_differing": [
+    "ep_analysis",
+    "job_id",
+    "output_dir"
+   ],
+   "metrics_bit_identical": true,
+   "all_results_and_series_identical": true,
+   "phase1_published_p100": 42.455387205313436,
+   "phase1_published_wr": 36.000468505550955,
+   "v5_equals_phase1_published": true
+  },
+  "coinflip": {
+   "a": "work_frozen/runs/g1v5/static_coinflip_frozen/sim/coinflip-ap-0.052391_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma",
+   "b": "work/runs/g1v5/static_coinflip_overlay/sim/coinflip-ap-0.052391_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma",
+   "p100_a": 48.96095571100894,
+   "p100_b": 48.96095571100894,
+   "wr_a": 35.68631880129508,
+   "wr_b": 35.68631880129508,
+   "n_result_keys": 425,
+   "result_keys_differing": [],
+   "counters_differing": [],
+   "n_batches": 399,
+   "batches_differing": [],
+   "n_freq": 13,
+   "freq_differing": [],
+   "options_only_in_b": [
+    "ap_load_adapt_alpha",
+    "ap_load_adapt_ref",
+    "ap_load_adapt_table",
+    "ap_load_adapt_window",
+    "ap_main_feat_subset",
+    "ap_union_feat_subset",
+    "ap_union_gate_load",
+    "ap_union_kappa",
+    "ap_union_model",
+    "pf_feat_subset"
+   ],
+   "options_only_in_a": [],
+   "options_differing": [
+    "ep_analysis",
+    "job_id",
+    "output_dir"
+   ],
+   "metrics_bit_identical": true,
+   "all_results_and_series_identical": true,
+   "phase1_published_p100": 48.96095571100894,
+   "phase1_published_wr": 35.68631880129508,
+   "v5_equals_phase1_published": true
+  },
+  "pinned_admit_dumps": {
+   "n_rows_a": 31105,
+   "n_rows_b": 31105,
+   "same_row_order": true,
+   "feat_cols_equal": true,
+   "df_X_identical": true,
+   "df_X_differing": [],
+   "df_Y_identical": true,
+   "df_Y_differing": [],
+   "split_identical": true
+  },
+  "pinned_prefetch_dumps": {
+   "PrefetcherConfTrainer.pkl": {
+    "same_row_order": true,
+    "X_identical": true,
+    "Y_identical": true
+   },
+   "PrefetcherTrainer.pkl": {
+    "same_row_order": true,
+    "X_identical": true,
+    "Y_identical": true
+   }
+  },
+  "pinned_models": {
+   "model_prefetch_offset_start": {
+    "identical": true
+   },
+   "model_prefetch_size": {
+    "identical": true
+   },
+   "model_prefetch_offset_end": {
+    "identical": true
+   },
+   "model_prefetch_pred_net_pf_st_binary": {
+    "identical": true
+   },
+   "model_admit_threshold_binary": {
+    "identical": true
+   }
+  },
+  "pinned_models_vs_CP1_frozen1": {
+   "model_prefetch_offset_start": {
+    "identical": true
+   },
+   "model_prefetch_size": {
+    "identical": true
+   },
+   "model_prefetch_offset_end": {
+    "identical": true
+   },
+   "model_prefetch_pred_net_pf_st_binary": {
+    "identical": true
+   },
+   "model_admit_threshold_binary": {
+    "identical": true
+   }
+  },
+  "pinned_pipeline": {
+   "a": "work_frozen/runs/g1v5/det_frozen_sim/sim/ml-ap-0.62094_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma",
+   "b": "work/runs/g1v5/det_overlay_sim/sim/ml-ap-0.62094_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma",
+   "p100_a": 40.130989380934864,
+   "p100_b": 40.130989380934864,
+   "wr_a": 35.176819014632436,
+   "wr_b": 35.176819014632436,
+   "n_result_keys": 425,
+   "result_keys_differing": [],
+   "counters_differing": [],
+   "n_batches": 401,
+   "batches_differing": [],
+   "n_freq": 13,
+   "freq_differing": [],
+   "options_only_in_b": [
+    "ap_load_adapt_alpha",
+    "ap_load_adapt_ref",
+    "ap_load_adapt_table",
+    "ap_load_adapt_window",
+    "ap_main_feat_subset",
+    "ap_union_feat_subset",
+    "ap_union_gate_load",
+    "ap_union_kappa",
+    "ap_union_model",
+    "pf_feat_subset"
+   ],
+   "options_only_in_a": [],
+   "options_differing": [
+    "ep_analysis",
+    "job_id",
+    "learned_ap_model_path",
+    "output_dir",
+    "prefetcher_model_path"
+   ],
+   "metrics_bit_identical": true,
+   "all_results_and_series_identical": true
+  },
+  "same_models_simF_vs_simV4": {
+   "a": "work_frozen/runs/g1v5/samemodel_frozen/sim/ml-ap-0.618762_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma",
+   "b": "work/runs/g1v5/samemodel_overlay/sim/ml-ap-0.618762_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma",
+   "p100_a": 39.97936091680761,
+   "p100_b": 39.97936091680761,
+   "wr_a": 35.37175078851158,
+   "wr_b": 35.37175078851158,
+   "n_result_keys": 425,
+   "result_keys_differing": [],
+   "counters_differing": [],
+   "n_batches": 402,
+   "batches_differing": [],
+   "n_freq": 13,
+   "freq_differing": [],
+   "options_only_in_b": [
+    "ap_load_adapt_alpha",
+    "ap_load_adapt_ref",
+    "ap_load_adapt_table",
+    "ap_load_adapt_window",
+    "ap_main_feat_subset",
+    "ap_union_feat_subset",
+    "ap_union_gate_load",
+    "ap_union_kappa",
+    "ap_union_model",
+    "pf_feat_subset"
+   ],
+   "options_only_in_a": [],
+   "options_differing": [
+    "ep_analysis",
+    "job_id",
+    "learned_ap_model_path",
+    "output_dir",
+    "prefetcher_model_path"
+   ],
+   "metrics_bit_identical": true,
+   "all_results_and_series_identical": true
+  },
+  "alpha_v4_vs_v5": {
+   "a": "work_v4/runs/g1v5/alpha_v3/sim/ml-ap-0.892228_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma",
+   "b": "work/runs/g1v5/alpha_overlay/sim/ml-ap-0.892228_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma",
+   "p100_a": 39.5715164464613,
+   "p100_b": 39.5715164464613,
+   "wr_a": 35.66582168344084,
+   "wr_b": 35.66582168344084,
+   "n_result_keys": 425,
+   "result_keys_differing": [],
+   "counters_differing": [],
+   "n_batches": 402,
+   "batches_differing": [],
+   "n_freq": 13,
+   "freq_differing": [],
+   "options_only_in_b": [
+    "ap_main_feat_subset",
+    "ap_union_feat_subset",
+    "ap_union_gate_load",
+    "ap_union_kappa",
+    "ap_union_model"
+   ],
+   "options_only_in_a": [],
+   "options_differing": [
+    "ep_analysis",
+    "job_id",
+    "learned_ap_model_path",
+    "output_dir",
+    "prefetcher_model_path"
+   ],
+   "metrics_bit_identical": true,
+   "all_results_and_series_identical": true
+  },
+  "classtable_v4_vs_v5": {
+   "a": "work_v4/runs/g1v5/classtable_v3/sim/ml-ap-0.892228_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma",
+   "b": "work/runs/g1v5/classtable_overlay/sim/ml-ap-0.892228_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma",
+   "p100_a": 39.701016575964715,
+   "p100_b": 39.701016575964715,
+   "wr_a": 17.3849024086205,
+   "wr_b": 17.3849024086205,
+   "n_result_keys": 425,
+   "result_keys_differing": [],
+   "counters_differing": [],
+   "n_batches": 402,
+   "batches_differing": [],
+   "n_freq": 13,
+   "freq_differing": [],
+   "options_only_in_b": [
+    "ap_main_feat_subset",
+    "ap_union_feat_subset",
+    "ap_union_gate_load",
+    "ap_union_kappa",
+    "ap_union_model"
+   ],
+   "options_only_in_a": [],
+   "options_differing": [
+    "ep_analysis",
+    "job_id",
+    "learned_ap_model_path",
+    "output_dir",
+    "prefetcher_model_path"
+   ],
+   "metrics_bit_identical": true,
+   "all_results_and_series_identical": true
+  },
+  "union_never_v5_vs_alpha_v4": {
+   "a": "work_v4/runs/g1v5/alpha_v3/sim/ml-ap-0.892228_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma",
+   "b": "work/runs/g1v5/union_never/sim/ml-ap-0.892228_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma",
+   "p100_a": 39.5715164464613,
+   "p100_b": 39.5715164464613,
+   "wr_a": 35.66582168344084,
+   "wr_b": 35.66582168344084,
+   "n_result_keys": 425,
+   "result_keys_differing": [],
+   "counters_differing": [],
+   "n_batches": 402,
+   "batches_differing": [],
+   "n_freq": 13,
+   "freq_differing": [],
+   "options_only_in_b": [
+    "ap_main_feat_subset",
+    "ap_union_feat_subset",
+    "ap_union_gate_load",
+    "ap_union_kappa",
+    "ap_union_model"
+   ],
+   "options_only_in_a": [],
+   "options_differing": [
+    "ap_feat_subset",
+    "ep_analysis",
+    "job_id",
+    "learned_ap_model_path",
+    "output_dir",
+    "prefetcher_model_path"
+   ],
+   "metrics_bit_identical": true,
+   "all_results_and_series_identical": true
+  },
+  "union_self_v5_vs_alpha_v4": {
+   "a": "work_v4/runs/g1v5/alpha_v3/sim/ml-ap-0.892228_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma",
+   "b": "work/runs/g1v5/union_self/sim/ml-ap-0.892228_6_lru_366.475GB/full_0_0.1_cache_perf.txt.lzma",
+   "p100_a": 39.5715164464613,
+   "p100_b": 39.5715164464613,
+   "wr_a": 35.66582168344084,
+   "wr_b": 35.66582168344084,
+   "n_result_keys": 425,
+   "result_keys_differing": [],
+   "counters_differing": [],
+   "n_batches": 402,
+   "batches_differing": [],
+   "n_freq": 13,
+   "freq_differing": [],
+   "options_only_in_b": [
+    "ap_main_feat_subset",
+    "ap_union_feat_subset",
+    "ap_union_gate_load",
+    "ap_union_kappa",
+    "ap_union_model"
+   ],
+   "options_only_in_a": [],
+   "options_differing": [
+    "ep_analysis",
+    "job_id",
+    "learned_ap_model_path",
+    "output_dir",
+    "prefetcher_model_path"
+   ],
+   "metrics_bit_identical": true,
+   "all_results_and_series_identical": true
+  }
+ }
+}

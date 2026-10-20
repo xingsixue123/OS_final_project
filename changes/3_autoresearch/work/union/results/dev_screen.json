@@ -1,0 +1,28 @@
+{
+ "screen": [
+  {
+   "cand": "XA:F1PT",
+   "complete": true,
+   "mean_d": 1.4604437807637032,
+   "min_d": -0.27619140119996644,
+   "wins": 6,
+   "gate": true,
+   "mean_p100": 36.25881207911789
+  },
+  {
+   "cand": "XG:F1PT",
+   "complete": true,
+   "mean_d": 1.0724816271596591,
+   "min_d": -0.2276288526369754,
+   "wins": 7,
+   "gate": true,
+   "mean_p100": 36.646774232721924
+  }
+ ],
+ "confirmed": [
+  "XA:F1PT",
+  "XG:F1PT"
+ ],
+ "ref_min_alpha_mean": 37.719255859881585,
+ "ts": "2026-10-20 04:55:26"
+}
