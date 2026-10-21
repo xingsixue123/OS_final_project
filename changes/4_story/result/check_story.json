@@ -126,7 +126,7 @@
    "id": "F15",
    "prio": "P1",
    "evid": "DEV",
-   "refs": 4,
+   "refs": 5,
    "unsourced": []
   },
   {
@@ -406,7 +406,7 @@
    "id": "F52",
    "prio": "P0",
    "evid": "TEST-PREREG",
-   "refs": 8,
+   "refs": 10,
    "unsourced": []
   },
   {

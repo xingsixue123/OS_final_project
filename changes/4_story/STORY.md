@@ -524,7 +524,7 @@ Refs: [`changes/1_literature_review/explore/q3/src/q3solve.py#L282-L286`](../../
 - The best Region6 arm, R2, scored 42.38 ± 0.95, still above RejectX at 42.32.
 - Retention R = (ML-Baleen − ML-Peak)/(OPT-Baleen − OPT-Peak) was −0.04 (Region7) and +0.11 (Region6) for R2, and +0.01 for the best Ising arm C4.
 
-The only deployed arm more than 2 SE below Baleen online was the *classical* R2 on Region6 (−0.87, beyond 2 × SE = 0.85), and it was not below RejectX. No Ising arm came close.
+The only deployed arm more than 2 SE below Baleen online was the *classical* R2 on Region6 (−0.87, beyond 2 × SE = 0.85), and it was not below RejectX. The closest Ising arm was EIM C2 on Region6: 43.09 ± 0.16, i.e. 0.16 below Baleen online (43.25 ± 0.04), which is 1.72 SE of the difference (recomputed by the round-5 citation validator, `changes/4_story/result/validator_citation_round_5.md`), against 2.05 for the classical R2. In points, though, it was far smaller than R2's 0.87 gap.
 
 This is sample 0 only, i.e. the later dev instance. The run's operational deviations are listed in [F99](#F99).
 **Why this priority:** it is the first evidence of the deployment gap that motivated scope v2; dev-only, so not a test result.
@@ -1216,7 +1216,7 @@ Region5 samples 0.1–0.6 had never been run deployed; WP1 had simulated them of
 - vs B: 5/6, +1.35 (0.08 / 0.94).
 - It is below RejectX (39.35; low side 39.28) and CoinFlip (44.47). That is −3.2% vs Baleen.
 
-**Secondary arm B+α:** 34.48; 6/6 vs A (+1.70) and 6/6 vs B (+1.89); −4.7%.
+**Secondary arm B+α** (pre-declared secondary, "reported with the same rule, no claim", `changes/2_deployable_peak/wp9_region5/PROTOCOL_v2_H4.md#L15`, `changes/2_deployable_peak/wp9_region5/PROTOCOL_v2_H4.md#L78`): it meets the reported rule: 34.48; 6/6 vs A (+1.70) and 6/6 vs B (+1.89); −4.7%. No claim rests on it; it has the same protocol status as the X1 Ising record (F54).
 
 **Run.** 90 evaluations, all matched. Means and paired statistics were recomputed from `trials.csv` (Appendix D).
 
@@ -1236,7 +1236,7 @@ Refs: [`changes/2_deployable_peak/wp9_region5/RESULTS_test.md#L1-L19`](../../cha
 **The margin passes only at retrain level.**
 - The pre-registered rule uses the retrain-level SE (0.09).
 - The instance-level SE (0.75) is reported but not used, and the +1.16 improvement is less than twice it. The same holds vs B (+1.35 vs instance SE 0.94).
-- The secondary arm B+α passes 6/6, but its instance-level SEs are 1.19 (vs A) and 1.40 (vs B), so it too passes only at retrain level. On WP2 dev the threshold did nothing on B's models (B − B+α = +0.016 ± 0.386, 5/8), so before H4 the only support for B+α was the H3′ post-hoc result (B+α vs B 6/6, +0.79; [F47](#F47)), not dev ([F105](#F105)). B+α's own Region5 gain is more concentrated than A+α's: s0.5 gives 75% of its summed gain vs A (78% vs B), and the other five average +0.50 (post hoc).
+- The no-claim secondary arm B+α meets the reported rule 6/6 (no claim rests on it), but its instance-level SEs are 1.19 (vs A) and 1.40 (vs B), so it too meets it only at retrain level. On WP2 dev the threshold did nothing on B's models (B − B+α = +0.016 ± 0.386, 5/8), so before H4 the only support for B+α was the H3′ post-hoc result (B+α vs B 6/6, +0.79; [F47](#F47)), not dev ([F105](#F105)). B+α's own Region5 gain is more concentrated than A+α's: s0.5 gives 75% of its summed gain vs A (78% vs B), and the other five average +0.50 (post hoc).
 
 **RejectX could not be matched.** On 5 of 6 instances RejectX's write rate jumps across the ±1% band between probabilities 1e-6 apart.
 - The protocol therefore fixed, before the test, a two-sided rule: below both the authors' replays (39.35) and the closest replays under the band (39.28).
@@ -2099,7 +2099,7 @@ Status words (closed list; only these are used):
    - All deployed test pools except H5's Region1 and T1's Region2 were likewise offline-known ([F93](#F93)).
    - PLAN.md reserves the samples for one final use ([`changes/2_deployable_peak/PLAN.md#L28-L31`](../../changes/2_deployable_peak/PLAN.md#L28-L31)).
 2. **What a final confirmation should test** (recommendation, not a pre-registration):
-   - **The arm:** the only surviving claim, the load-adaptive threshold (A+α, and B+α) vs A and B, with α = −1 and ref = 20 frozen.
+   - **The arm:** the only surviving claim, the load-adaptive threshold A+α vs A and B (B+α was a no-claim secondary in H4: report it as a secondary again, or pre-register it), with α = −1 and ref = 20 frozen.
    - **Where:** on the reserve of the regions with peak pressure (Region5, Regions 6/7, Region4), committed before any run.
    - **The margin rule:** require the instance-level SE as well as the retrain-level one, and report the largest instance's share, because H4 passed only on the retrain-level SE and was concentrated ([F53](#F53)); the rule applies to B+α too (75% on one instance, [F105](#F105)).
    - **Load dependence:** state it explicitly as a hypothesis ([F69](#F69)).
