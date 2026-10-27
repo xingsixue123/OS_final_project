@@ -1,0 +1,24 @@
+<section id="algorithm" data-transition="fade" style="background:#FAFAF7;color:#3F4B60;font-family:'IBM Plex Sans', Arial, sans-serif;padding:96px 128px 160px;display:flex;flex-direction:column;gap:36px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;font-weight:700;color:#1F5FAF;letter-spacing:3px;text-transform:uppercase">Our method · Algorithm</p>
+<h2 style="font-size:56px;font-weight:700;line-height:1.15;color:#15213B">PeakBaleen vs Baleen, line by line</h2>
+</div>
+<div style="display:flex;flex-direction:row;gap:48px;align-items:start">
+<div style="width:760px;display:flex;flex-direction:column;gap:20px">
+<h3 style="font-size:34px;font-weight:700;color:#15213B">Algorithm 1 · Baleen</h3>
+<img src="/_blob/883b58f831468a87f2e7cc11a67784e0" alt="Algorithm 1, Baleen: sort episodes by disk time saved per byte, label the prefix that fits the write budget, train a GBM, then admit an access if its score exceeds theta, with theta tuned to the write rate" style="width:760px;height:256px;object-fit:contain;background:#FFFFFF">
+<div style="display:flex;flex-direction:column;gap:14px;padding:12px 0px 0px 0px">
+<div style="display:flex;flex-direction:row;align-items:center;gap:16px"><div style="width:36px;height:28px;background:#E6E9EE;border:1px solid #C9D2E3;border-radius:4px"></div><p style="font-size:26px"><b>Same</b> as Baleen</p></div>
+<div style="display:flex;flex-direction:row;align-items:center;gap:16px"><div style="width:36px;height:28px;background:#D6E4F7;border:1px solid #8DB7F0;border-radius:4px"></div><p style="font-size:26px"><b>New:</b> labels, causal load, adaptive bar</p></div>
+<div style="display:flex;flex-direction:row;align-items:center;gap:16px"><div style="width:36px;height:28px;background:#FCE1CC;border:1px solid #E7B48F;border-radius:4px"></div><p style="font-size:26px"><b>New core:</b> min–max QUBO, Ising solver</p></div>
+</div>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:20px">
+<h3 style="font-size:34px;font-weight:700;color:#1F5FAF">Algorithm 2 · PeakBaleen (ours)</h3>
+<img src="/_blob/0eb7e256d1c1550f5b4e7f41483a7e44" alt="Algorithm 2, PeakBaleen: LP warm start; min-max QUBO energy with a write-budget penalty solved by parallel tempering; its solution becomes the labels for a GBM with a load feature; online, the admission bar theta is scaled by clip of (load over 20) to the minus one, between 0.25 and 4" style="width:856px;height:427px;object-fit:contain;background:#FFFFFF">
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1200px;font-size:24px;color:#6B7588">PeakBaleen · Mid-term progress · Chiu, Fu, Xing</p>
+<p style="position:absolute;left:1592px;bottom:64px;width:200px;font-size:24px;color:#6B7588;text-align:right">5</p>
+<aside>Left is Baleen: it sorts episodes by disk time saved per byte, labels the prefix that fits the write budget, trains a GBM, and online admits when the score beats theta. Right is PeakBaleen. Orange is the Ising/QUBO core: the load left in each window, a smooth max over windows plus a quadratic write-budget penalty, solved by parallel tempering with 16 replicas from an LP warm start. Its solution becomes the labels. Blue is the rest of what is new: the GBM also sees a causal load signal, and online the bar is scaled by the load of the last ten minutes, lower when busy. Gray is unchanged from Baleen, including tuning theta to the same write rate. Sources: Baleen OPT score, changes/0_reproduce/baleen_code/BCacheSim/episodic_analysis/policies.py L410–L411; energy and penalty, changes/2_deployable_peak/wp2_deployed/src/q2lib/q2anneal.py L6, L12; solver settings, wp1_offline/RESULTS.md L27; load and bar, wp0_overlay/G3_REVIEW.md L9–L11; LaTeX source, changes/5_midterm/algorithm/alg.tex.</aside>
+</section>

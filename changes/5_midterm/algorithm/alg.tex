@@ -1,0 +1,69 @@
+\documentclass[11pt]{article}
+\usepackage[paperwidth=15.5cm,paperheight=14cm,margin=0.4cm]{geometry}
+\usepackage{amsmath}
+\usepackage{unicode-math}
+\setmainfont{texgyretermes}[Extension=.otf,UprightFont=*-regular,BoldFont=*-bold,ItalicFont=*-italic,BoldItalicFont=*-bolditalic]
+\setmathfont{texgyretermes-math.otf}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{calc,tikzmark}
+\pagestyle{empty}
+\definecolor{samec}{HTML}{E6E9EE}
+\definecolor{newc}{HTML}{D6E4F7}
+\definecolor{corec}{HTML}{FCE1CC}
+\newcommand{\mk}[1]{\tikzmark{#1}}
+% \band{color}{first-line mark}{last-line mark}
+\newcommand{\band}[3]{\fill[#1,rounded corners=2pt]
+  ($(current page.west |- {pic cs:#2})+(0.32cm,1.05em)$) rectangle ($(current page.east |- {pic cs:#3})+(-0.32cm,-0.38em)$);}
+\algrenewcommand\algorithmicrequire{\textbf{Require:}}
+\begin{document}
+
+\begin{algorithm}[H]
+\caption{Baleen (baseline)}
+\begin{tikzpicture}[remember picture,overlay]
+\band{samec}{a4}{a7}
+\end{tikzpicture}
+\begin{algorithmic}[1]
+\Require episodes $\mathcal{E}$ with size $s_e$ and disk time saved $d_e$; flash write budget $B$
+\State \mk{a1}sort $\mathcal{E}$ by $d_e/s_e$, descending \Comment{average-optimal OPT}
+\State \mk{a2}$y_e \gets 1$ on the longest prefix whose writes fit in $B$, else $0$
+\State \mk{a3}$f \gets \textsc{TrainGBM}(\phi, y)$
+\For{\mk{a4}each access $a$}
+\State \mk{a5}admit $a$ \textbf{iff} $f(\phi(a)) > \theta$
+\EndFor\mk{a6}
+\State \mk{a7}tune $\theta$ so the flash write rate $= B$
+\end{algorithmic}
+\end{algorithm}
+
+\clearpage
+
+\begin{algorithm}[H]
+\caption{PeakBaleen (ours)}
+\begin{tikzpicture}[remember picture,overlay]
+\band{newc}{b1}{b1}
+\band{corec}{b2}{b4}
+\band{newc}{b5}{b6}
+\band{samec}{b7}{b7}
+\band{newc}{b8}{b10}
+\band{samec}{b11}{b12}
+\end{tikzpicture}
+\begin{algorithmic}[1]
+\Require as Alg.~1, plus per-window disk time saved $d_{e,w}$ and no-cache load $C_w$
+\State \mk{b1}$x \gets$ LP relaxation, rounded and repaired \Comment{warm start}
+\State \mk{b2}$L_w(x) \gets C_w - \sum_e d_{e,w}\, x_e$ \Comment{load left in window $w$}
+\State \mk{b3}$E(x) \gets \mathrm{LSE}_\gamma\big(L(x)\big) + P\,\big(\sum_e s_e x_e - B\big)^2$ \Comment{min--max QUBO}
+\State \mk{b4}$x \gets \textsc{ParallelTempering}(E,\, x,\ 16 \text{ replicas})$ \Comment{Ising solver}
+\State \mk{b5}$y_e \gets x_e$ \Comment{peak-aware labels}
+\State \mk{b6}$f \gets \textsc{TrainGBM}([\phi, \ell], y)$
+\For{\mk{b7}each access $a$ at time $t$}
+\State \mk{b8}$\ell_t \gets$ GET disk time in $[t-10\,\text{min},\, t)$ \Comment{causal load}
+\State \mk{b9}$g \gets \mathrm{clip}\big((\ell_t/20)^{-1},\ 0.25,\ 4\big)$
+\State \mk{b10}admit $a$ \textbf{iff} $f(\phi(a), \ell_t) > \theta \cdot g$
+\EndFor\mk{b11}
+\State \mk{b12}tune $\theta$ so the flash write rate $= B$
+\end{algorithmic}
+\end{algorithm}
+
+\end{document}

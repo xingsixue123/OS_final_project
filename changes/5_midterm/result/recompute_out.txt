@@ -1,0 +1,27 @@
+== Slide 3: Baleen's OPT (offline, peak-blind oracle = WP1 column R0)
+OPT Region7 s0: 34.52 (n=1)
+OPT Region6 s0: 35.56 (n=1)
+OPT Region6+7 s0.4-0.6: 33.62 (n=6)
+OPT Region5 s0.1-0.6: 30.10 (n=6)
+OPT Region4 s0.2-0.6: 38.13 (n=5)
+
+== Baleen (arm A) deployed means, matched retrains
+A Region6+7 test: 39.27
+A Region5: 36.17
+A Region1: 24.14
+A Region4: 50.72
+
+== Slide 3: gap of Baleen online above its own offline OPT, held-out sets
+gap Region6+7 test: Baleen 39.27 vs OPT 33.62 -> 14.4%
+gap Region5: Baleen 36.17 vs OPT 30.10 -> 16.8%
+gap Region4: Baleen 50.72 vs OPT 38.13 -> 24.8%
+
+== Slide 6: changes vs Baleen (arm A)
+Full design X1 = Ea-1.0:F1PT, Region6+7: 40.53 vs Baleen 39.27 -> +3.2%
+Gate only A+alpha, Region6+7: 38.30 vs Baleen 39.27 -> -2.5%
+Gate only A+alpha, Region5: 35.02 vs Baleen 36.17 -> -3.2%
+Gate only A+alpha, Region4: 42.87 vs Baleen 50.72 -> -15.5%
+Gate only A+alpha, Region1: 24.62 vs Baleen 24.14 -> +2.0%
+
+== Slide 6: offline teacher, 39 instances (WP1)
+Baleen OPT mean 33.00; min-max PT mean 28.59; n=39

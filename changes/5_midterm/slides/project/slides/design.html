@@ -1,0 +1,37 @@
+<section id="design" data-transition="fade" style="background:#FAFAF7;color:#3F4B60;font-family:'IBM Plex Sans', Arial, sans-serif;padding:96px 128px 160px;display:flex;flex-direction:column;gap:28px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;font-weight:700;color:#1F5FAF;letter-spacing:3px;text-transform:uppercase">Our method · PeakBaleen</p>
+<h2 style="font-size:56px;font-weight:700;line-height:1.15;color:#15213B">A peak-aware offline teacher, plus a load-aware gate online</h2>
+<div style="display:flex;flex-direction:row;align-items:center;gap:32px">
+<div style="display:flex;flex-direction:row;align-items:center;gap:10px"><div style="width:36px;height:24px;background:#FFFFFF;border:2px solid #1F5FAF;border-radius:4px"></div><p style="font-size:24px">new in PeakBaleen</p></div>
+<div style="display:flex;flex-direction:row;align-items:center;gap:10px"><div style="width:36px;height:24px;background:#FFFFFF;border:1px solid #9AA3AF;border-radius:4px"></div><p style="font-size:24px">kept from Baleen</p></div>
+</div>
+</div>
+<div style="position:relative;width:1664px;height:540px">
+<p style="position:absolute;left:0px;top:0px;width:700px;font-size:24px;font-weight:700;color:#6B7588;letter-spacing:2px;text-transform:uppercase">Offline · on the training day</p>
+<div style="position:absolute;left:0px;top:44px;width:290px;height:170px;display:flex;flex-direction:column;gap:8px;background:#FFFFFF;border:1px solid #9AA3AF;border-radius:12px;padding:20px 24px"><h3 style="font-size:28px;font-weight:700;color:#15213B">Day-1 trace</h3><p style="font-size:24px;line-height:1.35">the training day’s requests</p></div>
+<div style="position:absolute;left:343px;top:44px;width:290px;height:170px;display:flex;flex-direction:column;gap:8px;background:#FFFFFF;border:1px solid #9AA3AF;border-radius:12px;padding:20px 24px"><h3 style="font-size:28px;font-weight:700;color:#15213B">Episodes</h3><p style="font-size:24px;line-height:1.35">Baleen’s residency model</p></div>
+<div style="position:absolute;left:686px;top:44px;width:290px;height:170px;display:flex;flex-direction:column;gap:8px;background:#FFFFFF;border:2px solid #1F5FAF;border-radius:12px;padding:20px 24px"><h3 style="font-size:28px;font-weight:700;color:#1F5FAF">Min–max QUBO</h3><p style="font-size:24px;line-height:1.35">minimize the peak window</p></div>
+<div style="position:absolute;left:1029px;top:44px;width:290px;height:170px;display:flex;flex-direction:column;gap:8px;background:#FFFFFF;border:2px solid #1F5FAF;border-radius:12px;padding:20px 24px"><h3 style="font-size:28px;font-weight:700;color:#1F5FAF">Ising solver</h3><p style="font-size:24px;line-height:1.35">parallel tempering → labels</p></div>
+<div style="position:absolute;left:1372px;top:44px;width:290px;height:170px;display:flex;flex-direction:column;gap:8px;background:#FFFFFF;border:2px solid #1F5FAF;border-radius:12px;padding:20px 24px"><h3 style="font-size:28px;font-weight:700;color:#1F5FAF">Train GBM</h3><p style="font-size:24px;line-height:1.35">Baleen features + load_t</p></div>
+<x-shape kind="arrow-right" style="position:absolute;left:296px;top:118px;width:40px;height:22px;background:#9AA3AF"></x-shape>
+<x-shape kind="arrow-right" style="position:absolute;left:639px;top:118px;width:40px;height:22px;background:#9AA3AF"></x-shape>
+<x-shape kind="arrow-right" style="position:absolute;left:982px;top:118px;width:40px;height:22px;background:#9AA3AF"></x-shape>
+<x-shape kind="arrow-right" style="position:absolute;left:1325px;top:118px;width:40px;height:22px;background:#9AA3AF"></x-shape>
+<x-shape kind="arrow-down" style="position:absolute;left:1503px;top:228px;width:28px;height:72px;background:#1F5FAF"></x-shape>
+<p style="position:absolute;left:1160px;top:246px;width:320px;font-size:24px;color:#1F5FAF;text-align:right">trained model</p>
+<p style="position:absolute;left:0px;top:270px;width:700px;font-size:24px;font-weight:700;color:#6B7588;letter-spacing:2px;text-transform:uppercase">Online · every request</p>
+<div style="position:absolute;left:0px;top:314px;width:290px;height:170px;display:flex;flex-direction:column;gap:8px;background:#FFFFFF;border:1px solid #9AA3AF;border-radius:12px;padding:20px 24px"><h3 style="font-size:28px;font-weight:700;color:#15213B">Request</h3><p style="font-size:24px;line-height:1.35">a GET at time t</p></div>
+<div style="position:absolute;left:343px;top:314px;width:290px;height:170px;display:flex;flex-direction:column;gap:8px;background:#FFFFFF;border:2px solid #1F5FAF;border-radius:12px;padding:20px 24px"><h3 style="font-size:28px;font-weight:700;color:#1F5FAF">Load meter</h3><p style="font-size:24px;line-height:1.35">load_t: past 10 min only</p></div>
+<div style="position:absolute;left:686px;top:314px;width:290px;height:170px;display:flex;flex-direction:column;gap:8px;background:#FFFFFF;border:2px solid #1F5FAF;border-radius:12px;padding:20px 24px"><h3 style="font-size:28px;font-weight:700;color:#1F5FAF">Adaptive bar</h3><p style="font-size:24px;line-height:1.35">θ_t lower when busy</p></div>
+<div style="position:absolute;left:1029px;top:314px;width:290px;height:170px;display:flex;flex-direction:column;gap:8px;background:#FFFFFF;border:1px solid #9AA3AF;border-radius:12px;padding:20px 24px"><h3 style="font-size:28px;font-weight:700;color:#15213B">Admit?</h3><p style="font-size:24px;line-height:1.35">s &gt; θ_t → flash, else HDD</p></div>
+<div style="position:absolute;left:1372px;top:314px;width:290px;height:170px;display:flex;flex-direction:column;gap:8px;background:#FFFFFF;border:1px solid #9AA3AF;border-radius:12px;padding:20px 24px"><h3 style="font-size:28px;font-weight:700;color:#15213B">GBM score</h3><p style="font-size:24px;line-height:1.35">s = f(a, load_t)</p></div>
+<x-shape kind="arrow-right" style="position:absolute;left:296px;top:388px;width:40px;height:22px;background:#9AA3AF"></x-shape>
+<x-shape kind="arrow-right" style="position:absolute;left:639px;top:388px;width:40px;height:22px;background:#9AA3AF"></x-shape>
+<x-shape kind="arrow-right" style="position:absolute;left:982px;top:388px;width:40px;height:22px;background:#9AA3AF"></x-shape>
+<x-shape kind="arrow-left" style="position:absolute;left:1325px;top:388px;width:40px;height:22px;background:#9AA3AF"></x-shape>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1200px;font-size:24px;color:#6B7588">PeakBaleen · Mid-term progress · Chiu, Fu, Xing</p>
+<p style="position:absolute;left:1592px;bottom:64px;width:200px;font-size:24px;color:#6B7588;text-align:right">4</p>
+<aside>PeakBaleen keeps Baleen’s pipeline and changes two places. Offline, on the training day, we replace Baleen’s average-optimal oracle with a min–max QUBO that minimizes the busiest window under the same write budget, and solve it with an Ising solver, parallel tempering. Its solution becomes the training labels for Baleen’s GBM, which also gets a causal load feature. Online, a load meter measures the disk time of the last ten minutes of requests, using only the past. The GBM scores each request, and the admission bar adapts to load: when the system is busy the bar drops, so the write budget is spent where the peak is. Everything in blue is new; everything in gray is Baleen. Sources: changes/2_deployable_peak/wp0_overlay/G3_REVIEW.md L9–L11 (load signal and adaptive bar); wp1_offline/RESULTS.md L27 (solver).</aside>
+</section>

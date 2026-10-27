@@ -1,0 +1,42 @@
+<section id="task" data-transition="fade" style="background:#FAFAF7;color:#3F4B60;font-family:'IBM Plex Sans', Arial, sans-serif;padding:96px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;font-weight:700;color:#1F5FAF;letter-spacing:3px;text-transform:uppercase">The task</p>
+<h2 style="font-size:56px;font-weight:700;line-height:1.15;color:#15213B">Decide what enters a flash cache, under a write budget, so the peak disk load is lowest</h2>
+</div>
+<div style="display:flex;flex-direction:row;gap:56px">
+<div style="width:1040px;display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;flex-direction:row;align-items:center;gap:16px">
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#FFFFFF;border:1px solid #E3E6EA;border-radius:12px;padding:24px 28px">
+<h3 style="font-size:30px;font-weight:700;color:#15213B">Request</h3>
+<p style="font-size:26px;line-height:1.35">a block read (GET) from the storage trace</p>
+</div>
+<x-shape kind="arrow-right" style="background:#9AA3AF;width:44px;height:22px"></x-shape>
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#FFFFFF;border:1px solid #E3E6EA;border-radius:12px;padding:24px 28px">
+<h3 style="font-size:30px;font-weight:700;color:#15213B">Flash cache</h3>
+<p style="font-size:26px;line-height:1.35">366 GB; a hit costs the disks nothing</p>
+</div>
+<x-shape kind="arrow-right" style="background:#9AA3AF;width:44px;height:22px"></x-shape>
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#FFFFFF;border:1px solid #E3E6EA;border-radius:12px;padding:24px 28px">
+<h3 style="font-size:30px;font-weight:700;color:#15213B">HDD on a miss</h3>
+<p style="font-size:26px;line-height:1.35">costs disk-head time</p>
+</div>
+</div>
+<div style="display:flex;flex-direction:row;justify-content:center">
+<x-shape kind="arrow-up" style="background:#1F5FAF;width:24px;height:44px"></x-shape>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px;background:#FFFFFF;border:2px solid #1F5FAF;border-radius:12px;padding:24px 28px">
+<h3 style="font-size:30px;font-weight:700;color:#1F5FAF">Admission policy: what we design</h3>
+<p style="font-size:26px;line-height:1.35">On a miss, write the block into flash or not? Every admission spends flash writes, and flash wears out, so writes are capped.</p>
+</div>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:18px;background:#FFFFFF;border:1px solid #E3E6EA;border-radius:12px;padding:32px">
+<h3 style="font-size:30px;font-weight:700;color:#15213B">Problem</h3>
+<p style="font-size:26px;line-height:1.35"><b>Constraint:</b> flash write rate 35.6 MB/s (± 1%)</p>
+<p style="font-size:26px;line-height:1.35"><b>Minimize:</b> P100, the busiest 10-minute window of HDD utilization (%)</p>
+<p style="font-size:26px;line-height:1.35"><b>Data:</b> Meta Tectonic traces, 7 regions, 0.1% samples, replayed in BCacheSim (Baleen’s simulator)</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1200px;font-size:24px;color:#6B7588">PeakBaleen · Mid-term progress · Chiu, Fu, Xing</p>
+<p style="position:absolute;left:1592px;bottom:64px;width:200px;font-size:24px;color:#6B7588;text-align:right">2</p>
+<aside>The task. Requests hit a flash cache in front of hard disks. A hit is free for the disks; a miss costs disk-head time. The admission policy decides, on each miss, whether to write the block into flash. Flash wears out, so the write rate is capped, here at 35.6 MB/s. The metric is P100: the busiest 10-minute window of disk utilization, because that is what disks are provisioned for. The data are Baleen’s public traces from Meta’s Tectonic storage system. Each trace comes from one storage cluster, which can span a whole datacenter, with thousands of storage nodes serving hundreds of applications. The paper names these seven clusters Region1 to Region7; the name is only an anonymous label, not a geographic region. Regions 1 to 3 were recorded in 2019, Region4 in 2021, and Regions 5 to 7 in 2023, each over several days: the first day is used for training, the rest for testing. Because a full trace is huge, it is downsampled to 0.1% of the blocks, keeping every access to those blocks, and the cache is scaled down to match. Different samples, s0, s0.1 and so on, are different 0.1% slices of the same cluster, so each one is a separate smaller workload. We run everything in Baleen’s own simulator, so our numbers are directly comparable with the paper. Sources: changes/0_reproduce/RESULTS.md L5 (setup); Baleen paper §5, documents/Baleen_FAST24_Wong.pdf (Regions); every number: changes/5_midterm/SOURCES.md.</aside>
+</section>
