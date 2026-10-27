@@ -86,6 +86,9 @@ OS_final_project/
     0_reproduce/              frozen artifact + sandboxed reproduction (env/, work/ not in git)
     1_literature_review/      lit reviews, ising_followup (synthetic audit), harness_eval, explore (Q1–Q3)
     2_deployable_peak/        PLAN.md; wp0_overlay, wp1_offline, wp5_ising, wp2_deployed
+    3_autoresearch/           24 h worker/validator loop (contract documents/GOOD_RESULT.md, result/FINAL_REPORT.md)
+    4_story/                  STORY.md: every finding with priority, evidence level and repo refs
+    5_midterm/                mid-term slides (source, algorithm LaTeX, SOURCES.md value->file map)
 ```
 - **Environments (not in git):**
   - Baleen env: `changes/0_reproduce/env`
