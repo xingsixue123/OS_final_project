@@ -58,7 +58,7 @@ Baleen beats the simple policies, but its own offline oracle shows the peak can 
 
 ## Slide 4 · PeakBaleen design
 
-A peak-aware offline teacher, plus a load-aware gate online. Blue = new in PeakBaleen; gray = kept from Baleen.
+A peak-aware oracle offline, plus a load-adaptive bar online. Blue = new in PeakBaleen; gray = kept from Baleen.
 
 ```
 OFFLINE (training day)
@@ -130,27 +130,27 @@ The slide renders are `changes/5_midterm/algorithm/alg1.png` and `alg2.png`. The
 
 ## Slide 6 · Results so far
 
-The teacher wins offline; online, the load-aware gate is what transfers so far.
+Our oracle wins offline; online, the adaptive bar is what transfers so far. Row 1 is offline only: its Baleen column is Baleen’s OPT (slide 3’s last column), averaged over 39 samples. The other rows compare deployed policies against deployed Baleen.
 
 | Setting | Baleen | PeakBaleen | Change | Status |
 |---|---|---|---|---|
-| Offline teacher, 39 samples (Region4–7) | 33.00 | 28.59 | −13.7% | wins 37 of 39 samples |
-| Full design (labels + gate), Region6 + 7 | 39.27 | 40.53 | +3.2% | fails: one collapse (Region7 s0.5) |
-| Gate only, Region6 + 7 | 39.27 | 38.30 | −2.5% | observed, not pre-registered |
-| Gate only, Region5 (fresh) | 36.17 | 35.02 | −3.2% | pre-registered pass, 5/6 |
-| Gate only, Region4 | 50.72 | 42.87 | −15.5% | observed, not pre-registered |
-| Gate only, Region1 (low load) | 24.14 | 24.62 | +2.0% | no gain |
+| Offline: our oracle vs Baleen’s OPT | 33.00 | 28.59 | −13.7% | wins 37 of 39, Region4–7 |
+| Oracle labels + adaptive bar, Region6 + 7 | 39.27 | 40.53 | +3.2% | fails: one collapse (Region7 s0.5) |
+| Adaptive bar only, Region6 + 7 | 39.27 | 38.30 | −2.5% | observed, not pre-registered |
+| Adaptive bar only, Region5 (fresh) | 36.17 | 35.02 | −3.2% | pre-registered pass, 5/6 |
+| Adaptive bar only, Region4 | 50.72 | 42.87 | −15.5% | observed, not pre-registered |
+| Adaptive bar only, Region1 (low load) | 24.14 | 24.62 | +2.0% | no gain |
 
-- **Why the labels don’t transfer.** They fit day 1’s peak. In Region7 s0.5 the peak is a big scan, 48% of the window’s accesses. The Ising-label models admit 4–14% of that window; Baleen admits 56–69%.
+- **Why the oracle’s labels don’t transfer.** They fit day 1’s peak. In Region7 s0.5 the peak is a big scan, 48% of the window’s accesses. The Ising-label models admit 4–14% of that window; Baleen admits 56–69%.
 - **Solver check.** Offline, LP (−13.0%) and CP-SAT (−13.2%) match the Ising solver: the gain comes from the min–max formulation.
 
 | Row | Code | Output | Report |
 |---|---|---|---|
-| Offline teacher | `changes/2_deployable_peak/wp1_offline/src/wp1.py`, `src/wp1_analyze.py` | `changes/2_deployable_peak/wp1_offline/results/wp1_table.csv`, `wp1_summary.json` | `changes/2_deployable_peak/wp1_offline/RESULTS.md` L7–L9 |
-| Full design and gate, Region6 + 7 | `changes/2_deployable_peak/wp3_test/src/wp3.py`, `src/evaluate_test.py` | `changes/2_deployable_peak/wp3_test/trials.csv` (arms `Ea-1.0`/F1PT and `Aa-1.0`), `results/evaluation.json` | `changes/2_deployable_peak/wp3_test/RESULTS_test.md` §0–§3 |
-| Gate, Region5 | `changes/2_deployable_peak/wp9_region5/src/wp9.py`, `src/evaluate_test.py` | `changes/2_deployable_peak/wp9_region5/trials.csv`, `results/evaluation.json` | `changes/2_deployable_peak/wp9_region5/RESULTS_test.md` §0 |
-| Gate, Region4 | `changes/3_autoresearch/work/union_t2/src/` | `changes/3_autoresearch/work/t2u_region4/trials_test.csv` | `changes/3_autoresearch/result/FINAL_REPORT.md` L66, L75 |
-| Gate, Region1 | `changes/2_deployable_peak/wp10_schedule/src/wp10.py`, `src/evaluate_test.py` | `changes/2_deployable_peak/wp10_schedule/trials_test.csv`, `results_test/evaluation.json` | `changes/2_deployable_peak/wp10_schedule/RESULTS_test.md` |
+| Offline: oracle vs Baleen’s OPT | `changes/2_deployable_peak/wp1_offline/src/wp1.py`, `src/wp1_analyze.py` | `changes/2_deployable_peak/wp1_offline/results/wp1_table.csv`, `wp1_summary.json` | `changes/2_deployable_peak/wp1_offline/RESULTS.md` L7–L9 |
+| Oracle labels + adaptive bar, and adaptive bar only, Region6 + 7 | `changes/2_deployable_peak/wp3_test/src/wp3.py`, `src/evaluate_test.py` | `changes/2_deployable_peak/wp3_test/trials.csv` (arms `Ea-1.0`/F1PT and `Aa-1.0`), `results/evaluation.json` | `changes/2_deployable_peak/wp3_test/RESULTS_test.md` §0–§3 |
+| Adaptive bar, Region5 | `changes/2_deployable_peak/wp9_region5/src/wp9.py`, `src/evaluate_test.py` | `changes/2_deployable_peak/wp9_region5/trials.csv`, `results/evaluation.json` | `changes/2_deployable_peak/wp9_region5/RESULTS_test.md` §0 |
+| Adaptive bar, Region4 | `changes/3_autoresearch/work/union_t2/src/` | `changes/3_autoresearch/work/t2u_region4/trials_test.csv` | `changes/3_autoresearch/result/FINAL_REPORT.md` L66, L75 |
+| Adaptive bar, Region1 | `changes/2_deployable_peak/wp10_schedule/src/wp10.py`, `src/evaluate_test.py` | `changes/2_deployable_peak/wp10_schedule/trials_test.csv`, `results_test/evaluation.json` | `changes/2_deployable_peak/wp10_schedule/RESULTS_test.md` |
 | % changes | `changes/5_midterm/code/recompute.py` | `changes/5_midterm/result/recompute_out.txt` L20–L24 | — |
 | Scan mechanism | `changes/2_deployable_peak/wp3_test/src/emu.py` (peak-window admission) | `changes/2_deployable_peak/wp3_test/trials.csv` (columns `peak_adm`, `peak_bigoff_share`) | `changes/2_deployable_peak/wp3_test/RESULTS_test.md` L45–L47 |
 
@@ -159,9 +159,9 @@ The teacher wins offline; online, the load-aware gate is what transfers so far.
 ## Slide 7 · Next (Nov 2 – Dec 2)
 
 - Finish the baselines: reproduce Baleen on all 7 traces, as the proposal promised.
-- Make the teacher transfer: labels that survive a change in peak type (scan vs burst), for example by training over several days.
-- Ablations: labels vs load feature vs gate, and when load-awareness helps (load level, peak type).
-- Final test and paper: one run on samples 0.7–0.9, which have not been touched yet (`changes/2_deployable_peak/wp10_schedule/RESULTS_test.md` L3).
+- Make the oracle’s labels transfer: labels that survive a change in peak type (scan vs burst), for example by training over several days.
+- Ablations: labels vs load feature vs adaptive bar, and when load-awareness helps (load level, peak type).
+- Final test and paper: one run on samples 0.7–0.9, which no deployed run has touched; only the offline comparison (slide 6, row 1) included them (`changes/2_deployable_peak/wp10_schedule/RESULTS_test.md` L3).
 
 ---
 
@@ -222,18 +222,18 @@ The teacher wins offline; online, the load-aware gate is what transfers so far.
 | 6 | 40.53 | `changes/5_midterm/result/recompute_out.txt#L20` | full design X1, Region6+7 test |
 | 6 | 3.2 | `changes/5_midterm/result/recompute_out.txt#L20` | X1 vs Baleen, +3.2% |
 | 6 | 52.30 | `changes/2_deployable_peak/wp3_test/RESULTS_test.md#L26` | the collapse: Region7 s0.5, X1 |
-| 6 | 38.30 | `changes/5_midterm/result/recompute_out.txt#L21` | gate only (A+α), Region6+7 test |
+| 6 | 38.30 | `changes/5_midterm/result/recompute_out.txt#L21` | adaptive bar only (A+α), Region6+7 test |
 | 6 | 2.5 | `changes/5_midterm/result/recompute_out.txt#L21` | A+α vs Baleen, −2.5% |
-| 6 | 35.02 | `changes/5_midterm/result/recompute_out.txt#L22` | gate only, Region5 (pre-registered H4) |
+| 6 | 35.02 | `changes/5_midterm/result/recompute_out.txt#L22` | adaptive bar only, Region5 (pre-registered H4) |
 | 6 | 3.2 | `changes/5_midterm/result/recompute_out.txt#L22` | A+α vs Baleen on Region5, −3.2% |
 | 6 | 5/6 | `changes/2_deployable_peak/wp9_region5/RESULTS_test.md#L11` | H4 wins vs Baleen |
-| 6 | 42.87 | `changes/5_midterm/result/recompute_out.txt#L23` | gate only, Region4 |
+| 6 | 42.87 | `changes/5_midterm/result/recompute_out.txt#L23` | adaptive bar only, Region4 |
 | 6 | 15.5 | `changes/5_midterm/result/recompute_out.txt#L23` | A+α vs Baleen on Region4, −15.5% |
-| 6 | 24.62 | `changes/5_midterm/result/recompute_out.txt#L24` | gate only, Region1 |
+| 6 | 24.62 | `changes/5_midterm/result/recompute_out.txt#L24` | adaptive bar only, Region1 |
 | 6 | 2.0 | `changes/5_midterm/result/recompute_out.txt#L24` | A+α vs Baleen on Region1, +2.0% |
 | 6 | 48% | `changes/2_deployable_peak/wp3_test/RESULTS_test.md#L45` | Region7 s0.5 peak window: share of big-offset (scan) accesses |
 | 6 | 4–14% | `changes/2_deployable_peak/wp3_test/RESULTS_test.md#L47` | peak-window admission, Ising-label models |
 | 6 | 56–69% | `changes/2_deployable_peak/wp3_test/RESULTS_test.md#L46` | peak-window admission, Baleen-label models |
 | 6 | 13.0 | `changes/2_deployable_peak/wp1_offline/RESULTS.md#L7` | offline LP, −13.03% |
 | 6 | 13.2 | `changes/2_deployable_peak/wp1_offline/RESULTS.md#L8` | offline CP-SAT, −13.15% |
-| 7 | 0.7–0.9 | `changes/2_deployable_peak/wp10_schedule/RESULTS_test.md#L3` | reserve samples, untouched |
+| 7 | 0.7–0.9 | `changes/2_deployable_peak/wp10_schedule/RESULTS_test.md#L3` | reserve samples, untouched by deployed runs |

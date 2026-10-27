@@ -1,21 +1,21 @@
 <section id="results" data-transition="fade" style="background:#FAFAF7;color:#3F4B60;font-family:'IBM Plex Sans', Arial, sans-serif;padding:96px 128px 160px;display:flex;flex-direction:column;gap:40px">
 <div style="display:flex;flex-direction:column;gap:12px">
 <p style="font-size:24px;font-weight:700;color:#1F5FAF;letter-spacing:3px;text-transform:uppercase">Results so far</p>
-<h2 style="font-size:56px;font-weight:700;line-height:1.15;color:#15213B">The teacher wins offline; online, the load-aware gate is what transfers so far</h2>
+<h2 style="font-size:56px;font-weight:700;line-height:1.15;color:#15213B">Our oracle wins offline; online, the adaptive bar is what transfers so far</h2>
 </div>
 <table style="font-size:24px;color:#3F4B60">
 <tr><th style="width:36%;text-align:left">Setting</th><th style="width:12%;text-align:right">Baleen</th><th style="width:13%;text-align:right">PeakBaleen</th><th style="width:11%;text-align:right">Change</th><th style="width:28%;text-align:left">Status</th></tr>
-<tr><td>Offline teacher, 39 samples (Region4–7)</td><td style="text-align:right">33.00</td><td style="text-align:right">28.59</td><td style="text-align:right;color:#1F5FAF;font-weight:700">−13.7%</td><td>wins 37 of 39 samples</td></tr>
-<tr><td>Full design (labels + gate), Region6 + 7</td><td style="text-align:right">39.27</td><td style="text-align:right">40.53</td><td style="text-align:right;color:#B4501A;font-weight:700">+3.2%</td><td>fails: one collapse (Region7 s0.5)</td></tr>
-<tr><td>Gate only, Region6 + 7</td><td style="text-align:right">39.27</td><td style="text-align:right">38.30</td><td style="text-align:right;color:#1F5FAF;font-weight:700">−2.5%</td><td>observed, not pre-registered</td></tr>
-<tr style="background:#EEF3FA"><td>Gate only, Region5 (fresh)</td><td style="text-align:right">36.17</td><td style="text-align:right">35.02</td><td style="text-align:right;color:#1F5FAF;font-weight:700">−3.2%</td><td>pre-registered pass, 5/6</td></tr>
-<tr><td>Gate only, Region4</td><td style="text-align:right">50.72</td><td style="text-align:right">42.87</td><td style="text-align:right;color:#1F5FAF;font-weight:700">−15.5%</td><td>observed, not pre-registered</td></tr>
-<tr><td>Gate only, Region1 (low load)</td><td style="text-align:right">24.14</td><td style="text-align:right">24.62</td><td style="text-align:right;color:#B4501A;font-weight:700">+2.0%</td><td>no gain</td></tr>
+<tr><td>Offline: our oracle vs Baleen’s OPT</td><td style="text-align:right">33.00</td><td style="text-align:right">28.59</td><td style="text-align:right;color:#1F5FAF;font-weight:700">−13.7%</td><td>wins 37 of 39, Region4–7</td></tr>
+<tr><td>Oracle labels + adaptive bar, Region6 + 7</td><td style="text-align:right">39.27</td><td style="text-align:right">40.53</td><td style="text-align:right;color:#B4501A;font-weight:700">+3.2%</td><td>fails: one collapse (Region7 s0.5)</td></tr>
+<tr><td>Adaptive bar only, Region6 + 7</td><td style="text-align:right">39.27</td><td style="text-align:right">38.30</td><td style="text-align:right;color:#1F5FAF;font-weight:700">−2.5%</td><td>observed, not pre-registered</td></tr>
+<tr style="background:#EEF3FA"><td>Adaptive bar only, Region5 (fresh)</td><td style="text-align:right">36.17</td><td style="text-align:right">35.02</td><td style="text-align:right;color:#1F5FAF;font-weight:700">−3.2%</td><td>pre-registered pass, 5/6</td></tr>
+<tr><td>Adaptive bar only, Region4</td><td style="text-align:right">50.72</td><td style="text-align:right">42.87</td><td style="text-align:right;color:#1F5FAF;font-weight:700">−15.5%</td><td>observed, not pre-registered</td></tr>
+<tr><td>Adaptive bar only, Region1 (low load)</td><td style="text-align:right">24.14</td><td style="text-align:right">24.62</td><td style="text-align:right;color:#B4501A;font-weight:700">+2.0%</td><td>no gain</td></tr>
 </table>
 <div style="display:flex;flex-direction:row;gap:32px">
 <div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#FFFFFF;border:1px solid #E3E6EA;border-radius:12px;padding:24px 28px">
-<h3 style="font-size:28px;font-weight:700;color:#15213B">Why the labels don’t transfer</h3>
-<p style="font-size:24px;line-height:1.35">They fit day 1’s peak. In Region7 s0.5 the peak is a big scan (48% of accesses) that these models admit 4–14% of; Baleen admits 56–69%.</p>
+<h3 style="font-size:28px;font-weight:700;color:#15213B">Why the oracle’s labels don’t transfer</h3>
+<p style="font-size:24px;line-height:1.35">They fit day 1’s peak. In Region7 s0.5 the peak is a big scan (48% of accesses) that models trained on them admit 4–14% of; Baleen admits 56–69%.</p>
 </div>
 <div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#FFFFFF;border:1px solid #E3E6EA;border-radius:12px;padding:24px 28px">
 <h3 style="font-size:28px;font-weight:700;color:#15213B">Solver check</h3>
@@ -24,5 +24,5 @@
 </div>
 <p style="position:absolute;left:128px;bottom:64px;width:1200px;font-size:24px;color:#6B7588">PeakBaleen · Mid-term progress · Chiu, Fu, Xing</p>
 <p style="position:absolute;left:1592px;bottom:64px;width:200px;font-size:24px;color:#6B7588;text-align:right">6</p>
-<aside>Where we are. Offline, the min–max teacher lowers the peak by 13.7% on average and wins 37 of 39 instances. Deploying the full design, labels plus gate, failed its pre-registered test because one instance collapsed: its peak is a big sequential scan, and labels fitted to day 1 taught the model not to admit scans. The gate alone on Baleen’s own models helps: minus 3.2% on Region5, a cluster we had never run, in a pre-registered test, and large gains on Region4, which we only observed after the fact; it does not help on the low-load Region1. And the Ising solver is not the reason for the offline gain: LP and CP-SAT do as well. Sources: changes/5_midterm/result/recompute_out.txt L20–L27; changes/2_deployable_peak/wp1_offline/RESULTS.md L7–L9; wp3_test/RESULTS_test.md L26, L45–L47; wp9_region5/RESULTS_test.md L11.</aside>
+<aside>Where we are. Row one is offline only: our peak-aware oracle against Baleen’s own OPT, the oracle from slide 3. It lowers the peak by 13.7% on average and wins 37 of 39 instances. The other rows are deployed policies against deployed Baleen, with the same Baleen numbers as on slide 3. Deploying the full design, oracle labels plus the adaptive bar, failed its pre-registered test because one instance collapsed: its peak is a big sequential scan, and labels fitted to day 1 taught the model not to admit scans. The adaptive bar alone, on Baleen’s own models, helps: minus 3.2% on Region5, a cluster we had never run, in a pre-registered test, meaning we committed the hypothesis and the pass rule before running it, and large gains on Region4, which we only observed after the fact; it does not help on the low-load Region1. And the Ising solver is not the reason for the offline gain: LP and CP-SAT do as well. Sources: changes/5_midterm/result/recompute_out.txt L20–L27; changes/2_deployable_peak/wp1_offline/RESULTS.md L7–L9; wp3_test/RESULTS_test.md L26, L45–L47; wp9_region5/RESULTS_test.md L11.</aside>
 </section>
