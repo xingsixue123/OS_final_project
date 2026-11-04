@@ -26,7 +26,8 @@ Baleen (FAST '24) chooses which blocks to admit to a flash cache. It optimises *
 | 2 · WP9 (Region5) | Fresh deployed test: H4 = load-adaptive threshold on Baleen models (A+α) vs A, B; X1 as Ising record | **done: H4 YES** (A+α 35.02 vs A 36.17, 5/6; B+α 34.48, 6/6); X1 fails again (s0.5 51.46). `wp9_region5/RESULTS_test.md` |
 | 2 · WP10 (Track E) | Ising-optimized admission-threshold table on Baleen's models | **done: H5 NO** on Region1 (TB:pt 24.45 vs A 24.14; 1/6 vs A). Region1 is low-load: the α arms do not help there either (A+α 24.62). PT tables = classical tables. `wp10_schedule/RESULTS_test.md` |
 | 3 · Auto-research | Unattended Opus 5.5 worker + validator loop (contract `changes/3_autoresearch/documents/GOOD_RESULT.md`) | **done 2026-10-20 11:44: NEGATIVE, budget exhausted** (`result/FINAL_REPORT.md`). Dev finalist = union of Baleen model + Ising F1-label model (35.36 vs A+α 36.16 on dev). T1 Region2: unevaluable (infeasible s0.2, very low load). T2 Region4: Y 43.17 beats A 50.72 / B 56.71 but not A+α 42.87 (1/5). Validators PASS round 2. Not pre-registered: A+α −15% vs A on Region4 (H4-type replication) |
-| 2 · WP4/6/7 | Mechanism analysis, mid-term report, paper | to do |
+| 2 · WP6 | Mid-term talk and report | **slides done, report drafted** (`changes/5_midterm/`) |
+| 2 · WP4/7 | Mechanism analysis, paper | to do |
 
 ## 3. Hypothesis ledger
 Only valid results are listed: held-out or test data, matched write rate within ±1%, every seed and retrain included.
@@ -88,7 +89,7 @@ OS_final_project/
     2_deployable_peak/        PLAN.md; wp0_overlay, wp1_offline, wp5_ising, wp2_deployed
     3_autoresearch/           24 h worker/validator loop (contract documents/GOOD_RESULT.md, result/FINAL_REPORT.md)
     4_story/                  STORY.md: every finding with priority, evidence level and repo refs
-    5_midterm/                mid-term slides (source, algorithm LaTeX, SOURCES.md value->file map)
+    5_midterm/                mid-term slides and report (source, algorithm LaTeX, SOURCES.md value->file map)
 ```
 - **Environments (not in git):**
   - Baleen env: `changes/0_reproduce/env`

@@ -1,7 +1,8 @@
-# 5_midterm: mid-term progress slides (7 slides)
+# 5_midterm: mid-term progress slides (7 slides) and report (8 pages)
 
 - **Live deck:** https://claude.ai/artifact/XTyrUmxzuVWm4A2p1NVZH4. It is private until shared from its Share menu, and downloads as .pptx or PDF.
-- **This folder** holds the deck's full source, so it is contained in the repo. Every number on the slides points back to a result file in the repo.
+- **Report for Canvas:** `report/PeakBaleen_Midterm_Report.pdf` (source `report/PeakBaleen_Midterm_Report.docx`). It follows the slides' order and the proposal's style.
+- **This folder** holds the source of both, so they are contained in the repo. Every number points back to a result file in the repo.
 
 | Slide | Content |
 |---|---|
@@ -18,15 +19,21 @@
 |---|---|
 | `slides/project/deck.json`, `slides/project/slides/*.html` | The deck source: one 1920×1080 HTML slide per file, with speaker notes in `<aside>` (each ends with its "Sources:") |
 | `algorithm/alg.tex`, `algorithm/alg1.png`, `algorithm/alg2.png`, `algorithm/build.sh` | Slide 5's algorithms: LaTeX source and the 300-dpi renders. In the live deck, `algorithm.html` references these images by their uploaded asset ids (`/_blob/…`). |
-| `SOURCES.md` | Every value on every slide, mapped to `file#line` in the repo |
+| `SOURCES.md` | Every value on every slide, and every further value in the report, mapped to `file#line` in the repo |
+| `report/report.js`, `report/figures/` | Report generator (docx-js; helpers from `documents/proposal_docx_compose/proposal.js`) and its two figures |
+| `code/recompute_report.py`, `result/recompute_report_out.txt` | Recomputes the report-only values (Table 4, Figure 2 data, peak-window behaviour) from raw CSVs |
 | `code/recompute.py`, `result/recompute_out.txt` | Recomputes the derived values (Baleen's offline OPT column, the 14–25% gap, the % changes) from raw CSVs |
 | `code/check_sources.py` | Checks that each `SOURCES.md` row's value appears in its cited lines |
 
 ## Reproduce and check
 ```
 changes/0_reproduce/env/bin/python -B changes/5_midterm/code/recompute.py > changes/5_midterm/result/recompute_out.txt
-python3 changes/5_midterm/code/check_sources.py        # expect: 68 rows checked, 0 problems
+changes/0_reproduce/env/bin/python -B changes/5_midterm/code/recompute_report.py > changes/5_midterm/result/recompute_report_out.txt
+python3 changes/5_midterm/code/check_sources.py        # expect: 164 rows checked, 0 problems
 bash changes/5_midterm/algorithm/build.sh              # rebuild the algorithm images (needs tectonic)
+(cd changes/5_midterm/report/figures && python3 fig1.py && python3 fig2.py)
+(cd changes/5_midterm/report && npm ci && node report.js)   # writes the .docx
+soffice --headless --convert-to pdf --outdir changes/5_midterm/report changes/5_midterm/report/PeakBaleen_Midterm_Report.docx   # needs Carlito and Caladea, the metric-compatible Calibri and Cambria
 ```
 
 ## Notes

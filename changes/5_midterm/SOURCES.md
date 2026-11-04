@@ -237,3 +237,108 @@ Our oracle wins offline; online, the adaptive bar is what transfers so far. Row 
 | 6 | 13.0 | `changes/2_deployable_peak/wp1_offline/RESULTS.md#L7` | offline LP, −13.03% |
 | 6 | 13.2 | `changes/2_deployable_peak/wp1_offline/RESULTS.md#L8` | offline CP-SAT, −13.15% |
 | 7 | 0.7–0.9 | `changes/2_deployable_peak/wp10_schedule/RESULTS_test.md#L3` | reserve samples, untouched by deployed runs |
+
+---
+
+## Mid-term report: values beyond the slides (checked by code/check_sources.py)
+
+The report is `report/PeakBaleen_Midterm_Report.pdf`. Values it shares with the slides are in the appendix above; the rows below are the rest. `R5` = report section 5. Report tables and figure come from `code/recompute_report.py` (output `result/recompute_report_out.txt`; figure data `report/figures/fig2_data.csv`).
+
+| Section | Value | Source | What |
+|---|---|---|---|
+| R1 | 5.3 | `changes/5_midterm/result/recompute_report_out.txt#L11` | full design, Region5 vs Baleen |
+| R1 | 38.09 | `changes/5_midterm/result/recompute_report_out.txt#L11` | full design, Region5 |
+| R1 | 5.4 | `changes/2_deployable_peak/wp1_offline/RESULTS.md#L11` | offline, Region4 alone (Ising) |
+| R1 | −0.28 | `changes/2_deployable_peak/wp3_test/RESULTS_test.md#L75` | retention, full design, Region6+7 |
+| R1 | +0.16 | `changes/2_deployable_peak/wp3_test/RESULTS_test.md#L75` | retention, adaptive bar, Region6+7 |
+| R1 | −0.54 | `changes/2_deployable_peak/wp9_region5/RESULTS_test.md#L49` | retention, full design, Region5 |
+| R1 | 0.31 | `changes/2_deployable_peak/wp9_region5/RESULTS_test.md#L49` | retention, adaptive bar, Region5 |
+| R1 | 13.172 | `changes/4_story/STORY.md#L2081` | LP beats peak-aware greedy by this much on dev; SB 13.217 |
+| R2 | 400 | `documents/PeakBaleen_Proposal.pdf` | proposal's stated operating point (H1) |
+| R2 | 366.475 | `changes/0_reproduce/RESULTS.md#L5` | cache size |
+| R3 | 14.4 | `changes/5_midterm/result/recompute_out.txt#L15` | Baleen above its OPT |
+| R3 | 16.8 | `changes/5_midterm/result/recompute_out.txt#L16` | Baleen above its OPT |
+| R3 | 24.8 | `changes/5_midterm/result/recompute_out.txt#L17` | Baleen above its OPT |
+| R4 | 10, 30 and 60 | `changes/SCOPE_v2.md#L19` | load feature windows |
+| R4 | 0.25 | `changes/2_deployable_peak/wp0_overlay/G3_REVIEW.md#L11` | adaptive bar clip low |
+| R4 | 20 | `changes/2_deployable_peak/wp0_overlay/G3_REVIEW.md#L11` | adaptive bar reference load |
+| R4 | 16 | `changes/2_deployable_peak/wp1_offline/RESULTS.md#L27` | parallel tempering replicas |
+| R4 | −11.64 | `changes/4_story/STORY.md#L629` | SB is the worst of the four Ising solvers |
+| R5 | 39.17 | `changes/5_midterm/result/recompute_report_out.txt#L3` | Table 4 |
+| R5 | 0.2 | `changes/5_midterm/result/recompute_report_out.txt#L3` | Table 4 |
+| R5 | 36.37 | `changes/5_midterm/result/recompute_report_out.txt#L8` | Table 4 |
+| R5 | 0.5 | `changes/5_midterm/result/recompute_report_out.txt#L8` | Table 4 |
+| R5 | 56.71 | `changes/5_midterm/result/recompute_report_out.txt#L13` | Table 4 |
+| R5 | 11.8 | `changes/5_midterm/result/recompute_report_out.txt#L13` | Table 4 |
+| R5 | 24.54 | `changes/5_midterm/result/recompute_report_out.txt#L18` | Table 4 |
+| R5 | 1.7 | `changes/5_midterm/result/recompute_report_out.txt#L18` | Table 4 |
+| R5 | 38.38 | `changes/5_midterm/result/recompute_report_out.txt#L5` | Table 4 |
+| R5 | 2.3 | `changes/5_midterm/result/recompute_report_out.txt#L5` | Table 4 |
+| R5 | 34.48 | `changes/5_midterm/result/recompute_report_out.txt#L10` | Table 4 |
+| R5 | 4.7 | `changes/5_midterm/result/recompute_report_out.txt#L10` | Table 4 |
+| R5 | 43.87 | `changes/5_midterm/result/recompute_report_out.txt#L15` | Table 4 |
+| R5 | 13.5 | `changes/5_midterm/result/recompute_report_out.txt#L15` | Table 4 |
+| R5 | 24.48 | `changes/5_midterm/result/recompute_report_out.txt#L20` | Table 4 |
+| R5 | 1.4 | `changes/5_midterm/result/recompute_report_out.txt#L20` | Table 4 |
+| R5 | wins 5/6 | `changes/5_midterm/result/recompute_report_out.txt#L4` | adaptive bar, Region6+7 |
+| R5 | wins 5/6 | `changes/5_midterm/result/recompute_report_out.txt#L9` | adaptive bar, Region5 |
+| R5 | wins 5/5 | `changes/5_midterm/result/recompute_report_out.txt#L14` | adaptive bar, Region4 |
+| R5 | wins 1/6 | `changes/5_midterm/result/recompute_report_out.txt#L19` | adaptive bar, Region1 |
+| R5 | wins 5/6 | `changes/5_midterm/result/recompute_report_out.txt#L6` | full design, Region6+7 |
+| R5 | wins 3/6 | `changes/5_midterm/result/recompute_report_out.txt#L11` | full design, Region5 |
+| R5 | 30/30 | `changes/2_deployable_peak/wp1_offline/RESULTS.md#L13` | offline wins, Regions 5-7 |
+| R5 | 16.2 | `changes/2_deployable_peak/wp1_offline/RESULTS.md#L13` | offline mean reduction, Regions 5-7 |
+| R5 | 7/9 | `changes/2_deployable_peak/wp1_offline/RESULTS.md#L11` | offline, Region4 |
+| R5 | 33/39 | `changes/2_deployable_peak/wp1_offline/RESULTS.md#L102` | (continued on the next line of the file) simulated peak window moved |
+| R5 | 39.07 | `changes/2_deployable_peak/wp3_test/RESULTS_test.md#L26` | collapse, Baleen |
+| R5 | 52.30 | `changes/2_deployable_peak/wp3_test/RESULTS_test.md#L26` | collapse, full design |
+| R5 | 42.72 | `changes/2_deployable_peak/wp9_region5/RESULTS_test.md#L29` | collapse, Baleen |
+| R5 | 51.46 | `changes/2_deployable_peak/wp9_region5/RESULTS_test.md#L29` | collapse, full design |
+| R5 | 4.40 | `changes/5_midterm/result/recompute_report_out.txt#L36` | Region5 s0.6, full design vs Baleen |
+| R5 | 69% | `changes/4_story/STORY.md#L2077` | Region5 gain concentration |
+| R5 | 1.16 | `changes/2_deployable_peak/wp9_region5/RESULTS_test.md#L11` | mean gain |
+| R5 | 0.75 | `changes/2_deployable_peak/wp9_region5/RESULTS_test.md#L11` | instance SE |
+| R5 | 0.09 | `changes/2_deployable_peak/wp9_region5/RESULTS_test.md#L11` | retrain SE |
+| R5 | 93.5% | `changes/4_story/STORY.md#L1495` | two samples carry this share on Region4 |
+| R5 | 8.0% | `changes/1_literature_review/lit_review_qubo/REPORT.md#L86` | thesis: flash writes |
+| R5 | 1.4% | `changes/1_literature_review/lit_review_qubo/REPORT.md#L86` | thesis: peak, Region3 |
+| R5 | 48% | `changes/2_deployable_peak/wp3_test/RESULTS_test.md#L45` | Region7 s0.5 peak window |
+| R5 | 56–69% | `changes/2_deployable_peak/wp3_test/RESULTS_test.md#L46` | Baleen admission |
+| R5 | 4–14% | `changes/2_deployable_peak/wp3_test/RESULTS_test.md#L47` | full design admission |
+| R5 | 13 points | `changes/2_deployable_peak/wp3_test/RESULTS_test.md#L48` | peak rise |
+| R5 | 0.52 | `changes/5_midterm/result/recompute_report_out.txt#L42` | Region5 s0.5 big-offset share |
+| R5 | 0.39 | `changes/5_midterm/result/recompute_report_out.txt#L42` | peak-window admission |
+| R5 | 0.56 | `changes/5_midterm/result/recompute_report_out.txt#L43` | peak-window admission |
+| R5 | 0.28 | `changes/5_midterm/result/recompute_report_out.txt#L44` | peak-window admission |
+| R5 | 41% | `changes/2_deployable_peak/wp2_deployed/RESULTS_dev.md#L47` | full design, Region6 dev |
+| R5 | 22% | `changes/2_deployable_peak/wp2_deployed/RESULTS_dev.md#L47` | Baleen, Region6 dev |
+| R5 | 10/12 | `changes/2_deployable_peak/wp2_deployed/RESULTS_dev.md#L47` | peak moved off the scan |
+| R5 | 18/39 | `changes/2_deployable_peak/wp1_offline/RESULTS.md#L94` | Ising below CP-SAT |
+| R5 | 22/39 | `changes/2_deployable_peak/wp1_offline/RESULTS.md#L95` | Ising below LP |
+| R5 | 0.18 | `changes/2_deployable_peak/wp1_offline/RESULTS.md#L94` | mean difference vs CP-SAT |
+| R5 | 0.15 | `changes/2_deployable_peak/wp1_offline/RESULTS.md#L95` | mean difference vs LP |
+| R5 | 1/6 | `changes/2_deployable_peak/wp5_ising/RESULTS_test.md#L12` | tight budgets, 1 s |
+| R5 | 6/6 | `changes/2_deployable_peak/wp5_ising/RESULTS_test.md#L12` | tight budgets, 3 s |
+| R5 | 4/6 | `changes/2_deployable_peak/wp5_ising/RESULTS_test.md#L12` | tight budgets, 10 s |
+| R6 | 37.59 | `changes/0_reproduce/RESULTS.md#L50` | paper's Fig 9 Baleen, Region7 |
+| R6 | 41.31 | `changes/0_reproduce/RESULTS.md#L51` | paper's Fig 9 Baleen, Region6 |
+| R6 | 0.6 | `changes/0_reproduce/RESULTS.md#L3` | Baleen vs authors' released-metric runs |
+| R6 | 36 rows | `changes/2_deployable_peak/wp2_deployed/RESULTS_dev.md#L239` | threshold search bound |
+| R6 | 26,499 | `changes/2_deployable_peak/wp0_overlay/CP1.md#L14` | train/serve parity |
+| R6 | +217/−6 | `changes/2_deployable_peak/wp0_overlay/CP1.md#L17` | overlay patch size |
+| R6 | 32k-89k | `changes/2_deployable_peak/wp1_offline/RESULTS.md#L23` | episodes per instance |
+| R6 | 997-1009 | `changes/2_deployable_peak/wp1_offline/RESULTS.md#L23` | windows per instance |
+| R6 | 214 MB | `changes/2_deployable_peak/wp5_ising/RESULTS_dev.md#L28-L29` | matrix-free SB |
+| R6 | 126k | `changes/2_deployable_peak/wp5_ising/RESULTS_dev.md#L29` | variables |
+| R6 | ~70k | `changes/2_deployable_peak/wp5_ising/RESULTS_dev.md#L31` | dense package OOM |
+| R6 | 123-GB | `changes/2_deployable_peak/wp5_ising/RESULTS_dev.md#L31` | machine memory |
+| R6 | 165 MB | `changes/2_deployable_peak/wp5_ising/RESULTS_dev.md#L31` | PT |
+| R6 | 64 | `RESEARCH.md#L25` | development screen |
+| R6 | 24.45 | `changes/2_deployable_peak/wp10_schedule/RESULTS_test.md#L31` | H5, threshold table on Region1 |
+| R6 | 35.36 | `changes/3_autoresearch/result/FINAL_REPORT.md#L53` | dev, union design |
+| R6 | 36.16 | `RESEARCH.md#L28` | dev, adaptive bar |
+| R6 | 43.17 | `changes/3_autoresearch/result/FINAL_REPORT.md#L66` | Region4, union |
+| R6 | 42.87 | `changes/3_autoresearch/result/FINAL_REPORT.md#L66` | Region4, adaptive bar |
+| R6 | ≈ 10% | `changes/3_autoresearch/result/FINAL_REPORT.md#L73` | Region2 peak |
+| R6 | 11.5 MB/s | `changes/3_autoresearch/result/FINAL_REPORT.md#L65` | Region2 s0.2 admit-all |
+| R7 | s0.4–0.6 | `changes/2_deployable_peak/wp10_schedule/PROTOCOL_v2_H5.md#L24` | Region3 samples missing from the release |

@@ -1,4 +1,4 @@
-"""Check changes/5_midterm/SOURCES.md: every cited file exists and every value appears in its cited lines.
+"""Check changes/5_midterm/SOURCES.md (slide rows and report rows R<section>): every cited file exists and every value appears in its cited lines.
 
   python3 changes/5_midterm/code/check_sources.py      # exit 0 iff every row checks out
 
@@ -13,7 +13,7 @@ from decimal import ROUND_HALF_UP, Decimal
 
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 REPO = os.path.dirname(os.path.dirname(HERE))
-ROW = re.compile(r"^\| *(\d+) *\| *(.+?) *\| *`([^`#]+)(?:#L(\d+)(?:-L(\d+))?)?` *\|")
+ROW = re.compile(r"^\| *(R?\d+) *\| *(.+?) *\| *`([^`#]+)(?:#L(\d+)(?:-L(\d+))?)?` *\|")
 NUM = re.compile(r"\d+(?:\.\d+)?")
 
 
