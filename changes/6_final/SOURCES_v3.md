@@ -6,7 +6,7 @@ Deck: `PeakBaleen_Final_v3.pptx` (11 slides + 2 backup), built by `build_deck_v3
 |---|---|---|
 | 2–5 | Motivation, task, baselines, key idea | as in `SOURCES.md` (v1) |
 | 6–7 | Design and algorithm | `changes/3_autoresearch/work/union/SCOPE_AMENDMENT.md` (either-model admission), `changes/2_deployable_peak/wp0_overlay/G3_REVIEW.md`, `algorithm_v2/alg.tex` |
-| 8–9 | Offline and solver | `changes/2_deployable_peak/wp1_offline/results/wp1_table.csv`, `wp5_ising/RESULTS_test.md`, `wp5_ising/RESULTS_dev.md` |
+| 8 | Offline (the solver is its fourth bullet) | `changes/2_deployable_peak/wp1_offline/results/wp1_table.csv`, `wp5_ising/RESULTS_test.md`, `wp5_ising/RESULTS_dev.md` |
 | Slide 9 | Online with Ising labels (dev) | `changes/2_deployable_peak/wp2_deployed/trials.csv` |
 | Slide 10 | PeakBaleen: development samples and Region4 | `changes/3_autoresearch/work/union/trials_dev.csv`, `results/dev_finalist.json` |
 | Slide 10 (cont.) | Region4 and Region5 | `changes/3_autoresearch/work/t2u_region4/trials_test.csv`, `changes/2_deployable_peak/wp9_region5/trials.csv` |
@@ -16,9 +16,6 @@ Deck: `PeakBaleen_Final_v3.pptx` (11 slides + 2 backup), built by `build_deck_v3
 
 | Slide | Value | Source | What |
 |---|---|---|---|
-| 2 | Motivation | Baleen paper §3.1 (`documents/Baleen_FAST24_Wong.pdf`) |
-| 4 | Baselines table | same rows as the mid-term slide 3 (`changes/5_midterm/SOURCES.md`) |
-| 5 | Key idea (schematic, illustrative values) and formulation | `changes/2_deployable_peak/wp2_deployed/src/q2lib/q2anneal.py`, `documents/proposal_docx_compose/figures/fig2.py` |
 | 3 | 366 | `changes/0_reproduce/RESULTS.md#L5` | cache size, 366.475 GB |
 | 3 | 35.6 | `changes/0_reproduce/RESULTS.md#L5` | flash write rate, MB/s |
 | 3 | 10 | `RESEARCH.md#L12` | the peak metric uses 10-minute windows |
