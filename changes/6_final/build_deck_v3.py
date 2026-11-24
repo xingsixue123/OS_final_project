@@ -14,7 +14,7 @@ if not os.environ.get("SLIDE_KIT"):
 sys.path.insert(0, os.environ["SLIDE_KIT"])
 from ndslides import *  # noqa: E402,F401,F403
 from pptx.chart.data import CategoryChartData  # noqa: E402
-from pptx.enum.chart import XL_CHART_TYPE, XL_LABEL_POSITION, XL_LEGEND_POSITION, XL_TICK_LABEL_POSITION  # noqa: E402
+from pptx.enum.chart import XL_AXIS_CROSSES, XL_CHART_TYPE, XL_LABEL_POSITION, XL_LEGEND_POSITION, XL_TICK_LABEL_POSITION  # noqa: E402
 from pptx.util import Inches, Pt  # noqa: E402
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -404,37 +404,39 @@ text(s, 8.6, 2.25, 3.85, 4.1, [
 # =====================================================================
 # 9 · Result 2 · Ising solver
 # =====================================================================
-s = d.content("RESULT 2 · ISING SOLVER", "The Ising solver finds the lowest peaks and scales to large instances",
-              "Second, the solver. On the same 39 samples and the same objective, parallel tempering gives the largest mean "
-              "peak reduction, 13.7 percent, against 13.2 for CP-SAT and 13.0 for linear programming. With a short solve budget "
-              "of three seconds, it matches or beats the best classical solver on all six test samples. And Ising formulations "
-              "scale: matrix-free simulated bifurcation handles 126 thousand variables in 214 megabytes, and parallel tempering "
-              "stays within 165 megabytes, while a dense solver runs out of memory beyond about 70 thousand variables.")
+s = d.content("RESULT 2 · ISING SOLVER", "Our Ising solver: the lowest peaks, and it scales",
+              "Second, the solver. We gave the same problem to three solvers: linear programming with rounding, Google's "
+              "CP-SAT, and our Ising solver, parallel tempering. The Ising solver reaches the largest peak reduction, 13.7 "
+              "percent, against 13.2 and 13.0. It is also fast: with only three seconds per problem, it matched or beat the best "
+              "classical solver on all six test samples. And it scales: our Ising formulations handle problems with 126 "
+              "thousand variables in a few hundred megabytes, where a dense implementation runs out of memory beyond about 70 "
+              "thousand.")
 sv = off["solvers"]
 cd = CategoryChartData()
 cd.categories = ["LP + round + repair", "CP-SAT", "Ising: parallel tempering"]
-cd.add_series("Mean offline peak reduction (%)", [sv["lp"]["reduction"], sv["cpsat"]["reduction"], sv["pt"]["reduction"]])
-ch = chart(s, XL_CHART_TYPE.BAR_CLUSTERED, 0.89, 2.05, 5.9, 3.4, cd, [GREY], maxv=16, major=4, legend=False, cat_size=12,
-           label_fmt='0.0"%"')
+cd.add_series("Peak reduction vs Baleen’s OPT", [sv["lp"]["reduction"], sv["cpsat"]["reduction"], sv["pt"]["reduction"]])
+ch = chart(s, XL_CHART_TYPE.BAR_CLUSTERED, 0.89, 2.05, 7.0, 4.3, cd, [GREY], maxv=16, major=4, legend=False, cat_size=13,
+           fmt='0"%"', label_fmt='0.0"%"')
 ch.category_axis.reverse_order = True
+ch.category_axis.crosses = XL_AXIS_CROSSES.MAXIMUM
 ch.has_title = False
 ch.plots[0].gap_width = 45
+va = ch.value_axis
+va.has_title = True
+va.axis_title.text_frame.text = "peak reduction vs Baleen’s OPT"
+r_ = va.axis_title.text_frame.paragraphs[0].runs[0]
+r_.font.size = Pt(11)
+r_.font.bold = False
+r_.font.color.rgb = MUTED
 p_ = ch.plots[0].series[0].points[2]
 p_.format.fill.solid()
 p_.format.fill.fore_color.rgb = ORANGE
-text(s, 0.89, 5.5, 5.9, 0.5, "Mean per-sample peak reduction against Baleen’s OPT; 39 samples, same objective, 300 s each.",
-     size=10, color=MUTED)
-box(s, 7.1, 2.05, 5.35, 1.9, fill=WHITE, line=LINE, radius=0.04)
-text(s, 7.3, 2.12, 5.0, 0.3, "SHORT SOLVE BUDGET", size=12, color=BLUE, bold=True)
-text(s, 7.3, 2.45, 5.0, 0.7, "6 / 6", size=34, color=ORANGE, bold=True)
-text(s, 7.3, 3.2, 5.0, 0.7, "test samples where Ising matches or beats the best classical solver at a 3 s budget",
-     size=12.5)
-card(s, 7.1, 4.1, 5.35, 1.9, [
-    head("SCALES TO LARGE INSTANCES"),
-    bl("Matrix-free simulated bifurcation: <B>214 MB</B> at <B>126k</B> variables", after=4),
-    bl("Parallel tempering (sparse): ≤ <B>165 MB</B>", after=4),
-    bl("A dense solver runs out of memory beyond ≈ 70k variables (123 GB machine)", after=0),
-], size=12.5)
+text(s, 8.35, 2.35, 4.1, 3.8, [
+    bl("<B>Lowest peak</B>: on the same problem, the Ising solver brings the peak lowest of the three", after=16),
+    bl("<B>Fast</B>: with only a few seconds per problem, it matches or beats the best classical solver", after=16),
+    bl("<B>Scales</B>: on large problems it needs only a few hundred MB of memory, where a dense implementation runs out",
+       after=0),
+], size=15.5, spacing=1.1)
 
 # =====================================================================
 # 10 · Result 3 · Online with Ising labels (dev)

@@ -1,6 +1,6 @@
 # 6_final v3: where every number on the v3 slides comes from
 
-Deck: `PeakBaleen_Final_v3.pptx` (13 slides + 2 backup), built by `build_deck_v3.py`. v3 = v2 with slides 2–5 and 8 rewritten (slide 2's sketch is schematic and carries no data). Chart values come from `result/numbers.json` (`code/recompute_final.py`) and `result/numbers_v2.json` (`code/recompute_final_v2.py`), both computed from the raw result ledgers.
+Deck: `PeakBaleen_Final_v3.pptx` (13 slides + 2 backup), built by `build_deck_v3.py`. v3 = v2 with slides 2–5, 8 and 9 rewritten (slide 2's sketch is schematic and carries no data). Chart values come from `result/numbers.json` (`code/recompute_final.py`) and `result/numbers_v2.json` (`code/recompute_final_v2.py`), both computed from the raw result ledgers.
 
 | Slide | Content | Main source |
 |---|---|---|
@@ -70,7 +70,6 @@ Deck: `PeakBaleen_Final_v3.pptx` (13 slides + 2 backup), built by `build_deck_v3
 | 9 | 13.69 | `changes/6_final/result/recompute_final_out.txt#L4` | Ising (13.7%) |
 | 9 | 13.15 | `changes/6_final/result/recompute_final_out.txt#L3` | CP-SAT (13.2%) |
 | 9 | 13.03 | `changes/6_final/result/recompute_final_out.txt#L2` | LP (13.0%) |
-| 9 | 6/6 | `changes/2_deployable_peak/wp5_ising/RESULTS_test.md#L12` | 3 s budget: Ising ≤ best classical on 6/6 |
 | 10 | 38.50 | `changes/6_final/result/recompute_final_v2_out.txt#L2` | dev, Baleen |
 | 10 | 37.20 | `changes/6_final/result/recompute_final_v2_out.txt#L2` | dev, Ising labels + load-aware admission |
 | 10 | -3.4% | `changes/6_final/result/recompute_final_v2_out.txt#L2` | dev change |

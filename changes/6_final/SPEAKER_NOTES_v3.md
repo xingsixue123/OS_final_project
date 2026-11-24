@@ -34,9 +34,9 @@ Left is Baleen: sort episodes by disk time saved per byte, label the prefix that
 
 First result, offline. We compare two plans made in hindsight on the same trace: Baleen's OPT, and our plan solved by the Ising solver, both replayed in the simulator at the same write budget. Ours has the lower peak in every region; over all 39 samples the peak drops by 13.7 percent on average. Why does it win? Baleen's OPT picks data one piece at a time by how much it saves per byte, and never asks when that saving happens. Our plan looks at every ten-minute window at once and spends the flash writes on data that relieves the busiest ones. And lowering only the tallest window would just make the second-tallest the new peak; solving all windows together with the Ising solver brings the maximum down as a whole.
 
-## 9 · The Ising solver finds the lowest peaks and scales to large instances
+## 9 · Our Ising solver: the lowest peaks, and it scales
 
-Second, the solver. On the same 39 samples and the same objective, parallel tempering gives the largest mean peak reduction, 13.7 percent, against 13.2 for CP-SAT and 13.0 for linear programming. With a short solve budget of three seconds, it matches or beats the best classical solver on all six test samples. And Ising formulations scale: matrix-free simulated bifurcation handles 126 thousand variables in 214 megabytes, and parallel tempering stays within 165 megabytes, while a dense solver runs out of memory beyond about 70 thousand variables.
+Second, the solver. We gave the same problem to three solvers: linear programming with rounding, Google's CP-SAT, and our Ising solver, parallel tempering. The Ising solver reaches the largest peak reduction, 13.7 percent, against 13.2 and 13.0. It is also fast: with only three seconds per problem, it matched or beat the best classical solver on all six test samples. And it scales: our Ising formulations handle problems with 126 thousand variables in a few hundred megabytes, where a dense implementation runs out of memory beyond about 70 thousand.
 
 ## 10 · Online, a model trained on Ising labels learns to cache the peak
 
