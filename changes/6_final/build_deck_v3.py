@@ -422,11 +422,13 @@ s = d.content("RESULT 2 · ONLINE", "Online, Ising labels teach the model to cac
 dv = x1["dev"]
 cd = CategoryChartData()
 t6 = x1["test6"]
-cd.categories = ["Dev set", "Test set (Region6)"]
+cd.categories = ["Dev set", "Test set"]
 cd.add_series("Baleen", [dv["all"]["baleen"], t6["baleen"]])
 cd.add_series("Model on Ising labels", [dv["all"]["ising"], t6["ising"]])
 chart(s, XL_CHART_TYPE.COLUMN_CLUSTERED, 0.89, 2.0, 6.6, 4.4, cd, [GREY, ORANGE], maxv=50, major=10, cat_size=12,
       fmt='0"%"')
+text(s, 0.89, 6.48, 6.6, 0.3, "Dev set: Region6 and Region7, samples s0–s0.3  ·  Test set: Region6, samples s0.4–s0.6",
+     size=11, color=MUTED)
 text(s, 7.95, 2.3, 4.5, 3.9, [
     bl("<B>The peak is a scan</B>: Region6’s busiest windows are long runs of sequential reads, which Baleen’s model "
        "rarely caches", after=16),
