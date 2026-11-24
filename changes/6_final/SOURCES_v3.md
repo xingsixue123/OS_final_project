@@ -1,6 +1,6 @@
 # 6_final v3: where every number on the v3 slides comes from
 
-Deck: `PeakBaleen_Final_v3.pptx` (13 slides + 2 backup), built by `build_deck_v3.py`. v3 = v2 with slide 2 rewritten (its sketch is schematic and carries no data). Chart values come from `result/numbers.json` (`code/recompute_final.py`) and `result/numbers_v2.json` (`code/recompute_final_v2.py`), both computed from the raw result ledgers.
+Deck: `PeakBaleen_Final_v3.pptx` (13 slides + 2 backup), built by `build_deck_v3.py`. v3 = v2 with slides 2 and 3 rewritten (slide 2's sketch is schematic and carries no data). Chart values come from `result/numbers.json` (`code/recompute_final.py`) and `result/numbers_v2.json` (`code/recompute_final_v2.py`), both computed from the raw result ledgers.
 
 | Slide | Content | Main source |
 |---|---|---|
@@ -17,17 +17,12 @@ Deck: `PeakBaleen_Final_v3.pptx` (13 slides + 2 backup), built by `build_deck_v3
 | Slide | Value | Source | What |
 |---|---|---|---|
 | 2 | Motivation | Baleen paper §3.1 (`documents/Baleen_FAST24_Wong.pdf`) |
-| 3 | Task and test protocol | `changes/0_reproduce/RESULTS.md`, `changes/SCOPE_v2.md` |
 | 4 | Baselines table | same rows as the mid-term slide 3 (`changes/5_midterm/SOURCES.md`) |
 | 5 | Key idea (schematic, illustrative values) and formulation | `changes/2_deployable_peak/wp2_deployed/src/q2lib/q2anneal.py`, `documents/proposal_docx_compose/figures/fig2.py` |
 | 3 | 366 | `changes/0_reproduce/RESULTS.md#L5` | cache size, 366.475 GB |
 | 3 | 35.6 | `changes/0_reproduce/RESULTS.md#L5` | flash write rate, MB/s |
-| 3 | 0.1% | `changes/0_reproduce/RESULTS.md#L5` | trace sample size |
 | 3 | 10 | `RESEARCH.md#L12` | the peak metric uses 10-minute windows |
 | 3 | Region | `documents/Baleen_FAST24_Wong.pdf` | §5 "Workloads": 7 Meta Tectonic clusters, each can span a datacenter; 3 years; block-key sampling; day 1 trains, the rest tests |
-| 3 | 201910 | `changes/2_deployable_peak/wp10_schedule/RESULTS_test.md#L3` | Region1 recorded 2019-10 (Regions 2, 3 likewise: `changes/3_autoresearch/documents/GOOD_RESULT.md#L22-L24`) |
-| 3 | 202110 | `changes/2_deployable_peak/wp1_offline/RESULTS.md#L19` | Region4 recorded 2021-10 |
-| 3 | 20230325 | `changes/2_deployable_peak/wp1_offline/RESULTS.md#L19` | Regions 5–7 recorded 2023-03-25 |
 | 4 | 34.63 | `changes/0_reproduce/RESULTS.md#L9` | paper Fig. 9 average, CoinFlip |
 | 4 | 31.95 | `changes/0_reproduce/RESULTS.md#L9` | paper Fig. 9 average, RejectX |
 | 4 | 28.11 | `changes/0_reproduce/RESULTS.md#L9` | paper Fig. 9 average, Baleen |
@@ -59,8 +54,6 @@ Deck: `PeakBaleen_Final_v3.pptx` (13 slides + 2 backup), built by `build_deck_v3
 | 4 | 25 | `changes/5_midterm/result/recompute_out.txt#L17` | upper end of "14–25%" (Region4: 24.8%) |
 | 4 | 9 | `changes/0_reproduce/RESULTS.md#L48` | footnote "3–9 retrains": reproduction rows use 9 retrains |
 | 4 | 3 | `changes/2_deployable_peak/wp9_region5/RESULTS_test.md#L21` | footnote "3–9 retrains": test rows use 3 matched retrains |
-| 3 | ±1% | `changes/SCOPE_v2.md#L31` | write rate matched within ±1% |
-| 3 | ≥3 retrains | `changes/SCOPE_v2.md#L37` | every configuration retrained at least 3 times |
 | 5 | 16 replicas | `changes/2_deployable_peak/wp1_offline/RESULTS.md#L27` | parallel tempering, 16 replicas, LP start |
 | 6 | 0.25 | `changes/2_deployable_peak/wp0_overlay/G3_REVIEW.md#L11` | adaptive bar formula (clip 0.25-4, reference 20, α = −1) |
 | 6 | 10/30/60 | `changes/2_deployable_peak/wp0_overlay/G3_REVIEW.md#L9` | load feature windows |

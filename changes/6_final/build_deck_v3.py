@@ -196,40 +196,36 @@ bar(s, 0.89, 6.05, 11.56, 0.55, "Our question: with the same flash writes, can w
 # =====================================================================
 # 3 · Task
 # =====================================================================
-s = d.content("THE TASK", "Choose what enters flash, under a write budget, so the peak disk load is lowest",
-              "The task. Read requests hit a flash cache in front of hard disks. A hit costs the disks nothing; a miss costs "
-              "disk-head time. On each miss, the admission policy decides whether to write the block into flash, and every "
-              "admission spends flash writes, which are capped at 35.6 megabytes per second. We minimize P100, the busiest "
-              "ten-minute window of disk utilization. The data are Baleen's public traces from Meta's Tectonic storage: Region1 "
-              "to Region7 are seven storage clusters, anonymous names from the paper, not geography. Each sample is a different "
-              "0.1 percent slice of a cluster's blocks. Day one trains, later days test. We design on development samples and test "
-              "on clusters the design never saw, and for a pre-registered test we commit the hypothesis and pass rule to git first.")
-xs = [0.89, 3.19, 5.49]
+s = d.content("THE TASK", "The task: decide what enters flash so the peak disk load is lowest",
+              "The task. Requests read blocks through a flash cache in front of hard disks. A hit costs the disks nothing; a "
+              "miss costs disk-head time. On every miss, the admission policy, which is what we design, decides whether to "
+              "write the block into flash. Every admission spends flash writes, so all policies get the same budget, 35.6 "
+              "megabytes per second. The goal is the lowest P100: the busiest ten minutes of disk load. We use Meta's "
+              "production storage traces from seven clusters, which the Baleen paper calls Region1 to Region7, and replay them "
+              "in Baleen's own simulator: the first day trains, the later days test. Each cluster is cut into small samples, "
+              "and each sample is one test case.")
+BW3, G3 = 1.95, 0.42
+xs = [0.89 + i * (BW3 + G3) for i in range(3)]
 for xx, (h_, b_) in zip(xs, [("Request", "a block read (GET) from the trace"), ("Flash cache", "366 GB; a hit costs the disks nothing"),
                              ("HDD on a miss", "costs disk-head time")]):
-    card(s, xx, 2.05, 1.95, 1.05, [(h_, {"size": 14, "bold": True, "color": NAVY, "after": 2}), b_], size=11.5)
-arrow(s, 2.86, 2.57, 3.17, 2.57, color=GREY, w=2)
-arrow(s, 5.16, 2.57, 5.47, 2.57, color=GREY, w=2)
-arrow(s, 4.16, 3.72, 4.16, 3.14, color=BLUE, w=2.25)
-c = box(s, 0.89, 3.75, 6.55, 1.0, fill=PALE, line=BLUE, lw=1.5, radius=0.06)
-text(s, 1.07, 3.85, 6.2, 0.85, [("Admission policy: what we design", {"size": 14, "bold": True, "color": BLUE, "after": 2}),
-                                "On a miss: write the block into flash or not? Every admission spends flash writes."], size=12)
-card(s, 0.89, 4.95, 6.55, 1.55, [
-    head("HOW WE TEST"),
-    bl("Design on development samples (Region6 and Region7, s0–s0.3)", after=2),
-    bl("Test on clusters the design never saw (Region4, Region5)", after=2),
-    bl("<B>Pre-registered</B> tests: hypothesis and pass rule committed to git before running", after=2),
-    bl("Every policy retrained ≥ 3 times; write rate matched within ±1%", after=0),
-], size=11.5)
-card(s, 7.75, 2.05, 4.7, 4.45, [
-    head("PROBLEM"),
-    ("<B>Constraint</B>: flash write rate 35.6 MB/s (±1%), 366 GB cache", {"after": 8}),
-    ("<B>Minimize</B>: P100, the busiest 10-minute window of HDD utilization (%)", {"after": 8}),
-    ("<B>Data</B>: Baleen’s public Meta Tectonic traces. <B>Region1–7</B> = seven storage clusters (anonymous names from "
-     "the paper), recorded in 2019, 2021 and 2023", {"after": 8}),
-    ("<B>Samples</B> s0 … s0.9: ten different 0.1% slices of a cluster’s blocks. Day 1 trains, later days test", {"after": 8}),
-    ("<B>Simulator</B>: BCacheSim, Baleen’s own, kept frozen", {}),
-], size=13)
+    card(s, xx, 2.4, BW3, 1.2, [(h_, {"size": 16, "bold": True, "color": NAVY, "after": 3}), b_], size=13)
+for i in range(2):
+    arrow(s, xs[i] + BW3 + 0.03, 3.0, xs[i + 1] - 0.03, 3.0, color=GREY, w=2)
+arrow(s, xs[1] + BW3 / 2, 4.27, xs[1] + BW3 / 2, 3.64, color=BLUE, w=2.25)
+box(s, 0.89, 4.3, xs[2] + BW3 - 0.89, 1.2, fill=PALE, line=BLUE, lw=1.5, radius=0.06)
+text(s, 1.09, 4.42, xs[2] + BW3 - 1.29, 1.0, [("Admission policy: what we design", {"size": 16, "bold": True, "color": BLUE, "after": 3}),
+                                             "On a miss: write the block into flash or not? Every admission spends flash writes."],
+     size=13)
+for y0, h0, lab, big, small in [
+        (2.2, 1.05, "BUDGET", "35.6 MB/s", "of flash writes, the same for every policy"),
+        (3.4, 1.05, "GOAL", "Lowest P100", "the busiest 10 minutes of disk load"),
+        (4.6, 1.5, "DATA", "7 Meta storage clusters", "named Region1–7 as in the Baleen paper, replayed in Baleen’s simulator; day 1 "
+                                                         "trains, later days test; each cluster is cut into small samples, each "
+                                                         "one test case")]:
+    box(s, 7.95, y0, 4.5, h0, fill=WHITE, line=LINE, radius=0.04)
+    text(s, 8.15, y0 + 0.08, 4.1, h0 - 0.12, [(lab, {"size": 11, "bold": True, "color": BLUE, "after": 1}),
+                                             (big, {"size": 19, "bold": True, "color": NAVY, "after": 1}),
+                                             (small, {"size": 12, "color": INK})], spacing=1.05)
 
 # =====================================================================
 # 4 · Baselines
