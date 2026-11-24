@@ -1,6 +1,6 @@
 # 6_final: final presentation deck
 
-- **Deck:** `PeakBaleen_Final_v1.pptx`, 13 slides plus 3 backup slides, with speaker notes in every slide (also collected in `SPEAKER_NOTES.md`; about 12 minutes of speech for the 13 main slides). A PDF render is in `preview/PeakBaleen_Final_v1.pdf`.
+- **Deck:** `PeakBaleen_Final_v1.pptx`, 13 slides plus 3 backup slides, with speaker notes in every slide (also collected in `SPEAKER_NOTES.md`; about 12 minutes of speech for the 13 main slides). The PDF version is `PeakBaleen_Final_v1.pdf`, exported with static IBM Plex fonts so it matches PowerPoint.
 - **Outline:** approved 2026-11-24. The planned slide on the one-shot final test (samples 0.7–0.9) was dropped at the captain's decision, so the reserve samples are still untouched by deployed runs.
 - **No new experiments.** Every result comes from runs already recorded in `RESEARCH.md`; this folder only recomputes and presents them.
 - **Style:** the team's ND/EMNLP slide kit (python-pptx, kept outside this repo; point `SLIDE_KIT` at it).
@@ -29,7 +29,8 @@
 | `code/recompute_final.py`, `result/recompute_final_out.txt`, `result/numbers.json` | Recompute every charted number from the raw result CSVs |
 | `SOURCES.md`, `code/check_sources.py` | Every number on the slides mapped to `file#line`, and the checker |
 | `assets/` | Algorithm images copied from `changes/5_midterm/algorithm/` |
-| `preview/` | PDF render and contact sheet |
+| `PeakBaleen_Final_v1.pdf` | The deck as PDF |
+| `preview/` | Layout-check contact sheet |
 
 ## Rebuild and check
 ```
@@ -40,4 +41,7 @@ PYTHONDONTWRITEBYTECODE=1 $PY build_deck.py PeakBaleen_Final_v1.pptx
 PYTHONDONTWRITEBYTECODE=1 $PY $SLIDE_KIT/preview.py PeakBaleen_Final_v1.pptx preview --dpi 80
 cd ../.. && python3 changes/6_final/code/check_sources.py   # expect: 159 rows checked, 0 problems
 ```
-Previews render titles lighter than PowerPoint does (LibreOffice and the variable Plex font); the fonts are embedded in the deck.
+The `preview.py` render shows titles lighter than PowerPoint (LibreOffice cannot bold the variable Plex font); for the PDF, export with the static IBM Plex Sans fonts (github.com/IBM/plex) on the fontconfig path:
+```
+FONTCONFIG_FILE=<fonts.conf listing the static Plex dir> soffice --headless --convert-to pdf --outdir changes/6_final changes/6_final/PeakBaleen_Final_v1.pptx
+```
