@@ -1,6 +1,6 @@
 # 6_final v3: where every number on the v3 slides comes from
 
-Deck: `PeakBaleen_Final_v3.pptx` (13 slides + 2 backup), built by `build_deck_v3.py`. v3 = v2 with slides 2–5, 8 and 9 rewritten (slide 2's sketch is schematic and carries no data). Chart values come from `result/numbers.json` (`code/recompute_final.py`) and `result/numbers_v2.json` (`code/recompute_final_v2.py`), both computed from the raw result ledgers.
+Deck: `PeakBaleen_Final_v3.pptx` (13 slides + 2 backup), built by `build_deck_v3.py`. v3 = v2 with slides 2–5 and 8–10 rewritten (slide 2's sketch is schematic and carries no data). Chart values come from `result/numbers.json` (`code/recompute_final.py`) and `result/numbers_v2.json` (`code/recompute_final_v2.py`), both computed from the raw result ledgers.
 
 | Slide | Content | Main source |
 |---|---|---|
@@ -72,19 +72,8 @@ Deck: `PeakBaleen_Final_v3.pptx` (13 slides + 2 backup), built by `build_deck_v3
 | 9 | 13.03 | `changes/6_final/result/recompute_final_out.txt#L2` | LP (13.0%) |
 | 10 | 38.50 | `changes/6_final/result/recompute_final_v2_out.txt#L2` | dev, Baleen |
 | 10 | 37.20 | `changes/6_final/result/recompute_final_v2_out.txt#L2` | dev, Ising labels + load-aware admission |
-| 10 | -3.4% | `changes/6_final/result/recompute_final_v2_out.txt#L2` | dev change |
-| 10 | 6/8 | `changes/6_final/result/recompute_final_v2_out.txt#L2` | dev wins |
 | 10 | 39.31 | `changes/6_final/result/recompute_final_v2_out.txt#L3` | Region6 dev, Baleen |
 | 10 | 36.73 | `changes/6_final/result/recompute_final_v2_out.txt#L3` | Region6 dev, Ising labels |
-| 10 | -6.6% | `changes/6_final/result/recompute_final_v2_out.txt#L3` | Region6 change |
-| 10 | 4/4 | `changes/6_final/result/recompute_final_v2_out.txt#L3` | Region6 wins |
-| 10 | 0.22 | `changes/6_final/result/recompute_final_v2_out.txt#L5` | Region6 peak window cached, Baleen (22%) |
-| 10 | 0.41 | `changes/6_final/result/recompute_final_v2_out.txt#L6` | Region6 peak window cached, Ising labels (41%) |
-| 10 | 9/12 | `changes/6_final/result/recompute_final_v2_out.txt#L5` | peak on a scan, Baleen |
-| 10 | 2/12 | `changes/6_final/result/recompute_final_v2_out.txt#L6` | peak on a scan, Ising labels |
-| 10 | +1.17 | `changes/6_final/result/recompute_final_v2_out.txt#L7` | bar gain on Ising labels |
-| 10 | 8/8 | `changes/6_final/result/recompute_final_v2_out.txt#L7` | samples |
-| 10 | +0.62 | `changes/6_final/result/recompute_final_v2_out.txt#L7` | bar gain on Baleen labels |
 | 11 | 35.36 | `changes/6_final/result/recompute_final_v2_out.txt#L10` | PeakBaleen (Ising labels), dev |
 | 11 | 36.78 | `changes/6_final/result/recompute_final_v2_out.txt#L10` | Baleen, dev |
 | 11 | -3.9% | `changes/6_final/result/recompute_final_v2_out.txt#L10` | change vs Baleen |

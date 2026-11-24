@@ -38,9 +38,9 @@ First result, offline. We compare two plans made in hindsight on the same trace:
 
 Second, the solver. We gave the same problem to three solvers: linear programming with rounding, Google's CP-SAT, and our Ising solver, parallel tempering. The Ising solver reaches the largest peak reduction, 13.7 percent, against 13.2 and 13.0. It is also fast: with only three seconds per problem, it matched or beat the best classical solver on all six test samples. And it scales: our Ising formulations handle problems with 126 thousand variables in a few hundred megabytes, where a dense implementation runs out of memory beyond about 70 thousand.
 
-## 10 · Online, a model trained on Ising labels learns to cache the peak
+## 10 · Online, Ising labels teach the model to cache the peak
 
-Third, online. Online means we replay the test days in Baleen's simulator and the trained model decides request by request, without seeing the future. A model trained on the Ising labels, with the load feature and the load-aware bar, lowers the peak by 3.4 percent against Baleen on our development samples, winning 6 of 8, and by 6.6 percent on Region6, winning all 4. The reason: Region6's peaks are big sequential scans. The Ising labels teach the model to admit them at the peak: it caches 41 percent of the peak window instead of 22, and the peak moves off the scan in 10 of 12 retrains. Load-aware admission helps the Ising labels most: plus 1.17 points on every sample, versus 0.62 on Baleen's labels.
+Third, online. Online means we replay the test days in Baleen's simulator and the trained model decides request by request, without seeing the future. A model trained on the Ising labels lowers the peak by 3.4 percent against Baleen on our development samples, and by 6.6 percent on Region6. Why? Region6's busiest windows are big scans, long runs of sequential reads, and Baleen's model rarely caches them. The Ising labels mark that data as worth caching at the peak, so the model learns to cache it there: it caches 41 percent of the peak window instead of 22, and the peak moves off the scan. The load-aware bar adds the most on top of Ising labels: when the disks are busy, it lets more of that data in.
 
 ## 11 · PeakBaleen beats Baleen on all 10 development samples
 

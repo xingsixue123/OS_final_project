@@ -440,32 +440,28 @@ text(s, 8.35, 2.35, 4.1, 3.8, [
 # 10 · Result 3 · Online with Ising labels (dev)
 # =====================================================================
 x1 = V["dev_x1"]
-s = d.content("RESULT 3 · ONLINE", "Online, a model trained on Ising labels learns to cache the peak",
+s = d.content("RESULT 3 · ONLINE", "Online, Ising labels teach the model to cache the peak",
               "Third, online. Online means we replay the test days in Baleen's simulator and the trained model decides request "
-              "by request, without seeing the future. A model trained on the Ising labels, with the load feature and the "
-              "load-aware bar, lowers the peak by 3.4 percent against Baleen on our development samples, winning 6 of 8, and "
-              "by 6.6 percent on Region6, winning all 4. The reason: Region6's peaks are big sequential scans. The Ising labels "
-              "teach the model to admit them at the peak: it caches 41 percent of the peak window instead of 22, and the peak "
-              "moves off the scan in 10 of 12 retrains. Load-aware admission helps the Ising labels most: plus 1.17 points on "
-              "every sample, versus 0.62 on Baleen's labels.")
+              "by request, without seeing the future. A model trained on the Ising labels lowers the peak by 3.4 percent "
+              "against Baleen on our development samples, and by 6.6 percent on Region6. Why? Region6's busiest windows are big "
+              "scans, long runs of sequential reads, and Baleen's model rarely caches them. The Ising labels mark that data as "
+              "worth caching at the peak, so the model learns to cache it there: it caches 41 percent of the peak window instead "
+              "of 22, and the peak moves off the scan. The load-aware bar adds the most on top of Ising labels: when the disks "
+              "are busy, it lets more of that data in.")
 dv = x1["dev"]
 cd = CategoryChartData()
-cd.categories = [f"All dev samples\n{dv['all']['pct']:+.1f}% · {dv['all']['wins']}/{dv['all']['n']}".replace("-", "−"),
-                 f"Region6\n{dv['Region6']['pct']:+.1f}% · {dv['Region6']['wins']}/{dv['Region6']['n']}".replace("-", "−")]
+cd.categories = ["All development samples", "Region6"]
 cd.add_series("Baleen", [dv["all"]["baleen"], dv["Region6"]["baleen"]])
-cd.add_series("Ising labels + load-aware admission", [dv["all"]["ising"], dv["Region6"]["ising"]])
-chart(s, XL_CHART_TYPE.COLUMN_CLUSTERED, 0.89, 2.0, 6.0, 4.0, cd, [GREY, ORANGE], maxv=45, major=10, cat_size=11.5)
-text(s, 0.89, 6.05, 6.0, 0.45, "Mean deployed P100 (%), lower is better; development samples of Region6 and Region7 "
-     "(s0–s0.3), 3 retrains each.", size=10, color=MUTED)
-mb, mi = x1["mech"]["baleen"], x1["mech"]["ising"]
-for i, (big, small) in enumerate([
-        (f"{round(100 * mb['peak_adm'])}% → {round(100 * mi['peak_adm'])}%", "of Region6’s peak window cached in flash"),
-        (f"{mb['scan_peaks']}/{mb['n']} → {mi['scan_peaks']}/{mi['n']}", "retrains whose peak is a scan (Region6)"),
-        (f"+{x1['bar_on_ising']:.2f}", f"points from load-aware admission on Ising labels ({x1['bar_on_ising_wins']}/8 "
-                                        f"samples), vs +{x1['bar_on_baleen']:.2f} on Baleen’s labels")]):
-    box(s, 7.2, 2.05 + i * 1.5, 5.25, 1.35, fill=WHITE, line=LINE, radius=0.04)
-    text(s, 7.4, 2.12 + i * 1.5, 4.9, 0.6, big, size=28, color=ORANGE, bold=True)
-    text(s, 7.4, 2.72 + i * 1.5, 4.9, 0.62, small, size=12)
+cd.add_series("Model on Ising labels", [dv["all"]["ising"], dv["Region6"]["ising"]])
+chart(s, XL_CHART_TYPE.COLUMN_CLUSTERED, 0.89, 2.0, 6.6, 4.4, cd, [GREY, ORANGE], maxv=50, major=10, cat_size=12,
+      fmt='0"%"')
+text(s, 7.95, 2.3, 4.5, 3.9, [
+    bl("<B>The peak is a scan</B>: Region6’s busiest windows are long runs of sequential reads, which Baleen’s model "
+       "rarely caches", after=16),
+    bl("<B>Ising labels mark it as worth caching</B>: the model learns to cache that data at the peak, and the peak moves "
+       "off the scan", after=16),
+    bl("<B>The load-aware bar helps most here</B>: when the disks are busy, it lets more of that data in", after=0),
+], size=15.5, spacing=1.1)
 
 # =====================================================================
 # 11 · Result 4 · PeakBaleen on dev
