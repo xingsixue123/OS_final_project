@@ -243,9 +243,8 @@ rows = [["Trace", "Year", "Samples", "CoinFlip", "RejectX", "Baleen", "Baleen’
         ["Region6", "2023", "s0", "43.45", "42.32", "43.25", "35.56"],
         ["Region6 + 7", "2023", "s0.4–0.6", "48.64", "40.73", "39.27", "33.62"],
         ["Region5", "2023", "s0.1–0.6", "44.47", "39.35", "36.17", "30.10"],
-        ["Region4", "2021", "s0.2–0.6", "68.84", "65.84", "50.72", "38.13"],
-        ["Region1", "2019", "s0.1–0.6", "50.39", "28.20", "24.14", "not run"]]
-grid(s, 0.89, 2.1, [1.45, 1.0, 1.0, 0.95, 0.95, 0.9, 1.3], rows, rh=0.5, size=13.5,
+        ["Region4", "2021", "s0.2–0.6", "68.84", "65.84", "50.72", "38.13"]]
+grid(s, 0.89, 2.1, [1.45, 1.0, 1.0, 0.95, 0.95, 0.9, 1.3], rows, rh=0.56, size=13.5,
      aligns=["l", "l", "l", "r", "r", "r", "r"], shade={1: PALE}, bold_first=True)
 text(s, 8.95, 2.3, 3.5, 3.8, [
     bl("<B>Baleen’s OPT</B> (last column): looking back at the whole trace, it caches the data that saves the most disk "
@@ -257,15 +256,13 @@ text(s, 8.95, 2.3, 3.5, 3.8, [
 # =====================================================================
 # 5 · Key idea
 # =====================================================================
-s = d.content("KEY IDEA", "Spend the same flash writes on the busiest window instead of the average",
-              "Here is the idea on a toy example. On the left, Baleen ranks by saving per byte, which is optimal for the "
-              "average; the tallest window is left where it is. On the right, the same flash writes are spent so that the "
-              "maximum over all windows is as low as possible. Formally: each episode, one stay of a block in the cache, is a "
-              "binary decision. Each window has a no-cache load C, and admitting an episode removes its saving d from the "
-              "windows it touches. We minimize the largest remaining window load under the write budget B. As an Ising "
-              "energy, we use a smooth maximum over all windows plus a quadratic penalty on the budget, and solve it with "
-              "parallel tempering, 16 replicas, started from an LP solution. Earlier attempts targeted one fixed peak window; "
-              "ours covers every window.")
+s = d.content("KEY IDEA", "Our idea: the same flash writes, spent to lower the peak",
+              "Here is the idea on a toy example. On the left is Baleen: it ranks data by how much disk time each byte saves, "
+              "which lowers the average, but the tallest window stays tall. On the right is PeakBaleen: with the same flash "
+              "writes, we look at every ten-minute window at once and pick the data that makes the tallest one as low as "
+              "possible. Deciding which data to cache is a yes-or-no choice for every piece of data, all coupled through the "
+              "write budget. That is exactly the kind of problem an Ising solver is built for, so we write it as an Ising "
+              "problem and solve it with parallel tempering.")
 G = [33, 38, 44, 53, 42, 69, 48, 40, 51, 60, 35, 45, 41, 32]
 m = sum(G) / len(G)
 O = [m + (g - m) * 0.42 for g in G]
@@ -284,18 +281,16 @@ hline(s, 4.64, 7.79, pkG, BLUE, w=1.25)
 text(s, 5.9, pkG - 0.3, 1.85, 0.28, "Baleen’s peak", size=10, color=BLUE, align="r")
 pkO = 2.95 + 2.4 - 2.4 * max(O) / 80
 arrow(s, 7.6, pkG + 0.03, 7.6, pkO - 0.03, color=NAVY, w=1.5, both=True)
-text(s, 0.89, 5.75, 7.0, 0.3, "Schematic, illustrative values: the same flash writes, a lower maximum", size=10, color=MUTED)
-card(s, 8.2, 2.05, 4.25, 4.45, [
-    head("AS AN OPTIMIZATION PROBLEM"),
-    ("<I>x</I>_{e} ∈ {0, 1}: admit episode <I>e</I> (one stay of a block in cache)", {"after": 5}),
-    ("Load left in window <I>w</I>:  <I>L</I>_{w}(<I>x</I>) = <I>C</I>_{w} − Σ_{e} <I>d</I>_{e,w} <I>x</I>_{e}", {"after": 5}),
-    ("<B>minimize</B> max_{w} <I>L</I>_{w}(<I>x</I>)  subject to  Σ_{e} <I>s</I>_{e} <I>x</I>_{e} ≤ <I>B</I>", {"after": 12}),
-    head("AS AN ISING / QUBO ENERGY", col=ORANGE),
-    ("<I>E</I>(<I>x</I>) = LSE_{γ}(<I>L</I>(<I>x</I>)) + <I>P</I> (Σ_{e} <I>s</I>_{e} <I>x</I>_{e} − <I>B</I>)^{2}", {"after": 5}),
-    ("Smooth max over all windows + quadratic write-budget penalty; solved by <B>parallel tempering</B> (16 replicas) "
-     "from an LP start", {"after": 8}),
-    ("<muted>Earlier attempts targeted one fixed peak window; this covers every window</muted>", {"size": 11}),
-], size=12.5)
+text(s, 0.89, 5.75, 7.0, 0.3, "Schematic: the same flash writes, a lower peak", size=10, color=MUTED)
+text(s, 8.2, 2.25, 4.25, 4.1, [
+    head("BALEEN"),
+    ("Ranks data by disk time saved per byte: lowers the average, the tallest window stays tall", {"after": 16}),
+    head("PEAKBALEEN", col=ORANGE),
+    ("Looks at every 10-minute window at once and picks the data that makes the tallest one lowest", {"after": 16}),
+    head("HOW WE SOLVE IT", col=ORANGE),
+    ("Cache or not is a yes/no choice for each piece of data: we write it as an <B>Ising problem</B> and solve it with an "
+     "<B>Ising solver</B>", {}),
+], size=15, spacing=1.1)
 
 # =====================================================================
 # 6 · Design

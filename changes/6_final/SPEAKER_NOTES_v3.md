@@ -18,9 +18,9 @@ The task. Requests read blocks through a flash cache in front of hard disks. A h
 
 These are the baselines we ran ourselves, all at the same write budget; lower is better. The first row is the paper's own average. CoinFlip admits at random, RejectX rejects first-time items, and Baleen is the machine-learned policy: it is the baseline to beat. The last column is Baleen's OPT. It looks back at the whole trace, as if it knew the future, ranks the data by how much disk time each byte of flash writes saves, and caches the best until the write budget runs out. Baleen's model is trained to imitate OPT. Online, Baleen sits 14 to 25 percent above OPT on our test sets. That gap is the room we target.
 
-## 5 · Spend the same flash writes on the busiest window instead of the average
+## 5 · Our idea: the same flash writes, spent to lower the peak
 
-Here is the idea on a toy example. On the left, Baleen ranks by saving per byte, which is optimal for the average; the tallest window is left where it is. On the right, the same flash writes are spent so that the maximum over all windows is as low as possible. Formally: each episode, one stay of a block in the cache, is a binary decision. Each window has a no-cache load C, and admitting an episode removes its saving d from the windows it touches. We minimize the largest remaining window load under the write budget B. As an Ising energy, we use a smooth maximum over all windows plus a quadratic penalty on the budget, and solve it with parallel tempering, 16 replicas, started from an LP solution. Earlier attempts targeted one fixed peak window; ours covers every window.
+Here is the idea on a toy example. On the left is Baleen: it ranks data by how much disk time each byte saves, which lowers the average, but the tallest window stays tall. On the right is PeakBaleen: with the same flash writes, we look at every ten-minute window at once and pick the data that makes the tallest one as low as possible. Deciding which data to cache is a yes-or-no choice for every piece of data, all coupled through the write budget. That is exactly the kind of problem an Ising solver is built for, so we write it as an Ising problem and solve it with parallel tempering.
 
 ## 6 · PeakBaleen adds an Ising-trained peak model next to Baleen’s own model
 
