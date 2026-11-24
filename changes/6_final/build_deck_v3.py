@@ -413,12 +413,10 @@ x1 = V["dev_x1"]
 s = d.content("RESULT 2 · ONLINE", "Online, Ising labels teach the model to cache the peak",
               "Second, online. Online means we replay the test days in Baleen's simulator and the trained model decides request "
               "by request, without seeing the future. A model trained on the Ising labels lowers the peak by 3.4 percent "
-              "against Baleen on our development set, and by 2.7 percent on Region6's test samples, winning all three. Why? "
-              "Region6's busiest windows are big "
-              "scans, long runs of sequential reads, and Baleen's model rarely caches them. The Ising labels mark that data as "
-              "worth caching at the peak, so the model learns to cache it there: it caches 41 percent of the peak window instead "
-              "of 22, and the peak moves off the scan. The load-aware bar adds the most on top of Ising labels: when the disks "
-              "are busy, it lets more of that data in.")
+              "against Baleen on our dev set, and by 2.7 percent on the test samples, winning all three. Why? Baleen's model "
+              "scores data by its average value, so data that matters only in the busiest windows, such as long sequential "
+              "reads, rarely gets cached. The Ising labels mark exactly that data, so the model learns to cache it in the "
+              "busiest windows. And the load-aware bar amplifies this: when the disks are busy, it lets more of that data in.")
 dv = x1["dev"]
 cd = CategoryChartData()
 t6 = x1["test6"]
@@ -430,11 +428,11 @@ chart(s, XL_CHART_TYPE.COLUMN_CLUSTERED, 0.89, 2.0, 6.6, 4.4, cd, [GREY, ORANGE]
 text(s, 0.89, 6.48, 6.6, 0.3, "Dev set: Region6 and Region7, samples s0–s0.3  ·  Test set: Region6, samples s0.4–s0.6",
      size=11, color=MUTED)
 text(s, 7.95, 2.3, 4.5, 3.9, [
-    bl("<B>The peak is a scan</B>: Region6’s busiest windows are long runs of sequential reads, which Baleen’s model "
-       "rarely caches", after=16),
-    bl("<B>Ising labels mark it as worth caching</B>: the model learns to cache that data at the peak, and the peak moves "
-       "off the scan", after=16),
-    bl("<B>The load-aware bar helps most here</B>: when the disks are busy, it lets more of that data in", after=0),
+    bl("<B>Baleen’s model misses the peak</B>: it scores data by its average value, so data that matters only in the "
+       "busiest windows, such as long sequential reads, rarely gets cached", after=16),
+    bl("<B>Ising labels mark what matters at the peak</B>: the model learns to cache that data in the busiest windows",
+       after=16),
+    bl("<B>The load-aware bar amplifies it</B>: when the disks are busy, it lets more of that data in", after=0),
 ], size=15.5, spacing=1.1)
 
 # =====================================================================
