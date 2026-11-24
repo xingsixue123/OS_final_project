@@ -378,25 +378,28 @@ text(s, 0.89, 6.0, 5.1, 0.6, "Lines 1–6 run offline, once per training day; no
 # 8 · Result 1 · Offline
 # =====================================================================
 off = N["offline"]
-s = d.content("RESULT 1 · OFFLINE", "Offline, the Ising min–max oracle cuts the peak by 13.7% and wins 37 of 39 samples",
-              "First result, offline. We compare the two oracles directly: Baleen's OPT, which is optimal for the average, and "
-              "our min-max oracle solved by the Ising solver, both replayed in the simulator at the same write rate. Across 39 "
-              "samples of Regions 4 to 7, ours lowers the peak by 13.7 percent per sample on average and wins 37 of them. On "
-              "Regions 5 to 7 it wins all 30, by 16 percent.")
+s = d.content("RESULT 1 · OFFLINE", "Offline, planning for the peak beats Baleen’s plan in every region",
+              "First result, offline. We compare two plans made in hindsight on the same trace: Baleen's OPT, and our plan "
+              "solved by the Ising solver, both replayed in the simulator at the same write budget. Ours has the lower peak in "
+              "every region; over all 39 samples the peak drops by 13.7 percent on average. Why does it win? Baleen's OPT picks "
+              "data one piece at a time by how much it saves per byte, and never asks when that saving happens. Our plan looks "
+              "at every ten-minute window at once and spends the flash writes on data that relieves the busiest ones. And "
+              "lowering only the tallest window would just make the second-tallest the new peak; solving all windows together "
+              "with the Ising solver brings the maximum down as a whole.")
 cd = CategoryChartData()
-cd.categories = [f"{r['region']}\n−{r['reduction']}% · {r['wins']}/{r['n']}" for r in off["regions"]]
-cd.add_series("Baleen’s OPT (average-optimal)", [r["opt"] for r in off["regions"]])
-cd.add_series("Ising min–max oracle (ours)", [r["ours"] for r in off["regions"]])
-chart(s, XL_CHART_TYPE.COLUMN_CLUSTERED, 0.89, 2.0, 7.5, 4.0, cd, [GREY, ORANGE], maxv=40, major=10, cat_size=11)
-text(s, 0.89, 6.05, 7.5, 0.45, "Mean P100 (%) of each offline selection, replayed in the simulator at 35.6 MB/s; lower is "
-     "better. Under each region: mean per-sample reduction · samples won.", size=10, color=MUTED)
-pt = off["solvers"]["pt"]
-for i, (big, small) in enumerate([(f"−{pt['reduction']:.1f}%", "mean per-sample peak reduction against Baleen’s OPT"),
-                                  (f"{pt['wins']} / {pt['n']}", "samples won, Regions 4–7"),
-                                  ("30 / 30", "samples won on Regions 5–7, <B>−16.2%</B>")]):
-    box(s, 8.75, 2.05 + i * 1.5, 3.7, 1.35, fill=WHITE, line=LINE, radius=0.04)
-    text(s, 8.95, 2.12 + i * 1.5, 3.4, 0.6, big, size=30, color=ORANGE, bold=True)
-    text(s, 8.95, 2.72 + i * 1.5, 3.4, 0.62, small, size=11.5)
+cd.categories = [r["region"] for r in off["regions"]]
+cd.add_series("Baleen’s OPT", [r["opt"] for r in off["regions"]])
+cd.add_series("Our plan (Ising solver)", [r["ours"] for r in off["regions"]])
+chart(s, XL_CHART_TYPE.COLUMN_CLUSTERED, 0.89, 2.0, 7.3, 4.4, cd, [GREY, ORANGE], maxv=40, major=10, cat_size=12,
+      fmt='0"%"')
+text(s, 8.6, 2.25, 3.85, 4.1, [
+    bl("<B>Baleen’s OPT only sees the average</B>: it picks data one by one by saving per byte, never asking when the "
+       "saving lands", after=16),
+    bl("<B>We see every 10-minute window at once</B>: flash writes go to the data that relieves the busiest windows",
+       after=16),
+    bl("<B>Solving all windows together</B>: lowering only the tallest window makes the next one the peak; the Ising "
+       "solver brings the maximum down as a whole", after=0),
+], size=15, spacing=1.1)
 
 # =====================================================================
 # 9 · Result 2 · Ising solver

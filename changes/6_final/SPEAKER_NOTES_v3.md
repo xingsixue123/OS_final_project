@@ -30,9 +30,9 @@ PeakBaleen keeps Baleen and adds three things, numbered on the diagram. One, off
 
 Left is Baleen: sort episodes by disk time saved per byte, label the prefix that fits the write budget, train the model, and admit when the score beats theta. Right is PeakBaleen. Orange is the Ising core: the load left in each window, a smooth max over all windows plus a quadratic budget penalty, solved by parallel tempering from an LP warm start. Line 5 trains the peak model on the Ising labels. Online, line 10 admits a request if either Baleen's model or the peak model clears its bar; kappa scales the peak model's bar to its own day-one threshold, and the bar drops when the disks are busy. Theta is still tuned to the same write rate.
 
-## 8 · Offline, the Ising min–max oracle cuts the peak by 13.7% and wins 37 of 39 samples
+## 8 · Offline, planning for the peak beats Baleen’s plan in every region
 
-First result, offline. We compare the two oracles directly: Baleen's OPT, which is optimal for the average, and our min-max oracle solved by the Ising solver, both replayed in the simulator at the same write rate. Across 39 samples of Regions 4 to 7, ours lowers the peak by 13.7 percent per sample on average and wins 37 of them. On Regions 5 to 7 it wins all 30, by 16 percent.
+First result, offline. We compare two plans made in hindsight on the same trace: Baleen's OPT, and our plan solved by the Ising solver, both replayed in the simulator at the same write budget. Ours has the lower peak in every region; over all 39 samples the peak drops by 13.7 percent on average. Why does it win? Baleen's OPT picks data one piece at a time by how much it saves per byte, and never asks when that saving happens. Our plan looks at every ten-minute window at once and spends the flash writes on data that relieves the busiest ones. And lowering only the tallest window would just make the second-tallest the new peak; solving all windows together with the Ising solver brings the maximum down as a whole.
 
 ## 9 · The Ising solver finds the lowest peaks and scales to large instances
 

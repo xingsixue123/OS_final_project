@@ -1,6 +1,6 @@
 # 6_final v3: where every number on the v3 slides comes from
 
-Deck: `PeakBaleen_Final_v3.pptx` (13 slides + 2 backup), built by `build_deck_v3.py`. v3 = v2 with slides 2–5 rewritten (slide 2's sketch is schematic and carries no data). Chart values come from `result/numbers.json` (`code/recompute_final.py`) and `result/numbers_v2.json` (`code/recompute_final_v2.py`), both computed from the raw result ledgers.
+Deck: `PeakBaleen_Final_v3.pptx` (13 slides + 2 backup), built by `build_deck_v3.py`. v3 = v2 with slides 2–5 and 8 rewritten (slide 2's sketch is schematic and carries no data). Chart values come from `result/numbers.json` (`code/recompute_final.py`) and `result/numbers_v2.json` (`code/recompute_final_v2.py`), both computed from the raw result ledgers.
 
 | Slide | Content | Main source |
 |---|---|---|
@@ -52,22 +52,12 @@ Deck: `PeakBaleen_Final_v3.pptx` (13 slides + 2 backup), built by `build_deck_v3
 | 6 | 10/30/60 | `changes/2_deployable_peak/wp0_overlay/G3_REVIEW.md#L9` | load feature windows |
 | 8 | 37.46 | `changes/6_final/result/recompute_final_out.txt#L7` | Region4 OPT mean; ours 35.54 → 35.5; −5.4%, 7/9 |
 | 8 | 35.54 | `changes/6_final/result/recompute_final_out.txt#L7` | Region4, ours |
-| 8 | 5.4 | `changes/6_final/result/recompute_final_out.txt#L7` | Region4 reduction |
-| 8 | 7/9 | `changes/6_final/result/recompute_final_out.txt#L7` | Region4 wins |
 | 8 | 28.74 | `changes/6_final/result/recompute_final_out.txt#L8` | Region5 OPT |
 | 8 | 24.60 | `changes/6_final/result/recompute_final_out.txt#L8` | Region5 ours |
-| 8 | 14.6 | `changes/6_final/result/recompute_final_out.txt#L8` | Region5 reduction |
-| 8 | 10/10 | `changes/6_final/result/recompute_final_out.txt#L8` | Region5 wins |
 | 8 | 33.27 | `changes/6_final/result/recompute_final_out.txt#L9` | Region6 OPT |
 | 8 | 27.71 | `changes/6_final/result/recompute_final_out.txt#L9` | Region6 ours |
-| 8 | 16.6 | `changes/6_final/result/recompute_final_out.txt#L9` | Region6 reduction |
 | 8 | 32.98 | `changes/6_final/result/recompute_final_out.txt#L10` | Region7 OPT |
 | 8 | 27.21 | `changes/6_final/result/recompute_final_out.txt#L10` | Region7 ours |
-| 8 | 17.3 | `changes/6_final/result/recompute_final_out.txt#L10` | Region7 reduction |
-| 8 | 13.69 | `changes/6_final/result/recompute_final_out.txt#L4` | all 39 samples, Ising (shown −13.7%) |
-| 8 | 37/39 | `changes/6_final/result/recompute_final_out.txt#L4` | samples won |
-| 8 | 30/30 | `changes/6_final/result/recompute_final_out.txt#L11` | Regions 5–7 wins |
-| 8 | 16.2 | `changes/6_final/result/recompute_final_out.txt#L11` | Regions 5–7 reduction |
 | 16 | 42.455 | `changes/0_reproduce/RESULTS.md#L17` | bit-exact RejectX |
 | 16 | 48.961 | `changes/0_reproduce/RESULTS.md#L18` | bit-exact CoinFlip |
 | 16 | 0.6 | `changes/0_reproduce/RESULTS.md#L3` | Baleen within 0.6 points |
