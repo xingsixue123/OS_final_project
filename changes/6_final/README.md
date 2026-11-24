@@ -1,7 +1,7 @@
 # 6_final: final presentation deck
 
 ## Current version: v3 (use this one)
-- `PeakBaleen_Final_v3.pptx` / `.pdf` = v2 with slide 2 (motivation) rewritten as three short points and a sketch of where Baleen's savings land, slide 3 (task) cut to the flow diagram plus budget, goal and data, slide 4 (baselines) with a new title, no footnote, no Region1 row, and three bullets on the 14–25% gap, slide 5 (key idea) without formulas, slide 8 (offline) with three reasons instead of big numbers, slide 9 (solver) with three plain bullets, and slide 10 (online) with three reasons. Built by `build_deck_v3.py`; numbers in `SOURCES_v3.md`; notes in `SPEAKER_NOTES_v3.md`.
+- `PeakBaleen_Final_v3.pptx` / `.pdf` = v2 with slide 2 (motivation) rewritten as three short points and a sketch of where Baleen's savings land, slide 3 (task) cut to the flow diagram plus budget, goal and data, slide 4 (baselines) with a new title, no footnote, no Region1 row, and three bullets on the 14–25% gap, slide 5 (key idea) without formulas, slide 8 (offline) with three reasons instead of big numbers, slide 9 (solver) with three plain bullets, slide 10 (online) with three reasons, and the two PeakBaleen result slides merged into one table (slide 11). Now 12 slides + 2 backup. Built by `build_deck_v3.py`; numbers in `SOURCES_v3.md`; notes in `SPEAKER_NOTES_v3.md`.
 
 ## v2
 - **Deck:** `PeakBaleen_Final_v2.pptx` and `PeakBaleen_Final_v2.pdf`; 13 slides plus 2 backup slides, speaker notes in every slide (also in `SPEAKER_NOTES_v2.md`).

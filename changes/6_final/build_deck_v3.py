@@ -464,67 +464,41 @@ text(s, 7.95, 2.3, 4.5, 3.9, [
 ], size=15.5, spacing=1.1)
 
 # =====================================================================
-# 11 · Result 4 · PeakBaleen on dev
+# 11 · Result 4 · PeakBaleen (development samples and an unseen cluster)
 # =====================================================================
-u = V["dev_union"]
-s = d.content("RESULT 4 · PEAKBALEEN", "PeakBaleen beats Baleen on all 10 development samples",
-              "Fourth, the full PeakBaleen: Baleen's model plus the Ising peak model, with load-aware admission. On ten "
-              "development samples from four clusters, it beats Baleen on all ten, lowering the peak by 3.9 percent. It also "
-              "beats Baleen with the load feature on 9 of 10, and Baleen with the load-aware bar alone on 7 of 10, so the Ising "
-              "peak model adds on top of load-aware admission. And the Ising labels matter: the same design with labels from "
-              "CP-SAT reaches 36.13, while the Ising version reaches 35.36.")
-rows = [["Configuration", "Mean P100 (%)", "PeakBaleen better on"],
-        ["Baleen", f"{u['baleen']:.2f}", f"<B>{u['baleen_wins']} / 10</B> samples"],
-        ["Baleen + load feature", f"{u['load']:.2f}", f"{u['load_wins']} / 10"],
-        ["Baleen + load-aware admission", f"{u['bar']:.2f}", f"{u['bar_wins']} / 10"],
-        ["PeakBaleen with CP-SAT labels", f"{u['cpsat']:.2f}", f"{u['cpsat_wins']} / 10"],
-        ["<or>PeakBaleen (Ising labels)</or>", f"<or><B>{u['peak']:.2f}</B></or>", "—"]]
-grid(s, 0.89, 2.05, [3.9, 1.9, 2.2], rows, rh=0.55, size=14, aligns=["l", "r", "r"], shade={5: PALEOR}, bold_first=True)
-text(s, 0.89, 5.45, 8.0, 0.6, "Development samples: Region6 and Region7 s0–s0.3, Region5 s0, Region1 s0; 3 retrains each; "
-     "lower is better.", size=10.5, color=MUTED)
-for i, (big, small) in enumerate([(f"{u['pct_baleen']:+.1f}%".replace("-", "−"), f"peak against Baleen, better on "
-                                                                                  f"<B>{u['baleen_wins']} / 10</B> samples"),
-                                  ("Ising > CP-SAT", f"labels in the same design: {u['peak']:.2f} vs {u['cpsat']:.2f}")]):
-    box(s, 9.2, 2.05 + i * 1.75, 3.25, 1.55, fill=WHITE, line=LINE, radius=0.04)
-    text(s, 9.4, 2.12 + i * 1.75, 2.95, 0.6, big, size=26 if i else 30, color=ORANGE, bold=True)
-    text(s, 9.4, 2.75 + i * 1.75, 2.95, 0.75, small, size=12)
+u, r4, r5 = V["dev_union"], V["region4"], V["region5"]
+s = d.content("RESULT 4 · PEAKBALEEN", "PeakBaleen beats Baleen, including on an unseen cluster",
+              "Fourth, the full PeakBaleen: Baleen's model plus the Ising peak model, with load-aware admission. The table shows "
+              "the mean peak on our ten development samples and on Region4, a cluster the design never saw; lower is better. "
+              "PeakBaleen has the lowest peak in both: 3.9 percent below Baleen on the development samples, where it wins all "
+              "ten, and 14.9 percent below Baleen on Region4. Why does it work? Baleen's model keeps caching what it already "
+              "does well, and the peak model adds the data that matters at the peak. The Ising labels matter: the same design "
+              "with CP-SAT labels is worse in both columns. And on Region5, another unseen cluster, PeakBaleen's load-aware "
+              "admission passed a pre-registered test, lowering the peak by 3.2 percent.")
+
+
+def pct_s(v):
+    return f"{v:+.1f}%".replace("-", "−")
+
+
+rows = [["Configuration", "Development (10 samples)", "Region4 (unseen)"],
+        ["Baleen", f"{u['baleen']:.2f}", f"{r4['baleen']:.2f}"],
+        ["Baleen + load feature", f"{u['load']:.2f}", f"{r4['load']:.2f}"],
+        ["PeakBaleen with CP-SAT labels", f"{u['cpsat']:.2f}", f"{r4['cpsat']:.2f}"],
+        ["<or>PeakBaleen (Ising labels)</or>", f"<or><B>{u['peak']:.2f}</B>  {pct_s(u['pct_baleen'])}</or>",
+         f"<or><B>{r4['peak']:.2f}</B>  {pct_s(r4['pct_baleen'])}</or>"]]
+grid(s, 0.89, 2.35, [3.3, 2.15, 2.0], rows, rh=0.72, size=15, aligns=["l", "r", "r"], shade={4: PALEOR}, bold_first=True,
+     head_size=11)
+text(s, 8.75, 2.3, 3.7, 4.0, [
+    bl("<B>Two models, best of both</B>: Baleen’s model keeps caching what it already does well; the peak model adds "
+       f"what matters at the peak. Better on all {u['baleen_wins']} development samples", after=16),
+    bl("<B>Ising labels beat CP-SAT labels</B> in the same design, on both sets", after=16),
+    bl(f"<B>Region5, also unseen</B>: PeakBaleen’s load-aware admission passes a pre-registered test "
+       f"({pct_s(r5['bar']['pct'])})", after=0),
+], size=15, spacing=1.1)
 
 # =====================================================================
-# 12 · Result 5 · Fresh clusters
-# =====================================================================
-r4, r5 = V["region4"], V["region5"]
-s = d.content("RESULT 5 · NEW CLUSTERS", "On a cluster it never saw, PeakBaleen cuts Baleen’s peak by 14.9%",
-              "Fifth, clusters the design never saw. On Region4, PeakBaleen lowers the peak from 50.7 to 43.2 percent, 14.9 "
-              "percent below Baleen and better on 4 of 5 samples, and 23.9 percent below Baleen with the load feature. The "
-              "Ising-label version again beats the CP-SAT-label version, 43.2 against 44.4. On Region5 we ran a pre-registered "
-              "test of load-aware admission, PeakBaleen's third component: it passed, minus 3.2 percent on 5 of 6 samples, and "
-              "minus 4.7 percent on all 6 with the load feature.")
-cd = CategoryChartData()
-cd.categories = ["Baleen", "Baleen + load feature", "PeakBaleen, CP-SAT labels", "PeakBaleen (Ising labels)"]
-cd.add_series("Region4 mean P100 (%)", [r4["baleen"], r4["load"], r4["cpsat"], r4["peak"]])
-ch = chart(s, XL_CHART_TYPE.COLUMN_CLUSTERED, 0.89, 2.0, 7.0, 4.0, cd, [GREY], maxv=60, major=10, legend=False, cat_size=11)
-ch.has_title = False
-ch.plots[0].gap_width = 70
-for i, col in ((2, RGBColor(0xE7, 0xB4, 0x8F)), (3, ORANGE)):
-    pp = ch.plots[0].series[0].points[i]
-    pp.format.fill.solid()
-    pp.format.fill.fore_color.rgb = col
-text(s, 0.89, 6.05, 7.0, 0.45, "Region4 (2021 trace, samples s0.2–s0.6, never used for design): mean deployed P100 (%), "
-     "lower is better.", size=10, color=MUTED)
-box(s, 8.2, 2.05, 4.25, 2.05, fill=WHITE, line=LINE, radius=0.04)
-text(s, 8.4, 2.12, 3.9, 0.3, "REGION4", size=12, color=BLUE, bold=True)
-text(s, 8.4, 2.42, 3.9, 0.65, f"{r4['pct_baleen']:+.1f}%".replace("-", "−"), size=32, color=ORANGE, bold=True)
-text(s, 8.4, 3.1, 3.9, 0.95, f"vs Baleen, better on <B>{r4['wins_baleen']} / {r4['n']}</B> samples; "
-     f"{r4['pct_load']:+.1f}% vs Baleen + load feature ({r4['wins_load']} / {r4['n']})".replace("-", "−"), size=12)
-card(s, 8.2, 4.25, 4.25, 1.8, [
-    head("REGION5 · PRE-REGISTERED TEST"),
-    ("Load-aware admission (component 3) on a cluster never run before:", {"after": 5}),
-    (f"<blue><B>{r5['bar']['pct']:+.1f}%</B></blue>, better on {r5['bar']['wins']} / 6 samples".replace("-", "−"), {"after": 3}),
-    (f"with the load feature: <blue><B>{r5['load_bar']['pct']:+.1f}%</B></blue>, {r5['load_bar']['wins']} / 6".replace("-", "−"), {}),
-], size=12.5, fill=PALE, line=None)
-
-# =====================================================================
-# 13 · Conclusion
+# 12 · Conclusion
 # =====================================================================
 s = d.content("CONCLUSION", "What we built and what it achieves",
               "To conclude. One: formulating admission as a min-max problem and solving it with an Ising solver finds much "
@@ -591,7 +565,7 @@ d.save(os.path.join(HERE, OUT))
 
 # the speaker notes as one file, for rehearsal
 lines = ["# PeakBaleen final presentation (v3): speaker notes", "",
-         f"Generated by build_deck_v3.py from {OUT}. Slides 15-16 are backup.", ""]
+         f"Generated by build_deck_v3.py from {OUT}. Slides 14-15 are backup.", ""]
 for i, sl in enumerate(d.prs.slides, 1):
     title = sl.shapes.title.text_frame.text if sl.shapes.title is not None else ("Title" if i == 1 else "Backup")
     lines += [f"## {i} · {title}", "", sl.notes_slide.notes_text_frame.text, ""]
