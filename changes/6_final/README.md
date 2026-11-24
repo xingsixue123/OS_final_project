@@ -1,6 +1,9 @@
 # 6_final: final presentation deck
 
-## Current version: v2 (use this one)
+## Current version: v3 (use this one)
+- `PeakBaleen_Final_v3.pptx` / `.pdf` = v2 with slide 2 (motivation) rewritten: three short points and a sketch of where Baleen's savings land. Built by `build_deck_v3.py`; numbers in `SOURCES_v3.md`; notes in `SPEAKER_NOTES_v3.md`.
+
+## v2
 - **Deck:** `PeakBaleen_Final_v2.pptx` and `PeakBaleen_Final_v2.pdf`; 13 slides plus 2 backup slides, speaker notes in every slide (also in `SPEAKER_NOTES_v2.md`).
 - **Story:** the Ising min–max oracle offline (−13.7%), the Ising solver, a model trained on Ising labels online (dev −3.4%, Region6 −6.6%), and PeakBaleen = Baleen's model + the Ising peak model with load-aware admission: 10/10 development samples, −14.9% on the unseen Region4, and the pre-registered Region5 test of load-aware admission.
 - **Files:** `build_deck_v2.py`, `algorithm_v2/` (updated Algorithm 2), `code/recompute_final_v2.py` → `result/numbers_v2.json`, `SOURCES_v2.md` (check: `python3 changes/6_final/code/check_sources.py SOURCES_v2.md`, 138 rows, 0 problems).
