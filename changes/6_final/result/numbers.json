@@ -1,0 +1,284 @@
+{
+ "offline": {
+  "solvers": {
+   "lp": {
+    "reduction": 13.03,
+    "wins": 36,
+    "n": 39
+   },
+   "cpsat": {
+    "reduction": 13.15,
+    "wins": 36,
+    "n": 39
+   },
+   "pt": {
+    "reduction": 13.69,
+    "wins": 37,
+    "n": 39
+   }
+  },
+  "regions": [
+   {
+    "region": "Region4",
+    "n": 9,
+    "opt": 37.46,
+    "ours": 35.54,
+    "reduction": 5.4,
+    "wins": 7
+   },
+   {
+    "region": "Region5",
+    "n": 10,
+    "opt": 28.74,
+    "ours": 24.6,
+    "reduction": 14.6,
+    "wins": 10
+   },
+   {
+    "region": "Region6",
+    "n": 10,
+    "opt": 33.27,
+    "ours": 27.71,
+    "reduction": 16.6,
+    "wins": 10
+   },
+   {
+    "region": "Region7",
+    "n": 10,
+    "opt": 32.98,
+    "ours": 27.21,
+    "reduction": 17.3,
+    "wins": 10
+   }
+  ],
+  "pt_below_cpsat": 18,
+  "pt_below_lp": 22
+ },
+ "ablation": {
+  "Region6+7": {
+   "baleen": 39.27,
+   "n": 6,
+   "load": {
+    "p100": 39.17,
+    "pct": -0.2,
+    "wins": 4
+   },
+   "bar": {
+    "p100": 38.3,
+    "pct": -2.5,
+    "wins": 5
+   },
+   "load_bar": {
+    "p100": 38.38,
+    "pct": -2.3,
+    "wins": 6
+   },
+   "full": {
+    "p100": 40.53,
+    "pct": 3.2,
+    "wins": 5
+   }
+  },
+  "Region5": {
+   "baleen": 36.17,
+   "n": 6,
+   "load": {
+    "p100": 36.37,
+    "pct": 0.5,
+    "wins": 3
+   },
+   "bar": {
+    "p100": 35.02,
+    "pct": -3.2,
+    "wins": 5
+   },
+   "load_bar": {
+    "p100": 34.48,
+    "pct": -4.7,
+    "wins": 6
+   },
+   "full": {
+    "p100": 38.09,
+    "pct": 5.3,
+    "wins": 3
+   }
+  },
+  "Region4": {
+   "baleen": 50.72,
+   "n": 5,
+   "load": {
+    "p100": 56.71,
+    "pct": 11.8,
+    "wins": 2
+   },
+   "bar": {
+    "p100": 42.87,
+    "pct": -15.5,
+    "wins": 5
+   },
+   "load_bar": {
+    "p100": 43.87,
+    "pct": -13.5,
+    "wins": 4
+   }
+  },
+  "Region1": {
+   "baleen": 24.14,
+   "n": 6,
+   "load": {
+    "p100": 24.54,
+    "pct": 1.7,
+    "wins": 1
+   },
+   "bar": {
+    "p100": 24.62,
+    "pct": 2.0,
+    "wins": 1
+   },
+   "load_bar": {
+    "p100": 24.48,
+    "pct": 1.4,
+    "wins": 1
+   }
+  }
+ },
+ "samples": [
+  {
+   "inst": "Region6_s0.4",
+   "d_full": -0.65,
+   "d_bar": -1.46
+  },
+  {
+   "inst": "Region6_s0.5",
+   "d_full": -1.51,
+   "d_bar": -1.25
+  },
+  {
+   "inst": "Region6_s0.6",
+   "d_full": -1.02,
+   "d_bar": 0.74
+  },
+  {
+   "inst": "Region7_s0.4",
+   "d_full": -2.31,
+   "d_bar": -0.85
+  },
+  {
+   "inst": "Region7_s0.5",
+   "d_full": 13.23,
+   "d_bar": -2.12
+  },
+  {
+   "inst": "Region7_s0.6",
+   "d_full": -0.15,
+   "d_bar": -0.85
+  },
+  {
+   "inst": "Region5_s0.1",
+   "d_full": 0.97,
+   "d_bar": -0.61
+  },
+  {
+   "inst": "Region5_s0.2",
+   "d_full": -0.7,
+   "d_bar": 0.25
+  },
+  {
+   "inst": "Region5_s0.3",
+   "d_full": -1.72,
+   "d_bar": -0.25
+  },
+  {
+   "inst": "Region5_s0.4",
+   "d_full": -0.17,
+   "d_bar": -0.37
+  },
+  {
+   "inst": "Region5_s0.5",
+   "d_full": 8.74,
+   "d_bar": -4.76
+  },
+  {
+   "inst": "Region5_s0.6",
+   "d_full": 4.4,
+   "d_bar": -1.18
+  }
+ ],
+ "collapse": {
+  "Region7_s0.5": {
+   "baleen": {
+    "adm": 0.57,
+    "big": 0.48
+   },
+   "bar": {
+    "adm": 0.67,
+    "big": 0.48
+   },
+   "full": {
+    "adm": 0.09,
+    "big": 0.48
+   }
+  },
+  "Region5_s0.5": {
+   "baleen": {
+    "adm": 0.39,
+    "big": 0.52
+   },
+   "bar": {
+    "adm": 0.56,
+    "big": 0.52
+   },
+   "full": {
+    "adm": 0.28,
+    "big": 0.52
+   }
+  }
+ },
+ "region5": {
+  "rows": [
+   {
+    "inst": "Region5_s0.1",
+    "A": 39.92,
+    "Aa": 39.32,
+    "Ba": 39.55,
+    "gain_Aa": 0.6
+   },
+   {
+    "inst": "Region5_s0.2",
+    "A": 33.92,
+    "Aa": 34.16,
+    "Ba": 33.51,
+    "gain_Aa": -0.24
+   },
+   {
+    "inst": "Region5_s0.3",
+    "A": 37.72,
+    "Aa": 37.47,
+    "Ba": 37.28,
+    "gain_Aa": 0.25
+   },
+   {
+    "inst": "Region5_s0.4",
+    "A": 26.39,
+    "Aa": 26.02,
+    "Ba": 25.95,
+    "gain_Aa": 0.37
+   },
+   {
+    "inst": "Region5_s0.5",
+    "A": 42.72,
+    "Aa": 37.96,
+    "Ba": 35.07,
+    "gain_Aa": 4.76
+   },
+   {
+    "inst": "Region5_s0.6",
+    "A": 36.38,
+    "Aa": 35.19,
+    "Ba": 35.51,
+    "gain_Aa": 1.19
+   }
+  ],
+  "s05_share": 69
+ }
+}

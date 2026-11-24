@@ -1,0 +1,66 @@
+== Slide 8-9: offline, ours vs Baleen's OPT (R0); per-sample % reduction, mean
+lp: mean reduction 13.03%, wins 36/39
+cpsat: mean reduction 13.15%, wins 36/39
+pt: mean reduction 13.69%, wins 37/39
+pt lower than cpsat on 18/39; lower than lp on 22/39
+mean P100: R0 33.00, pt 28.59
+Region4: n=9 OPT 37.46 ours 35.54 reduction 5.4% wins 7/9
+Region5: n=10 OPT 28.74 ours 24.60 reduction 14.6% wins 10/10
+Region6: n=10 OPT 33.27 ours 27.71 reduction 16.6% wins 10/10
+Region7: n=10 OPT 32.98 ours 27.21 reduction 17.3% wins 10/10
+Regions 5-7: wins 30/30, mean reduction 16.2%
+
+== Slide 10-11: deployed, each configuration vs Baleen (mean P100, % change, samples below Baleen)
+Region6+7: Baleen 39.27 (n=6)
+  load: 39.17, -0.2%, wins 4/6
+  bar: 38.30, -2.5%, wins 5/6
+  load_bar: 38.38, -2.3%, wins 6/6
+  full: 40.53, +3.2%, wins 5/6
+Region5: Baleen 36.17 (n=6)
+  load: 36.37, +0.5%, wins 3/6
+  bar: 35.02, -3.2%, wins 5/6
+  load_bar: 34.48, -4.7%, wins 6/6
+  full: 38.09, +5.3%, wins 3/6
+Region4: Baleen 50.72 (n=5)
+  load: 56.71, +11.8%, wins 2/5
+  bar: 42.87, -15.5%, wins 5/5
+  load_bar: 43.87, -13.5%, wins 4/5
+  full: not run
+Region1: Baleen 24.14 (n=6)
+  load: 24.54, +1.7%, wins 1/6
+  bar: 24.62, +2.0%, wins 1/6
+  load_bar: 24.48, +1.4%, wins 1/6
+  full: not run
+
+== Slide 10: change vs Baleen per test sample (points of P100)
+Region6_s0.4: full -0.65, bar -1.46
+Region6_s0.5: full -1.51, bar -1.25
+Region6_s0.6: full -1.02, bar +0.74
+Region7_s0.4: full -2.31, bar -0.85
+Region7_s0.5: full +13.23, bar -2.12
+Region7_s0.6: full -0.15, bar -0.85
+Region5_s0.1: full +0.97, bar -0.61
+Region5_s0.2: full -0.70, bar +0.25
+Region5_s0.3: full -1.72, bar -0.25
+Region5_s0.4: full -0.17, bar -0.37
+Region5_s0.5: full +8.74, bar -4.76
+Region5_s0.6: full +4.40, bar -1.18
+
+== Slide 12: the two collapses, peak-window admission and big-offset share (mean over matched retrains)
+Region7_s0.5 baleen: peak-window admission 0.57, big-offset share 0.48
+Region7_s0.5 bar: peak-window admission 0.67, big-offset share 0.48
+Region7_s0.5 full: peak-window admission 0.09, big-offset share 0.48
+Region5_s0.5 baleen: peak-window admission 0.39, big-offset share 0.52
+Region5_s0.5 bar: peak-window admission 0.56, big-offset share 0.52
+Region5_s0.5 full: peak-window admission 0.28, big-offset share 0.52
+
+== Backup: Region5 per sample (A, A+alpha, B+alpha)
+                  A     Aa     Ba  gain_Aa
+inst                                      
+Region5_s0.1  39.92  39.32  39.55     0.60
+Region5_s0.2  33.92  34.16  33.51    -0.24
+Region5_s0.3  37.72  37.47  37.28     0.25
+Region5_s0.4  26.39  26.02  25.95     0.37
+Region5_s0.5  42.72  37.96  35.07     4.76
+Region5_s0.6  36.38  35.19  35.51     1.19
+share of the A+alpha gain from s0.5: 69%
