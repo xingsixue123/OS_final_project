@@ -413,12 +413,10 @@ s = d.content("RESULT 2 · ISING SOLVER", "Our Ising solver: the lowest peaks, a
               "thousand.")
 sv = off["solvers"]
 cd = CategoryChartData()
-cd.categories = ["LP + round + repair", "CP-SAT", "Ising: parallel tempering"]
-cd.add_series("Peak reduction vs Baleen’s OPT", [sv["lp"]["reduction"], sv["cpsat"]["reduction"], sv["pt"]["reduction"]])
+cd.categories = ["Ising: parallel tempering", "CP-SAT", "LP + round + repair"]  # a bar chart draws the first category at the bottom
+cd.add_series("Peak reduction vs Baleen’s OPT", [sv["pt"]["reduction"], sv["cpsat"]["reduction"], sv["lp"]["reduction"]])
 ch = chart(s, XL_CHART_TYPE.BAR_CLUSTERED, 0.89, 2.05, 7.0, 4.3, cd, [GREY], maxv=16, major=4, legend=False, cat_size=13,
            fmt='0"%"', label_fmt='0.0"%"')
-ch.category_axis.reverse_order = True
-ch.category_axis.crosses = XL_AXIS_CROSSES.MAXIMUM
 ch.has_title = False
 ch.plots[0].gap_width = 45
 va = ch.value_axis
@@ -428,7 +426,7 @@ r_ = va.axis_title.text_frame.paragraphs[0].runs[0]
 r_.font.size = Pt(11)
 r_.font.bold = False
 r_.font.color.rgb = MUTED
-p_ = ch.plots[0].series[0].points[2]
+p_ = ch.plots[0].series[0].points[0]
 p_.format.fill.solid()
 p_.format.fill.fore_color.rgb = ORANGE
 text(s, 8.35, 2.35, 4.1, 3.8, [
