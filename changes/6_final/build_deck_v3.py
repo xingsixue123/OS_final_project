@@ -384,64 +384,34 @@ s = d.content("RESULT 1 · OFFLINE", "Offline, planning for the peak beats Balee
               "every region; over all 39 samples the peak drops by 13.7 percent on average. Why does it win? Baleen's OPT picks "
               "data one piece at a time by how much it saves per byte, and never asks when that saving happens. Our plan looks "
               "at every ten-minute window at once and spends the flash writes on data that relieves the busiest ones. And "
-              "lowering only the tallest window would just make the second-tallest the new peak; solving all windows together "
-              "with the Ising solver brings the maximum down as a whole.")
+              "lowering only the tallest window would just make the second-tallest the new peak, so all windows are solved "
+              "together. The Ising solver does this best: against two classical solvers on the same problem, it gets the "
+              "lowest peak, 13.7 percent below Baleen's OPT versus 13.2 for CP-SAT and 13.0 for linear programming; it is "
+              "fast, matching or beating the best classical solver with only three seconds per problem; and it scales to "
+              "problems with 126 thousand variables in a few hundred megabytes.")
 cd = CategoryChartData()
 cd.categories = [r["region"] for r in off["regions"]]
 cd.add_series("Baleen’s OPT", [r["opt"] for r in off["regions"]])
 cd.add_series("Our plan (Ising solver)", [r["ours"] for r in off["regions"]])
 chart(s, XL_CHART_TYPE.COLUMN_CLUSTERED, 0.89, 2.0, 7.3, 4.4, cd, [GREY, ORANGE], maxv=40, major=10, cat_size=12,
       fmt='0"%"')
-text(s, 8.6, 2.25, 3.85, 4.1, [
-    bl("<B>Baleen’s OPT only sees the average</B>: it picks data one by one by saving per byte, never asking when the "
-       "saving lands", after=16),
+text(s, 8.6, 2.15, 3.85, 4.3, [
+    bl("<B>Baleen’s OPT only sees the average</B>: it picks data by saving per byte, never asking when the saving lands",
+       after=12),
     bl("<B>We see every 10-minute window at once</B>: flash writes go to the data that relieves the busiest windows",
-       after=16),
-    bl("<B>Solving all windows together</B>: lowering only the tallest window makes the next one the peak; the Ising "
-       "solver brings the maximum down as a whole", after=0),
-], size=15, spacing=1.1)
+       after=12),
+    bl("<B>All windows are solved together</B>: lowering only the tallest window just makes the next one the peak",
+       after=12),
+    bl("<B>The Ising solver does this best</B>: the lowest peak of the solvers we tried, fast, and it scales to large "
+       "problems", after=0),
+], size=14.5, spacing=1.08)
 
 # =====================================================================
-# 9 · Result 2 · Ising solver
-# =====================================================================
-s = d.content("RESULT 2 · ISING SOLVER", "Our Ising solver: the lowest peaks, and it scales",
-              "Second, the solver. We gave the same problem to three solvers: linear programming with rounding, Google's "
-              "CP-SAT, and our Ising solver, parallel tempering. The Ising solver reaches the largest peak reduction, 13.7 "
-              "percent, against 13.2 and 13.0. It is also fast: with only three seconds per problem, it matched or beat the best "
-              "classical solver on all six test samples. And it scales: our Ising formulations handle problems with 126 "
-              "thousand variables in a few hundred megabytes, where a dense implementation runs out of memory beyond about 70 "
-              "thousand.")
-sv = off["solvers"]
-cd = CategoryChartData()
-cd.categories = ["Ising: parallel tempering", "CP-SAT", "LP + round + repair"]  # a bar chart draws the first category at the bottom
-cd.add_series("Peak reduction vs Baleen’s OPT", [sv["pt"]["reduction"], sv["cpsat"]["reduction"], sv["lp"]["reduction"]])
-ch = chart(s, XL_CHART_TYPE.BAR_CLUSTERED, 0.89, 2.05, 7.0, 4.3, cd, [GREY], maxv=16, major=4, legend=False, cat_size=13,
-           fmt='0"%"', label_fmt='0.0"%"')
-ch.has_title = False
-ch.plots[0].gap_width = 45
-va = ch.value_axis
-va.has_title = True
-va.axis_title.text_frame.text = "peak reduction vs Baleen’s OPT"
-r_ = va.axis_title.text_frame.paragraphs[0].runs[0]
-r_.font.size = Pt(11)
-r_.font.bold = False
-r_.font.color.rgb = MUTED
-p_ = ch.plots[0].series[0].points[0]
-p_.format.fill.solid()
-p_.format.fill.fore_color.rgb = ORANGE
-text(s, 8.35, 2.35, 4.1, 3.8, [
-    bl("<B>Lowest peak</B>: on the same problem, the Ising solver brings the peak lowest of the three", after=16),
-    bl("<B>Fast</B>: with only a few seconds per problem, it matches or beats the best classical solver", after=16),
-    bl("<B>Scales</B>: on large problems it needs only a few hundred MB of memory, where a dense implementation runs out",
-       after=0),
-], size=15.5, spacing=1.1)
-
-# =====================================================================
-# 10 · Result 3 · Online with Ising labels (dev)
+# 9 · Result 3 · Online with Ising labels (dev)
 # =====================================================================
 x1 = V["dev_x1"]
-s = d.content("RESULT 3 · ONLINE", "Online, Ising labels teach the model to cache the peak",
-              "Third, online. Online means we replay the test days in Baleen's simulator and the trained model decides request "
+s = d.content("RESULT 2 · ONLINE", "Online, Ising labels teach the model to cache the peak",
+              "Second, online. Online means we replay the test days in Baleen's simulator and the trained model decides request "
               "by request, without seeing the future. A model trained on the Ising labels lowers the peak by 3.4 percent "
               "against Baleen on our development samples, and by 6.6 percent on Region6. Why? Region6's busiest windows are big "
               "scans, long runs of sequential reads, and Baleen's model rarely caches them. The Ising labels mark that data as "
@@ -464,11 +434,11 @@ text(s, 7.95, 2.3, 4.5, 3.9, [
 ], size=15.5, spacing=1.1)
 
 # =====================================================================
-# 11 · Result 4 · PeakBaleen (development samples and an unseen cluster)
+# 10 · Result 4 · PeakBaleen (development samples and an unseen cluster)
 # =====================================================================
 u, r4, r5 = V["dev_union"], V["region4"], V["region5"]
-s = d.content("RESULT 4 · PEAKBALEEN", "PeakBaleen beats Baleen, including on an unseen cluster",
-              "Fourth, the full PeakBaleen: Baleen's model plus the Ising peak model, with load-aware admission. The table shows "
+s = d.content("RESULT 3 · PEAKBALEEN", "PeakBaleen beats Baleen, including on an unseen cluster",
+              "Third, the full PeakBaleen: Baleen's model plus the Ising peak model, with load-aware admission. The table shows "
               "the mean peak on our ten development samples and on Region4, a cluster the design never saw; lower is better. "
               "PeakBaleen has the lowest peak in both: 3.9 percent below Baleen on the development samples, where it wins all "
               "ten, and 14.9 percent below Baleen on Region4. Why does it work? Baleen's model keeps caching what it already "
@@ -498,7 +468,7 @@ text(s, 8.75, 2.3, 3.7, 4.0, [
 ], size=15, spacing=1.1)
 
 # =====================================================================
-# 12 · Conclusion
+# 11 · Conclusion
 # =====================================================================
 s = d.content("CONCLUSION", "What we built and what it achieves",
               "To conclude. One: formulating admission as a min-max problem and solving it with an Ising solver finds much "
@@ -565,7 +535,7 @@ d.save(os.path.join(HERE, OUT))
 
 # the speaker notes as one file, for rehearsal
 lines = ["# PeakBaleen final presentation (v3): speaker notes", "",
-         f"Generated by build_deck_v3.py from {OUT}. Slides 14-15 are backup.", ""]
+         f"Generated by build_deck_v3.py from {OUT}. Slides 13-14 are backup.", ""]
 for i, sl in enumerate(d.prs.slides, 1):
     title = sl.shapes.title.text_frame.text if sl.shapes.title is not None else ("Title" if i == 1 else "Backup")
     lines += [f"## {i} · {title}", "", sl.notes_slide.notes_text_frame.text, ""]
