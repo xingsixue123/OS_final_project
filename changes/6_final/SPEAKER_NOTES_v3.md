@@ -16,7 +16,7 @@ The task. Requests read blocks through a flash cache in front of hard disks. A h
 
 ## 4 · Baleen is the baseline to beat, and it still leaves room
 
-These are the baselines we ran ourselves, all at the same write budget; lower is better. The first row is the paper's own average. CoinFlip admits at random, RejectX rejects first-time items, and Baleen is the machine-learned policy: it is the baseline to beat. The last column is Baleen's OPT, the best choice Baleen could make offline, knowing the future. Online, Baleen sits 14 to 25 percent above it on our test sets. That gap is the room we target.
+These are the baselines we ran ourselves, all at the same write budget; lower is better. The first row is the paper's own average. CoinFlip admits at random, RejectX rejects first-time items, and Baleen is the machine-learned policy: it is the baseline to beat. The last column is Baleen's OPT. It looks back at the whole trace, as if it knew the future, ranks the data by how much disk time each byte of flash writes saves, and caches the best until the write budget runs out. Baleen's model is trained to imitate OPT. Online, Baleen sits 14 to 25 percent above OPT on our test sets. That gap is the room we target.
 
 ## 5 · Spend the same flash writes on the busiest window instead of the average
 

@@ -233,9 +233,10 @@ for y0, h0, lab, big, small in [
 s = d.content("BASELINES WE RAN", "Baleen is the baseline to beat, and it still leaves room",
               "These are the baselines we ran ourselves, all at the same write budget; lower is better. The first row is the "
               "paper's own average. CoinFlip admits at random, RejectX rejects first-time items, and Baleen is the machine-"
-              "learned policy: it is the baseline to beat. The last column is Baleen's OPT, the best choice Baleen could make "
-              "offline, knowing the future. Online, Baleen sits 14 to 25 percent above it on our test sets. That gap is the room "
-              "we target.")
+              "learned policy: it is the baseline to beat. The last column is Baleen's OPT. It looks back at the whole trace, as if "
+              "it knew the future, ranks the data by how much disk time each byte of flash writes saves, and caches the best "
+              "until the write budget runs out. Baleen's model is trained to imitate OPT. Online, Baleen sits 14 to 25 percent "
+              "above OPT on our test sets. That gap is the room we target.")
 rows = [["Trace", "Year", "Samples", "CoinFlip", "RejectX", "Baleen", "Baleen’s OPT"],
         ["Paper, Fig. 9", "2019–23", "avg of 7", "34.63", "31.95", "28.11", "—"],
         ["Region7", "2023", "s0", "48.96", "42.46", "40.10", "34.52"],
@@ -246,11 +247,12 @@ rows = [["Trace", "Year", "Samples", "CoinFlip", "RejectX", "Baleen", "Baleen’
         ["Region1", "2019", "s0.1–0.6", "50.39", "28.20", "24.14", "not run"]]
 grid(s, 0.89, 2.1, [1.45, 1.0, 1.0, 0.95, 0.95, 0.9, 1.3], rows, rh=0.5, size=13.5,
      aligns=["l", "l", "l", "r", "r", "r", "r"], shade={1: PALE}, bold_first=True)
-text(s, 8.95, 2.95, 3.5, 3.0, [
-    bl("<B>Baleen’s OPT</B> (last column): the best Baleen could do offline, knowing the future", after=18),
-    bl("Online, Baleen is <or><B>14–25%</B></or> above its OPT on our test sets", after=18),
+text(s, 8.95, 2.3, 3.5, 3.8, [
+    bl("<B>Baleen’s OPT</B> (last column): looking back at the whole trace, it caches the data that saves the most disk "
+       "time per byte written, until the write budget runs out", after=16),
+    bl("Baleen’s model learns to imitate OPT; online it is <or><B>14–25%</B></or> above OPT on our test sets", after=16),
     bl("That gap is the room we target", after=0),
-], size=17, spacing=1.12)
+], size=15.5, spacing=1.12)
 
 # =====================================================================
 # 5 · Key idea
