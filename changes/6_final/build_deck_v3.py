@@ -468,33 +468,76 @@ text(s, 8.75, 2.3, 3.7, 4.0, [
 ], size=15, spacing=1.1)
 
 # =====================================================================
-# 11 · Conclusion
+# 11 · Limitations
 # =====================================================================
-s = d.content("CONCLUSION", "What we built and what it achieves",
-              "To conclude. One: formulating admission as a min-max problem and solving it with an Ising solver finds much "
-              "better peaks offline, 13.7 percent below Baleen's own oracle, with the Ising solver giving the lowest peaks and "
-              "scaling to large instances. Two: a model trained on those Ising labels learns to cache the peak online. Three: "
-              "PeakBaleen, Baleen's model plus the Ising peak model with load-aware admission, beats Baleen on all ten "
-              "development samples and by 14.9 percent on a cluster it never saw. Next, we will train the labels over several "
-              "days, run the final test on our held-back samples, and cover all seven clusters. Thank you.")
+s = d.content("LIMITATIONS", "Limitations: where PeakBaleen falls short",
+              "Where PeakBaleen falls short. First, and most important: labels from one training day can break. The chart shows "
+              "the model trained only on Ising labels, on each test sample. It beats Baleen on most of them, but on two it "
+              "collapses: on Region7 sample 0.5 the peak rises from 39 to 52. On that test day the peak was a big scan that the "
+              "training day never had at its peak, so the labels taught the model not to cache it. This is why PeakBaleen keeps "
+              "Baleen's own model next to the peak model. Second, online keeps only part of the offline gain: 13.7 percent "
+              "offline, about 4 percent online. Third, on solution quality the Ising solver ties the classical solvers; its "
+              "edge is speed and scale.")
+order = [x for pre in ("Region6_", "Region7_", "Region5_") for x in N["samples"] if x["inst"].startswith(pre)]
+cd = CategoryChartData()
+for reg, pre in (("Region6", "Region6_"), ("Region7", "Region7_"), ("Region5", "Region5_")):
+    cat = cd.add_category(reg)
+    for smp in order:
+        if smp["inst"].startswith(pre):
+            cat.add_sub_category(smp["inst"].split("_")[1])
+cd.add_series("Model on Ising labels", [x["d_full"] for x in order])
+ch = chart(s, XL_CHART_TYPE.COLUMN_CLUSTERED, 0.89, 2.0, 7.0, 4.45, cd, [GREY], maxv=15, minv=-3, major=3,
+           fmt='+0;−0;0', labels=False, cat_size=11)
+ch.has_title = False
+ch.plots[0].gap_width = 70
+ser = ch.plots[0].series[0]
+for i, x in enumerate(order):
+    if x["d_full"] >= 8:
+        pp = ser.points[i]
+        pp.format.fill.solid()
+        pp.format.fill.fore_color.rgb = ORANGE
+        point_label(ser, i, f"+{x['d_full']:.1f}", ORANGE, size=11)
+va = ch.value_axis
+va.has_title = True
+va.axis_title.text_frame.text = "change in peak vs Baleen, points (higher is worse)"
+r_ = va.axis_title.text_frame.paragraphs[0].runs[0]
+r_.font.size = Pt(10.5)
+r_.font.bold = False
+r_.font.color.rgb = MUTED
+text(s, 8.3, 2.2, 4.15, 4.2, [
+    bl("<B>Labels from one day can break</B>: if a test day’s peak is a scan the training day never had, the model does "
+       "not cache it and the peak rises (Region7 s0.5: 39 → 52). This is why PeakBaleen keeps Baleen’s own model", after=14),
+    bl("<B>Online keeps only part of the offline gain</B>: −13.7% offline, about −4% online", after=14),
+    bl("<B>The Ising solver ties classical solvers on quality</B>: its edge is speed and scale", after=0),
+], size=14.5, spacing=1.08)
+
+# =====================================================================
+# 12 · Takeaways
+# =====================================================================
+s = d.content("CONCLUSION", "Takeaways",
+              "Three takeaways. One: planning for the peak works. Offline, the Ising plan beats Baleen's plan in every region, "
+              "13.7 percent lower on average, and the Ising solver is fast and scales. Two: PeakBaleen, Baleen's model plus an "
+              "Ising-trained peak model with load-aware admission, beats Baleen online: on all ten development samples, and by "
+              "14.9 percent on a cluster it never saw. Three: labels must cover the peaks to come. Labels from a single "
+              "training day can break when the peak changes kind, which is why we keep Baleen's model as a safety net. Next, "
+              "we will train the Ising labels over several days, run the final test on our held-back samples, and cover all "
+              "seven clusters. Thank you.")
 CW = (11.56 - 0.5) / 3
 for i, (col, fill, ttl, body) in enumerate([
-        (ORANGE, PALEOR, "Ising finds better peaks offline",
-         "<B>−13.7%</B> against Baleen’s oracle, <B>37 / 39</B> samples; the lowest peaks of the solvers we tried, and it "
-         "scales to 126k variables."),
-        (NAVY, CREAM, "Ising labels teach the model the peak",
-         "Online, <B>−3.4%</B> on development samples and <B>−6.6%</B> on Region6: the model caches 41% of the peak window "
-         "instead of 22%."),
+        (ORANGE, PALEOR, "Planning for the peak works",
+         "Offline, the Ising plan beats Baleen’s plan in every region (<B>−13.7%</B>); the Ising solver is fast and scales."),
         (BLUE, PALE, "PeakBaleen beats Baleen online",
-         "<B>10 / 10</B> development samples; <B>−14.9%</B> on the unseen Region4; load-aware admission passes a "
-         "pre-registered test on Region5.")]):
+         "Baleen’s model plus an Ising-trained peak model wins all <B>10</B> development samples and cuts the peak "
+         "<B>14.9%</B> on an unseen cluster."),
+        (NAVY, CREAM, "Labels must cover the peaks to come",
+         "Labels from one training day can break when the peak changes kind; Baleen’s model is the safety net.")]):
     x0 = 0.89 + i * (CW + 0.25)
     box(s, x0, 2.05, CW, 2.75, fill=fill, radius=0.05)
     circle_num(s, x0 + 0.2, 2.22, i + 1, d=0.4, fill=col, size=13)
-    text(s, x0 + 0.2, 2.75, CW - 0.4, 2.0, [(ttl, {"size": 15, "bold": True, "color": col, "after": 6}), body], size=13)
+    text(s, x0 + 0.2, 2.75, CW - 0.4, 2.0, [(ttl, {"size": 16, "bold": True, "color": col, "after": 6}), body], size=14)
 card(s, 0.89, 5.0, 11.56, 0.95, [head("NEXT"),
-                                 ("Train the Ising labels over several days  ·  final test on held-back samples s0.7–s0.9  ·  "
-                                  "all seven clusters", {})], size=13)
+                                 ("Train the Ising labels over several days  ·  final test on held-back samples  ·  all seven "
+                                  "clusters", {})], size=14)
 bar(s, 0.89, 6.1, 11.56, 0.5, "Thank you · Questions?", size=15)
 
 # =====================================================================
@@ -535,7 +578,7 @@ d.save(os.path.join(HERE, OUT))
 
 # the speaker notes as one file, for rehearsal
 lines = ["# PeakBaleen final presentation (v3): speaker notes", "",
-         f"Generated by build_deck_v3.py from {OUT}. Slides 13-14 are backup.", ""]
+         f"Generated by build_deck_v3.py from {OUT}. Slides 14-15 are backup.", ""]
 for i, sl in enumerate(d.prs.slides, 1):
     title = sl.shapes.title.text_frame.text if sl.shapes.title is not None else ("Title" if i == 1 else "Backup")
     lines += [f"## {i} · {title}", "", sl.notes_slide.notes_text_frame.text, ""]

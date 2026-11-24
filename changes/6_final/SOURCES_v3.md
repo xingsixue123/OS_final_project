@@ -1,6 +1,6 @@
 # 6_final v3: where every number on the v3 slides comes from
 
-Deck: `PeakBaleen_Final_v3.pptx` (11 slides + 2 backup), built by `build_deck_v3.py`. v3 = v2 with slides 2–5 and 8–10 rewritten v2's slides 11–12 merged, and the solver slide folded into the offline slide (slide 2's sketch is schematic and carries no data). Chart values come from `result/numbers.json` (`code/recompute_final.py`) and `result/numbers_v2.json` (`code/recompute_final_v2.py`), both computed from the raw result ledgers.
+Deck: `PeakBaleen_Final_v3.pptx` (12 slides + 2 backup), built by `build_deck_v3.py`. v3 = v2 with slides 2–5 and 8–10 rewritten v2's slides 11–12 merged, the solver slide folded into the offline slide, a limitations slide added, and the conclusion rewritten as takeaways (slide 2's sketch is schematic and carries no data). Chart values come from `result/numbers.json` (`code/recompute_final.py`) and `result/numbers_v2.json` (`code/recompute_final_v2.py`), both computed from the raw result ledgers.
 
 | Slide | Content | Main source |
 |---|---|---|
@@ -10,7 +10,9 @@ Deck: `PeakBaleen_Final_v3.pptx` (11 slides + 2 backup), built by `build_deck_v3
 | Slide 9 | Online with Ising labels (dev) | `changes/2_deployable_peak/wp2_deployed/trials.csv` |
 | Slide 10 | PeakBaleen: development samples and Region4 | `changes/3_autoresearch/work/union/trials_dev.csv`, `results/dev_finalist.json` |
 | Slide 10 (cont.) | Region4 and Region5 | `changes/3_autoresearch/work/t2u_region4/trials_test.csv`, `changes/2_deployable_peak/wp9_region5/trials.csv` |
-| 13–14 | Backup | `changes/2_deployable_peak/wp9_region5/trials.csv`, `changes/0_reproduce/RESULTS.md` |
+| 11 | Limitations | `changes/2_deployable_peak/wp3_test/RESULTS_test.md` §2, `changes/2_deployable_peak/wp9_region5/RESULTS_test.md` |
+| 12 | Takeaways | as slides 8–10 |
+| 14–15 | Backup | `changes/2_deployable_peak/wp9_region5/trials.csv`, `changes/0_reproduce/RESULTS.md` |
 
 ## Every value, with file and line (checked by `code/check_sources.py SOURCES_v3.md`)
 
@@ -55,15 +57,25 @@ Deck: `PeakBaleen_Final_v3.pptx` (11 slides + 2 backup), built by `build_deck_v3
 | 8 | 27.71 | `changes/6_final/result/recompute_final_out.txt#L9` | Region6 ours |
 | 8 | 32.98 | `changes/6_final/result/recompute_final_out.txt#L10` | Region7 OPT |
 | 8 | 27.21 | `changes/6_final/result/recompute_final_out.txt#L10` | Region7 ours |
-| 14 | 42.455 | `changes/0_reproduce/RESULTS.md#L17` | bit-exact RejectX |
-| 14 | 48.961 | `changes/0_reproduce/RESULTS.md#L18` | bit-exact CoinFlip |
-| 14 | 0.6 | `changes/0_reproduce/RESULTS.md#L3` | Baleen within 0.6 points |
-| 14 | 37.59 | `changes/0_reproduce/RESULTS.md#L50` | paper Fig 9 Region7 Baleen |
-| 14 | 41.31 | `changes/0_reproduce/RESULTS.md#L51` | paper Fig 9 Region6 Baleen |
-| 14 | 40.10 ± 0.18 | `changes/0_reproduce/RESULTS.md#L50` | ours, 9 retrains |
-| 14 | 43.25 ± 0.04 | `changes/0_reproduce/RESULTS.md#L51` | ours, 9 retrains |
-| 14 | 28.11 | `changes/0_reproduce/RESULTS.md#L9` | notebook: paper averages exact |
-| 14 | §4.1 | `changes/0_reproduce/RESULTS.md#L66` | threshold re-converged to the write rate |
+| 11 | +13.23 | `changes/6_final/result/recompute_final_out.txt#L40` | Region7 s0.5, model on Ising labels (+13.2) |
+| 11 | +8.74 | `changes/6_final/result/recompute_final_out.txt#L46` | Region5 s0.5, model on Ising labels (+8.7) |
+| 11 | 39.07 | `changes/2_deployable_peak/wp3_test/RESULTS_test.md#L26` | Region7 s0.5, Baleen (39) |
+| 11 | 52.30 | `changes/2_deployable_peak/wp3_test/RESULTS_test.md#L26` | Region7 s0.5, model on Ising labels (52) |
+| 11 | 13.69 | `changes/6_final/result/recompute_final_out.txt#L4` | offline gain (−13.7%) |
+| 11 | -3.9% | `changes/6_final/result/recompute_final_v2_out.txt#L10` | online, PeakBaleen on dev (about −4%) |
+| 11 | -3.4% | `changes/6_final/result/recompute_final_v2_out.txt#L2` | online, model on Ising labels on dev (about −4%) |
+| 12 | 13.69 | `changes/6_final/result/recompute_final_out.txt#L4` | offline (−13.7%) |
+| 12 | 10/10 | `changes/6_final/result/recompute_final_v2_out.txt#L10` | all 10 development samples |
+| 12 | -14.9% | `changes/6_final/result/recompute_final_v2_out.txt#L14` | Region4 |
+| 15 | 42.455 | `changes/0_reproduce/RESULTS.md#L17` | bit-exact RejectX |
+| 15 | 48.961 | `changes/0_reproduce/RESULTS.md#L18` | bit-exact CoinFlip |
+| 15 | 0.6 | `changes/0_reproduce/RESULTS.md#L3` | Baleen within 0.6 points |
+| 15 | 37.59 | `changes/0_reproduce/RESULTS.md#L50` | paper Fig 9 Region7 Baleen |
+| 15 | 41.31 | `changes/0_reproduce/RESULTS.md#L51` | paper Fig 9 Region6 Baleen |
+| 15 | 40.10 ± 0.18 | `changes/0_reproduce/RESULTS.md#L50` | ours, 9 retrains |
+| 15 | 43.25 ± 0.04 | `changes/0_reproduce/RESULTS.md#L51` | ours, 9 retrains |
+| 15 | 28.11 | `changes/0_reproduce/RESULTS.md#L9` | notebook: paper averages exact |
+| 15 | §4.1 | `changes/0_reproduce/RESULTS.md#L66` | threshold re-converged to the write rate |
 | 9 | 38.50 | `changes/6_final/result/recompute_final_v2_out.txt#L2` | dev, Baleen |
 | 9 | 37.20 | `changes/6_final/result/recompute_final_v2_out.txt#L2` | dev, Ising labels + load-aware admission |
 | 9 | 39.31 | `changes/6_final/result/recompute_final_v2_out.txt#L3` | Region6 dev, Baleen |
@@ -82,26 +94,26 @@ Deck: `PeakBaleen_Final_v3.pptx` (11 slides + 2 backup), built by `build_deck_v3
 | 10 | -14.9% | `changes/6_final/result/recompute_final_v2_out.txt#L14` | vs Baleen |
 | 10 | -3.2 | `changes/6_final/result/recompute_final_v2_out.txt#L15` | Region5 load-aware admission |
 | 10 | YES | `changes/2_deployable_peak/wp9_region5/RESULTS_test.md#L11` | Region5 pre-registered test passed |
-| 13 | 39.92 | `changes/6_final/result/recompute_final_out.txt#L60` | Region5_s0.1, Baleen |
-| 13 | 39.32 | `changes/6_final/result/recompute_final_out.txt#L60` | Region5_s0.1, + load-aware admission |
-| 13 | 39.55 | `changes/6_final/result/recompute_final_out.txt#L60` | Region5_s0.1, + load + load-aware admission |
-| 13 | 33.92 | `changes/6_final/result/recompute_final_out.txt#L61` | Region5_s0.2, Baleen |
-| 13 | 34.16 | `changes/6_final/result/recompute_final_out.txt#L61` | Region5_s0.2, + load-aware admission |
-| 13 | 33.51 | `changes/6_final/result/recompute_final_out.txt#L61` | Region5_s0.2, + load + load-aware admission |
-| 13 | 37.72 | `changes/6_final/result/recompute_final_out.txt#L62` | Region5_s0.3, Baleen |
-| 13 | 37.47 | `changes/6_final/result/recompute_final_out.txt#L62` | Region5_s0.3, + load-aware admission |
-| 13 | 37.28 | `changes/6_final/result/recompute_final_out.txt#L62` | Region5_s0.3, + load + load-aware admission |
-| 13 | 26.39 | `changes/6_final/result/recompute_final_out.txt#L63` | Region5_s0.4, Baleen |
-| 13 | 26.02 | `changes/6_final/result/recompute_final_out.txt#L63` | Region5_s0.4, + load-aware admission |
-| 13 | 25.95 | `changes/6_final/result/recompute_final_out.txt#L63` | Region5_s0.4, + load + load-aware admission |
-| 13 | 42.72 | `changes/6_final/result/recompute_final_out.txt#L64` | Region5_s0.5, Baleen |
-| 13 | 37.96 | `changes/6_final/result/recompute_final_out.txt#L64` | Region5_s0.5, + load-aware admission |
-| 13 | 35.07 | `changes/6_final/result/recompute_final_out.txt#L64` | Region5_s0.5, + load + load-aware admission |
-| 13 | 36.38 | `changes/6_final/result/recompute_final_out.txt#L65` | Region5_s0.6, Baleen |
-| 13 | 35.19 | `changes/6_final/result/recompute_final_out.txt#L65` | Region5_s0.6, + load-aware admission |
-| 13 | 35.51 | `changes/6_final/result/recompute_final_out.txt#L65` | Region5_s0.6, + load + load-aware admission |
-| 13 | 36.17 | `changes/6_final/result/recompute_final_out.txt#L19` | Region5 mean |
-| 13 | 35.02 | `changes/6_final/result/recompute_final_out.txt#L21` | Region5 mean |
-| 13 | 34.48 | `changes/6_final/result/recompute_final_out.txt#L22` | Region5 mean |
+| 14 | 39.92 | `changes/6_final/result/recompute_final_out.txt#L60` | Region5_s0.1, Baleen |
+| 14 | 39.32 | `changes/6_final/result/recompute_final_out.txt#L60` | Region5_s0.1, + load-aware admission |
+| 14 | 39.55 | `changes/6_final/result/recompute_final_out.txt#L60` | Region5_s0.1, + load + load-aware admission |
+| 14 | 33.92 | `changes/6_final/result/recompute_final_out.txt#L61` | Region5_s0.2, Baleen |
+| 14 | 34.16 | `changes/6_final/result/recompute_final_out.txt#L61` | Region5_s0.2, + load-aware admission |
+| 14 | 33.51 | `changes/6_final/result/recompute_final_out.txt#L61` | Region5_s0.2, + load + load-aware admission |
+| 14 | 37.72 | `changes/6_final/result/recompute_final_out.txt#L62` | Region5_s0.3, Baleen |
+| 14 | 37.47 | `changes/6_final/result/recompute_final_out.txt#L62` | Region5_s0.3, + load-aware admission |
+| 14 | 37.28 | `changes/6_final/result/recompute_final_out.txt#L62` | Region5_s0.3, + load + load-aware admission |
+| 14 | 26.39 | `changes/6_final/result/recompute_final_out.txt#L63` | Region5_s0.4, Baleen |
+| 14 | 26.02 | `changes/6_final/result/recompute_final_out.txt#L63` | Region5_s0.4, + load-aware admission |
+| 14 | 25.95 | `changes/6_final/result/recompute_final_out.txt#L63` | Region5_s0.4, + load + load-aware admission |
+| 14 | 42.72 | `changes/6_final/result/recompute_final_out.txt#L64` | Region5_s0.5, Baleen |
+| 14 | 37.96 | `changes/6_final/result/recompute_final_out.txt#L64` | Region5_s0.5, + load-aware admission |
+| 14 | 35.07 | `changes/6_final/result/recompute_final_out.txt#L64` | Region5_s0.5, + load + load-aware admission |
+| 14 | 36.38 | `changes/6_final/result/recompute_final_out.txt#L65` | Region5_s0.6, Baleen |
+| 14 | 35.19 | `changes/6_final/result/recompute_final_out.txt#L65` | Region5_s0.6, + load-aware admission |
+| 14 | 35.51 | `changes/6_final/result/recompute_final_out.txt#L65` | Region5_s0.6, + load + load-aware admission |
+| 14 | 36.17 | `changes/6_final/result/recompute_final_out.txt#L19` | Region5 mean |
+| 14 | 35.02 | `changes/6_final/result/recompute_final_out.txt#L21` | Region5 mean |
+| 14 | 34.48 | `changes/6_final/result/recompute_final_out.txt#L22` | Region5 mean |
 | 10 | fresh | `changes/3_autoresearch/result/FINAL_REPORT.md#L11` | Region4 is a fresh test pool, not used for design |
 
