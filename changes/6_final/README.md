@@ -1,7 +1,7 @@
 # 6_final: final presentation deck
 
 ## Current version: v3 (use this one)
-- `PeakBaleen_Final_v3.pptx` / `.pdf` = v2 with slide 2 (motivation) rewritten as three short points and a sketch of where Baleen's savings land, and slide 3 (task) cut to the flow diagram plus budget, goal and data. Built by `build_deck_v3.py`; numbers in `SOURCES_v3.md`; notes in `SPEAKER_NOTES_v3.md`.
+- `PeakBaleen_Final_v3.pptx` / `.pdf` = v2 with slide 2 (motivation) rewritten as three short points and a sketch of where Baleen's savings land, slide 3 (task) cut to the flow diagram plus budget, goal and data, and slide 4 (baselines) with a new title, no footnote, and three bullets on the 14–25% gap. Built by `build_deck_v3.py`; numbers in `SOURCES_v3.md`; notes in `SPEAKER_NOTES_v3.md`.
 
 ## v2
 - **Deck:** `PeakBaleen_Final_v2.pptx` and `PeakBaleen_Final_v2.pdf`; 13 slides plus 2 backup slides, speaker notes in every slide (also in `SPEAKER_NOTES_v2.md`).

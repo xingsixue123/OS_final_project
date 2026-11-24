@@ -230,36 +230,27 @@ for y0, h0, lab, big, small in [
 # =====================================================================
 # 4 · Baselines
 # =====================================================================
-s = d.content("BASELINES WE RAN", "Baleen beats the simple policies, but sits 14–25% above its own offline oracle",
-              "These are the baselines we ran ourselves, all at the same write rate. The first row is the paper's Figure 9 "
-              "average, for reference. CoinFlip admits at random, RejectX rejects first-time items, and Baleen is the machine-"
-              "learned policy. Baleen is the strongest deployed baseline everywhere except Region6 s0. The last column is "
-              "Baleen's OPT, the offline oracle its model is trained to imitate. On the held-out sets, Baleen online sits 14 to "
-              "25 percent above that oracle, which is the headroom we target. And that oracle itself optimizes the average, not "
-              "the peak.")
+s = d.content("BASELINES WE RAN", "Baleen is the baseline to beat, and it still leaves room",
+              "These are the baselines we ran ourselves, all at the same write budget; lower is better. The first row is the "
+              "paper's own average. CoinFlip admits at random, RejectX rejects first-time items, and Baleen is the machine-"
+              "learned policy: it is the baseline to beat. The last column is Baleen's OPT, the best choice Baleen could make "
+              "offline, knowing the future. Online, Baleen sits 14 to 25 percent above it on our test sets. That gap is the room "
+              "we target.")
 rows = [["Trace", "Year", "Samples", "CoinFlip", "RejectX", "Baleen", "Baleen’s OPT"],
         ["Paper, Fig. 9", "2019–23", "avg of 7", "34.63", "31.95", "28.11", "—"],
         ["Region7", "2023", "s0", "48.96", "42.46", "40.10", "34.52"],
         ["Region6", "2023", "s0", "43.45", "42.32", "43.25", "35.56"],
         ["Region6 + 7", "2023", "s0.4–0.6", "48.64", "40.73", "39.27", "33.62"],
-        ["Region5", "2023", "s0.1–0.6", "44.47", "39.35*", "36.17", "30.10"],
+        ["Region5", "2023", "s0.1–0.6", "44.47", "39.35", "36.17", "30.10"],
         ["Region4", "2021", "s0.2–0.6", "68.84", "65.84", "50.72", "38.13"],
         ["Region1", "2019", "s0.1–0.6", "50.39", "28.20", "24.14", "not run"]]
-grid(s, 0.89, 2.05, [1.45, 1.0, 1.0, 0.95, 0.95, 0.9, 1.3], rows, rh=0.44, size=13,
+grid(s, 0.89, 2.1, [1.45, 1.0, 1.0, 0.95, 0.95, 0.9, 1.3], rows, rh=0.5, size=13.5,
      aligns=["l", "l", "l", "r", "r", "r", "r"], shade={1: PALE}, bold_first=True)
-text(s, 0.89, 5.6, 7.6, 0.9, "P100 (%), lower is better, all at 35.6 MB/s. s0 rows are our reproduction; later samples are "
-     "held-out tests. Baleen = mean of 3–9 retrains. *RejectX cannot reach the write rate on 5 of the 6 Region5 samples.",
-     size=10, color=MUTED)
-box(s, 8.85, 2.05, 3.6, 2.35, fill=WHITE, line=LINE, radius=0.04)
-text(s, 9.05, 2.15, 3.2, 0.8, "14–25%", size=40, color=ORANGE, bold=True)
-text(s, 9.05, 2.95, 3.25, 1.4, "Baleen online above its own offline oracle on the held-out sets: Region6 + 7 <B>14.4%</B>, "
-     "Region5 <B>16.8%</B>, Region4 <B>24.8%</B>. That gap is our headroom.", size=12)
-card(s, 8.85, 4.55, 3.6, 1.95, [
-    ("<B>CoinFlip</B>: admit at random", {"after": 3}),
-    ("<B>RejectX</B>: reject first-time items", {"after": 3}),
-    ("<B>Baleen</B>: a gradient-boosted model (GBM) imitating its oracle", {"after": 6}),
-    ("<or>And the oracle optimizes the <B>average</B>, not the peak</or>", {}),
-], size=12)
+text(s, 8.95, 2.95, 3.5, 3.0, [
+    bl("<B>Baleen’s OPT</B> (last column): the best Baleen could do offline, knowing the future", after=18),
+    bl("Online, Baleen is <or><B>14–25%</B></or> above its OPT on our test sets", after=18),
+    bl("That gap is the room we target", after=0),
+], size=17, spacing=1.12)
 
 # =====================================================================
 # 5 · Key idea

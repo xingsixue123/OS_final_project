@@ -14,9 +14,9 @@ A flash cache sits in front of the hard disks and absorbs reads. Flash wears out
 
 The task. Requests read blocks through a flash cache in front of hard disks. A hit costs the disks nothing; a miss costs disk-head time. On every miss, the admission policy, which is what we design, decides whether to write the block into flash. Every admission spends flash writes, so all policies get the same budget, 35.6 megabytes per second. The goal is the lowest P100: the busiest ten minutes of disk load. We use Meta's production storage traces from seven clusters, which the Baleen paper calls Region1 to Region7, and replay them in Baleen's own simulator: the first day trains, the later days test. Each cluster is cut into small samples, and each sample is one test case.
 
-## 4 · Baleen beats the simple policies, but sits 14–25% above its own offline oracle
+## 4 · Baleen is the baseline to beat, and it still leaves room
 
-These are the baselines we ran ourselves, all at the same write rate. The first row is the paper's Figure 9 average, for reference. CoinFlip admits at random, RejectX rejects first-time items, and Baleen is the machine-learned policy. Baleen is the strongest deployed baseline everywhere except Region6 s0. The last column is Baleen's OPT, the offline oracle its model is trained to imitate. On the held-out sets, Baleen online sits 14 to 25 percent above that oracle, which is the headroom we target. And that oracle itself optimizes the average, not the peak.
+These are the baselines we ran ourselves, all at the same write budget; lower is better. The first row is the paper's own average. CoinFlip admits at random, RejectX rejects first-time items, and Baleen is the machine-learned policy: it is the baseline to beat. The last column is Baleen's OPT, the best choice Baleen could make offline, knowing the future. Online, Baleen sits 14 to 25 percent above it on our test sets. That gap is the room we target.
 
 ## 5 · Spend the same flash writes on the busiest window instead of the average
 

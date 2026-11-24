@@ -1,6 +1,6 @@
 # 6_final v3: where every number on the v3 slides comes from
 
-Deck: `PeakBaleen_Final_v3.pptx` (13 slides + 2 backup), built by `build_deck_v3.py`. v3 = v2 with slides 2 and 3 rewritten (slide 2's sketch is schematic and carries no data). Chart values come from `result/numbers.json` (`code/recompute_final.py`) and `result/numbers_v2.json` (`code/recompute_final_v2.py`), both computed from the raw result ledgers.
+Deck: `PeakBaleen_Final_v3.pptx` (13 slides + 2 backup), built by `build_deck_v3.py`. v3 = v2 with slides 2–4 rewritten (slide 2's sketch is schematic and carries no data). Chart values come from `result/numbers.json` (`code/recompute_final.py`) and `result/numbers_v2.json` (`code/recompute_final_v2.py`), both computed from the raw result ledgers.
 
 | Slide | Content | Main source |
 |---|---|---|
@@ -42,7 +42,6 @@ Deck: `PeakBaleen_Final_v3.pptx` (13 slides + 2 backup), built by `build_deck_v3
 | 4 | 39.35 | `changes/2_deployable_peak/wp9_region5/RESULTS_test.md#L31` | Region5 s0.1–0.6, RejectX (authors' probabilities) |
 | 4 | 36.17 | `changes/2_deployable_peak/wp9_region5/RESULTS_test.md#L31` | Region5 s0.1–0.6, Baleen |
 | 4 | 30.10 | `changes/5_midterm/result/recompute_out.txt#L5` | Region5 s0.1–0.6, Baleen's offline OPT |
-| 4 | s0.4 is matched | `changes/2_deployable_peak/wp9_region5/RESULTS_test.md#L33` | footnote: RejectX misses the write rate on the other 5 Region5 samples |
 | 4 | 68.84 | `changes/3_autoresearch/result/FINAL_REPORT.md#L68` | Region4 s0.2–0.6, CoinFlip |
 | 4 | 65.84 | `changes/3_autoresearch/result/FINAL_REPORT.md#L68` | Region4 s0.2–0.6, RejectX |
 | 4 | 50.72 | `changes/3_autoresearch/result/FINAL_REPORT.md#L66` | Region4 s0.2–0.6, Baleen |
@@ -52,8 +51,6 @@ Deck: `PeakBaleen_Final_v3.pptx` (13 slides + 2 backup), built by `build_deck_v3
 | 4 | 24.14 | `changes/2_deployable_peak/wp10_schedule/RESULTS_test.md#L31` | Region1 s0.1–0.6, Baleen |
 | 4 | 14 | `changes/5_midterm/result/recompute_out.txt#L15` | lower end of "14–25%" (Baleen above its OPT, Region6+7 test: 14.4%) |
 | 4 | 25 | `changes/5_midterm/result/recompute_out.txt#L17` | upper end of "14–25%" (Region4: 24.8%) |
-| 4 | 9 | `changes/0_reproduce/RESULTS.md#L48` | footnote "3–9 retrains": reproduction rows use 9 retrains |
-| 4 | 3 | `changes/2_deployable_peak/wp9_region5/RESULTS_test.md#L21` | footnote "3–9 retrains": test rows use 3 matched retrains |
 | 5 | 16 replicas | `changes/2_deployable_peak/wp1_offline/RESULTS.md#L27` | parallel tempering, 16 replicas, LP start |
 | 6 | 0.25 | `changes/2_deployable_peak/wp0_overlay/G3_REVIEW.md#L11` | adaptive bar formula (clip 0.25-4, reference 20, α = −1) |
 | 6 | 10/30/60 | `changes/2_deployable_peak/wp0_overlay/G3_REVIEW.md#L9` | load feature windows |
