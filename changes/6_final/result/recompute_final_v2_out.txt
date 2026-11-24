@@ -5,6 +5,7 @@ Region7: Baleen 37.69, Ising labels 37.67 (-0.0%), wins 2/4
 Region6 baleen: peak-window admission 0.22; peak on a scan in 9/12 retrains
 Region6 ising: peak-window admission 0.41; peak on a scan in 2/12 retrains
 adaptive bar gain on Ising labels: +1.17 (8/8); on Baleen labels: +0.62 (6/8)
+Region6 test (s0.4-0.6): Baleen 39.79, Ising labels 38.73 (-2.7%), wins 3/3
 
 == Slide 11: dev, PeakBaleen (union) on 10 dev samples
 PeakBaleen 35.36 (n=10); Baleen 36.78 (-3.9%), wins 10/10; Baleen + adaptive bar 36.16, wins 7/10; Baleen + load 36.77, wins 9/10

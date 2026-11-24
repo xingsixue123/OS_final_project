@@ -37,7 +37,14 @@
   },
   "bar_on_ising": 1.17,
   "bar_on_ising_wins": 8,
-  "bar_on_baleen": 0.62
+  "bar_on_baleen": 0.62,
+  "test6": {
+   "baleen": 39.79,
+   "ising": 38.73,
+   "pct": -2.7,
+   "wins": 3,
+   "n": 3
+  }
  },
  "dev_union": {
   "peak": 35.36,

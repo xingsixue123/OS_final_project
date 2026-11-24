@@ -46,8 +46,16 @@ for key, arms, design in (("baleen", ["A"], "baleen"), ("ising", ["Ea-1.0"], "F1
     print(f"Region6 {key}: peak-window admission {t.peak_adm.mean():.2f}; peak on a scan in {int((t.peak_bigoff_share > 0.25).sum())}/{len(t)} retrains")
 gi, ga = X1 - D, Aa - A
 print(f"adaptive bar gain on Ising labels: {-gi.mean():+.2f} ({int((gi < 0).sum())}/{len(gi)}); on Baleen labels: {-ga.mean():+.2f} ({int((ga < 0).sum())}/{len(ga)})")
+# the same model on Region6's pre-registered test samples (s0.4-0.6, WP3)
+w3 = pd.read_csv(P("2_deployable_peak", "wp3_test", "trials.csv"))
+A3, X3 = per_inst(w3, ["A"], "baleen"), per_inst(w3, ["Ea-1.0"], "F1PT")
+idx6 = [i for i in A3.index if i.startswith("Region6")]
+a6, x6 = A3[idx6], X3[idx6]
+test6 = dict(baleen=round(a6.mean(), 2), ising=round(x6.mean(), 2), pct=round(pct(x6.mean(), a6.mean()), 1),
+             wins=int((x6 < a6).sum()), n=len(idx6))
+print(f"Region6 test (s0.4-0.6): Baleen {a6.mean():.2f}, Ising labels {x6.mean():.2f} ({test6['pct']:+.1f}%), wins {test6['wins']}/{len(idx6)}")
 OUT["dev_x1"] = dict(dev=dev, mech=mech, bar_on_ising=round(-gi.mean(), 2), bar_on_ising_wins=int((gi < 0).sum()),
-                     bar_on_baleen=round(-ga.mean(), 2))
+                     bar_on_baleen=round(-ga.mean(), 2), test6=test6)
 
 # ---------------- dev: PeakBaleen (Baleen model OR Ising peak model, + adaptive bar) ----------------
 un = pd.read_csv(P("3_autoresearch", "work", "union", "trials_dev.csv"))

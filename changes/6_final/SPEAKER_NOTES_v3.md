@@ -36,7 +36,7 @@ First result, offline. We compare two plans made in hindsight on the same trace:
 
 ## 9 · Online, Ising labels teach the model to cache the peak
 
-Second, online. Online means we replay the test days in Baleen's simulator and the trained model decides request by request, without seeing the future. A model trained on the Ising labels lowers the peak by 3.4 percent against Baleen on our development samples, and by 6.6 percent on Region6. Why? Region6's busiest windows are big scans, long runs of sequential reads, and Baleen's model rarely caches them. The Ising labels mark that data as worth caching at the peak, so the model learns to cache it there: it caches 41 percent of the peak window instead of 22, and the peak moves off the scan. The load-aware bar adds the most on top of Ising labels: when the disks are busy, it lets more of that data in.
+Second, online. Online means we replay the test days in Baleen's simulator and the trained model decides request by request, without seeing the future. A model trained on the Ising labels lowers the peak by 3.4 percent against Baleen on our development set, and by 2.7 percent on Region6's test samples, winning all three. Why? Region6's busiest windows are big scans, long runs of sequential reads, and Baleen's model rarely caches them. The Ising labels mark that data as worth caching at the peak, so the model learns to cache it there: it caches 41 percent of the peak window instead of 22, and the peak moves off the scan. The load-aware bar adds the most on top of Ising labels: when the disks are busy, it lets more of that data in.
 
 ## 10 · PeakBaleen beats Baleen, including on an unseen cluster
 
