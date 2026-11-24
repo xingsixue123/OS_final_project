@@ -1,0 +1,15 @@
+== Slide 10: dev, Ising labels + load feature + adaptive bar (X1) vs Baleen (A)
+all: Baleen 38.50, Ising labels 37.20 (-3.4%), wins 6/8
+Region6: Baleen 39.31, Ising labels 36.73 (-6.6%), wins 4/4
+Region7: Baleen 37.69, Ising labels 37.67 (-0.0%), wins 2/4
+Region6 baleen: peak-window admission 0.22; peak on a scan in 9/12 retrains
+Region6 ising: peak-window admission 0.41; peak on a scan in 2/12 retrains
+adaptive bar gain on Ising labels: +1.17 (8/8); on Baleen labels: +0.62 (6/8)
+
+== Slide 11: dev, PeakBaleen (union) on 10 dev samples
+PeakBaleen 35.36 (n=10); Baleen 36.78 (-3.9%), wins 10/10; Baleen + adaptive bar 36.16, wins 7/10; Baleen + load 36.77, wins 9/10
+same design with CP-SAT labels 36.13; Ising-label version lower on 6/10
+
+== Slide 12: Region4 (never run before)
+Baleen 50.72, Baleen + load 56.71, PeakBaleen 43.17 (-14.9% vs Baleen, wins 4/5; -23.9% vs Baleen + load, wins 5/5); CP-SAT labels 44.37
+Region5 (pre-registered): Baleen 36.17; load-aware bar {'p100': 35.02, 'pct': -3.2, 'wins': 5}; + load feature {'p100': 34.48, 'pct': -4.7, 'wins': 6}

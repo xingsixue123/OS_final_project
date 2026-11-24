@@ -1,5 +1,12 @@
 # 6_final: final presentation deck
 
+## Current version: v2 (use this one)
+- **Deck:** `PeakBaleen_Final_v2.pptx` and `PeakBaleen_Final_v2.pdf`; 13 slides plus 2 backup slides, speaker notes in every slide (also in `SPEAKER_NOTES_v2.md`).
+- **Story:** the Ising min–max oracle offline (−13.7%), the Ising solver, a model trained on Ising labels online (dev −3.4%, Region6 −6.6%), and PeakBaleen = Baleen's model + the Ising peak model with load-aware admission: 10/10 development samples, −14.9% on the unseen Region4, and the pre-registered Region5 test of load-aware admission.
+- **Files:** `build_deck_v2.py`, `algorithm_v2/` (updated Algorithm 2), `code/recompute_final_v2.py` → `result/numbers_v2.json`, `SOURCES_v2.md` (check: `python3 changes/6_final/code/check_sources.py SOURCES_v2.md`, 138 rows, 0 problems).
+- **Rebuild:** as below, with `build_deck_v2.py PeakBaleen_Final_v2.pptx` after running both recompute scripts.
+
+## v1 (superseded 2026-11-24)
 - **Deck:** `PeakBaleen_Final_v1.pptx`, 13 slides plus 3 backup slides, with speaker notes in every slide (also collected in `SPEAKER_NOTES.md`; about 12 minutes of speech for the 13 main slides). The PDF version is `PeakBaleen_Final_v1.pdf`, exported with static IBM Plex fonts so it matches PowerPoint.
 - **Outline:** approved 2026-11-24. The planned slide on the one-shot final test (samples 0.7–0.9) was dropped at the captain's decision, so the reserve samples are still untouched by deployed runs.
 - **No new experiments.** Every result comes from runs already recorded in `RESEARCH.md`; this folder only recomputes and presents them.

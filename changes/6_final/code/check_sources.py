@@ -1,6 +1,6 @@
 """Check changes/6_final/SOURCES.md: every cited file exists and every value appears in its cited lines.
 
-  python3 changes/6_final/code/check_sources.py      # exit 0 iff every row checks out
+  python3 changes/6_final/code/check_sources.py [SOURCES_v2.md]      # exit 0 iff every row checks out
 
 A value matches a cited line if it occurs there verbatim, or (for a plain number, ignoring a leading sign and a
 trailing %) if some number in the line rounds half-up to it at the value's precision (42.455 -> 42.46).
@@ -27,7 +27,8 @@ def num_match(value, text):
 
 def main():
     bad, n = [], 0
-    for line in open(os.path.join(HERE, "SOURCES.md"), encoding="utf-8"):
+    name = sys.argv[1] if len(sys.argv) > 1 else "SOURCES.md"
+    for line in open(os.path.join(HERE, name), encoding="utf-8"):
         m = ROW.match(line)
         if not m:
             continue

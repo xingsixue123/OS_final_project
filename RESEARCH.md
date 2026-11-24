@@ -27,7 +27,7 @@ Baleen (FAST '24) chooses which blocks to admit to a flash cache. It optimises *
 | 2 · WP10 (Track E) | Ising-optimized admission-threshold table on Baleen's models | **done: H5 NO** on Region1 (TB:pt 24.45 vs A 24.14; 1/6 vs A). Region1 is low-load: the α arms do not help there either (A+α 24.62). PT tables = classical tables. `wp10_schedule/RESULTS_test.md` |
 | 3 · Auto-research | Unattended Opus 5.5 worker + validator loop (contract `changes/3_autoresearch/documents/GOOD_RESULT.md`) | **done 2026-10-20 11:44: NEGATIVE, budget exhausted** (`result/FINAL_REPORT.md`). Dev finalist = union of Baleen model + Ising F1-label model (35.36 vs A+α 36.16 on dev). T1 Region2: unevaluable (infeasible s0.2, very low load). T2 Region4: Y 43.17 beats A 50.72 / B 56.71 but not A+α 42.87 (1/5). Validators PASS round 2. Not pre-registered: A+α −15% vs A on Region4 (H4-type replication) |
 | 2 · WP6 | Mid-term talk and report | **slides done, report drafted** (`changes/5_midterm/`) |
-| 2 · WP7 | Final presentation | **deck done** (`changes/6_final/`, 13 + 3 backup slides; no new runs; reserve test not run) |
+| 2 · WP7 | Final presentation | **deck v2 done** (`changes/6_final/PeakBaleen_Final_v2.pptx`, 13 + 2 backup slides; no new runs; reserve test not run) |
 | 2 · WP4/7 | Mechanism analysis, paper | to do |
 
 ## 3. Hypothesis ledger

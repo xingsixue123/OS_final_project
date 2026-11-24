@@ -1,0 +1,80 @@
+{
+ "dev_x1": {
+  "dev": {
+   "all": {
+    "baleen": 38.5,
+    "ising": 37.2,
+    "pct": -3.4,
+    "wins": 6,
+    "n": 8
+   },
+   "Region6": {
+    "baleen": 39.31,
+    "ising": 36.73,
+    "pct": -6.6,
+    "wins": 4,
+    "n": 4
+   },
+   "Region7": {
+    "baleen": 37.69,
+    "ising": 37.67,
+    "pct": -0.0,
+    "wins": 2,
+    "n": 4
+   }
+  },
+  "mech": {
+   "baleen": {
+    "peak_adm": 0.22,
+    "scan_peaks": 9,
+    "n": 12
+   },
+   "ising": {
+    "peak_adm": 0.41,
+    "scan_peaks": 2,
+    "n": 12
+   }
+  },
+  "bar_on_ising": 1.17,
+  "bar_on_ising_wins": 8,
+  "bar_on_baleen": 0.62
+ },
+ "dev_union": {
+  "peak": 35.36,
+  "n": 10,
+  "cpsat": 36.13,
+  "cpsat_wins": 6,
+  "baleen": 36.78,
+  "baleen_wins": 10,
+  "bar": 36.16,
+  "bar_wins": 7,
+  "load": 36.77,
+  "load_wins": 9,
+  "pct_baleen": -3.9
+ },
+ "region4": {
+  "baleen": 50.72,
+  "load": 56.71,
+  "peak": 43.17,
+  "cpsat": 44.37,
+  "pct_baleen": -14.9,
+  "pct_load": -23.9,
+  "wins_baleen": 4,
+  "wins_load": 5,
+  "n": 5
+ },
+ "region5": {
+  "baleen": 36.17,
+  "n": 6,
+  "bar": {
+   "p100": 35.02,
+   "pct": -3.2,
+   "wins": 5
+  },
+  "load_bar": {
+   "p100": 34.48,
+   "pct": -4.7,
+   "wins": 6
+  }
+ }
+}
